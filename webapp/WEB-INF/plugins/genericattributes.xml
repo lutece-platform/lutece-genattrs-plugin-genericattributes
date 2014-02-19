@@ -3,7 +3,7 @@
     <!-- Plugin Informations -->
     <name>genericattributes</name>
     <class>fr.paris.lutece.plugins.genericattributes.service.GenericAttributesPlugin</class>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <description>form.plugin.description</description>
     <documentation/>
     <installation/>
