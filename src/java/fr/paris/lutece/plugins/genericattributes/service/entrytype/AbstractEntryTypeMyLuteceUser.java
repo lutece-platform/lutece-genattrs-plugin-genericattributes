@@ -134,7 +134,8 @@ public abstract class AbstractEntryTypeMyLuteceUser extends EntryTypeService
     {
         LuteceUser user = SecurityService.getInstance(  ).getRegisteredUser( request );
 
-        if ( SecurityService.isAuthenticationEnable( ) && SecurityService.getInstance( ).isExternalAuthentication( ) )
+        if ( SecurityService.isAuthenticationEnable(  ) &&
+                SecurityService.getInstance(  ).isExternalAuthentication(  ) )
         {
             if ( user == null )
             {
@@ -144,7 +145,7 @@ public abstract class AbstractEntryTypeMyLuteceUser extends EntryTypeService
                 }
                 catch ( UserNotSignedException e )
                 {
-                    AppLogService.error( e.getMessage( ), e );
+                    AppLogService.error( e.getMessage(  ), e );
                 }
             }
         }

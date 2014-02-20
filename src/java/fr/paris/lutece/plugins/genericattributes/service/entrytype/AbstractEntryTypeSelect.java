@@ -46,12 +46,12 @@ import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.html.Paginator;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -132,7 +132,7 @@ public abstract class AbstractEntryTypeSelect extends EntryTypeService
             }
             catch ( NumberFormatException ne )
             {
-                AppLogService.error( ne.getMessage( ), ne );
+                AppLogService.error( ne.getMessage(  ), ne );
             }
         }
 

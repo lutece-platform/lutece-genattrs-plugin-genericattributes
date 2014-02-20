@@ -75,7 +75,7 @@ public final class EntryHome
     public static void copy( Entry entry )
     {
         Entry entryCopy = (Entry) entry.clone(  );
-        List<Field> listField = FieldHome.getFieldListByIdEntry( entry.getIdEntry( ) );
+        List<Field> listField = FieldHome.getFieldListByIdEntry( entry.getIdEntry(  ) );
         entryCopy.setIdEntry( create( entry ) );
 
         for ( Field field : listField )

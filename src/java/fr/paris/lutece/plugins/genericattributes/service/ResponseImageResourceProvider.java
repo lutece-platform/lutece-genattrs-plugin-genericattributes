@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2013, Mairie de Paris
+ * Copyright (c) 2002-2014, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,26 +33,54 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service;
 
-import fr.paris.lutece.portal.service.image.ImageResourceManager;
-import fr.paris.lutece.portal.service.plugin.PluginDefaultImplementation;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
+import fr.paris.lutece.portal.business.file.File;
+import fr.paris.lutece.portal.business.file.FileHome;
+import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
+import fr.paris.lutece.portal.business.physicalfile.PhysicalFileHome;
+import fr.paris.lutece.portal.service.image.ImageResource;
+import fr.paris.lutece.portal.service.image.ImageResourceProvider;
 
 
 /**
- * Generic attributes plugin
+ * Resource provider for images
  */
-public class GenericAttributesPlugin extends PluginDefaultImplementation
+public class ResponseImageResourceProvider implements ImageResourceProvider
 {
     /**
-     * Name of the generic attribute plugin
+     * {@inheritDoc}
      */
-    public static final String PLUGIN_NAME = "genericattributes";
+    @Override
+    public String getResourceTypeId(  )
+    {
+        return Response.RESOURCE_TYPE;
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void init(  )
+    public ImageResource getImageResource( int nIdResource )
     {
-        ImageResourceManager.registerProvider( new ResponseImageResourceProvider(  ) );
+        Response response = ResponseHome.findByPrimaryKey( nIdResource );
+
+        if ( response.getFile(  ) != null )
+        {
+            File file = FileHome.findByPrimaryKey( response.getFile(  ).getIdFile(  ) );
+
+            if ( file.getPhysicalFile(  ) != null )
+            {
+                PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile(  )
+                                                                                   .getIdPhysicalFile(  ) );
+                ImageResource image = new ImageResource(  );
+                image.setImage( physicalFile.getValue(  ) );
+                image.setMimeType( file.getMimeType(  ) );
+
+                return image;
+            }
+        }
+
+        return null;
     }
 }

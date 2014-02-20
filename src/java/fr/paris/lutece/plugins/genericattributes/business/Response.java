@@ -53,6 +53,11 @@ public class Response implements Serializable
      * Anonymized status value
      */
     public static final int CONSTANT_STATUS_ANONYMIZED = 10;
+
+    /**
+     * The resource type of responses
+     */
+    public static final String RESOURCE_TYPE = "GENERICATTRIBUTES_RESPONSE";
     private static final long serialVersionUID = -4566081273426609947L;
     private int _nIdResponse;
     private String _strToStringValueResponse;
