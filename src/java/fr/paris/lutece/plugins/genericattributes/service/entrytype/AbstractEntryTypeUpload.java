@@ -57,6 +57,7 @@ import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.html.Paginator;
+import fr.paris.lutece.util.url.UrlItem;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
@@ -88,6 +89,11 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
     protected static final String ALL = "*";
     protected static final String COMMA = ",";
 
+    // Private parameters
+    private static final String PARAMETER_RESOURCE_TYPE = "resource_type";
+    private static final String PARAMETER_ID = "id";
+    private static final String URL_IMAGE_SERVLET = "image";
+
     // PROPERTIES
     private static final String PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_MAX_FILES = "genericattributes.message.error.uploading_file.max_files";
     private static final String PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_FILE_MAX_SIZE = "genericattributes.message.error.uploading_file.file_max_size";
@@ -110,6 +116,21 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
      * @return The URL to redirect the user to download the file
      */
     public abstract String getUrlDownloadFile( int nResponseId, String strBaseUrl );
+
+    /**
+     * Get the URL to download a file of a response throw the image servlet.
+     * @param nResponseId The id of the response
+     * @param strBaseUrl The base URL
+     * @return The URL of to download the image
+     */
+    protected String getUrlDownloadImage( int nResponseId, String strBaseUrl )
+    {
+        UrlItem url = new UrlItem( strBaseUrl + URL_IMAGE_SERVLET );
+        url.addParameter( PARAMETER_RESOURCE_TYPE, Response.RESOURCE_TYPE );
+        url.addParameter( PARAMETER_ID, nResponseId );
+
+        return url.getUrl(  );
+    }
 
     /**
      * {@inheritDoc}
