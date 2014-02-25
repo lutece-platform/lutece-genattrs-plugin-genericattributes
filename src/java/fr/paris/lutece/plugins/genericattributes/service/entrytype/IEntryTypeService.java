@@ -87,14 +87,15 @@ public interface IEntryTypeService
     String FIELD_CONFIRM_FIELD_TITLE = "genericattributes.createEntry.labelConfirmFieldTitle";
 
     /**
-     * Get the HtmlCode of the entry
+     * Get the template to display the creation or modification form of an
+     * entry of this entry type
      * @param entry The entry
      * @param bDisplayFront True if the template will be used to display content
      *            in Front Office, false if it will be used to display content
      *            in back office
      * @return the HtmlCode of the entry
      */
-    String getHtmlCode( Entry entry, boolean bDisplayFront );
+    String getTemplateHtmlForm( Entry entry, boolean bDisplayFront );
 
     /**
      * Get template create URL of the entry
