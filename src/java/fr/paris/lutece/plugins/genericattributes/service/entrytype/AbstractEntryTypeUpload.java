@@ -53,10 +53,8 @@ import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
-import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
-import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
 
 import org.apache.commons.fileupload.FileItem;
@@ -567,28 +565,6 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
         entry.setMandatory( strMandatory != null );
 
         return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Paginator<?> getPaginator( Entry entry, int nItemPerPage, String strBaseUrl,
-        String strPageIndexParameterName, String strPageIndex )
-    {
-        return new Paginator<RegularExpression>( entry.getFields(  ).get( 0 ).getRegularExpressionList(  ),
-            nItemPerPage, strBaseUrl, strPageIndexParameterName, strPageIndex );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public LocalizedPaginator<?> getPaginator( Entry entry, int nItemPerPage, String strBaseUrl,
-        String strPageIndexParameterName, String strPageIndex, Locale locale )
-    {
-        return new LocalizedPaginator<RegularExpression>( entry.getFields(  ).get( 0 ).getRegularExpressionList(  ),
-            nItemPerPage, strBaseUrl, strPageIndexParameterName, strPageIndex, locale );
     }
 
     /**

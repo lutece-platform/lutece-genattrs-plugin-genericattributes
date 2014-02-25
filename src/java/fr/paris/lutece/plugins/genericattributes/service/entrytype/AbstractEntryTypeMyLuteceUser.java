@@ -44,7 +44,6 @@ import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.ReferenceList;
-import fr.paris.lutece.util.html.Paginator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,17 +102,6 @@ public abstract class AbstractEntryTypeMyLuteceUser extends EntryTypeService
         entry.getFields(  ).get( 0 ).setMaxSizeEnter( 0 );
 
         return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Paginator<?> getPaginator( Entry entry, int nItemPerPage, String strBaseUrl,
-        String strPageIndexParameterName, String strPageIndex )
-    {
-        return new Paginator( entry.getFields(  ).get( 0 ).getRegularExpressionList(  ), nItemPerPage, strBaseUrl,
-            strPageIndexParameterName, strPageIndex );
     }
 
     /**

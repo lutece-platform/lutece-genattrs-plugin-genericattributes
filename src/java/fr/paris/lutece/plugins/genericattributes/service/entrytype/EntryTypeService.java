@@ -37,9 +37,7 @@ import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceList;
-import fr.paris.lutece.util.html.Paginator;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
@@ -90,26 +88,6 @@ public abstract class EntryTypeService implements IEntryTypeService
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
         return StringUtils.EMPTY;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Paginator<?> getPaginator( Entry entry, int nItemPerPage, String strBaseUrl,
-        String strPageIndexParameterName, String strPageIndex )
-    {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public LocalizedPaginator<?> getPaginator( Entry entry, int nItemPerPage, String strBaseUrl,
-        String strPageIndexParameterName, String strPageIndex, Locale locale )
-    {
-        return null;
     }
 
     /**

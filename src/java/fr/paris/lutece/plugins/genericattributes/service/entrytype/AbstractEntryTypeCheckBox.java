@@ -43,8 +43,6 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.util.AppLogService;
-import fr.paris.lutece.portal.web.util.LocalizedPaginator;
-import fr.paris.lutece.util.html.Paginator;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -115,17 +113,6 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
         entry.setFieldInLine( nFieldInLine == 1 );
 
         return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Paginator<Field> getPaginator( Entry entry, int nItemPerPage, String strBaseUrl,
-        String strPageIndexParameterName, String strPageIndex )
-    {
-        return new Paginator<Field>( entry.getFields(  ), nItemPerPage, strBaseUrl, strPageIndexParameterName,
-            strPageIndex );
     }
 
     /**
@@ -227,16 +214,5 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
         return response.getField(  ).getTitle(  );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public LocalizedPaginator<Field> getPaginator( Entry entry, int nItemPerPage, String strBaseUrl,
-        String strPageIndexParameterName, String strPageIndex, Locale locale )
-    {
-        return new LocalizedPaginator<Field>( entry.getFields(  ), nItemPerPage, strBaseUrl, strPageIndexParameterName,
-            strPageIndex, locale );
     }
 }

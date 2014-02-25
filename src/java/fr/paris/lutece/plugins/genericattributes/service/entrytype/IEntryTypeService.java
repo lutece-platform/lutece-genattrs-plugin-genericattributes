@@ -37,9 +37,7 @@ import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceList;
-import fr.paris.lutece.util.html.Paginator;
 
 import org.apache.commons.fileupload.FileItem;
 
@@ -141,31 +139,6 @@ public interface IEntryTypeService
      */
     GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
         Locale locale );
-
-    /**
-     * The paginator who is use in the template modify of the entry
-     * @param entry The entry
-     * @param nItemPerPage Number of items to display per page
-     * @param strBaseUrl The base Url for build links on each page link
-     * @param strPageIndexParameterName The parameter name for the page index
-     * @param strPageIndex The current page index
-     * @return the paginator who is use in the template modify of the entry
-     */
-    Paginator<?> getPaginator( Entry entry, int nItemPerPage, String strBaseUrl, String strPageIndexParameterName,
-        String strPageIndex );
-
-    /**
-     * The paginator who is use in the template modify of the entry
-     * @param entry The entry
-     * @param nItemPerPage Number of items to display per page
-     * @param strBaseUrl The base Url for build links on each page link
-     * @param strPageIndexParameterName The parameter name for the page index
-     * @param strPageIndex The current page index
-     * @param locale Locale
-     * @return the paginator who is use in the template modify of the entry
-     */
-    LocalizedPaginator<?> getPaginator( Entry entry, int nItemPerPage, String strBaseUrl,
-        String strPageIndexParameterName, String strPageIndex, Locale locale );
 
     /**
      * Get the list of regular expression who is use in the template modify of

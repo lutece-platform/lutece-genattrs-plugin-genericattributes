@@ -44,9 +44,7 @@ import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
-import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceList;
-import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.string.StringUtil;
 
 import org.apache.commons.lang.StringUtils;
@@ -181,17 +179,6 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         }
 
         return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Paginator<?> getPaginator( Entry entry, int nItemPerPage, String strBaseUrl,
-        String strPageIndexParameterName, String strPageIndex )
-    {
-        return new Paginator<RegularExpression>( entry.getFields(  ).get( 0 ).getRegularExpressionList(  ),
-            nItemPerPage, strBaseUrl, strPageIndexParameterName, strPageIndex );
     }
 
     /**
@@ -336,16 +323,5 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
         return response.getResponseValue(  );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public LocalizedPaginator<RegularExpression> getPaginator( Entry entry, int nItemPerPage, String strBaseUrl,
-        String strPageIndexParameterName, String strPageIndex, Locale locale )
-    {
-        return new LocalizedPaginator<RegularExpression>( entry.getFields(  ).get( 0 ).getRegularExpressionList(  ),
-            nItemPerPage, strBaseUrl, strPageIndexParameterName, strPageIndex, locale );
     }
 }
