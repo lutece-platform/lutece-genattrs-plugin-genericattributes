@@ -35,15 +35,17 @@ package fr.paris.lutece.plugins.genericattributes.business;
 
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.sql.Timestamp;
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 
 
 /**
- *
+ * 
  * class ResponseFilter
- *
+ * 
  */
 public class ResponseFilter
 {
@@ -57,12 +59,13 @@ public class ResponseFilter
     private boolean _bGroupbyMonth;
     private String _strOrderBy;
     private boolean _bIsOrderByAsc = true;
+    private List<Integer> _listId;
 
     /**
      * Get the id of a resource in the filter
      * @return The id of the resource to insert in the filter
      */
-    public int getIdResource(  )
+    public int getIdResource( )
     {
         return _nIdResource;
     }
@@ -77,19 +80,19 @@ public class ResponseFilter
     }
 
     /**
-     *
+     * 
      * @return true if the filter contain an id of a resource
      */
-    public boolean containsIdResource(  )
+    public boolean containsIdResource( )
     {
         return ( _nIdResource != GenericAttributesUtils.CONSTANT_ID_NULL );
     }
 
     /**
-     *
+     * 
      * @return the id of field insert in the filter
      */
-    public int getIdField(  )
+    public int getIdField( )
     {
         return _nIdField;
     }
@@ -104,19 +107,19 @@ public class ResponseFilter
     }
 
     /**
-     *
+     * 
      * @return true if the filter contain an id of field depend
      */
-    public boolean containsIdField(  )
+    public boolean containsIdField( )
     {
         return ( _nIdField != GenericAttributesUtils.CONSTANT_ID_NULL );
     }
 
     /**
-     *
+     * 
      * @return the id of entry insert in the filter
      */
-    public int getIdEntry(  )
+    public int getIdEntry( )
     {
         return _nIdEntry;
     }
@@ -131,19 +134,19 @@ public class ResponseFilter
     }
 
     /**
-     *
+     * 
      * @return true if the filter contain an id of entry depend
      */
-    public boolean containsIdEntry(  )
+    public boolean containsIdEntry( )
     {
         return ( _nIdEntry != GenericAttributesUtils.CONSTANT_ID_NULL );
     }
 
     /**
-     *
+     * 
      * @return date of the first submit
      */
-    public Timestamp getDateFirst(  )
+    public Timestamp getDateFirst( )
     {
         return _tDateFirst;
     }
@@ -158,19 +161,19 @@ public class ResponseFilter
     }
 
     /**
-     *
+     * 
      * @return true if the filter contain the date of the first submit
      */
-    public boolean containsDateFirst(  )
+    public boolean containsDateFirst( )
     {
         return ( _tDateFirst != null );
     }
 
     /**
-     *
+     * 
      * @return date of the last submit
      */
-    public Timestamp getDateLast(  )
+    public Timestamp getDateLast( )
     {
         return _tDateLast;
     }
@@ -185,19 +188,19 @@ public class ResponseFilter
     }
 
     /**
-     *
+     * 
      * @return true if the filter contain the date of the last submit
      */
-    public boolean containsDateLast(  )
+    public boolean containsDateLast( )
     {
         return ( _tDateLast != null );
     }
 
     /**
-     *
+     * 
      * @return true if the response must be group by day
      */
-    public boolean isGroupbyDay(  )
+    public boolean isGroupbyDay( )
     {
         return _bGroupbyDay;
     }
@@ -215,7 +218,7 @@ public class ResponseFilter
      * true if the response must be group by month
      * @return true if the response must be group by month
      */
-    public boolean isGroupbyMonth(  )
+    public boolean isGroupbyMonth( )
     {
         return _bGroupbyMonth;
     }
@@ -233,7 +236,7 @@ public class ResponseFilter
      * true if the response must be group by week
      * @return true if the response must be group by week
      */
-    public boolean isGroupbyWeek(  )
+    public boolean isGroupbyWeek( )
     {
         return _bGroupbyWeek;
     }
@@ -260,7 +263,7 @@ public class ResponseFilter
      * Get order by
      * @return the order by
      */
-    public String getOrderBy(  )
+    public String getOrderBy( )
     {
         return _strOrderBy;
     }
@@ -269,7 +272,7 @@ public class ResponseFilter
      * Check if the filter contains order by
      * @return true if it contains, false otherwise
      */
-    public boolean containsOrderBy(  )
+    public boolean containsOrderBy( )
     {
         return StringUtils.isNotBlank( _strOrderBy );
     }
@@ -287,8 +290,33 @@ public class ResponseFilter
      * Check if the order by is asc
      * @return true if the order by is asc;
      */
-    public boolean isOrderByAsc(  )
+    public boolean isOrderByAsc( )
     {
         return _bIsOrderByAsc;
+    }
+
+    /**
+     * @return the _listId
+     */
+    public List<Integer> getListId( )
+    {
+        return this._listId;
+    }
+
+    /**
+     * @param listId the _listId to set
+     */
+    public void setListId( List<Integer> listId )
+    {
+        this._listId = listId;
+    }
+
+    /**
+     * 
+     * @return true if the filter contain an id of entry depend
+     */
+    public boolean containsListIdResource( )
+    {
+        return CollectionUtils.isNotEmpty( _listId );
     }
 }
