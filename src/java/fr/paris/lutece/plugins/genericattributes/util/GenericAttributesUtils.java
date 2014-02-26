@@ -68,7 +68,7 @@ public final class GenericAttributesUtils
     /**
      * Private constructor
      */
-    private GenericAttributesUtils( )
+    private GenericAttributesUtils(  )
     {
         // Do nothing
     }
