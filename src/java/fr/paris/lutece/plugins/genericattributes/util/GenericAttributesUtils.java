@@ -47,12 +47,31 @@ import java.util.List;
 /**
  * Utility class of plugin generic attributes
  */
-public class GenericAttributesUtils
+public final class GenericAttributesUtils
 {
+    /**
+     * Equals constant
+     */
     public static final String CONSTANT_EQUAL = "=";
+
+    /**
+     * Value to represent a null id
+     */
     public static final int CONSTANT_ID_NULL = -1;
+
+    /**
+     * Value for anonymized responses
+     */
     public static final String CONSTANT_RESPONSE_VALUE_ANONYMIZED = "anonymized";
     private static final String REGEX_ID = "^[\\d]+$";
+
+    /**
+     * Private constructor
+     */
+    private GenericAttributesUtils( )
+    {
+        // Do nothing
+    }
 
     /**
      * Return the field which title is specified in parameter
