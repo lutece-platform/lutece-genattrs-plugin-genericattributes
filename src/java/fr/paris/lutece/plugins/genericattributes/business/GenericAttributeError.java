@@ -33,13 +33,15 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
+import fr.paris.lutece.util.ErrorMessage;
+
 import java.io.Serializable;
 
 
 /**
  * class GenericAttributeError
  */
-public class GenericAttributeError implements Serializable
+public class GenericAttributeError implements Serializable, ErrorMessage
 {
     private static final long serialVersionUID = -7407796611197325735L;
     private String _strTitleQuestion;
@@ -115,5 +117,14 @@ public class GenericAttributeError implements Serializable
     public String getUrl(  )
     {
         return _strUrl;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getMessage( )
+    {
+        return getErrorMessage( );
     }
 }
