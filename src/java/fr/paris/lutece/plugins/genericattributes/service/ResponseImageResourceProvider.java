@@ -41,6 +41,7 @@ import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFileHome;
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.image.ImageResourceProvider;
+import fr.paris.lutece.util.file.FileUtil;
 
 
 /**
@@ -69,7 +70,7 @@ public class ResponseImageResourceProvider implements ImageResourceProvider
         {
             File file = FileHome.findByPrimaryKey( response.getFile(  ).getIdFile(  ) );
 
-            if ( file.getPhysicalFile(  ) != null )
+            if ( file.getPhysicalFile( ) != null && FileUtil.hasImageExtension( file.getTitle( ) ) )
             {
                 PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile(  )
                                                                                    .getIdPhysicalFile(  ) );
