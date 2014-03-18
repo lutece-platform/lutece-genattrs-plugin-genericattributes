@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
+import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
@@ -213,6 +214,16 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
+        if ( response.getField(  ).getTitle(  ) == null )
+        {
+            Field field = FieldHome.findByPrimaryKey( response.getField(  ).getIdField(  ) );
+
+            if ( field != null )
+            {
+                response.setField( field );
+            }
+        }
+
         return response.getField(  ).getTitle(  );
     }
 }

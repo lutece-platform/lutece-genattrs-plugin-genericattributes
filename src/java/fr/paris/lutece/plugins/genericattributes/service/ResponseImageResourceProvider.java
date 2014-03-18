@@ -70,7 +70,7 @@ public class ResponseImageResourceProvider implements ImageResourceProvider
         {
             File file = FileHome.findByPrimaryKey( response.getFile(  ).getIdFile(  ) );
 
-            if ( file.getPhysicalFile( ) != null && FileUtil.hasImageExtension( file.getTitle( ) ) )
+            if ( ( file.getPhysicalFile(  ) != null ) && FileUtil.hasImageExtension( file.getTitle(  ) ) )
             {
                 PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile(  )
                                                                                    .getIdPhysicalFile(  ) );

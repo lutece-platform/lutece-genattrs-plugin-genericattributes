@@ -123,8 +123,8 @@ public class GenericAttributeError implements Serializable, ErrorMessage
      * {@inheritDoc}
      */
     @Override
-    public String getMessage( )
+    public String getMessage(  )
     {
-        return getErrorMessage( );
+        return getErrorMessage(  );
     }
 }
