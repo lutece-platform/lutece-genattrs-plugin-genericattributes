@@ -42,6 +42,7 @@ import fr.paris.lutece.portal.business.physicalfile.PhysicalFileHome;
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.image.ImageResourceProvider;
 import fr.paris.lutece.util.file.FileUtil;
+import fr.paris.lutece.util.url.UrlItem;
 
 
 /**
@@ -83,5 +84,18 @@ public class ResponseImageResourceProvider implements ImageResourceProvider
         }
 
         return null;
+    }
+
+    /**
+     * Get the URL to download an image response
+     * @param nIdResponse The id of the response
+     * @return The URl to download the image
+     */
+    public static String getUrlDownloadImageResponse( int nIdResponse )
+    {
+        UrlItem urlItem = new UrlItem( "/images/" );
+        urlItem.addParameter( "resource_type", Response.RESOURCE_TYPE );
+        urlItem.addParameter( "id", nIdResponse );
+        return urlItem.getUrl( );
     }
 }
