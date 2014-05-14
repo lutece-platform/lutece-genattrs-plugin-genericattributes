@@ -96,6 +96,7 @@ public class ResponseImageResourceProvider implements ImageResourceProvider
         UrlItem urlItem = new UrlItem( "image" );
         urlItem.addParameter( "resource_type", Response.RESOURCE_TYPE );
         urlItem.addParameter( "id", nIdResponse );
-        return urlItem.getUrl( );
+
+        return urlItem.getUrl(  );
     }
 }
