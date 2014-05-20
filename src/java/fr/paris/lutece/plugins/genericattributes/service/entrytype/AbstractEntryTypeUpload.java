@@ -53,6 +53,7 @@ import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.url.UrlItem;
@@ -407,13 +408,33 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
      */
     protected List<FileItem> getFileSources( Entry entry, HttpServletRequest request )
     {
-        HttpSession session = request.getSession( false );
-
-        if ( session != null )
+        if ( request != null )
         {
-            // check the file in session - it might no be deleted
-            return getAsynchronousUploadHandler(  )
-                       .getFileItems( Integer.toString( entry.getIdEntry(  ) ), session.getId(  ) );
+            String strIdEntry = Integer.toString( entry.getIdEntry(  ) );
+
+            // Files are only removed if a given flag is in the request 
+            getAsynchronousUploadHandler( ).doRemoveFile( request, strIdEntry );
+
+            if ( request instanceof MultipartHttpServletRequest )
+            {
+                MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+                List<FileItem> listFileItem = multipartRequest.getFileList( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
+
+                if ( ( listFileItem != null ) && ( listFileItem.size(  ) > 0 ) )
+                {
+                    String strSessionId = request.getSession( ).getId( );
+                    for ( FileItem fileItem : listFileItem )
+                    {
+                        if ( fileItem.getSize( ) > 0l && StringUtils.isNotEmpty( fileItem.getName( ) ) )
+                        {
+                            getAsynchronousUploadHandler( ).addFileItemToUploadedFile( fileItem, strIdEntry,
+                                    strSessionId );
+                        }
+                    }
+                }
+            }
+
+            return getAsynchronousUploadHandler( ).getFileItems( strIdEntry, request.getSession( ).getId( ) );
         }
 
         return null;

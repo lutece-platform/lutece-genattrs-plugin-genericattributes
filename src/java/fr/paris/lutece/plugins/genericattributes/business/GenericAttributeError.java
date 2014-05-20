@@ -48,12 +48,13 @@ public class GenericAttributeError implements Serializable, ErrorMessage
     private String _strErrorMessage;
     private boolean _bMandatoryError;
     private String _strUrl;
+    private boolean _bDisplayableError = true;
 
     /**
      * return true if the error is a mandatory error
      * @return true if the error is a mandatory error
      */
-    public boolean isMandatoryError(  )
+    public boolean isMandatoryError( )
     {
         return _bMandatoryError;
     }
@@ -71,7 +72,7 @@ public class GenericAttributeError implements Serializable, ErrorMessage
      * Gets the error Message
      * @return the error Message
      */
-    public String getErrorMessage(  )
+    public String getErrorMessage( )
     {
         return _strErrorMessage;
     }
@@ -86,10 +87,10 @@ public class GenericAttributeError implements Serializable, ErrorMessage
     }
 
     /**
-     *
+     * 
      * @return the title of the mandatory question
      */
-    public String getTitleQuestion(  )
+    public String getTitleQuestion( )
     {
         return _strTitleQuestion;
     }
@@ -114,7 +115,7 @@ public class GenericAttributeError implements Serializable, ErrorMessage
     /**
      * @return the _strUrl
      */
-    public String getUrl(  )
+    public String getUrl( )
     {
         return _strUrl;
     }
@@ -123,8 +124,29 @@ public class GenericAttributeError implements Serializable, ErrorMessage
      * {@inheritDoc}
      */
     @Override
-    public String getMessage(  )
+    public String getMessage( )
     {
-        return getErrorMessage(  );
+        return getErrorMessage( );
+    }
+
+    /**
+     * Check if the error is a displayable error. Non displayable errors should
+     * not be displayed in any manners to users.
+     * @return True if the error is a displayable error, false otherwise
+     */
+    public boolean getIsDisplayableError( )
+    {
+        return _bDisplayableError;
+    }
+
+    /**
+     * Set the error as displayable or not. Non displayable errors should
+     * not be displayed in any manners to users.
+     * @param bDisplayableError True if the error is a displayable error, false
+     *            otherwise
+     */
+    public void setIsDisplayableError( boolean bDisplayableError )
+    {
+        _bDisplayableError = bDisplayableError;
     }
 }

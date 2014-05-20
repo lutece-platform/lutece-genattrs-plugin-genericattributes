@@ -42,7 +42,6 @@ import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
-import fr.paris.lutece.portal.service.util.AppLogService;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -111,16 +110,9 @@ public abstract class AbstractEntryTypeSelect extends EntryTypeService
         Response response = new Response(  );
         response.setEntry( entry );
 
-        if ( strIdField != null )
+        if ( StringUtils.isNotEmpty( strIdField ) && StringUtils.isNumeric( strIdField ) )
         {
-            try
-            {
-                nIdField = Integer.parseInt( strIdField );
-            }
-            catch ( NumberFormatException ne )
-            {
-                AppLogService.error( ne.getMessage(  ), ne );
-            }
+            nIdField = Integer.parseInt( strIdField );
         }
 
         if ( nIdField != -1 )

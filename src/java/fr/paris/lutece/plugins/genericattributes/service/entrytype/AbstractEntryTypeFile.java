@@ -1,0 +1,233 @@
+/*
+ * Copyright (c) 2002-2014, Mairie de Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
+package fr.paris.lutece.plugins.genericattributes.service.entrytype;
+
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.GenAttFileItem;
+import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
+import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
+import fr.paris.lutece.portal.business.file.File;
+import fr.paris.lutece.portal.business.file.FileHome;
+import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
+import fr.paris.lutece.portal.service.fileupload.FileUploadService;
+import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
+import fr.paris.lutece.util.filesystem.FileSystemUtil;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
+
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+
+
+/**
+ * Abstract entries of type files. This abstract entry type extends the abstract
+ * entry type upload.
+ */
+public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
+{
+    private static final String MESSAGE_ERROR_NOT_AN_IMAGE = "genericattributes.message.notAnImage";
+
+    /**
+     * Check whether this entry type allows only images or every file type
+     * @return True if this entry type allows only images, false if it allow
+     *         every file type
+     */
+    protected abstract boolean checkForImages( );
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
+            Locale locale )
+    {
+        List<FileItem> listFilesSource = null;
+
+        if ( request instanceof MultipartHttpServletRequest )
+        {
+            List<FileItem> asynchronousFileItem = getFileSources( entry, request );
+
+            if ( asynchronousFileItem != null )
+            {
+                listFilesSource = asynchronousFileItem;
+            }
+
+            GenericAttributeError genAttError = null;
+
+            if ( getAsynchronousUploadHandler( ).hasRemoveFlag( request, Integer.toString( entry.getIdEntry( ) ) ) )
+            {
+                if ( ( listFilesSource != null ) && !listFilesSource.isEmpty( ) )
+                {
+                    for ( FileItem fileItem : listFilesSource )
+                    {
+                        if ( fileItem instanceof GenAttFileItem )
+                        {
+                            GenAttFileItem genAttFileItem = (GenAttFileItem) fileItem;
+                            if ( genAttFileItem.getIdResponse( ) > 0 )
+                            {
+                                Response response = ResponseHome.findByPrimaryKey( genAttFileItem.getIdResponse( ) );
+                                response.setEntry( entry );
+                                response.setFile( FileHome.findByPrimaryKey( response.getFile( ).getIdFile( ) ) );
+                                listResponse.add( response );
+                            }
+                        }
+                        else
+                        {
+                            Response response = new Response( );
+                            response.setEntry( entry );
+                            File file = new File( );
+                            file.setTitle( fileItem.getName( ) );
+                            file.setSize( (int) fileItem.getSize( ) );
+                            listResponse.add( response );
+                        }
+                    }
+                    genAttError = new GenericAttributeError( );
+                    genAttError.setErrorMessage( StringUtils.EMPTY );
+                    genAttError.setMandatoryError( false );
+                    genAttError.setIsDisplayableError( false );
+                }
+            }
+
+            if ( ( listFilesSource != null ) && !listFilesSource.isEmpty( ) )
+            {
+                genAttError = checkResponseData( entry, listFilesSource, locale, request );
+
+                if ( genAttError != null )
+                {
+                    // Add the response to the list in order to have the error message in the page
+                    //                    Response response = new Response(  );
+                    //                    response.setEntry( entry );
+                    //                    listResponse.add( response );
+
+                    for ( FileItem fileItem : listFilesSource )
+                    {
+                        if ( fileItem instanceof GenAttFileItem )
+                        {
+                            GenAttFileItem genAttFileItem = (GenAttFileItem) fileItem;
+                            if ( genAttFileItem.getIdResponse( ) > 0 )
+                            {
+                                Response response = ResponseHome.findByPrimaryKey( genAttFileItem.getIdResponse( ) );
+                                response.setEntry( entry );
+                                response.setFile( FileHome.findByPrimaryKey( response.getFile( ).getIdFile( ) ) );
+                                listResponse.add( response );
+                            }
+                        }
+                    }
+
+                    return genAttError;
+                }
+
+                for ( FileItem fileItem : listFilesSource )
+                {
+                    String strFilename = ( fileItem != null ) ? FileUploadService.getFileNameOnly( fileItem )
+                            : StringUtils.EMPTY;
+
+                    //Add the image to the response list
+                    Response response = new Response( );
+                    response.setEntry( entry );
+
+                    if ( ( fileItem != null ) && ( fileItem.getSize( ) < Integer.MAX_VALUE ) )
+                    {
+                        PhysicalFile physicalFile = new PhysicalFile( );
+                        physicalFile.setValue( fileItem.get( ) );
+
+                        File file = new File( );
+                        file.setPhysicalFile( physicalFile );
+                        file.setTitle( strFilename );
+                        file.setSize( (int) fileItem.getSize( ) );
+                        file.setMimeType( FileSystemUtil.getMIMEType( strFilename ) );
+
+                        response.setFile( file );
+                    }
+
+                    listResponse.add( response );
+
+                    if ( checkForImages( ) )
+                    {
+                        BufferedImage image = null;
+
+                        try
+                        {
+                            if ( ( fileItem != null ) && ( fileItem.get( ) != null ) )
+                            {
+                                image = ImageIO.read( new ByteArrayInputStream( fileItem.get( ) ) );
+                            }
+                        }
+                        catch ( IOException e )
+                        {
+                            AppLogService.error( e );
+                        }
+
+                        if ( ( image == null ) && StringUtils.isNotBlank( strFilename ) )
+                        {
+                            genAttError = new GenericAttributeError( );
+                            genAttError.setMandatoryError( false );
+
+                            Object[] args = { ( fileItem != null ) ? fileItem.getName( ) : StringUtils.EMPTY };
+                            genAttError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_ERROR_NOT_AN_IMAGE,
+                                    args, request.getLocale( ) ) );
+                            genAttError.setTitleQuestion( entry.getTitle( ) );
+                        }
+                    }
+                }
+
+                return genAttError;
+            }
+
+            if ( entry.isMandatory( ) )
+            {
+                genAttError = new MandatoryError( entry, locale );
+
+                Response response = new Response( );
+                response.setEntry( entry );
+                listResponse.add( response );
+            }
+
+            return genAttError;
+        }
+
+        return entry.isMandatory( ) ? new MandatoryError( entry, locale ) : null;
+    }
+}

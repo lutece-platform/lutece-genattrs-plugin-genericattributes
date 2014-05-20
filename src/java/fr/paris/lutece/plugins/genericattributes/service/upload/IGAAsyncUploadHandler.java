@@ -39,6 +39,8 @@ import org.apache.commons.fileupload.FileItem;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * Interface for asynchronous upload handlers used by entries of type upload
@@ -60,4 +62,29 @@ public interface IGAAsyncUploadHandler extends IAsynchronousUploadHandler
      * @return the fileItem found, <code>null</code> otherwise.
      */
     List<FileItem> getFileItems( String strIdEntry, String strSessionId );
+
+    /**
+     * Add file item to the list of uploaded files
+     * @param fileItem the file item
+     * @param strIdEntry the id entry
+     * @param strSessionId the session id
+     */
+    void addFileItemToUploadedFile( FileItem fileItem, String strIdEntry, String strSessionId );
+
+    /**
+     * Check if the request has a remove flag for a given entry.
+     * @param request The request
+     * @param strIdEntry The id of the entry
+     * @return True if the request has a remove flag for the given entry, false
+     *         otherwise
+     */
+    boolean hasRemoveFlag( HttpServletRequest request, String strIdEntry );
+
+    /**
+     * Do remove a file of a given entry if a flag is present in the request.
+     * Files are selected from the request.
+     * @param request The request
+     * @param strIdEntry The id of the entry
+     */
+    void doRemoveFile( HttpServletRequest request, String strIdEntry );
 }
