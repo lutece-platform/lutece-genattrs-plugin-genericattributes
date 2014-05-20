@@ -413,28 +413,29 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
             String strIdEntry = Integer.toString( entry.getIdEntry(  ) );
 
             // Files are only removed if a given flag is in the request 
-            getAsynchronousUploadHandler( ).doRemoveFile( request, strIdEntry );
+            getAsynchronousUploadHandler(  ).doRemoveFile( request, strIdEntry );
 
             if ( request instanceof MultipartHttpServletRequest )
             {
                 MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-                List<FileItem> listFileItem = multipartRequest.getFileList( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
+                List<FileItem> listFileItem = multipartRequest.getFileList( PREFIX_ATTRIBUTE + entry.getIdEntry(  ) );
 
                 if ( ( listFileItem != null ) && ( listFileItem.size(  ) > 0 ) )
                 {
-                    String strSessionId = request.getSession( ).getId( );
+                    String strSessionId = request.getSession(  ).getId(  );
+
                     for ( FileItem fileItem : listFileItem )
                     {
-                        if ( fileItem.getSize( ) > 0l && StringUtils.isNotEmpty( fileItem.getName( ) ) )
+                        if ( ( fileItem.getSize(  ) > 0L ) && StringUtils.isNotEmpty( fileItem.getName(  ) ) )
                         {
-                            getAsynchronousUploadHandler( ).addFileItemToUploadedFile( fileItem, strIdEntry,
-                                    strSessionId );
+                            getAsynchronousUploadHandler(  )
+                                .addFileItemToUploadedFile( fileItem, strIdEntry, strSessionId );
                         }
                     }
                 }
             }
 
-            return getAsynchronousUploadHandler( ).getFileItems( strIdEntry, request.getSession( ).getId( ) );
+            return getAsynchronousUploadHandler(  ).getFileItems( strIdEntry, request.getSession(  ).getId(  ) );
         }
 
         return null;
