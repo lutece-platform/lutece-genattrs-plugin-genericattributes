@@ -68,7 +68,7 @@ import javax.servlet.http.HttpSession;
  * AbstractAsynchronousUploadHandler.
  * @see #getFileItems(String, String)
  * @see #removeFileItem(String, String, int)
- * 
+ *
  */
 public abstract class AbstractAsynchronousUploadHandler implements IGAAsyncUploadHandler
 {
@@ -81,43 +81,42 @@ public abstract class AbstractAsynchronousUploadHandler implements IGAAsyncUploa
 
     /** <sessionId,<fieldName,fileItems>> */
     /** contains uploaded file items */
-    private static Map<String, Map<String, List<FileItem>>> _mapAsynchronousUpload = new ConcurrentHashMap<String, Map<String, List<FileItem>>>( );
+    private static Map<String, Map<String, List<FileItem>>> _mapAsynchronousUpload = new ConcurrentHashMap<String, Map<String, List<FileItem>>>(  );
 
     /**
      * Get the upload submit prefix
      * @return The upload submit prefix
      */
-    public abstract String getUploadSubmitPrefix( );
+    public abstract String getUploadSubmitPrefix(  );
 
     /**
      * Get the upload delete prefix
      * @return The upload delete prefix
      */
-    public abstract String getUploadDeletePrefix( );
+    public abstract String getUploadDeletePrefix(  );
 
     /**
      * Get the upload checkbox prefix
      * @return The upload checkbox prefix
      */
-    public abstract String getUploadCheckboxPrefix( );
+    public abstract String getUploadCheckboxPrefix(  );
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void process( HttpServletRequest request, HttpServletResponse response, JSONObject mainObject,
-            List<FileItem> listFileItemsToUpload )
+        List<FileItem> listFileItemsToUpload )
     {
         // prevent 0 empty uploads
-        if ( ( listFileItemsToUpload == null ) || listFileItemsToUpload.isEmpty( ) )
+        if ( ( listFileItemsToUpload == null ) || listFileItemsToUpload.isEmpty(  ) )
         {
             throw new AppException( "No file uploaded" );
         }
 
         String strSessionId = request.getParameter( PARAMETER_JSESSION_ID );
-        String strIdSession = request.getParameter( PARAMETER_JSESSION_ID );
 
-        if ( StringUtils.isNotBlank( strIdSession ) )
+        if ( StringUtils.isNotBlank( strSessionId ) )
         {
             String strFieldName = request.getParameter( PARAMETER_FIELD_NAME );
 
@@ -133,22 +132,23 @@ public abstract class AbstractAsynchronousUploadHandler implements IGAAsyncUploa
 
             List<FileItem> fileItemsSession = mapFileItemsSession.get( strFieldName );
 
-            if ( canUploadFiles( strFieldName, fileItemsSession, listFileItemsToUpload, mainObject, request.getLocale( ) ) )
+            if ( canUploadFiles( strFieldName, fileItemsSession, listFileItemsToUpload, mainObject,
+                        request.getLocale(  ) ) )
             {
                 fileItemsSession.addAll( listFileItemsToUpload );
-
-                JSONObject jsonListFileItems = JSONUtils.getUploadedFileJSON( fileItemsSession );
-                mainObject.accumulateAll( jsonListFileItems );
-                // add entry id to json
-                mainObject.element( JSONUtils.JSON_KEY_FIELD_NAME, strFieldName );
             }
+
+            JSONObject jsonListFileItems = JSONUtils.getUploadedFileJSON( fileItemsSession );
+            mainObject.accumulateAll( jsonListFileItems );
+            // add entry id to json
+            mainObject.element( JSONUtils.JSON_KEY_FIELD_NAME, strFieldName );
         }
         else
         {
-            AppLogService.error( AbstractAsynchronousUploadHandler.class.getName( ) + " : Session does not exists" );
+            AppLogService.error( AbstractAsynchronousUploadHandler.class.getName(  ) + " : Session does not exists" );
 
             String strMessage = I18nService.getLocalizedString( PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_SESSION_LOST,
-                    request.getLocale( ) );
+                    request.getLocale(  ) );
             JSONUtils.buildJsonError( mainObject, strMessage );
         }
     }
@@ -181,11 +181,11 @@ public abstract class AbstractAsynchronousUploadHandler implements IGAAsyncUploa
         // Remove the file (this will also delete the file physically)
         List<FileItem> uploadedFiles = getFileItems( strIdEntry, strSessionId );
 
-        if ( ( uploadedFiles != null ) && !uploadedFiles.isEmpty( ) && ( uploadedFiles.size( ) > nIndex ) )
+        if ( ( uploadedFiles != null ) && !uploadedFiles.isEmpty(  ) && ( uploadedFiles.size(  ) > nIndex ) )
         {
             // Remove the object from the Hashmap
             FileItem fileItem = uploadedFiles.remove( nIndex );
-            fileItem.delete( );
+            fileItem.delete(  );
         }
     }
 
@@ -201,19 +201,20 @@ public abstract class AbstractAsynchronousUploadHandler implements IGAAsyncUploa
     /**
      * Checks the request parameters to see if an upload submit has been
      * called.
-     * 
+     *
      * @param request the HTTP request
      * @return the name of the upload action, if any. Null otherwise.
      */
     public String getUploadAction( HttpServletRequest request )
     {
-        Enumeration<String> enumParamNames = request.getParameterNames( );
+        Enumeration<String> enumParamNames = request.getParameterNames(  );
 
-        while ( enumParamNames.hasMoreElements( ) )
+        while ( enumParamNames.hasMoreElements(  ) )
         {
-            String paramName = enumParamNames.nextElement( );
+            String paramName = enumParamNames.nextElement(  );
 
-            if ( paramName.startsWith( getUploadSubmitPrefix( ) ) || paramName.startsWith( getUploadDeletePrefix( ) ) )
+            if ( paramName.startsWith( getUploadSubmitPrefix(  ) ) ||
+                    paramName.startsWith( getUploadDeletePrefix(  ) ) )
             {
                 return paramName;
             }
@@ -224,33 +225,33 @@ public abstract class AbstractAsynchronousUploadHandler implements IGAAsyncUploa
 
     /**
      * Performs an upload action.
-     * 
+     *
      * @param request the HTTP request
      * @param strUploadAction the name of the upload action
      */
     public void doUploadAction( HttpServletRequest request, String strUploadAction )
     {
         // Get the name of the upload field
-        String strIdEntry = ( strUploadAction.startsWith( getUploadSubmitPrefix( ) ) ? strUploadAction
-                .substring( getUploadSubmitPrefix( ).length( ) ) : strUploadAction.substring( getUploadDeletePrefix( )
-                .length( ) ) );
+        String strIdEntry = ( strUploadAction.startsWith( getUploadSubmitPrefix(  ) )
+            ? strUploadAction.substring( getUploadSubmitPrefix(  ).length(  ) )
+            : strUploadAction.substring( getUploadDeletePrefix(  ).length(  ) ) );
 
         String strFieldName = buildFieldName( strIdEntry );
 
-        if ( StringUtils.equals( strUploadAction, getUploadSubmitPrefix( ) )
-                && request instanceof MultipartHttpServletRequest )
+        if ( StringUtils.equals( strUploadAction, getUploadSubmitPrefix(  ) ) &&
+                request instanceof MultipartHttpServletRequest )
         {
             // A file was submitted
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 
             FileItem fileItem = multipartRequest.getFile( strFieldName );
 
-            if ( ( fileItem != null ) && ( fileItem.getSize( ) > 0 ) )
+            if ( ( fileItem != null ) && ( fileItem.getSize(  ) > 0 ) )
             {
-                addFileItemToUploadedFile( fileItem, strIdEntry, request.getSession( ).getId( ) );
+                addFileItemToUploadedFile( fileItem, strIdEntry, request.getSession(  ).getId(  ) );
             }
         }
-        else if ( StringUtils.equals( strUploadAction, getUploadDeletePrefix( ) ) )
+        else if ( StringUtils.equals( strUploadAction, getUploadDeletePrefix(  ) ) )
         {
             doRemoveFile( request, strIdEntry );
         }
@@ -270,20 +271,20 @@ public abstract class AbstractAsynchronousUploadHandler implements IGAAsyncUploa
             {
                 // Some previously uploaded files were deleted
                 // Build the prefix of the associated checkboxes
-                String strPrefix = getUploadCheckboxPrefix( ) + strIdEntry;
+                String strPrefix = getUploadCheckboxPrefix(  ) + strIdEntry;
 
                 // Look for the checkboxes in the request
-                Enumeration<String> enumParamNames = request.getParameterNames( );
-                List<Integer> listIndexes = new ArrayList<Integer>( );
+                Enumeration<String> enumParamNames = request.getParameterNames(  );
+                List<Integer> listIndexes = new ArrayList<Integer>(  );
 
-                while ( enumParamNames.hasMoreElements( ) )
+                while ( enumParamNames.hasMoreElements(  ) )
                 {
-                    String strParamName = enumParamNames.nextElement( );
+                    String strParamName = enumParamNames.nextElement(  );
 
                     if ( strParamName.startsWith( strPrefix ) )
                     {
                         // Get the index from the name of the checkbox
-                        listIndexes.add( Integer.parseInt( strParamName.substring( strPrefix.length( ) ) ) );
+                        listIndexes.add( Integer.parseInt( strParamName.substring( strPrefix.length(  ) ) ) );
                     }
                 }
 
@@ -292,7 +293,7 @@ public abstract class AbstractAsynchronousUploadHandler implements IGAAsyncUploa
 
                 for ( int nIndex : listIndexes )
                 {
-                    removeFileItem( strIdEntry, session.getId( ), nIndex );
+                    removeFileItem( strIdEntry, session.getId(  ), nIndex );
                 }
             }
         }
@@ -306,7 +307,7 @@ public abstract class AbstractAsynchronousUploadHandler implements IGAAsyncUploa
     {
         // This is the name that will be displayed in the form. We keep
         // the original name, but clean it to make it cross-platform.
-        String strFileName = UploadUtil.cleanFileName( fileItem.getName( ).trim( ) );
+        String strFileName = UploadUtil.cleanFileName( fileItem.getName(  ).trim(  ) );
 
         initMap( strSessionId, buildFieldName( strIdEntry ) );
 
@@ -315,24 +316,28 @@ public abstract class AbstractAsynchronousUploadHandler implements IGAAsyncUploa
 
         if ( uploadedFiles != null )
         {
-            if ( !uploadedFiles.isEmpty( ) )
-            {
-                Iterator<FileItem> iterUploadedFiles = uploadedFiles.iterator( );
-                boolean bNew = true;
+            boolean bNew = true;
 
-                while ( bNew && iterUploadedFiles.hasNext( ) )
+            if ( !uploadedFiles.isEmpty(  ) )
+            {
+                Iterator<FileItem> iterUploadedFiles = uploadedFiles.iterator(  );
+
+                while ( bNew && iterUploadedFiles.hasNext(  ) )
                 {
-                    FileItem uploadedFile = iterUploadedFiles.next( );
-                    String strUploadedFileName = UploadUtil.cleanFileName( fileItem.getName( ).trim( ) );
+                    FileItem uploadedFile = iterUploadedFiles.next(  );
+                    String strUploadedFileName = UploadUtil.cleanFileName( fileItem.getName(  ).trim(  ) );
                     // If we find a file with the same name and the same
                     // length, we consider that the current file has
                     // already been uploaded
-                    bNew = !( StringUtils.equals( strUploadedFileName, strFileName ) && ( uploadedFile.getSize( ) == fileItem
-                            .getSize( ) ) );
+                    bNew = !( StringUtils.equals( strUploadedFileName, strFileName ) &&
+                        ( uploadedFile.getSize(  ) == fileItem.getSize(  ) ) );
                 }
             }
 
-            uploadedFiles.add( fileItem );
+            if ( bNew )
+            {
+                uploadedFiles.add( fileItem );
+            }
         }
     }
 
@@ -342,7 +347,7 @@ public abstract class AbstractAsynchronousUploadHandler implements IGAAsyncUploa
     @Override
     public boolean hasRemoveFlag( HttpServletRequest request, String strIdEntry )
     {
-        return StringUtils.isNotEmpty( request.getParameter( getUploadDeletePrefix( ) + strIdEntry ) );
+        return StringUtils.isNotEmpty( request.getParameter( getUploadDeletePrefix(  ) + strIdEntry ) );
     }
 
     /**
@@ -369,11 +374,11 @@ public abstract class AbstractAsynchronousUploadHandler implements IGAAsyncUploa
      * @category CALLED_BY_JS (directoryupload.js)
      */
     private boolean canUploadFiles( String strFieldName, List<FileItem> listUploadedFileItems,
-            List<FileItem> listFileItemsToUpload, JSONObject mainObject, Locale locale )
+        List<FileItem> listFileItemsToUpload, JSONObject mainObject, Locale locale )
     {
-        if ( StringUtils.isNotBlank( strFieldName ) && ( strFieldName.length( ) > PREFIX_ENTRY_ID.length( ) ) )
+        if ( StringUtils.isNotBlank( strFieldName ) && ( strFieldName.length(  ) > PREFIX_ENTRY_ID.length(  ) ) )
         {
-            String strIdEntry = strFieldName.substring( PREFIX_ENTRY_ID.length( ) );
+            String strIdEntry = strFieldName.substring( PREFIX_ENTRY_ID.length(  ) );
 
             if ( StringUtils.isEmpty( strIdEntry ) || !StringUtils.isNumeric( strIdEntry ) )
             {
@@ -385,12 +390,13 @@ public abstract class AbstractAsynchronousUploadHandler implements IGAAsyncUploa
 
             if ( entry != null )
             {
-                GenericAttributeError error = EntryTypeServiceManager.getEntryTypeService( entry ).canUploadFiles(
-                        entry, listUploadedFileItems, listFileItemsToUpload, locale );
+                GenericAttributeError error = EntryTypeServiceManager.getEntryTypeService( entry )
+                                                                     .canUploadFiles( entry, listUploadedFileItems,
+                        listFileItemsToUpload, locale );
 
                 if ( error != null )
                 {
-                    JSONUtils.buildJsonError( mainObject, error.getErrorMessage( ) );
+                    JSONUtils.buildJsonError( mainObject, error.getErrorMessage(  ) );
 
                     return false;
                 }
@@ -421,7 +427,7 @@ public abstract class AbstractAsynchronousUploadHandler implements IGAAsyncUploa
 
                 if ( mapFileItemsSession == null )
                 {
-                    mapFileItemsSession = new ConcurrentHashMap<String, List<FileItem>>( );
+                    mapFileItemsSession = new ConcurrentHashMap<String, List<FileItem>>(  );
                     _mapAsynchronousUpload.put( strSessionId, mapFileItemsSession );
                 }
             }
@@ -431,7 +437,7 @@ public abstract class AbstractAsynchronousUploadHandler implements IGAAsyncUploa
 
         if ( listFileItems == null )
         {
-            listFileItems = new ArrayList<FileItem>( );
+            listFileItems = new ArrayList<FileItem>(  );
             mapFileItemsSession.put( strFieldName, listFileItems );
         }
     }
