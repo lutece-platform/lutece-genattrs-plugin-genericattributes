@@ -342,7 +342,7 @@ public abstract class AbstractAsynchronousUploadHandler implements IGAAsyncUploa
     @Override
     public boolean hasRemoveFlag( HttpServletRequest request, String strIdEntry )
     {
-        return StringUtils.isNotEmpty( getUploadDeletePrefix( ) + strIdEntry );
+        return StringUtils.isNotEmpty( request.getParameter( getUploadDeletePrefix( ) + strIdEntry ) );
     }
 
     /**

@@ -123,11 +123,12 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
                             listResponse.add( response );
                         }
                     }
-                    genAttError = new GenericAttributeError( );
-                    genAttError.setErrorMessage( StringUtils.EMPTY );
-                    genAttError.setMandatoryError( false );
-                    genAttError.setIsDisplayableError( false );
                 }
+                genAttError = new GenericAttributeError( );
+                genAttError.setErrorMessage( StringUtils.EMPTY );
+                genAttError.setMandatoryError( false );
+                genAttError.setIsDisplayableError( false );
+                return genAttError;
             }
 
             if ( ( listFilesSource != null ) && !listFilesSource.isEmpty( ) )
