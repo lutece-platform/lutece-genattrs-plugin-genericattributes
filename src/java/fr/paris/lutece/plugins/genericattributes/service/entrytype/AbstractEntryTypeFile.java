@@ -53,12 +53,15 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 
 import java.awt.image.BufferedImage;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+
 import java.util.List;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
+
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -212,8 +215,8 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
         response.setEntry( entry );
 
         File file = new File(  );
-        file.setTitle( fileItem.getName( ) );
-        file.setSize( ( fileItem.getSize( ) < Integer.MAX_VALUE ) ? (int) fileItem.getSize( ) : Integer.MAX_VALUE );
+        file.setTitle( fileItem.getName(  ) );
+        file.setSize( ( fileItem.getSize(  ) < Integer.MAX_VALUE ) ? (int) fileItem.getSize(  ) : Integer.MAX_VALUE );
 
         if ( bCreatePhysicalFile )
         {
