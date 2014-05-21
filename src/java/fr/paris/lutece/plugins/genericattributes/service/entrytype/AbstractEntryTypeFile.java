@@ -47,20 +47,18 @@ import fr.paris.lutece.portal.service.fileupload.FileUploadService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
+import fr.paris.lutece.util.filesystem.FileSystemUtil;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 
 import java.awt.image.BufferedImage;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-
 import java.util.List;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
-
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -214,16 +212,18 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
         response.setEntry( entry );
 
         File file = new File(  );
+        file.setTitle( fileItem.getName( ) );
+        file.setSize( ( fileItem.getSize( ) < Integer.MAX_VALUE ) ? (int) fileItem.getSize( ) : Integer.MAX_VALUE );
 
         if ( bCreatePhysicalFile )
         {
+            file.setMimeType( FileSystemUtil.getMIMEType( file.getTitle(  ) ) );
+
             PhysicalFile physicalFile = new PhysicalFile(  );
             physicalFile.setValue( fileItem.get(  ) );
             file.setPhysicalFile( physicalFile );
         }
 
-        file.setTitle( fileItem.getName(  ) );
-        file.setSize( ( fileItem.getSize(  ) < Integer.MAX_VALUE ) ? (int) fileItem.getSize(  ) : Integer.MAX_VALUE );
         response.setFile( file );
 
         return response;
