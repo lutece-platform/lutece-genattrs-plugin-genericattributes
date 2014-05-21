@@ -130,7 +130,7 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
 
                 for ( FileItem fileItem : listFilesSource )
                 {
-                    listResponse.add( getResponseFromFile( fileItem, entry, false ) );
+                    listResponse.add( getResponseFromFile( fileItem, entry, genAttError == null ) );
                 }
 
                 if ( genAttError != null )
@@ -219,6 +219,7 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
         {
             PhysicalFile physicalFile = new PhysicalFile(  );
             physicalFile.setValue( fileItem.get(  ) );
+            file.setPhysicalFile( physicalFile );
         }
 
         file.setTitle( fileItem.getName(  ) );
