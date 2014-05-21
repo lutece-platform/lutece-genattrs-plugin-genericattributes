@@ -39,6 +39,7 @@ import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
+import fr.paris.lutece.plugins.genericattributes.service.upload.AbstractAsynchronousUploadHandler;
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.file.FileHome;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
@@ -46,7 +47,6 @@ import fr.paris.lutece.portal.service.fileupload.FileUploadService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
-import fr.paris.lutece.util.filesystem.FileSystemUtil;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
@@ -83,6 +83,12 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
      * {@inheritDoc}
      */
     @Override
+    public abstract AbstractAsynchronousUploadHandler getAsynchronousUploadHandler(  );
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
         Locale locale )
     {
@@ -99,35 +105,14 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
 
             GenericAttributeError genAttError = null;
 
-            if ( getAsynchronousUploadHandler(  ).hasRemoveFlag( request, Integer.toString( entry.getIdEntry(  ) ) ) )
+            if ( getAsynchronousUploadHandler(  ).hasRemoveFlag( request, Integer.toString( entry.getIdEntry(  ) ) ) ||
+                    getAsynchronousUploadHandler(  ).hasAddFileFlag( request, Integer.toString( entry.getIdEntry(  ) ) ) )
             {
                 if ( ( listFilesSource != null ) && !listFilesSource.isEmpty(  ) )
                 {
                     for ( FileItem fileItem : listFilesSource )
                     {
-                        if ( fileItem instanceof GenAttFileItem )
-                        {
-                            GenAttFileItem genAttFileItem = (GenAttFileItem) fileItem;
-
-                            if ( genAttFileItem.getIdResponse(  ) > 0 )
-                            {
-                                Response response = ResponseHome.findByPrimaryKey( genAttFileItem.getIdResponse(  ) );
-                                response.setEntry( entry );
-                                response.setFile( FileHome.findByPrimaryKey( response.getFile(  ).getIdFile(  ) ) );
-                                listResponse.add( response );
-                            }
-                        }
-                        else
-                        {
-                            Response response = new Response(  );
-                            response.setEntry( entry );
-
-                            File file = new File(  );
-                            file.setTitle( fileItem.getName(  ) );
-                            file.setSize( (int) fileItem.getSize(  ) );
-                            response.setFile( file );
-                            listResponse.add( response );
-                        }
+                        listResponse.add( getResponseFromFile( fileItem, entry, false ) );
                     }
                 }
 
@@ -143,56 +128,19 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
             {
                 genAttError = checkResponseData( entry, listFilesSource, locale, request );
 
+                for ( FileItem fileItem : listFilesSource )
+                {
+                    listResponse.add( getResponseFromFile( fileItem, entry, false ) );
+                }
+
                 if ( genAttError != null )
                 {
-                    for ( FileItem fileItem : listFilesSource )
-                    {
-                        if ( fileItem instanceof GenAttFileItem )
-                        {
-                            GenAttFileItem genAttFileItem = (GenAttFileItem) fileItem;
-
-                            if ( genAttFileItem.getIdResponse(  ) > 0 )
-                            {
-                                Response response = ResponseHome.findByPrimaryKey( genAttFileItem.getIdResponse(  ) );
-                                response.setEntry( entry );
-                                response.setFile( FileHome.findByPrimaryKey( response.getFile(  ).getIdFile(  ) ) );
-                                listResponse.add( response );
-                            }
-                        }
-                    }
-
                     return genAttError;
                 }
 
                 for ( FileItem fileItem : listFilesSource )
                 {
-                    String strFilename = ( fileItem != null ) ? FileUploadService.getFileNameOnly( fileItem )
-                                                              : StringUtils.EMPTY;
-
-                    //Add the image to the response list
-                    Response response = new Response(  );
-                    response.setEntry( entry );
-
-                    if ( ( fileItem != null ) && ( fileItem.getSize(  ) < Integer.MAX_VALUE ) )
-                    {
-                        PhysicalFile physicalFile = new PhysicalFile(  );
-                        physicalFile.setValue( fileItem.get(  ) );
-
-                        File file = new File(  );
-                        file.setPhysicalFile( physicalFile );
-                        file.setTitle( strFilename );
-                        file.setSize( (int) fileItem.getSize(  ) );
-                        file.setMimeType( FileSystemUtil.getMIMEType( strFilename ) );
-
-                        response.setFile( file );
-
-                        if ( fileItem instanceof GenAttFileItem )
-                        {
-                            response.setIdResponse( ( (GenAttFileItem) fileItem ).getIdResponse(  ) );
-                        }
-                    }
-
-                    listResponse.add( response );
+                    String strFilename = FileUploadService.getFileNameOnly( fileItem );
 
                     if ( checkForImages(  ) )
                     {
@@ -200,7 +148,7 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
 
                         try
                         {
-                            if ( ( fileItem != null ) && ( fileItem.get(  ) != null ) )
+                            if ( fileItem.get(  ) != null )
                             {
                                 image = ImageIO.read( new ByteArrayInputStream( fileItem.get(  ) ) );
                             }
@@ -215,7 +163,7 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
                             genAttError = new GenericAttributeError(  );
                             genAttError.setMandatoryError( false );
 
-                            Object[] args = { ( fileItem != null ) ? fileItem.getName(  ) : StringUtils.EMPTY };
+                            Object[] args = { fileItem.getName(  ) };
                             genAttError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_ERROR_NOT_AN_IMAGE,
                                     args, request.getLocale(  ) ) );
                             genAttError.setTitleQuestion( entry.getTitle(  ) );
@@ -239,5 +187,44 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
         }
 
         return entry.isMandatory(  ) ? new MandatoryError( entry, locale ) : null;
+    }
+
+    private Response getResponseFromFile( FileItem fileItem, Entry entry, boolean bCreatePhysicalFile )
+    {
+        if ( fileItem instanceof GenAttFileItem )
+        {
+            GenAttFileItem genAttFileItem = (GenAttFileItem) fileItem;
+
+            if ( genAttFileItem.getIdResponse(  ) > 0 )
+            {
+                Response response = ResponseHome.findByPrimaryKey( genAttFileItem.getIdResponse(  ) );
+                response.setEntry( entry );
+                response.setFile( FileHome.findByPrimaryKey( response.getFile(  ).getIdFile(  ) ) );
+
+                if ( bCreatePhysicalFile )
+                {
+                    response.getFile(  ).getPhysicalFile(  ).setValue( fileItem.get(  ) );
+                }
+
+                return response;
+            }
+        }
+
+        Response response = new Response(  );
+        response.setEntry( entry );
+
+        File file = new File(  );
+
+        if ( bCreatePhysicalFile )
+        {
+            PhysicalFile physicalFile = new PhysicalFile(  );
+            physicalFile.setValue( fileItem.get(  ) );
+        }
+
+        file.setTitle( fileItem.getName(  ) );
+        file.setSize( ( fileItem.getSize(  ) < Integer.MAX_VALUE ) ? (int) fileItem.getSize(  ) : Integer.MAX_VALUE );
+        response.setFile( file );
+
+        return response;
     }
 }

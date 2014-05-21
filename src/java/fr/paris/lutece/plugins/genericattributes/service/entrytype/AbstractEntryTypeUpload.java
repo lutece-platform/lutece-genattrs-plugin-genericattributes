@@ -67,7 +67,6 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 
 /**
@@ -348,19 +347,23 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
 
         if ( error != null )
         {
-            // The file has been uploaded to the asynchronous uploaded file map, so it should be deleted
-            HttpSession session = request.getSession( false );
-
-            if ( session != null )
-            {
-                getAsynchronousUploadHandler(  )
-                    .removeFileItem( Integer.toString( entry.getIdEntry(  ) ), session.getId(  ),
-                    listFilesSource.size(  ) - 1 );
-            }
-
             return error;
         }
 
+        //        if ( error != null )
+        //        {
+        //            // The file has been uploaded to the asynchronous uploaded file map, so it should be deleted
+        //            HttpSession session = request.getSession( false );
+        //
+        //            if ( session != null )
+        //            {
+        //                getAsynchronousUploadHandler(  )
+        //                    .removeFileItem( Integer.toString( entry.getIdEntry(  ) ), session.getId(  ),
+        //                    listFilesSource.size(  ) - 1 );
+        //            }
+        //
+        //            return error;
+        //        }
         for ( FileItem fileSource : listFilesSource )
         {
             // Check mandatory attribute

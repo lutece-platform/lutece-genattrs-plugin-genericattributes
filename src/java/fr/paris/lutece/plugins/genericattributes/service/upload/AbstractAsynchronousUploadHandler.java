@@ -325,7 +325,7 @@ public abstract class AbstractAsynchronousUploadHandler implements IGAAsyncUploa
                 while ( bNew && iterUploadedFiles.hasNext(  ) )
                 {
                     FileItem uploadedFile = iterUploadedFiles.next(  );
-                    String strUploadedFileName = UploadUtil.cleanFileName( fileItem.getName(  ).trim(  ) );
+                    String strUploadedFileName = UploadUtil.cleanFileName( uploadedFile.getName(  ).trim(  ) );
                     // If we find a file with the same name and the same
                     // length, we consider that the current file has
                     // already been uploaded
@@ -348,6 +348,18 @@ public abstract class AbstractAsynchronousUploadHandler implements IGAAsyncUploa
     public boolean hasRemoveFlag( HttpServletRequest request, String strIdEntry )
     {
         return StringUtils.isNotEmpty( request.getParameter( getUploadDeletePrefix(  ) + strIdEntry ) );
+    }
+
+    /**
+     * Check if the request has the flag to submit a file without submitting the
+     * form.
+     * @param request The request
+     * @param strIdEntry The id of the entry
+     * @return True if the flag is present in the request, false otherwise
+     */
+    public boolean hasAddFileFlag( HttpServletRequest request, String strIdEntry )
+    {
+        return StringUtils.isNotEmpty( request.getParameter( getUploadSubmitPrefix(  ) + strIdEntry ) );
     }
 
     /**
