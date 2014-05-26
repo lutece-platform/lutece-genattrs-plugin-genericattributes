@@ -39,12 +39,12 @@ import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 
-import org.apache.commons.fileupload.FileItem;
-
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.fileupload.FileItem;
 
 
 /**
@@ -69,6 +69,8 @@ public interface IEntryTypeService
     String PARAMETER_UNIQUE = "unique_field";
     String PARAMETER_CSS_CLASS = "css_class";
     String PARAMETER_ERROR_MESSAGE = "errorMessage";
+    String PARAMETER_NUMBER_ROWS = "num_row";
+    String PARAMETER_NUMBER_COLUMNS = "num_column";
 
     //  message
     String MESSAGE_MANDATORY_FIELD = "portal.util.message.mandatoryField";
@@ -84,6 +86,8 @@ public interface IEntryTypeService
     String FIELD_WIDTH = "genericattributes.createEntry.labelWidth";
     String FIELD_HEIGHT = "genericattributes.createEntry.labelHeight";
     String FIELD_MAX_SIZE_ENTER = "genericattributes.createEntry.labelMaxSizeEnter";
+    String FIELD_NUMBER_ROWS = "genericattributes.createEntry.labelNumberRows";
+    String FIELD_NUMBER_COLUMNS = "genericattributes.createEntry.labelNumberColumns";
     String FIELD_CONFIRM_FIELD_TITLE = "genericattributes.createEntry.labelConfirmFieldTitle";
 
     /**
@@ -139,7 +143,7 @@ public interface IEntryTypeService
      *         response
      */
     GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-        Locale locale );
+            Locale locale );
 
     /**
      * Get the list of regular expression who is use in the template modify of
@@ -184,7 +188,7 @@ public interface IEntryTypeService
      * @return The error if there is any
      */
     GenericAttributeError canUploadFiles( Entry entry, List<FileItem> listUploadedFileItems,
-        List<FileItem> listFileItemsToUpload, Locale locale );
+            List<FileItem> listFileItemsToUpload, Locale locale );
 
     /**
      * Sets the string value of the response
