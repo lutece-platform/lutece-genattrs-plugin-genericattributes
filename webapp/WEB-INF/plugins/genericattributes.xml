@@ -4,7 +4,6 @@
     <name>genericattributes</name>
     <class>fr.paris.lutece.plugins.genericattributes.service.GenericAttributesPlugin</class>
     <version>1.1.1-SNAPSHOT</version>
-    <description>form.plugin.description</description>
     <documentation/>
     <installation/>
     <changes/>
@@ -13,7 +12,7 @@
     <provider>genericattributes.plugin.provider</provider>
     <provider-url>http://lutece.paris.fr</provider-url>
     <icon-url>images/admin/skin/plugins/genericattributes/genericattributes.png</icon-url>
-    <copyright>Copyright 2001-2013 Mairie de Paris</copyright>
+    <copyright>Copyright 2001-2014 Mairie de Paris</copyright>
     <core-version-dependency>
         <min-core-version>4.0.0</min-core-version>
         <max-core-version/>
