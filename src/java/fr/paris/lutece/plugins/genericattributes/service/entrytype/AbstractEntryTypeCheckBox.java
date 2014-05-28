@@ -151,13 +151,7 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
             }
         }
 
-        if ( listFieldInResponse.size(  ) == 0 )
-        {
-            response = new Response(  );
-            response.setEntry( entry );
-            listResponse.add( response );
-        }
-        else
+        if ( listFieldInResponse.size( ) != 0 )
         {
             for ( Field fieldInResponse : listFieldInResponse )
             {
