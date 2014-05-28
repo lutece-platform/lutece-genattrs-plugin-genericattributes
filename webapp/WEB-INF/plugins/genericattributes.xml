@@ -19,4 +19,9 @@
     </core-version-dependency>
     <db-pool-required>1</db-pool-required>
 
+	<listeners>
+		<listener>
+			<listener-class>fr.paris.lutece.plugins.genericattributes.service.GenericAttributesSessionListener</listener-class>
+		</listener>
+	</listeners>
 </plug-in>

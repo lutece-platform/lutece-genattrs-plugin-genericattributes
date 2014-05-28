@@ -8,4 +8,4 @@
 	<bean id="genericattributes.fieldDAO"  class="fr.paris.lutece.plugins.genericattributes.business.FieldDAO" />
 	
 	<bean id="genericattributes.fileService" class="fr.paris.lutece.plugins.genericattributes.service.file.FileService" />
-</beans> 
+</beans>

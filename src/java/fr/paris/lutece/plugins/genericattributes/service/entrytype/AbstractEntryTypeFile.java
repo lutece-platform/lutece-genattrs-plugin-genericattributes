@@ -39,28 +39,18 @@ import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
-import fr.paris.lutece.plugins.genericattributes.service.upload.AbstractAsynchronousUploadHandler;
+import fr.paris.lutece.plugins.genericattributes.service.upload.AbstractGenAttUploadHandler;
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.file.FileHome;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
-import fr.paris.lutece.portal.service.fileupload.FileUploadService;
-import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 
-import java.awt.image.BufferedImage;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-
 import java.util.List;
 import java.util.Locale;
-
-import javax.imageio.ImageIO;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -71,20 +61,11 @@ import javax.servlet.http.HttpServletRequest;
  */
 public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
 {
-    private static final String MESSAGE_ERROR_NOT_AN_IMAGE = "genericattributes.message.notAnImage";
-
-    /**
-     * Check whether this entry type allows only images or every file type
-     * @return True if this entry type allows only images, false if it allow
-     *         every file type
-     */
-    protected abstract boolean checkForImages(  );
-
     /**
      * {@inheritDoc}
      */
     @Override
-    public abstract AbstractAsynchronousUploadHandler getAsynchronousUploadHandler(  );
+    public abstract AbstractGenAttUploadHandler getAsynchronousUploadHandler(  );
 
     /**
      * {@inheritDoc}
@@ -106,8 +87,12 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
 
             GenericAttributeError genAttError = null;
 
-            if ( getAsynchronousUploadHandler(  ).hasRemoveFlag( request, Integer.toString( entry.getIdEntry(  ) ) ) ||
-                    getAsynchronousUploadHandler(  ).hasAddFileFlag( request, Integer.toString( entry.getIdEntry(  ) ) ) )
+            if ( getAsynchronousUploadHandler(  )
+                         .hasRemoveFlag( request,
+                        IEntryTypeService.PREFIX_ATTRIBUTE + Integer.toString( entry.getIdEntry(  ) ) ) ||
+                    getAsynchronousUploadHandler(  )
+                            .hasAddFileFlag( request,
+                        IEntryTypeService.PREFIX_ATTRIBUTE + Integer.toString( entry.getIdEntry(  ) ) ) )
             {
                 if ( ( listFilesSource != null ) && !listFilesSource.isEmpty(  ) )
                 {
@@ -141,34 +126,9 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
 
                 for ( FileItem fileItem : listFilesSource )
                 {
-                    String strFilename = FileUploadService.getFileNameOnly( fileItem );
-
                     if ( checkForImages(  ) )
                     {
-                        BufferedImage image = null;
-
-                        try
-                        {
-                            if ( fileItem.get(  ) != null )
-                            {
-                                image = ImageIO.read( new ByteArrayInputStream( fileItem.get(  ) ) );
-                            }
-                        }
-                        catch ( IOException e )
-                        {
-                            AppLogService.error( e );
-                        }
-
-                        if ( ( image == null ) && StringUtils.isNotBlank( strFilename ) )
-                        {
-                            genAttError = new GenericAttributeError(  );
-                            genAttError.setMandatoryError( false );
-
-                            Object[] args = { fileItem.getName(  ) };
-                            genAttError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_ERROR_NOT_AN_IMAGE,
-                                    args, request.getLocale(  ) ) );
-                            genAttError.setTitleQuestion( entry.getTitle(  ) );
-                        }
+                        genAttError = doCheckforImages( fileItem, entry, request.getLocale(  ) );
                     }
                 }
 

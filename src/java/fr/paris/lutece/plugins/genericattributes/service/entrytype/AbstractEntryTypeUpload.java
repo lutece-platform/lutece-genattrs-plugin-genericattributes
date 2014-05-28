@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
+import fr.paris.lutece.plugins.asynchronousupload.service.IAsyncUploadHandler;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
@@ -40,7 +41,6 @@ import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.file.FileService;
-import fr.paris.lutece.plugins.genericattributes.service.upload.IGAAsyncUploadHandler;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
@@ -51,6 +51,7 @@ import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
@@ -61,10 +62,17 @@ import fr.paris.lutece.util.url.UrlItem;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 
+import java.awt.image.BufferedImage;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+
+import javax.imageio.ImageIO;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -101,11 +109,14 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
     private static final String FIELD_MAX_FILES = "genericattributes.createEntry.labelMaxFiles";
     private static final String FIELD_FILE_MAX_SIZE = "genericattributes.createEntry.labelFileMaxSize";
 
+    // MESSAGES
+    private static final String MESSAGE_ERROR_NOT_AN_IMAGE = "genericattributes.message.notAnImage";
+
     /**
      * Get the asynchronous upload handler to use for entries of this type
      * @return The asynchronous upload handler to use for entries of this type
      */
-    public abstract IGAAsyncUploadHandler getAsynchronousUploadHandler(  );
+    public abstract IAsyncUploadHandler getAsynchronousUploadHandler(  );
 
     /**
      * Get the URL to download the file of a response
@@ -114,6 +125,13 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
      * @return The URL to redirect the user to download the file
      */
     public abstract String getUrlDownloadFile( int nResponseId, String strBaseUrl );
+
+    /**
+     * Check whether this entry type allows only images or every file type
+     * @return True if this entry type allows only images, false if it allow
+     *         every file type
+     */
+    protected abstract boolean checkForImages(  );
 
     /**
      * Get the URL to download a file of a response throw the image servlet.
@@ -214,6 +232,19 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
                 error.setErrorMessage( strMessage );
 
                 return error;
+            }
+        }
+
+        for ( FileItem fileItem : listFileItemsToUpload )
+        {
+            if ( checkForImages(  ) )
+            {
+                GenericAttributeError error = doCheckforImages( fileItem, entry, locale );
+
+                if ( error != null )
+                {
+                    return error;
+                }
             }
         }
 
@@ -416,29 +447,28 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
             String strIdEntry = Integer.toString( entry.getIdEntry(  ) );
 
             // Files are only removed if a given flag is in the request 
-            getAsynchronousUploadHandler(  ).doRemoveFile( request, strIdEntry );
+            getAsynchronousUploadHandler(  ).doRemoveFile( request, PREFIX_ATTRIBUTE + strIdEntry );
 
             if ( request instanceof MultipartHttpServletRequest )
             {
                 MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-                List<FileItem> listFileItem = multipartRequest.getFileList( PREFIX_ATTRIBUTE + entry.getIdEntry(  ) );
+                String strFieldName = IEntryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry(  );
+                List<FileItem> listFileItem = multipartRequest.getFileList( strFieldName );
 
                 if ( ( listFileItem != null ) && ( listFileItem.size(  ) > 0 ) )
                 {
-                    String strSessionId = request.getSession(  ).getId(  );
-
                     for ( FileItem fileItem : listFileItem )
                     {
                         if ( ( fileItem.getSize(  ) > 0L ) && StringUtils.isNotEmpty( fileItem.getName(  ) ) )
                         {
-                            getAsynchronousUploadHandler(  )
-                                .addFileItemToUploadedFile( fileItem, strIdEntry, strSessionId );
+                            getAsynchronousUploadHandler(  ).addFileItemToUploadedFile( fileItem, strFieldName, request );
                         }
                     }
                 }
             }
 
-            return getAsynchronousUploadHandler(  ).getFileItems( strIdEntry, request.getSession(  ).getId(  ) );
+            return getAsynchronousUploadHandler(  )
+                       .getFileItems( PREFIX_ATTRIBUTE + strIdEntry, request.getSession(  ).getId(  ) );
         }
 
         return null;
@@ -644,5 +674,44 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
         }
 
         return StringUtils.EMPTY;
+    }
+
+    /**
+     * Do check that an uploaded file is an image
+     * @param fileItem The file item
+     * @param entry the entry
+     * @param locale The locale
+     * @return The error if any, or null if the file is a valid image
+     */
+    public GenericAttributeError doCheckforImages( FileItem fileItem, Entry entry, Locale locale )
+    {
+        String strFilename = FileUploadService.getFileNameOnly( fileItem );
+        BufferedImage image = null;
+
+        try
+        {
+            if ( fileItem.get(  ) != null )
+            {
+                image = ImageIO.read( new ByteArrayInputStream( fileItem.get(  ) ) );
+            }
+        }
+        catch ( IOException e )
+        {
+            AppLogService.error( e );
+        }
+
+        if ( ( image == null ) && StringUtils.isNotBlank( strFilename ) )
+        {
+            GenericAttributeError genAttError = new GenericAttributeError(  );
+            genAttError.setMandatoryError( false );
+
+            Object[] args = { fileItem.getName(  ) };
+            genAttError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_ERROR_NOT_AN_IMAGE, args, locale ) );
+            genAttError.setTitleQuestion( entry.getTitle(  ) );
+
+            return genAttError;
+        }
+
+        return null;
     }
 }
