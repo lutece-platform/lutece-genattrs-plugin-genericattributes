@@ -42,13 +42,13 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -87,21 +87,21 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
             Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                    AdminMessage.TYPE_STOP );
+                AdminMessage.TYPE_STOP );
         }
         else if ( !isValid( strNumberRows ) )
         {
             Object[] tabRequiredFields = { I18nService.getLocalizedString( FIELD_NUMBER_ROWS, locale ) };
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields,
-                    AdminMessage.TYPE_STOP );
+                AdminMessage.TYPE_STOP );
         }
         else if ( !isValid( strNumberColumns ) )
         {
             Object[] tabRequiredFields = { I18nService.getLocalizedString( FIELD_NUMBER_COLUMNS, locale ) };
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields,
-                    AdminMessage.TYPE_STOP );
+                AdminMessage.TYPE_STOP );
         }
 
         // for don't update fields listFields=null
@@ -115,8 +115,8 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
         entry.setNumberColumn( column );
         entry.setNumberRow( row );
 
-        ArrayList<Field> listFields = new ArrayList<Field>( );
-        List<Field> fields = FieldHome.getFieldListByIdEntry( entry.getIdEntry( ) );
+        ArrayList<Field> listFields = new ArrayList<Field>(  );
+        List<Field> fields = FieldHome.getFieldListByIdEntry( entry.getIdEntry(  ) );
 
         for ( int i = 1; i <= ( row + 1 ); i++ )
         {
@@ -126,7 +126,7 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
 
                 for ( Field f : fields )
                 {
-                    if ( f.getValue( ).equals( i + "_" + j ) )
+                    if ( f.getValue(  ).equals( i + "_" + j ) )
                     {
                         existingFields = f;
 
@@ -138,7 +138,7 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
 
                 if ( ( i == 1 ) && ( j != 1 ) )
                 {
-                    Field field = new Field( );
+                    Field field = new Field(  );
 
                     if ( existingFields != null )
                     {
@@ -152,7 +152,7 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
                 }
                 else if ( ( i != 1 ) && ( j == 1 ) )
                 {
-                    Field field = new Field( );
+                    Field field = new Field(  );
 
                     if ( existingFields != null )
                     {
@@ -166,7 +166,7 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
                 }
                 else
                 {
-                    Field field = new Field( );
+                    Field field = new Field(  );
                     field.setParentEntry( entry );
                     field.setValue( i + "_" + j );
                     listFields.add( field );
@@ -184,19 +184,19 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
      */
     @Override
     public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-            Locale locale )
+        Locale locale )
     {
-        for ( int i = 1; i <= ( entry.getNumberRow( ) + 1 ); i++ )
+        for ( int i = 1; i <= ( entry.getNumberRow(  ) + 1 ); i++ )
         {
-            for ( int j = 1; j <= ( entry.getNumberColumn( ) + 1 ); j++ )
+            for ( int j = 1; j <= ( entry.getNumberColumn(  ) + 1 ); j++ )
             {
                 String strTitleRow = request.getParameter( "response_" + i + "_" + j );
 
                 Field existingFields = null;
 
-                for ( Field f : entry.getFields( ) )
+                for ( Field f : entry.getFields(  ) )
                 {
-                    if ( f.getValue( ).equals( i + "_" + j ) )
+                    if ( f.getValue(  ).equals( i + "_" + j ) )
                     {
                         existingFields = f;
 
@@ -204,7 +204,7 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
                     }
                 }
 
-                Response response = new Response( );
+                Response response = new Response(  );
                 response.setEntry( entry );
                 response.setResponseValue( strTitleRow );
                 response.setToStringValueResponse( strTitleRow );
@@ -222,7 +222,7 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
     @Override
     public String getResponseValueForExport( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getResponseValue( );
+        return response.getResponseValue(  );
     }
 
     /**
@@ -231,9 +231,9 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        if ( response.getField( ).getTitle( ) == null )
+        if ( response.getField(  ).getTitle(  ) == null )
         {
-            Field field = FieldHome.findByPrimaryKey( response.getField( ).getIdField( ) );
+            Field field = FieldHome.findByPrimaryKey( response.getField(  ).getIdField(  ) );
 
             if ( field != null )
             {
@@ -241,7 +241,7 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
             }
         }
 
-        return response.getField( ).getTitle( );
+        return response.getField(  ).getTitle(  );
     }
 
     /**

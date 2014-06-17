@@ -150,6 +150,16 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
         return entry.isMandatory(  ) ? new MandatoryError( entry, locale ) : null;
     }
 
+    /**
+     * Get a generic attributes response from a file item
+     * @param fileItem The file item
+     * @param entry The entry
+     * @param bCreatePhysicalFile True to create the physical file associated
+     *            with the file of the response, false otherwise. Note that the
+     *            physical file will never be saved in the database by this
+     *            method, like any other created object.
+     * @return The created response
+     */
     private Response getResponseFromFile( FileItem fileItem, Entry entry, boolean bCreatePhysicalFile )
     {
         if ( fileItem instanceof GenAttFileItem )

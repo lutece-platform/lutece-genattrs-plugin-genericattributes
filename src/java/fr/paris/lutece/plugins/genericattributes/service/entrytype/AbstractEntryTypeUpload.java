@@ -235,15 +235,18 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
             }
         }
 
-        for ( FileItem fileItem : listFileItemsToUpload )
+        if ( listFileItemsToUpload != null )
         {
-            if ( checkForImages(  ) )
+            for ( FileItem fileItem : listFileItemsToUpload )
             {
-                GenericAttributeError error = doCheckforImages( fileItem, entry, locale );
-
-                if ( error != null )
+                if ( checkForImages(  ) )
                 {
-                    return error;
+                    GenericAttributeError error = doCheckforImages( fileItem, entry, locale );
+
+                    if ( error != null )
+                    {
+                        return error;
+                    }
                 }
             }
         }
