@@ -54,6 +54,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 
 /**
@@ -92,7 +93,7 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
             int nIdEntry = Integer.parseInt( strIdEntry );
             Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
 
-            List<FileItem> listUploadedFileItems = getListUploadedFiles( request, strFieldName );
+            List<FileItem> listUploadedFileItems = getListUploadedFiles( strFieldName, request.getSession(  ) );
 
             if ( entry != null )
             {
@@ -116,28 +117,17 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
      * {@inheritDoc}
      */
     @Override
-    public List<FileItem> getListUploadedFiles( HttpServletRequest request, String strFieldName )
-    {
-        Map<String, List<FileItem>> mapUserFiles = _mapAsynchronousUpload.get( request.getSession(  ).getId(  ) );
-
-        return ( mapUserFiles == null ) ? null : mapUserFiles.get( strFieldName );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<FileItem> getFileItems( String strFieldName, String strSessionId )
+    public List<FileItem> getListUploadedFiles( String strFieldName, HttpSession session )
     {
         if ( StringUtils.isBlank( strFieldName ) )
         {
             throw new AppException( "id field name is not provided for the current file upload" );
         }
 
-        initMap( strSessionId, strFieldName );
+        initMap( session.getId(  ), strFieldName );
 
         // find session-related files in the map
-        Map<String, List<FileItem>> mapFileItemsSession = _mapAsynchronousUpload.get( strSessionId );
+        Map<String, List<FileItem>> mapFileItemsSession = _mapAsynchronousUpload.get( session.getId(  ) );
 
         return mapFileItemsSession.get( strFieldName );
     }
@@ -146,7 +136,7 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
      * {@inheritDoc}
      */
     @Override
-    public void addFileItemToUploadedFile( FileItem fileItem, String strFieldName, HttpServletRequest request )
+    public void addFileItemToUploadedFilesList( FileItem fileItem, String strFieldName, HttpServletRequest request )
     {
         // This is the name that will be displayed in the form. We keep
         // the original name, but clean it to make it cross-platform.
@@ -155,7 +145,7 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
         initMap( request.getSession(  ).getId(  ), buildFieldName( strFieldName ) );
 
         // Check if this file has not already been uploaded
-        List<FileItem> uploadedFiles = getFileItems( strFieldName, request.getSession(  ).getId(  ) );
+        List<FileItem> uploadedFiles = getListUploadedFiles( strFieldName, request.getSession(  ) );
 
         if ( uploadedFiles != null )
         {
@@ -188,10 +178,10 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
      * {@inheritDoc}
      */
     @Override
-    public void removeFileItem( String strFieldName, String strSessionId, int nIndex )
+    public void removeFileItem( String strFieldName, HttpSession session, int nIndex )
     {
         // Remove the file (this will also delete the file physically)
-        List<FileItem> uploadedFiles = getFileItems( strFieldName, strSessionId );
+        List<FileItem> uploadedFiles = getListUploadedFiles( strFieldName, session );
 
         if ( ( uploadedFiles != null ) && !uploadedFiles.isEmpty(  ) && ( uploadedFiles.size(  ) > nIndex ) )
         {

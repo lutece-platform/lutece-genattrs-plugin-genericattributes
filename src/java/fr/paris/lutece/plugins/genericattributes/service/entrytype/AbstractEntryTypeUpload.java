@@ -464,14 +464,15 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
                     {
                         if ( ( fileItem.getSize(  ) > 0L ) && StringUtils.isNotEmpty( fileItem.getName(  ) ) )
                         {
-                            getAsynchronousUploadHandler(  ).addFileItemToUploadedFile( fileItem, strFieldName, request );
+                            getAsynchronousUploadHandler(  )
+                                .addFileItemToUploadedFilesList( fileItem, strFieldName, request );
                         }
                     }
                 }
             }
 
             return getAsynchronousUploadHandler(  )
-                       .getFileItems( PREFIX_ATTRIBUTE + strIdEntry, request.getSession(  ).getId(  ) );
+                       .getListUploadedFiles( PREFIX_ATTRIBUTE + strIdEntry, request.getSession(  ) );
         }
 
         return null;
