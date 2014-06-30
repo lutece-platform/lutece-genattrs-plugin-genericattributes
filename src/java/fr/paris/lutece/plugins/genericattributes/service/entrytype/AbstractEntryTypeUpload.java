@@ -54,7 +54,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
-import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.url.UrlItem;
@@ -452,24 +451,9 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
             // Files are only removed if a given flag is in the request 
             getAsynchronousUploadHandler(  ).doRemoveFile( request, PREFIX_ATTRIBUTE + strIdEntry );
 
-            if ( request instanceof MultipartHttpServletRequest )
-            {
-                MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-                String strFieldName = IEntryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry(  );
-                List<FileItem> listFileItem = multipartRequest.getFileList( strFieldName );
-
-                if ( ( listFileItem != null ) && ( listFileItem.size(  ) > 0 ) )
-                {
-                    for ( FileItem fileItem : listFileItem )
-                    {
-                        if ( ( fileItem.getSize(  ) > 0L ) && StringUtils.isNotEmpty( fileItem.getName(  ) ) )
-                        {
-                            getAsynchronousUploadHandler(  )
-                                .addFileItemToUploadedFilesList( fileItem, strFieldName, request );
-                        }
-                    }
-                }
-            }
+            // Files are only added if a given flag is in the request
+            getAsynchronousUploadHandler(  )
+                .addFilesUploadedSynchronously( request, IEntryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry(  ) );
 
             return getAsynchronousUploadHandler(  )
                        .getListUploadedFiles( PREFIX_ATTRIBUTE + strIdEntry, request.getSession(  ) );
