@@ -239,8 +239,9 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
         // create map if not exists
         if ( mapFileItemsSession == null )
         {
-            synchronized ( strSessionId )
+            synchronized ( this )
             {
+                // Ignore double check locking error : assignation and instanciation of objects are separated.
                 mapFileItemsSession = _mapAsynchronousUpload.get( strSessionId );
 
                 if ( mapFileItemsSession == null )

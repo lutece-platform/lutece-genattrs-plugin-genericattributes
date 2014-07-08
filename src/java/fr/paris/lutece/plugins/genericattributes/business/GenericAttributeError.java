@@ -79,7 +79,7 @@ public class GenericAttributeError implements Serializable, ErrorMessage
 
     /**
      * set the error message
-     * @param errorMessage the erroer message
+     * @param errorMessage the error message
      */
     public void setErrorMessage( String errorMessage )
     {
