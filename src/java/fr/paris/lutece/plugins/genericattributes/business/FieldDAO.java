@@ -116,16 +116,15 @@ public final class FieldDAO implements IFieldDAO
     }
 
     /**
-     * Insert a new record in the table.
-     *
-     * @param field instance of the Field object to insert
-     * @param plugin the plugin
-     * @return the id of the new field
+     * {@inheritDoc}
      */
+    @Override
     public synchronized int insert( Field field, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         field.setIdField( newPrimaryKey( plugin ) );
+        field.setPosition( newPosition( plugin ) );
+
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         daoUtil.setInt( 1, field.getIdField(  ) );
         daoUtil.setInt( 2, field.getParentEntry(  ).getIdEntry(  ) );
         daoUtil.setString( 3, field.getTitle(  ) );
@@ -134,7 +133,7 @@ public final class FieldDAO implements IFieldDAO
         daoUtil.setInt( 6, field.getWidth(  ) );
         daoUtil.setBoolean( 7, field.isDefaultValue(  ) );
         daoUtil.setInt( 8, field.getMaxSizeEnter(  ) );
-        daoUtil.setInt( 9, newPosition( plugin ) );
+        daoUtil.setInt( 9, field.getPosition(  ) );
         daoUtil.setDate( 10,
             ( field.getValueTypeDate(  ) == null ) ? null : new Date( field.getValueTypeDate(  ).getTime(  ) ) );
         daoUtil.setBoolean( 11, field.isNoDisplayTitle(  ) );
@@ -146,12 +145,9 @@ public final class FieldDAO implements IFieldDAO
     }
 
     /**
-     * Load the data of the Field from the table
-     *
-     * @param nId The identifier of the field
-     * @param plugin the plugin
-     * @return the instance of the Field
+     * {@inheritDoc}
      */
+    @Override
     public Field load( int nId, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
@@ -187,11 +183,9 @@ public final class FieldDAO implements IFieldDAO
     }
 
     /**
-     * Delete a record from the table
-     *
-     * @param nIdField The identifier of the field
-     * @param plugin the plugin
+     * {@inheritDoc}
      */
+    @Override
     public void delete( int nIdField, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
@@ -201,11 +195,9 @@ public final class FieldDAO implements IFieldDAO
     }
 
     /**
-     * Update the field in the table
-     *
-     * @param field instance of the Field object to update
-     * @param plugin the plugin
+     * {@inheritDoc}
      */
+    @Override
     public void store( Field field, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
@@ -229,11 +221,9 @@ public final class FieldDAO implements IFieldDAO
     }
 
     /**
-     * Load the data of all the field of the entry and returns them in a list
-     * @param nIdEntry the id of the entry
-     * @param plugin the plugin
-     * @return the list of field
+     * {@inheritDoc}
      */
+    @Override
     public List<Field> selectFieldListByIdEntry( int nIdEntry, Plugin plugin )
     {
         List<Field> fieldList = new ArrayList<Field>(  );
@@ -271,12 +261,9 @@ public final class FieldDAO implements IFieldDAO
     }
 
     /**
-     * Delete an association between field and a regular expression
-     *
-     * @param nIdField The identifier of the field
-     * @param nIdExpression The identifier of the regular expression
-     * @param plugin the plugin
+     * {@inheritDoc}
      */
+    @Override
     public void deleteVerifyBy( int nIdField, int nIdExpression, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_VERIF_BY, plugin );
@@ -287,12 +274,9 @@ public final class FieldDAO implements IFieldDAO
     }
 
     /**
-     * insert an association between field and a regular expression
-     *
-     * @param nIdField The identifier of the field
-     * @param nIdExpression The identifier of the regular expression
-     * @param plugin the plugin
+     * {@inheritDoc}
      */
+    @Override
     public void insertVerifyBy( int nIdField, int nIdExpression, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_VERIF_BY, plugin );
@@ -303,12 +287,9 @@ public final class FieldDAO implements IFieldDAO
     }
 
     /**
-     * Load the key of all the regularExpression associate to the field and
-     * returns them in a list
-     * @param nIdField the id of the field
-     * @param plugin the plugin
-     * @return the list of regular expression key
+     * {@inheritDoc}
      */
+    @Override
     public List<Integer> selectListRegularExpressionKeyByIdField( int nIdField, Plugin plugin )
     {
         List<Integer> regularExpressionList = new ArrayList<Integer>(  );
@@ -327,11 +308,9 @@ public final class FieldDAO implements IFieldDAO
     }
 
     /**
-     * Check if the regular expression is use
-     * @param nIdExpression The identifier of the regular expression
-     * @param plugin the plugin
-     * @return true if the regular expression is use
+     * {@inheritDoc}
      */
+    @Override
     public boolean isRegularExpressionIsUse( int nIdExpression, Plugin plugin )
     {
         int nNumberEntry = 0;

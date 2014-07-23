@@ -36,6 +36,8 @@ package fr.paris.lutece.plugins.genericattributes.business;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppException;
+import fr.paris.lutece.util.sql.TransactionManager;
 
 import java.util.List;
 
@@ -76,32 +78,45 @@ public final class EntryHome
     {
         Entry entryCopy = (Entry) entry.clone(  );
         List<Field> listField = FieldHome.getFieldListByIdEntry( entry.getIdEntry(  ) );
-        entryCopy.setIdEntry( create( entry ) );
 
-        for ( Field field : listField )
+        TransactionManager.beginTransaction( getPlugin(  ) );
+
+        try
         {
-            field = FieldHome.findByPrimaryKey( field.getIdField(  ) );
+            entryCopy.setIdEntry( create( entry ) );
 
-            for ( Entry entryConditionnal : field.getConditionalQuestions(  ) )
+            for ( Field field : listField )
             {
-                entryConditionnal.setIdResource( entry.getIdResource(  ) );
-                entryConditionnal.setResourceType( entry.getResourceType(  ) );
+                field = FieldHome.findByPrimaryKey( field.getIdField(  ) );
+
+                for ( Entry entryConditionnal : field.getConditionalQuestions(  ) )
+                {
+                    entryConditionnal.setIdResource( entry.getIdResource(  ) );
+                    entryConditionnal.setResourceType( entry.getResourceType(  ) );
+                }
+
+                field.setParentEntry( entryCopy );
+                FieldHome.copy( field );
             }
 
-            field.setParentEntry( entryCopy );
-            FieldHome.copy( field );
+            if ( entryCopy.getEntryType(  ).getGroup(  ) )
+            {
+                for ( Entry entryChild : entry.getChildren(  ) )
+                {
+                    entryChild = EntryHome.findByPrimaryKey( entryChild.getIdEntry(  ) );
+                    entryChild.setParent( entryCopy );
+                    entryChild.setIdResource( entryCopy.getIdResource(  ) );
+                    entryChild.setResourceType( entryCopy.getResourceType(  ) );
+                    copy( entryChild );
+                }
+            }
+
+            TransactionManager.commitTransaction( getPlugin(  ) );
         }
-
-        if ( entryCopy.getEntryType(  ).getGroup(  ) )
+        catch ( Exception e )
         {
-            for ( Entry entryChild : entry.getChildren(  ) )
-            {
-                entryChild = EntryHome.findByPrimaryKey( entryChild.getIdEntry(  ) );
-                entryChild.setParent( entryCopy );
-                entryChild.setIdResource( entryCopy.getIdResource(  ) );
-                entryChild.setResourceType( entryCopy.getResourceType(  ) );
-                copy( entryChild );
-            }
+            TransactionManager.rollBack( getPlugin(  ) );
+            throw new AppException( e.getMessage(  ), e );
         }
     }
 
@@ -125,17 +140,28 @@ public final class EntryHome
 
         if ( entry != null )
         {
-            for ( Field field : entry.getFields(  ) )
-            {
-                FieldHome.remove( field.getIdField(  ) );
-            }
+            TransactionManager.beginTransaction( getPlugin(  ) );
 
-            for ( Entry entryChild : entry.getChildren(  ) )
+            try
             {
-                remove( entryChild.getIdEntry(  ) );
-            }
+                for ( Field field : entry.getFields(  ) )
+                {
+                    FieldHome.remove( field.getIdField(  ) );
+                }
 
-            _dao.delete( nIdEntry, getPlugin(  ) );
+                for ( Entry entryChild : entry.getChildren(  ) )
+                {
+                    remove( entryChild.getIdEntry(  ) );
+                }
+
+                _dao.delete( nIdEntry, getPlugin(  ) );
+                TransactionManager.commitTransaction( getPlugin(  ) );
+            }
+            catch ( Exception e )
+            {
+                TransactionManager.rollBack( getPlugin(  ) );
+                throw new AppException( e.getMessage(  ), e );
+            }
         }
     }
 

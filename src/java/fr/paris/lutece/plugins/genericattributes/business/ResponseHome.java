@@ -37,6 +37,8 @@ import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.file.FileHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppException;
+import fr.paris.lutece.util.sql.TransactionManager;
 
 import java.util.List;
 
@@ -67,12 +69,23 @@ public final class ResponseHome
      */
     public static void create( Response response )
     {
-        if ( response.getFile(  ) != null )
-        {
-            FileHome.create( response.getFile(  ) );
-        }
+        TransactionManager.beginTransaction( getPlugin(  ) );
 
-        _dao.insert( response, getPlugin(  ) );
+        try
+        {
+            if ( response.getFile(  ) != null )
+            {
+                FileHome.create( response.getFile(  ) );
+            }
+
+            _dao.insert( response, getPlugin(  ) );
+            TransactionManager.commitTransaction( getPlugin(  ) );
+        }
+        catch ( Exception e )
+        {
+            TransactionManager.rollBack( getPlugin(  ) );
+            throw new AppException( e.getMessage(  ), e );
+        }
     }
 
     /**
@@ -84,12 +97,23 @@ public final class ResponseHome
      */
     public static void update( Response response )
     {
-        if ( response.getFile(  ) != null )
-        {
-            FileHome.update( response.getFile(  ) );
-        }
+        TransactionManager.beginTransaction( getPlugin(  ) );
 
-        _dao.store( response, getPlugin(  ) );
+        try
+        {
+            if ( response.getFile(  ) != null )
+            {
+                FileHome.update( response.getFile(  ) );
+            }
+
+            _dao.store( response, getPlugin(  ) );
+            TransactionManager.commitTransaction( getPlugin(  ) );
+        }
+        catch ( Exception e )
+        {
+            TransactionManager.rollBack( getPlugin(  ) );
+            throw new AppException( e.getMessage(  ), e );
+        }
     }
 
     /**
@@ -100,14 +124,26 @@ public final class ResponseHome
     {
         Response response = findByPrimaryKey( nIdResponse );
 
-        if ( response != null )
+        TransactionManager.beginTransaction( getPlugin(  ) );
+
+        try
         {
-            if ( response.getFile(  ) != null )
+            if ( response != null )
             {
-                FileHome.remove( response.getFile(  ).getIdFile(  ) );
+                if ( response.getFile(  ) != null )
+                {
+                    FileHome.remove( response.getFile(  ).getIdFile(  ) );
+                }
+
+                _dao.delete( nIdResponse, getPlugin(  ) );
             }
 
-            _dao.delete( nIdResponse, getPlugin(  ) );
+            TransactionManager.commitTransaction( getPlugin(  ) );
+        }
+        catch ( Exception e )
+        {
+            TransactionManager.rollBack( getPlugin(  ) );
+            throw new AppException( e.getMessage(  ), e );
         }
     }
 

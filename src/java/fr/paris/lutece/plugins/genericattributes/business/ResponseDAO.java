@@ -109,8 +109,9 @@ public final class ResponseDAO implements IResponseDAO
     public synchronized void insert( Response response, Plugin plugin )
     {
         int nIndex = 1;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         response.setIdResponse( newPrimaryKey( plugin ) );
+
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         daoUtil.setInt( nIndex++, response.getIdResponse(  ) );
         daoUtil.setString( nIndex++, removeInvalidChars( response.getResponseValue(  ) ) );
         daoUtil.setInt( nIndex++, response.getEntry(  ).getIdEntry(  ) );
