@@ -176,6 +176,11 @@ public abstract class AbstractEntryTypeRadioButton extends EntryTypeService
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getField(  ).getTitle(  );
+        if ( response.getField(  ) != null )
+        {
+            return response.getField(  ).getTitle(  );
+        }
+
+        return null;
     }
 }

@@ -231,17 +231,22 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        if ( response.getField(  ).getTitle(  ) == null )
+        if ( response.getField(  ) != null )
         {
-            Field field = FieldHome.findByPrimaryKey( response.getField(  ).getIdField(  ) );
-
-            if ( field != null )
+            if ( response.getField(  ).getTitle(  ) == null )
             {
-                response.setField( field );
+                Field field = FieldHome.findByPrimaryKey( response.getField(  ).getIdField(  ) );
+
+                if ( field != null )
+                {
+                    response.setField( field );
+                }
             }
+
+            return response.getField(  ).getTitle(  );
         }
 
-        return response.getField(  ).getTitle(  );
+        return null;
     }
 
     /**

@@ -237,11 +237,14 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        String strTitle = response.getField(  ).getTitle(  );
-
-        if ( CONSTANT_ADDRESS.equals( strTitle ) )
+        if ( response.getField(  ) != null )
         {
-            return response.getResponseValue(  );
+            String strTitle = response.getField(  ).getTitle(  );
+
+            if ( CONSTANT_ADDRESS.equals( strTitle ) )
+            {
+                return response.getResponseValue(  );
+            }
         }
 
         return StringUtils.EMPTY;
