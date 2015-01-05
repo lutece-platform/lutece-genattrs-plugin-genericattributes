@@ -141,7 +141,7 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
 
             if ( tDateValue != null )
             {
-                response.setResponseValue( Long.toString( tDateValue.getTime(  ) ) );
+                response.setResponseValue( DateUtil.getDateString( tDateValue, locale ) );
             }
             else
             {
@@ -208,10 +208,8 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
     @Override
     public String getResponseValueForExport( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        Long newLong = Long.parseLong( response.getResponseValue(  ) );
-        Timestamp date = new Timestamp( newLong );
 
-        return DateUtil.getDateString( date, locale );
+        return response.getResponseValue(  );
     }
 
     /**
@@ -220,10 +218,9 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        Long newLong = Long.parseLong( response.getResponseValue(  ) );
-        Timestamp date = new Timestamp( newLong );
+        
 
-        return DateUtil.getDateString( date, locale );
+        return response.getResponseValue(  );
     }
 
     /**
@@ -234,10 +231,7 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
     {
         if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) )
         {
-            Long newLong = Long.parseLong( response.getResponseValue(  ) );
-            Timestamp date = new Timestamp( newLong );
-
-            response.setToStringValueResponse( DateUtil.getDateString( date, locale ) );
+            response.setToStringValueResponse( response.getResponseValue(  ) );
         }
     }
 }
