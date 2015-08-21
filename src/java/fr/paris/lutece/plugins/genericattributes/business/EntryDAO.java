@@ -39,7 +39,9 @@ import fr.paris.lutece.util.sql.DAOUtil;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -93,7 +95,11 @@ public final class EntryDAO implements IEntryDAO
         " AND pos_conditional = ?  AND ent.id_field_depend = ? AND id_resource=? ";
     private static final String SQL_QUERY_DECREMENT_ORDER_CONDITIONAL = "UPDATE genatt_entry SET pos_conditional = pos_conditional - 1 WHERE pos_conditional > ? AND id_field_depend=? AND id_resource=? AND resource_type=? ";
     private static final int CONSTANT_ZERO = 0;
-
+    
+    private static final String SQL_QUERY_SELECT_ENTRY_BY_FORM = "SELECT id_entry, title FROM genatt_entry WHERE id_resource = ? AND title IS NOT NULL ORDER BY id_entry ";
+    private static final String SQL_QUERY_SELECT_ENTRY_VALUE = "SELECT title FROM genatt_response INNER JOIN genatt_field ON genatt_response.id_field = genatt_field.id_field "
+    		+ "	WHERE genatt_response.id_entry = ? AND genatt_response.id_response = ? AND title IS NOT NULL  ORDER BY genatt_response.id_entry ";
+    
     /**
      * {@inheritDoc}
      */
@@ -708,4 +714,50 @@ public final class EntryDAO implements IEntryDAO
 
         return entry;
     }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<Integer , String> findEntryByForm( Plugin plugin, int nIdForm )
+    {
+        Map<Integer, String> listResult = new HashMap<Integer, String>(  );
+        
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ENTRY_BY_FORM, plugin );
+        daoUtil.setInt( 1, nIdForm );
+        daoUtil.executeQuery(  );
+        
+        while ( daoUtil.next(  ) )
+        {
+            listResult.put( daoUtil.getInt( 1 ) , daoUtil.getString( 2 ) );
+        }
+
+        daoUtil.free(  );
+
+
+        return listResult;
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getEntryValueByIdResponse(  Plugin plugin, int nIdEntry, int nIdResponse )
+    {
+    	DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ENTRY_VALUE, plugin );
+        daoUtil.setInt( 1, nIdEntry );
+        daoUtil.setInt( 2, nIdResponse );
+        daoUtil.executeQuery(  );
+
+        String val = null;
+
+        if ( daoUtil.next(  ) )
+        {
+            val = daoUtil.getString( 1 );
+        }
+
+        daoUtil.free(  );
+
+        return val;
+    	
+    }
+
 }

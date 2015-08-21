@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.genericattributes.business;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -118,6 +119,7 @@ public interface IEntryDAO
      * @param strResourceType The resource type of the entry to get
      * @return List<IEntry> the list of all the entries without parent
      */
+    
     Entry findByOrderAndIdFieldAndIdResource( Plugin plugin, int nOrder, int nIdField, int nIdResource,
         String strResourceType );
 
@@ -130,5 +132,25 @@ public interface IEntryDAO
      * @param nIdResource the id of the resource
      * @param strResourceType The resource type
      */
+    
     void decrementOrderByOne( Plugin plugin, int nOrder, int nIdField, int nIdResource, String strResourceType );
+    
+    /**
+     * 
+     * @param plugin The plugin
+     * @param nIdForm if form
+     * @return
+     */
+    
+    Map<Integer, String> findEntryByForm( Plugin plugin, int nIdForm ) ;
+    
+    /**
+     * 
+     * @param plugin the plugin
+     * @param nIdEntry id entry
+     * @param nIdResponse id entry response
+     * @return entry value
+     */
+    
+    String getEntryValueByIdResponse(  Plugin plugin, int nIdEntry, int nIdResponse ) ;
 }
