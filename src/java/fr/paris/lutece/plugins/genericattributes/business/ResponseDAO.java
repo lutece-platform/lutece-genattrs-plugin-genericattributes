@@ -54,7 +54,7 @@ public final class ResponseDAO implements IResponseDAO
         ", genatt_entry ent, genatt_entry_type type  " +
         " WHERE resp.id_response = ? and resp.id_entry = ent.id_entry and ent.id_type = type.id_type ";
     private static final String SQL_QUERY_SELECT_RESPONSE_BY_FILTER = SQL_QUERY_SELECT_RESPONSE +
-        ", genatt_entry ent, genatt_entry_type type, form_response_submit fr " +
+        ", genatt_entry ent, genatt_entry_type type " +
         " WHERE resp.id_entry = ent.id_entry and ent.id_type = type.id_type ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_response ( " +
         " id_response, response_value, id_entry, id_field, id_file, status ) VALUES ( ?,?,?,?,?,? )";
@@ -68,7 +68,7 @@ public final class ResponseDAO implements IResponseDAO
     private static final String SQL_QUERY_SELECT_MAX_NUMBER = " SELECT fr.response_value FROM genatt_response fr " +
         " INNER JOIN genatt_entry ent ON fr.id_entry = ent.id_entry " +
         " WHERE ent.id_entry = ? AND ent.id_resource = ? AND ent.resource_type = ? ORDER BY CAST(fr.response_value AS DECIMAL) DESC LIMIT 1 ";
-    private static final String SQL_FILTER_ID_RESOURCE = " AND fr.id_response= resp.id_response and fr.id_form_submit = ?";
+    private static final String SQL_FILTER_ID_RESOURCE = " AND ent.id_resource = ? ";
     private static final String SQL_FILTER_ID_ENTRY = " AND resp.id_entry = ? ";
     private static final String SQL_FILTER_ID_FIELD = " AND resp.id_field = ? ";
     private static final String SQL_FILTER_ID_RESPONSE = " resp.id_response ";
@@ -263,9 +263,7 @@ public final class ResponseDAO implements IResponseDAO
         sbSQL.append( SQL_ORDER_BY );
         sbSQL.append( ( filter.containsOrderBy(  ) ) ? filter.getOrderBy(  ) : SQL_FILTER_ID_RESPONSE );
         sbSQL.append( ( filter.isOrderByAsc(  ) ) ? SQL_ASC : SQL_DESC );
-        
-       // String sss = "SELECT resp.id_response, resp.response_value, type.class_name, ent.id_type, ent.id_entry, ent.title,  resp.id_field, resp.id_file, resp.status FROM genatt_response resp, genatt_entry ent, genatt_entry_type type, form_response_submit fr WHERE resp.id_entry = ent.id_entry and ent.id_type = type.id_type  AND fr.id_response= resp.id_response and fr.id_form_submit = 19";
-        
+
         DAOUtil daoUtil = new DAOUtil( sbSQL.toString(  ), plugin );
         int nIndex = 1;
 
