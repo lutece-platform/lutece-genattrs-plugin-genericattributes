@@ -51,10 +51,10 @@ public final class ResponseDAO implements IResponseDAO
     private static final String SQL_QUERY_SELECT_RESPONSE = "SELECT resp.id_response, resp.response_value, type.class_name, ent.id_type, ent.id_entry, ent.title, " +
         " resp.id_field, resp.id_file, resp.status FROM genatt_response resp";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_RESPONSE +
-        ", genatt_entry ent, genatt_entry_type type  " +
+        ", genatt_entry ent, genatt_entry_type type " +
         " WHERE resp.id_response = ? and resp.id_entry = ent.id_entry and ent.id_type = type.id_type ";
     private static final String SQL_QUERY_SELECT_RESPONSE_BY_FILTER = SQL_QUERY_SELECT_RESPONSE +
-        ", genatt_entry ent, genatt_entry_type type " +
+        ", genatt_entry ent, genatt_entry_type type, form_response_submit fr " +
         " WHERE resp.id_entry = ent.id_entry and ent.id_type = type.id_type ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_response ( " +
         " id_response, response_value, id_entry, id_field, id_file, status ) VALUES ( ?,?,?,?,?,? )";
