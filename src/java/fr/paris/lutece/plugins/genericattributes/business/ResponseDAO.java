@@ -69,7 +69,7 @@ public final class ResponseDAO implements IResponseDAO
         " INNER JOIN genatt_entry ent ON fr.id_entry = ent.id_entry " +
         " WHERE ent.id_entry = ? AND ent.id_resource = ? AND ent.resource_type = ? ORDER BY CAST(fr.response_value AS DECIMAL) DESC LIMIT 1 ";
 
-    private static final String SQL_FILTER_ID_RESOURCE = " AND fr.id_response = resp.id_response and fr.id_form_submit = ?";
+    private static final String SQL_FILTER_ID_RESOURCE = " AND fr.id_response = resp.id_response AND fr.id_form_submit = ?";
      
     private static final String SQL_FILTER_ID_ENTRY = " AND resp.id_entry = ? ";
     private static final String SQL_FILTER_ID_FIELD = " AND resp.id_field = ? ";
