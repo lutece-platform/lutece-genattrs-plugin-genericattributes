@@ -55,7 +55,7 @@ public final class ResponseDAO implements IResponseDAO
         " WHERE resp.id_response = ? and resp.id_entry = ent.id_entry and ent.id_type = type.id_type ";
     private static final String SQL_QUERY_SELECT_RESPONSE_BY_FILTER = SQL_QUERY_SELECT_RESPONSE +
         ", genatt_entry ent, genatt_entry_type type, form_response_submit fr " +
-        " WHERE resp.id_entry = ent.id_entry and ent.id_type = type.id_type ";
+        " WHERE resp.id_entry = ent.id_entry and ent.id_type = type.id_type and fr.id_response = resp.id_response ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_response ( " +
         " id_response, response_value, id_entry, id_field, id_file, status ) VALUES ( ?,?,?,?,?,? )";
     private static final String SQL_QUERY_UPDATE = "UPDATE genatt_response SET response_value = ?, id_entry = ?, id_field = ?, id_file = ?, status = ? WHERE id_response = ?";
@@ -69,7 +69,7 @@ public final class ResponseDAO implements IResponseDAO
         " INNER JOIN genatt_entry ent ON fr.id_entry = ent.id_entry " +
         " WHERE ent.id_entry = ? AND ent.id_resource = ? AND ent.resource_type = ? ORDER BY CAST(fr.response_value AS DECIMAL) DESC LIMIT 1 ";
 
-    private static final String SQL_FILTER_ID_RESOURCE = " AND fr.id_response = resp.id_response AND fr.id_form_submit = ?";
+    private static final String SQL_FILTER_ID_RESOURCE = " AND fr.id_form_submit = ?";
      
     private static final String SQL_FILTER_ID_ENTRY = " AND resp.id_entry = ? ";
     private static final String SQL_FILTER_ID_FIELD = " AND resp.id_field = ? ";
