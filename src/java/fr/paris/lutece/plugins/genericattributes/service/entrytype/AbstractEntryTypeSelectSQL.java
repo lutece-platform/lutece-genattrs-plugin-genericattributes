@@ -61,6 +61,7 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
     /**
      * {@inheritDoc}
      */
+	
     @Override
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
@@ -167,7 +168,7 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
     {
         List<Field> list = new ArrayList<Field>(  );
         String strSQL = entry.getComment(  );
-        DAOUtil daoUtil = new DAOUtil( strSQL );
+        DAOUtil daoUtil = new DAOUtil( strSQL, GenericAttributesUtils.getPlugin(  ) );
         daoUtil.executeQuery(  );
 
         while ( daoUtil.next(  ) )
