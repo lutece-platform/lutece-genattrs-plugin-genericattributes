@@ -57,6 +57,7 @@ public interface IEntryTypeService
     String PARAMETER_HELP_MESSAGE = "help_message";
     String PARAMETER_COMMENT = "comment";
     String PARAMETER_MANDATORY = "mandatory";
+    String PARAMETER_ROLE_ASSOCIATED = "role_associated";
     String PARAMETER_FIELD_IN_LINE = "field_in_line";
     String PARAMETER_HEIGHT = "height";
     String PARAMETER_WIDTH = "width";

@@ -67,6 +67,7 @@ public abstract class AbstractEntryTypeSelect extends EntryTypeService
             ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim(  ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
+        String strRoleAssociated = request.getParameter(PARAMETER_ROLE_ASSOCIATED);
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
 
         String strFieldError = StringUtils.EMPTY;
@@ -93,6 +94,7 @@ public abstract class AbstractEntryTypeSelect extends EntryTypeService
         entry.setCSSClass( strCSSClass );
 
         entry.setMandatory( strMandatory != null );
+        entry.setRoleAssociated(strRoleAssociated != null);
 
         return null;
     }

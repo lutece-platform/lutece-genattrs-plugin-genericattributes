@@ -76,6 +76,7 @@ public class Entry implements Serializable, Cloneable
     private String _strErrorMessage;
     private int _nNumberRow;
     private int _nNumberColumn;
+    private boolean _bRoleAssociated;
 
     /**
      * Get the list of children of this entry
@@ -555,7 +556,25 @@ public class Entry implements Serializable, Cloneable
     {
         this._nNumberColumn = nNumberColumn;
     }
-
+    
+    
+    /**
+     * Check if this entry can has an associated roles
+     * @return true if entry can has roles
+     */
+    public boolean isRoleAssociated() {
+        return _bRoleAssociated;
+    }
+    
+    /**
+     * Set true if the entry accept roles 
+     * @param _bRoleAssociated true if the entry accept roles
+     */
+    public void setRoleAssociated(boolean _bRoleAssociated) {
+        this._bRoleAssociated = _bRoleAssociated;
+    }
+    
+    
     /**
      * Creates and returns a copy of this object.
      * @return a clone of this instance.

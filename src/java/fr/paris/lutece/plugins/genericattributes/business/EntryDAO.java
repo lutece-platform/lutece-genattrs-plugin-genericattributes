@@ -54,18 +54,18 @@ public final class EntryDAO implements IEntryDAO
     private static final String SQL_QUERY_SELECT_ENTRY_ATTRIBUTES = "SELECT ent.id_type,typ.title,typ.is_group,typ.is_comment,typ.class_name,typ.is_mylutece_user," +
         "ent.id_entry,ent.id_resource,ent.resource_type,ent.id_parent,ent.title,ent.help_message," +
         "ent.comment,ent.mandatory,ent.fields_in_line," +
-        "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique, ent.map_provider, ent.css_class, ent.pos_conditional, ent.error_message, ent.num_row, ent.num_column " +
+        "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique, ent.map_provider, ent.css_class, ent.pos_conditional, ent.error_message, ent.num_row, ent.num_column, ent.is_role_associated " +
         "FROM genatt_entry ent,genatt_entry_type typ WHERE ent.id_type=typ.id_type ";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_ENTRY_ATTRIBUTES +
         " AND ent.id_entry = ? ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_entry ( " +
         "id_entry,id_resource,resource_type,id_type,id_parent,title,help_message, comment,mandatory,fields_in_line," +
-        "pos,id_field_depend,confirm_field,confirm_field_title,field_unique,map_provider,css_class, pos_conditional, error_message, num_row, num_column ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        "pos,id_field_depend,confirm_field,confirm_field_title,field_unique,map_provider,css_class, pos_conditional, error_message, num_row, num_column, is_role_associated ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM genatt_entry WHERE id_entry = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE genatt_entry SET " +
         "id_entry=?,id_resource=?,resource_type=?,id_type=?,id_parent=?,title=?,help_message=?," +
-        "comment=?,mandatory=?,fields_in_line=?," +
-        "pos=?,id_field_depend=?,confirm_field=?,confirm_field_title=?,field_unique=?,map_provider=?,css_class=?, pos_conditional=?, error_message=?, num_row = ?, num_column = ? WHERE id_entry=?";
+        "comment=?,mandatory=?, fields_in_line=?," +
+        "pos=?,id_field_depend=?,confirm_field=?,confirm_field_title=?,field_unique=?,map_provider=?,css_class=?, pos_conditional=?, error_message=?, num_row = ?, num_column = ?, is_role_associated = ? WHERE id_entry=?";
     private static final String SQL_QUERY_SELECT_ENTRY_BY_FILTER = SQL_QUERY_SELECT_ENTRY_ATTRIBUTES;
     private static final String SQL_QUERY_SELECT_NUMBER_ENTRY_BY_FILTER = "SELECT COUNT(ent.id_entry) " +
         "FROM genatt_entry ent,genatt_entry_type typ WHERE ent.id_type=typ.id_type ";
@@ -153,6 +153,7 @@ public final class EntryDAO implements IEntryDAO
         daoUtil.setString( 19, entry.getErrorMessage(  ) );
         daoUtil.setInt( 20, entry.getNumberRow(  ) );
         daoUtil.setInt( 21, entry.getNumberColumn(  ) );
+        daoUtil.setBoolean(22, entry.isRoleAssociated() );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -267,9 +268,10 @@ public final class EntryDAO implements IEntryDAO
         daoUtil.setString( nIndex++, entry.getErrorMessage(  ) );
         daoUtil.setInt( nIndex++, entry.getNumberRow(  ) );
         daoUtil.setInt( nIndex++, entry.getNumberColumn(  ) );
+        daoUtil.setBoolean(nIndex++, entry.isRoleAssociated());
 
         daoUtil.setInt( nIndex++, entry.getIdEntry(  ) );
-
+        
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
@@ -711,6 +713,7 @@ public final class EntryDAO implements IEntryDAO
         entry.setErrorMessage( daoUtil.getString( nIndex++ ) );
         entry.setNumberRow( daoUtil.getInt( nIndex++ ) );
         entry.setNumberColumn( daoUtil.getInt( nIndex++ ) );
+        entry.setRoleAssociated(daoUtil.getBoolean(nIndex++));
 
         return entry;
     }
