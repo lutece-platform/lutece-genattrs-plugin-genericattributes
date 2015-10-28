@@ -46,6 +46,7 @@ CREATE TABLE genatt_entry (
 	error_message long varchar default NULL,
 	num_row smallint default 0,
 	num_column smallint default 0,
+        is_role_associated smallint(1) DEFAULT '0',
 	PRIMARY KEY (id_entry)
 );
 
@@ -71,6 +72,7 @@ CREATE TABLE genatt_field (
 	value_type_date date NULL,
 	no_display_title smallint default NULL,
 	comment long varchar default null,
+        role_key varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
 	PRIMARY KEY (id_field)
 );
 
