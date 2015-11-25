@@ -1,61 +1,61 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-	<parent>
-	  <artifactId>lutece-plugins-pom</artifactId>
-	  <groupId>fr.paris.lutece.plugins</groupId>
-	  <version>3.7</version>
-	</parent>
+    <parent>
+        <artifactId>lutece-global-pom</artifactId>
+        <groupId>fr.paris.lutece.tools</groupId>
+        <version>3.0.3</version>
+    </parent>
 
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>fr.paris.lutece.plugins</groupId>
-	<artifactId>plugin-genericattributes</artifactId>
-	<packaging>lutece-plugin</packaging>
-	<version>1.1.4-SNAPSHOT</version>
-	<name>Lutece Generic Attributes plugin</name>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>fr.paris.lutece.plugins</groupId>
+    <artifactId>plugin-genericattributes</artifactId>
+    <packaging>lutece-plugin</packaging>
+    <version>1.1.4-SNAPSHOT</version>
+    <name>Lutece Generic Attributes plugin</name>
 
-	<repositories>
+    <repositories>
         <repository>
-          <id>luteceSnapshot</id>
-          <name>luteceSnapshot</name>
-          <url>http://dev.lutece.paris.fr/snapshot_repository</url>
-          <snapshots>
-              <enabled>true</enabled>
-          </snapshots>
+            <id>luteceSnapshot</id>
+            <name>luteceSnapshot</name>
+            <url>http://dev.lutece.paris.fr/snapshot_repository</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
         <repository>
-          <id>lutece</id>
-          <name>luteceRepository</name>
-          <url>http://dev.lutece.paris.fr/maven_repository</url>
-          <snapshots>
-              <enabled>false</enabled>
-          </snapshots>
+            <id>lutece</id>
+            <name>luteceRepository</name>
+            <url>http://dev.lutece.paris.fr/maven_repository</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
     </repositories>
 
-	<dependencies>
-		<dependency>
-	    	<groupId>fr.paris.lutece</groupId>
-	    	<artifactId>lutece-core</artifactId>
-	    	<version>[5.0.0-RC-04,)</version>
-	    	<type>lutece-core</type>
-	  	</dependency>
-		<dependency>
-	    	<groupId>fr.paris.lutece.plugins</groupId>
-	    	<artifactId>plugin-asynchronousupload</artifactId>
-	    	<version>[1.0.0-SNAPSHOT,)</version>
-	    	<type>lutece-plugin</type>
-	  	</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>fr.paris.lutece</groupId>
+            <artifactId>lutece-core</artifactId>
+            <version>[5.0.0,)</version>
+            <type>lutece-core</type>
+        </dependency>
+        <dependency>
+            <groupId>fr.paris.lutece.plugins</groupId>
+            <artifactId>plugin-asynchronousupload</artifactId>
+            <version>[1.0.0-SNAPSHOT,)</version>
+            <type>lutece-plugin</type>
+        </dependency>
+    </dependencies>
 
-	<properties>
-		<componentName>generic-attributes</componentName>
-		<jiraProjectName>GENERICATT</jiraProjectName>
-		<jiraComponentId>12272</jiraComponentId>
-	</properties>
+    <properties>
+        <componentName>generic-attributes</componentName>
+        <jiraProjectName>GENERICATT</jiraProjectName>
+        <jiraComponentId>12272</jiraComponentId>
+    </properties>
 
     <scm>
-        <connection>scm:svn:http://dev.lutece.paris.fr/svn/lutece/portal/trunk/plugins/genericattributes/plugin-genericattributes</connection>
-        <developerConnection>scm:svn:https://dev.lutece.paris.fr/svn/lutece/portal/trunk/plugins/genericattributes/plugin-genericattributes</developerConnection>
-        <url>http://dev.lutece.paris.fr/viewvc/lutece/portal/trunk/plugins/genericattributes/plugin-genericattributes</url>
+        <connection>scm:git:https://github.com/lutece-platform/lutece-genattrs-plugin-genericattributes.git</connection>
+        <developerConnection>scm:git:https://github.com/lutece-platform/lutece-genattrs-plugin-genericattributes.git</developerConnection>
+        <url>https://github.com/lutece-platform/lutece-genattrs-plugin-genericattributes.git</url>
     </scm>
 </project>
