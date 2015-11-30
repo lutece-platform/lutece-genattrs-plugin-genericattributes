@@ -42,6 +42,7 @@ import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 import org.apache.commons.lang.StringUtils;
@@ -86,7 +87,7 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
                 AdminMessage.TYPE_STOP );
         }
-
+        
         // for don't update fields listFields=null
         entry.setFields( null );
         entry.setTitle( strTitle );
@@ -96,6 +97,21 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
 
         entry.setMandatory( strMandatory != null );
 
+        try 
+        {
+        	getSqlQueryFields( entry );
+        }
+        catch ( AppException ae ) 
+        {
+            String strErrorMsg = ae.getMessage();
+            if ( strErrorMsg != null && strErrorMsg.contains( System.getProperty( "line.separator" ) ) ) 
+            {
+                strErrorMsg = strErrorMsg.substring( 0, strErrorMsg.indexOf( System.getProperty( "line.separator" ) ) );
+            }
+            Object[] tabErrorSQLMsg = { strErrorMsg };
+            return AdminMessageService.getMessageUrl( request, MESSAGE_INVALID_SQL_QUERY, tabErrorSQLMsg, AdminMessage.TYPE_STOP );
+        }
+        
         return null;
     }
 
@@ -156,7 +172,7 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getField(  ).getTitle(  );
+        return response.getField(  )  != null ? response.getField(  ) .getTitle(  ) : StringUtils.EMPTY;
     }
 
     /**

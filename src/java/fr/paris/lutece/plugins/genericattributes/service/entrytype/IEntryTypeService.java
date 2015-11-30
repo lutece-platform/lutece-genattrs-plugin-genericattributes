@@ -80,6 +80,7 @@ public interface IEntryTypeService
     String MESSAGE_UNIQUE_FIELD = "genericattributes.message.errorUniqueField";
     String MESSAGE_XSS_FIELD = "genericattributes.message.errorXssField";
     String MESSAGE_MAXLENGTH = "genericattributes.message.maxLength";
+    String MESSAGE_INVALID_SQL_QUERY = "genericattributes.message.invalidSqlQuery";
     String MESSAGE_MYLUTECE_AUTHENTIFICATION_REQUIRED = "genericattributes.message.myLuteceAuthentificationRequired";
     String FIELD_TITLE = "genericattributes.createEntry.labelTitle";
     String FIELD_INSERT_GROUP = "genericattributes.labelInsertGroup";
