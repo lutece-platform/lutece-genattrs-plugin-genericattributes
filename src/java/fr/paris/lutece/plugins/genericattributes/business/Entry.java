@@ -33,11 +33,10 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
-import fr.paris.lutece.portal.service.util.AppLogService;
-
 import java.io.Serializable;
-
 import java.util.List;
+
+import fr.paris.lutece.portal.service.util.AppLogService;
 
 
 /**
@@ -52,6 +51,7 @@ public class Entry implements Serializable, Cloneable
     //Other constants
     private int _nIdEntry;
     private String _strTitle;
+    private String _strCode;
     private String _strHelpMessage;
     private String _strComment;
     private boolean _bMandatory;
@@ -574,6 +574,22 @@ public class Entry implements Serializable, Cloneable
         this._bRoleAssociated = _bRoleAssociated;
     }
     
+    /**
+     * @return the _strCode
+     */
+    public String getCode()
+    {
+        return _strCode;
+    }
+
+    /**
+     * @param strCode
+     *            the code to set
+     */
+    public void setCode(String strCode)
+    {
+        this._strCode = strCode;
+    }
     
     /**
      * Creates and returns a copy of this object.

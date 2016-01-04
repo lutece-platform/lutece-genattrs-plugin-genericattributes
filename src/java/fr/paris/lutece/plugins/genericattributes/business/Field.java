@@ -49,6 +49,7 @@ public class Field implements Serializable
     private static final long serialVersionUID = -3613999153894144425L;
     private int _nIdField;
     private Entry _parentEntry;
+    private String _strCode;
     private String _strTitle;
     private String _strValue;
     private String _strComment;
@@ -338,4 +339,21 @@ public class Field implements Serializable
     {
         _strRoleKey = strRole;
     }
+
+    /**
+     * @return the _strCode
+     */
+    public String getCode()
+    {
+        return _strCode;
+    }
+
+    /**
+     * @param strCode the code to set
+     */
+    public void setCode(String strCode)
+    {
+        this._strCode = strCode;
+    }
+    
 }

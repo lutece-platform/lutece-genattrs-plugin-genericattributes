@@ -33,6 +33,14 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
@@ -41,14 +49,6 @@ import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -62,11 +62,11 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
     @Override
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
+        String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strNumberRows = request.getParameter( PARAMETER_NUMBER_ROWS );
         String strNumberColumns = request.getParameter( PARAMETER_NUMBER_COLUMNS );
-
         String strFieldError = StringUtils.EMPTY;
 
         if ( StringUtils.isBlank( strTitle ) )
@@ -107,6 +107,7 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
         // for don't update fields listFields=null
         int row = Integer.valueOf( strNumberRows );
         int column = Integer.valueOf( strNumberColumns );
+        entry.setCode( strCode );
         entry.setTitle( strTitle );
         entry.setHelpMessage( null );
         entry.setComment( strComment );

@@ -33,15 +33,15 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.util.sql.DAOUtil;
-
-import org.apache.commons.lang.StringUtils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+
+import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.util.sql.DAOUtil;
 
 
 /**
@@ -52,18 +52,21 @@ public final class EntryDAO implements IEntryDAO
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_entry ) FROM genatt_entry";
     private static final String SQL_QUERY_SELECT_ENTRY_ATTRIBUTES = "SELECT ent.id_type,typ.title,typ.is_group,typ.is_comment,typ.class_name,typ.is_mylutece_user," +
-        "ent.id_entry,ent.id_resource,ent.resource_type,ent.id_parent,ent.title,ent.help_message," +
+ "ent.id_entry,ent.id_resource,ent.resource_type,ent.id_parent,ent.code,ent.title,ent.help_message,"
+            +
         "ent.comment,ent.mandatory,ent.fields_in_line," +
         "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique, ent.map_provider, ent.css_class, ent.pos_conditional, ent.error_message, ent.num_row, ent.num_column, ent.is_role_associated " +
         "FROM genatt_entry ent,genatt_entry_type typ WHERE ent.id_type=typ.id_type ";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_ENTRY_ATTRIBUTES +
         " AND ent.id_entry = ? ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_entry ( " +
-        "id_entry,id_resource,resource_type,id_type,id_parent,title,help_message, comment,mandatory,fields_in_line," +
-        "pos,id_field_depend,confirm_field,confirm_field_title,field_unique,map_provider,css_class, pos_conditional, error_message, num_row, num_column, is_role_associated ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+ "id_entry,id_resource,resource_type,id_type,id_parent,code,title,help_message, comment,mandatory,fields_in_line,"
+            +
+ "pos,id_field_depend,confirm_field,confirm_field_title,field_unique,map_provider,css_class, pos_conditional, error_message, num_row, num_column, is_role_associated ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM genatt_entry WHERE id_entry = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE genatt_entry SET " +
-        "id_entry=?,id_resource=?,resource_type=?,id_type=?,id_parent=?,title=?,help_message=?," +
+ "id_entry=?,id_resource=?,resource_type=?,id_type=?,id_parent=?,code=?,title=?,help_message=?,"
+            +
         "comment=?,mandatory=?, fields_in_line=?," +
         "pos=?,id_field_depend=?,confirm_field=?,confirm_field_title=?,field_unique=?,map_provider=?,css_class=?, pos_conditional=?, error_message=?, num_row = ?, num_column = ?, is_role_associated = ? WHERE id_entry=?";
     private static final String SQL_QUERY_SELECT_ENTRY_BY_FILTER = SQL_QUERY_SELECT_ENTRY_ATTRIBUTES;
@@ -124,36 +127,38 @@ public final class EntryDAO implements IEntryDAO
             daoUtil.setIntNull( 5 );
         }
 
-        daoUtil.setString( 6, entry.getTitle(  ) );
-        daoUtil.setString( 7, entry.getHelpMessage(  ) );
-        daoUtil.setString( 8, entry.getComment(  ) );
-        daoUtil.setBoolean( 9, entry.isMandatory(  ) );
-        daoUtil.setBoolean( 10, entry.isFieldInLine(  ) );
+        daoUtil.setString( 6, entry.getCode( ) );
+        daoUtil.setString( 7, entry.getTitle( ) );
+        daoUtil.setString( 8, entry.getHelpMessage( ) );
+        daoUtil.setString( 9, entry.getComment( ) );
+        daoUtil.setBoolean( 10, entry.isMandatory( ) );
+        daoUtil.setBoolean( 11, entry.isFieldInLine( ) );
 
-        daoUtil.setInt( 11, newPosition( entry, plugin ) );
+        daoUtil.setInt( 12, newPosition( entry, plugin ) );
 
         if ( entry.getFieldDepend(  ) != null )
         {
-            daoUtil.setInt( 12, entry.getFieldDepend(  ).getIdField(  ) );
+            daoUtil.setInt( 13, entry.getFieldDepend( ).getIdField( ) );
         }
         else
         {
-            daoUtil.setIntNull( 12 );
+            daoUtil.setIntNull( 13 );
         }
 
-        daoUtil.setBoolean( 13, entry.isConfirmField(  ) );
-        daoUtil.setString( 14, entry.getConfirmFieldTitle(  ) );
-        daoUtil.setBoolean( 15, entry.isUnique(  ) );
+        daoUtil.setBoolean( 14, entry.isConfirmField( ) );
+        daoUtil.setString( 15, entry.getConfirmFieldTitle( ) );
+        daoUtil.setBoolean( 16, entry.isUnique( ) );
 
         String strMapProviderKey = ( entry.getMapProvider(  ) == null ) ? StringUtils.EMPTY
                                                                         : entry.getMapProvider(  ).getKey(  );
-        daoUtil.setString( 16, strMapProviderKey );
-        daoUtil.setString( 17, ( entry.getCSSClass(  ) == null ) ? StringUtils.EMPTY : entry.getCSSClass(  ) );
-        daoUtil.setInt( 18, newPositionConditional( entry, plugin ) );
-        daoUtil.setString( 19, entry.getErrorMessage(  ) );
-        daoUtil.setInt( 20, entry.getNumberRow(  ) );
-        daoUtil.setInt( 21, entry.getNumberColumn(  ) );
-        daoUtil.setBoolean(22, entry.isRoleAssociated() );
+        daoUtil.setString( 17, strMapProviderKey );
+        daoUtil.setString( 18,
+                ( entry.getCSSClass( ) == null ) ? StringUtils.EMPTY : entry.getCSSClass( ) );
+        daoUtil.setInt( 19, newPositionConditional( entry, plugin ) );
+        daoUtil.setString( 20, entry.getErrorMessage( ) );
+        daoUtil.setInt( 21, entry.getNumberRow( ) );
+        daoUtil.setInt( 22, entry.getNumberColumn( ) );
+        daoUtil.setBoolean( 23, entry.isRoleAssociated( ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -223,6 +228,7 @@ public final class EntryDAO implements IEntryDAO
             daoUtil.setIntNull( nIndex++ );
         }
 
+        daoUtil.setString( nIndex++, entry.getCode( ) );
         daoUtil.setString( nIndex++, entry.getTitle(  ) );
         daoUtil.setString( nIndex++, entry.getHelpMessage(  ) );
         daoUtil.setString( nIndex++, entry.getComment(  ) );
@@ -685,6 +691,7 @@ public final class EntryDAO implements IEntryDAO
             entry.setParent( entryParent );
         }
 
+        entry.setCode( daoUtil.getString( nIndex++ ) );
         entry.setTitle( daoUtil.getString( nIndex++ ) );
         entry.setHelpMessage( daoUtil.getString( nIndex++ ) );
         entry.setComment( daoUtil.getString( nIndex++ ) );

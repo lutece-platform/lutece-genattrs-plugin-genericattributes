@@ -33,6 +33,15 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
@@ -46,15 +55,6 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.util.ReferenceList;
-
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -99,6 +99,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
     @Override
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
+        String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
             ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim(  ) : null;
@@ -134,7 +135,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         listFields.add( buildField( entry, CONSTANT_ID_ADDRESS ) );
 
         entry.setFields( listFields );
-
+        entry.setCode( strCode );
         entry.setTitle( strTitle );
         entry.setHelpMessage( strHelpMessage );
         entry.setComment( strComment );
@@ -308,6 +309,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         field.setTitle( strFieldTitle );
         field.setValue( strFieldTitle );
         field.setParentEntry( entry );
+        field.setCode( strFieldTitle );
 
         return field;
     }

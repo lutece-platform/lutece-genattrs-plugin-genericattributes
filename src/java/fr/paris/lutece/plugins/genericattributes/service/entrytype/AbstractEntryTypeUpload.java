@@ -33,6 +33,20 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.asynchronousupload.service.IAsyncUploadHandler;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
@@ -57,23 +71,6 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.url.UrlItem;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.lang.StringUtils;
-
-import java.awt.image.BufferedImage;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-
-import javax.imageio.ImageIO;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -590,6 +587,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
+        String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
 
         String strError = this.checkEntryData( request, locale );
 
@@ -599,6 +597,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
         }
 
         entry.setTitle( strTitle );
+        entry.setCode( strCode );
         entry.setHelpMessage( strHelpMessage );
         entry.setComment( strComment );
         entry.setCSSClass( strCSSClass );

@@ -49,16 +49,16 @@ public final class FieldDAO implements IFieldDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_field ) FROM genatt_field";
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_field,id_entry,title,value,height,width,default_value,max_size_enter,pos,value_type_date,no_display_title,comment,role_key" +
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_field,id_entry,code,title,value,height,width,default_value,max_size_enter,pos,value_type_date,no_display_title,comment,role_key" +
         " FROM genatt_field  WHERE id_field = ? ORDER BY pos";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_field(id_field,id_entry,title,value,height,width,default_value,max_size_enter,pos,value_type_date,no_display_title,comment,role_key)" +
-        " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_field(id_field,id_entry,code,title,value,height,width,default_value,max_size_enter,pos,value_type_date,no_display_title,comment,role_key)" +
+        " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM genatt_field WHERE id_field = ? ";
     private static final String SQL_QUERY_INSERT_VERIF_BY = "INSERT INTO genatt_verify_by(id_field,id_expression) VALUES(?,?) ";
     private static final String SQL_QUERY_DELETE_VERIF_BY = "DELETE FROM genatt_verify_by WHERE id_field = ? and id_expression= ?";
     private static final String SQL_QUERY_UPDATE = "UPDATE  genatt_field SET " +
-        "id_field=?,id_entry=?,title=?,value=?,height=?,width=?,default_value=?,max_size_enter=?,pos=?,value_type_date=?,no_display_title=?,comment=?, role_key=? WHERE id_field = ?";
-    private static final String SQL_QUERY_SELECT_FIELD_BY_ID_ENTRY = "SELECT id_field,id_entry,title,value,height,width,default_value," +
+        "id_field=?,id_entry=?,code=?,title=?,value=?,height=?,width=?,default_value=?,max_size_enter=?,pos=?,value_type_date=?,no_display_title=?,comment=?, role_key=? WHERE id_field = ?";
+    private static final String SQL_QUERY_SELECT_FIELD_BY_ID_ENTRY = "SELECT id_field,id_entry,code,title,value,height,width,default_value," +
         "max_size_enter,pos,value_type_date,no_display_title,comment,role_key FROM genatt_field  WHERE id_entry = ? ORDER BY pos";
     private static final String SQL_QUERY_NEW_POSITION = "SELECT MAX(pos)" + " FROM genatt_field ";
     private static final String SQL_QUERY_SELECT_REGULAR_EXPRESSION_BY_ID_FIELD = "SELECT id_expression " +
@@ -127,18 +127,19 @@ public final class FieldDAO implements IFieldDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         daoUtil.setInt( 1, field.getIdField(  ) );
         daoUtil.setInt( 2, field.getParentEntry(  ).getIdEntry(  ) );
-        daoUtil.setString( 3, field.getTitle(  ) );
-        daoUtil.setString( 4, field.getValue(  ) );
-        daoUtil.setInt( 5, field.getHeight(  ) );
-        daoUtil.setInt( 6, field.getWidth(  ) );
-        daoUtil.setBoolean( 7, field.isDefaultValue(  ) );
-        daoUtil.setInt( 8, field.getMaxSizeEnter(  ) );
-        daoUtil.setInt( 9, field.getPosition(  ) );
-        daoUtil.setDate( 10,
+        daoUtil.setString( 3, field.getCode(  ) );
+        daoUtil.setString( 4, field.getTitle(  ) );
+        daoUtil.setString( 5, field.getValue(  ) );
+        daoUtil.setInt( 6, field.getHeight(  ) );
+        daoUtil.setInt( 7, field.getWidth(  ) );
+        daoUtil.setBoolean( 8, field.isDefaultValue(  ) );
+        daoUtil.setInt( 9, field.getMaxSizeEnter(  ) );
+        daoUtil.setInt( 10, field.getPosition(  ) );
+        daoUtil.setDate( 11,
             ( field.getValueTypeDate(  ) == null ) ? null : new Date( field.getValueTypeDate(  ).getTime(  ) ) );
-        daoUtil.setBoolean( 11, field.isNoDisplayTitle(  ) );
-        daoUtil.setString( 12, field.getComment(  ) );
-        daoUtil.setString(13, field.getRoleKey());
+        daoUtil.setBoolean( 12, field.isNoDisplayTitle(  ) );
+        daoUtil.setString( 13, field.getComment(  ) );
+        daoUtil.setString(14, field.getRoleKey());
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
 
@@ -166,17 +167,18 @@ public final class FieldDAO implements IFieldDAO
             entry = new Entry(  );
             entry.setIdEntry( daoUtil.getInt( 2 ) );
             field.setParentEntry( entry );
-            field.setTitle( daoUtil.getString( 3 ) );
-            field.setValue( daoUtil.getString( 4 ) );
-            field.setHeight( daoUtil.getInt( 5 ) );
-            field.setWidth( daoUtil.getInt( 6 ) );
-            field.setDefaultValue( daoUtil.getBoolean( 7 ) );
-            field.setMaxSizeEnter( daoUtil.getInt( 8 ) );
-            field.setPosition( daoUtil.getInt( 9 ) );
-            field.setValueTypeDate( daoUtil.getDate( 10 ) );
-            field.setNoDisplayTitle( daoUtil.getBoolean( 11 ) );
-            field.setComment( daoUtil.getString( 12 ) );
-            field.setRoleKey(daoUtil.getString( 13 ) );
+            field.setCode( daoUtil.getString( 3 ) );
+            field.setTitle( daoUtil.getString( 4 ) );
+            field.setValue( daoUtil.getString( 5 ) );
+            field.setHeight( daoUtil.getInt( 6 ) );
+            field.setWidth( daoUtil.getInt( 7 ) );
+            field.setDefaultValue( daoUtil.getBoolean( 8 ) );
+            field.setMaxSizeEnter( daoUtil.getInt( 9 ) );
+            field.setPosition( daoUtil.getInt( 10 ) );
+            field.setValueTypeDate( daoUtil.getDate( 11 ) );
+            field.setNoDisplayTitle( daoUtil.getBoolean( 12 ) );
+            field.setComment( daoUtil.getString( 13 ) );
+            field.setRoleKey(daoUtil.getString( 14 ) );
         }
 
         daoUtil.free(  );
@@ -205,20 +207,21 @@ public final class FieldDAO implements IFieldDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
         daoUtil.setInt( 1, field.getIdField(  ) );
         daoUtil.setInt( 2, field.getParentEntry(  ).getIdEntry(  ) );
-        daoUtil.setString( 3, field.getTitle(  ) );
-        daoUtil.setString( 4, field.getValue(  ) );
-        daoUtil.setInt( 5, field.getHeight(  ) );
-        daoUtil.setInt( 6, field.getWidth(  ) );
-        daoUtil.setBoolean( 7, field.isDefaultValue(  ) );
-        daoUtil.setInt( 8, field.getMaxSizeEnter(  ) );
-        daoUtil.setInt( 9, field.getPosition(  ) );
-        daoUtil.setDate( 10,
+        daoUtil.setString( 3, field.getCode(  ) );
+        daoUtil.setString( 4, field.getTitle(  ) );
+        daoUtil.setString( 5, field.getValue(  ) );
+        daoUtil.setInt( 6, field.getHeight(  ) );
+        daoUtil.setInt( 7, field.getWidth(  ) );
+        daoUtil.setBoolean( 8, field.isDefaultValue(  ) );
+        daoUtil.setInt( 9, field.getMaxSizeEnter(  ) );
+        daoUtil.setInt( 10, field.getPosition(  ) );
+        daoUtil.setDate( 11,
             ( field.getValueTypeDate(  ) == null ) ? null : new Date( field.getValueTypeDate(  ).getTime(  ) ) );
-        daoUtil.setBoolean( 11, field.isNoDisplayTitle(  ) );
-        daoUtil.setString( 12, field.getComment(  ) );
-        daoUtil.setString( 13, field.getRoleKey() );
+        daoUtil.setBoolean( 12, field.isNoDisplayTitle(  ) );
+        daoUtil.setString( 13, field.getComment(  ) );
+        daoUtil.setString( 14, field.getRoleKey() );
 
-        daoUtil.setInt( 14, field.getIdField(  ) );
+        daoUtil.setInt( 15, field.getIdField(  ) );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
@@ -245,17 +248,18 @@ public final class FieldDAO implements IFieldDAO
             entry = new Entry(  );
             entry.setIdEntry( daoUtil.getInt( 2 ) );
             field.setParentEntry( entry );
-            field.setTitle( daoUtil.getString( 3 ) );
-            field.setValue( daoUtil.getString( 4 ) );
-            field.setHeight( daoUtil.getInt( 5 ) );
-            field.setWidth( daoUtil.getInt( 6 ) );
-            field.setDefaultValue( daoUtil.getBoolean( 7 ) );
-            field.setMaxSizeEnter( daoUtil.getInt( 8 ) );
-            field.setPosition( daoUtil.getInt( 9 ) );
-            field.setValueTypeDate( daoUtil.getDate( 10 ) );
-            field.setNoDisplayTitle( daoUtil.getBoolean( 11 ) );
-            field.setComment( daoUtil.getString( 12 ) );
-            field.setRoleKey(daoUtil.getString( 13 ) );
+            field.setCode( daoUtil.getString( 3 ) );
+            field.setTitle( daoUtil.getString( 4 ) );
+            field.setValue( daoUtil.getString( 5 ) );
+            field.setHeight( daoUtil.getInt( 6 ) );
+            field.setWidth( daoUtil.getInt( 7 ) );
+            field.setDefaultValue( daoUtil.getBoolean( 8 ) );
+            field.setMaxSizeEnter( daoUtil.getInt( 9 ) );
+            field.setPosition( daoUtil.getInt( 10 ) );
+            field.setValueTypeDate( daoUtil.getDate( 11 ) );
+            field.setNoDisplayTitle( daoUtil.getBoolean( 12 ) );
+            field.setComment( daoUtil.getString( 13 ) );
+            field.setRoleKey(daoUtil.getString( 14 ) );
             fieldList.add( field );
         }
 

@@ -33,18 +33,18 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.fileupload.FileItem;
+
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
-
-import org.apache.commons.fileupload.FileItem;
-
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -53,6 +53,8 @@ import javax.servlet.http.HttpServletRequest;
 public interface IEntryTypeService
 {
     //  parameters Entry 
+    String PARAMETER_ENTRY_CODE = "entry_code";
+    String PARAMETER_FIELD_CODE = "field_code";
     String PARAMETER_TITLE = "title";
     String PARAMETER_HELP_MESSAGE = "help_message";
     String PARAMETER_COMMENT = "comment";

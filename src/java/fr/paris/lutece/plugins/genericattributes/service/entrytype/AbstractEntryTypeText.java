@@ -33,6 +33,14 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
@@ -47,14 +55,6 @@ import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.string.StringUtil;
 
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
 
 /**
  * Abstract entry type for text
@@ -67,6 +67,7 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
     @Override
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
+        String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
             ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim(  ) : null;
@@ -151,7 +152,8 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
             listFields.add( field );
             entry.setFields( listFields );
         }
-
+        entry.setCode( strCode );
+        entry.getFields( ).get( 0 ).setCode( strCode );
         entry.getFields(  ).get( 0 ).setValue( strValue );
         entry.getFields(  ).get( 0 ).setWidth( nWidth );
         entry.getFields(  ).get( 0 ).setMaxSizeEnter( nMaxSizeEnter );

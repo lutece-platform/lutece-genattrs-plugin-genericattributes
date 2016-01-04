@@ -33,6 +33,14 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
@@ -43,14 +51,6 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.util.string.StringUtil;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -67,6 +67,7 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
         String strTitle = request.getParameter( PARAMETER_TITLE );
+        String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
             ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim(  ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
@@ -77,6 +78,7 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         String strMaxSizeEnter = request.getParameter( PARAMETER_MAX_SIZE_ENTER );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
         String strUseRichText = request.getParameter( PARAMETER_USE_RICH_TEXT );
+        String strFieldCode = request.getParameter( PARAMETER_FIELD_CODE );
 
         int nWidth = -1;
         int nHeight = -1;
@@ -143,8 +145,8 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
             return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields,
                 AdminMessage.TYPE_STOP );
         }
-
         entry.setTitle( strTitle );
+        entry.setCode( strCode );
         entry.setHelpMessage( strHelpMessage );
         entry.setComment( strComment );
         entry.setCSSClass( strCSSClass );
@@ -158,11 +160,12 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
             entry.setFields( listFields );
         }
 
+        entry.getFields( ).get( 0 ).setCode( strFieldCode );
         entry.getFields(  ).get( 0 ).setValue( strValue );
         entry.getFields(  ).get( 0 ).setWidth( nWidth );
         entry.getFields(  ).get( 0 ).setHeight( nHeight );
         entry.getFields(  ).get( 0 ).setMaxSizeEnter( nMaxSizeEnter );
-
+        
         entry.setMandatory( strMandatory != null );
 
         return null;
