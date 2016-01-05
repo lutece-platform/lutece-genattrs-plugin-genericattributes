@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -48,8 +48,8 @@ public final class ResponseDAO implements IResponseDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = " SELECT MAX( id_response ) FROM genatt_response ";
-    private static final String SQL_QUERY_SELECT_RESPONSE = "SELECT resp.id_response, resp.response_value, type.class_name, ent.id_type, ent.id_entry, ent.title, " +
-        " resp.id_field, resp.id_file, resp.status FROM genatt_response resp";
+    private static final String SQL_QUERY_SELECT_RESPONSE = "SELECT resp.id_response, resp.response_value, type.class_name, ent.id_type, ent.id_entry, ent.title, ent.code, "
+            + " resp.id_field, resp.id_file, resp.status FROM genatt_response resp";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_RESPONSE +
         ", genatt_entry ent, genatt_entry_type type " +
         " WHERE resp.id_response = ? and resp.id_entry = ent.id_entry and ent.id_type = type.id_type ";
@@ -370,6 +370,7 @@ public final class ResponseDAO implements IResponseDAO
         entry.setEntryType( entryType );
         entry.setIdEntry( daoUtil.getInt( nIndex++ ) );
         entry.setTitle( daoUtil.getString( nIndex++ ) );
+        entry.setCode( daoUtil.getString( nIndex++ ) );
         response.setEntry( entry );
 
         // Get field if it exists
