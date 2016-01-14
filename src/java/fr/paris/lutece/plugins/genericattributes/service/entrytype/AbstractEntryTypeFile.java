@@ -76,9 +76,7 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
     {
         List<FileItem> listFilesSource = null;
 
-        if ( request instanceof MultipartHttpServletRequest
-                || ( getFileSources( entry, request ) != null && getFileSources( entry, request )
-                        .size( ) > 0 ) )
+        if ( request instanceof MultipartHttpServletRequest )
          {
             List<FileItem> asynchronousFileItem = getFileSources( entry, request );
 
