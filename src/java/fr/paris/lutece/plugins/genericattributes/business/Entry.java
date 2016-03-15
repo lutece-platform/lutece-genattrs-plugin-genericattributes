@@ -77,6 +77,7 @@ public class Entry implements Serializable, Cloneable
     private int _nNumberRow;
     private int _nNumberColumn;
     private boolean _bRoleAssociated;
+    private String _strEditMode;
 
     /**
      * Get the list of children of this entry
@@ -467,7 +468,6 @@ public class Entry implements Serializable, Cloneable
         _mapProvider = mapProvider;
     }
     
-
     /**
      * Get the error associated to the entry
      * @return the error
@@ -611,4 +611,19 @@ public class Entry implements Serializable, Cloneable
             return new Entry(  );
         }
     }
+
+	/**
+	 * @return the _strEditMode
+	 */
+	public String getEditMode( ) {
+		return _strEditMode;
+	}
+
+	/**
+	 * @param _strEditMode the _strEditMode to set
+	 */
+	public void setEditMode( String strEditMode ) {
+		this._strEditMode = strEditMode;
+	}
+    
 }

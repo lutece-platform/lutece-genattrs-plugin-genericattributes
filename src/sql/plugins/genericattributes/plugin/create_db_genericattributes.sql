@@ -47,7 +47,7 @@ CREATE TABLE genatt_entry (
 	error_message long varchar default NULL,
 	num_row smallint default 0,
 	num_column smallint default 0,
-        is_role_associated smallint(1) DEFAULT '0',
+    is_role_associated smallint DEFAULT '0',
 	PRIMARY KEY (id_entry)
 );
 
@@ -74,7 +74,7 @@ CREATE TABLE genatt_field (
 	value_type_date date NULL,
 	no_display_title smallint default NULL,
 	comment long varchar default null,
-        role_key varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+    role_key varchar(50) DEFAULT NULL,
 	PRIMARY KEY (id_field)
 );
 
@@ -113,4 +113,3 @@ CREATE INDEX index_genatt_verify_by_field ON genatt_verify_by (id_field);
 	
 ALTER TABLE genatt_verify_by ADD CONSTRAINT fk_genatt_verify_by_field FOREIGN KEY (id_field)
 	REFERENCES genatt_field (id_field);
-
