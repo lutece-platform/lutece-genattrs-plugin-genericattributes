@@ -57,7 +57,6 @@ public class Entry implements Serializable, Cloneable
     private boolean _bMandatory;
     private boolean _bFieldInLine;
     private IMapProvider _mapProvider;
-    private IGismapProvider _gismapProvider;
     private int _nPosition;
     private int _nIdResource;
     private String _strResourceType;
@@ -78,6 +77,7 @@ public class Entry implements Serializable, Cloneable
     private int _nNumberRow;
     private int _nNumberColumn;
     private boolean _bRoleAssociated;
+    private String _strEditMode;
 
     /**
      * Get the list of children of this entry
@@ -469,25 +469,6 @@ public class Entry implements Serializable, Cloneable
     }
     
     /**
-     * Get the selected map provider
-     * @see IGismapProvider
-     * @return the select gismap provider
-     */
-    public IGismapProvider getGismapProvider(  )
-    {
-        return _gismapProvider;
-    }
-
-    /**
-     * Sets the map provider
-     * @param mapProvider the map provider
-     */
-    public void setGismapProvider( IGismapProvider gismapProvider )
-    {
-        _gismapProvider = gismapProvider;
-    }
-
-    /**
      * Get the error associated to the entry
      * @return the error
      */
@@ -630,4 +611,19 @@ public class Entry implements Serializable, Cloneable
             return new Entry(  );
         }
     }
+
+	/**
+	 * @return the _strEditMode
+	 */
+	public String getEditMode( ) {
+		return _strEditMode;
+	}
+
+	/**
+	 * @param _strEditMode the _strEditMode to set
+	 */
+	public void setEditMode( String strEditMode ) {
+		this._strEditMode = strEditMode;
+	}
+    
 }
