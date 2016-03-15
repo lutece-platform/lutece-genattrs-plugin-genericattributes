@@ -57,7 +57,6 @@ public class Entry implements Serializable, Cloneable
     private boolean _bMandatory;
     private boolean _bFieldInLine;
     private IMapProvider _mapProvider;
-    private IGismapProvider _gismapProvider;
     private int _nPosition;
     private int _nIdResource;
     private String _strResourceType;
@@ -460,32 +459,14 @@ public class Entry implements Serializable, Cloneable
     }
 
     /**
-     * Sets the gismap provider
-     * @param gismapProvider the map provider
+     * Sets the map provider
+     * @param mapProvider the map provider
      */
     public void setMapProvider( IMapProvider mapProvider )
     {
         _mapProvider = mapProvider;
     }
     
-    /**
-     * Get the selected map provider
-     * @see IGismapProvider
-     * @return the select gismap provider
-     */
-    public IGismapProvider getGismapProvider(  )
-    {
-        return _gismapProvider;
-    }
-
-    /**
-     * Sets the map provider
-     * @param mapProvider the map provider
-     */
-    public void setGismapProvider( IGismapProvider gismapProvider )
-    {
-        _gismapProvider = gismapProvider;
-    }
 
     /**
      * Get the error associated to the entry

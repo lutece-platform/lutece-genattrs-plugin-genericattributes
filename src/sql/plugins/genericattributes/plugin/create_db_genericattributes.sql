@@ -42,7 +42,6 @@ CREATE TABLE genatt_entry (
 	confirm_field_title long varchar,
 	field_unique smallint default NULL,
 	map_provider varchar(45) default NULL,
-	gismap_provider varchar(45) default NULL,
 	css_class varchar(255) default NULL,
 	pos_conditional int default 0,
 	error_message long varchar default NULL,
