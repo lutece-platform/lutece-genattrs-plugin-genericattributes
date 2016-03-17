@@ -80,10 +80,4 @@ public interface IMapProvider extends Serializable
      * @return the Parameter 
      */
     Object getParameter(  );
-    
-    /**
-     * save data of the list response in a table (postgis) dedicated to Geoserver.
-     * @param response
-     */
-    //void saveResponseUsedByGeoserver( List<Response> listResponse );
 }
