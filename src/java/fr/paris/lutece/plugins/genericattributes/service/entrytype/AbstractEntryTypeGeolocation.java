@@ -25,7 +25,6 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
-import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 /**
  * @author bass
@@ -38,6 +37,9 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService {
     
     /** The Constant PARAMETER_EDIT_MODE. */
     public static final String PARAMETER_EDIT_MODE = "edit_mode";
+    
+    /** The Constant PARAMETER_VIEW_NUMBER. */
+    public static final String PARAMETER_VIEW_NUMBER = "view_number";
     
     /** The Constant PARAMETER_SUFFIX_ID_ADDRESS. */
     public static final String PARAMETER_SUFFIX_ID_ADDRESS = "_idAddress";
@@ -64,6 +66,9 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService {
     /** The Constant CONSTANT_PROVIDER. */
     public static final String CONSTANT_EDIT_MODE = "editMode";
     
+    /** The Constant CONSTANT_VIEW_NUMBER. */
+    public static final String CONSTANT_VIEW_NUMBER = "viewNumber";
+    
     /** The Constant CONSTANT_ID_ADDRESS. */
     public static final String CONSTANT_ID_ADDRESS = "idAddress";
     
@@ -83,11 +88,11 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService {
     public static final String CONSTANT_GEOMETRY = "geometry";
     
     
-    private static final String MESSAGE_SPECIFY_GEO = "genericattributes.message.specifyGeo";
+    //private static final String MESSAGE_SPECIFY_GEO = "genericattributes.message.specifyGeo";
     
     private static final String MESSAGE_SPECIFY_BOTH_X_AND_Y = "genericattributes.message.specifyBothXAndY";
     
-    public static final String PARAMETER_EDIT_MODE_LIST = "genericattributes-gismap.edit.mode.list";
+    public static final String PARAMETER_EDIT_MODE_LIST = "gismap.edit.mode.list";
 
     /**
      * {@inheritDoc}
@@ -102,6 +107,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService {
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
         String strMapProvider = request.getParameter( PARAMETER_MAP_PROVIDER );
         String strEditMode = request.getParameter( PARAMETER_EDIT_MODE );
+        String strViewNumber = request.getParameter( PARAMETER_VIEW_NUMBER );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
 
         String strFieldError = StringUtils.EMPTY;
@@ -130,6 +136,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService {
         	List<Field> listFields = new ArrayList<Field>(  );
             listFields.add( buildFieldMapProvider( entry, strMapProvider ) );
             listFields.add( buildField( entry, CONSTANT_EDIT_MODE, strEditMode ) );
+            listFields.add( buildField( entry, CONSTANT_VIEW_NUMBER, strViewNumber ) );
             listFields.add( buildField( entry, CONSTANT_ID_ADDRESS, CONSTANT_ID_ADDRESS ) );
             listFields.add( buildField( entry, CONSTANT_ADDRESS, CONSTANT_ADDRESS ) );
             listFields.add( buildField( entry, CONSTANT_ADDITIONAL_ADDRESS, CONSTANT_ADDITIONAL_ADDRESS ) );
@@ -147,23 +154,26 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService {
         	entry.getFields().get(1).setTitle(buildField( entry, CONSTANT_EDIT_MODE, strEditMode ).getTitle());
         	entry.getFields().get(1).setValue(buildField( entry, CONSTANT_EDIT_MODE, strEditMode).getValue());
         	
-        	entry.getFields().get(2).setTitle(buildField( entry, CONSTANT_ID_ADDRESS, CONSTANT_ID_ADDRESS ).getTitle());
-        	entry.getFields().get(2).setValue(buildField( entry, CONSTANT_ID_ADDRESS, CONSTANT_ID_ADDRESS).getValue());
+        	entry.getFields().get(2).setTitle(buildField( entry, CONSTANT_VIEW_NUMBER, strViewNumber ).getTitle());
+        	entry.getFields().get(2).setValue(buildField( entry, CONSTANT_VIEW_NUMBER, strViewNumber).getValue());
         	
-        	entry.getFields().get(3).setTitle(buildField( entry, CONSTANT_ADDRESS, CONSTANT_ADDRESS ).getTitle());
-        	entry.getFields().get(3).setValue(buildField( entry, CONSTANT_ADDRESS, CONSTANT_ADDRESS).getValue());
+        	entry.getFields().get(3).setTitle(buildField( entry, CONSTANT_ID_ADDRESS, CONSTANT_ID_ADDRESS ).getTitle());
+        	entry.getFields().get(3).setValue(buildField( entry, CONSTANT_ID_ADDRESS, CONSTANT_ID_ADDRESS).getValue());
         	
-        	entry.getFields().get(4).setTitle(buildField( entry, CONSTANT_ADDITIONAL_ADDRESS, CONSTANT_ADDITIONAL_ADDRESS ).getTitle());
-        	entry.getFields().get(4).setValue(buildField( entry, CONSTANT_ADDITIONAL_ADDRESS, CONSTANT_ADDITIONAL_ADDRESS).getValue());
+        	entry.getFields().get(4).setTitle(buildField( entry, CONSTANT_ADDRESS, CONSTANT_ADDRESS ).getTitle());
+        	entry.getFields().get(4).setValue(buildField( entry, CONSTANT_ADDRESS, CONSTANT_ADDRESS).getValue());
         	
-        	entry.getFields().get(5).setTitle(buildField( entry, CONSTANT_X, CONSTANT_X ).getTitle());
-        	entry.getFields().get(5).setValue(buildField( entry, CONSTANT_X, CONSTANT_X).getValue());
+        	entry.getFields().get(5).setTitle(buildField( entry, CONSTANT_ADDITIONAL_ADDRESS, CONSTANT_ADDITIONAL_ADDRESS ).getTitle());
+        	entry.getFields().get(5).setValue(buildField( entry, CONSTANT_ADDITIONAL_ADDRESS, CONSTANT_ADDITIONAL_ADDRESS).getValue());
         	
-        	entry.getFields().get(6).setTitle(buildField( entry, CONSTANT_Y, CONSTANT_Y ).getTitle());
-        	entry.getFields().get(6).setValue(buildField( entry, CONSTANT_Y, CONSTANT_Y).getValue());
+        	entry.getFields().get(6).setTitle(buildField( entry, CONSTANT_X, CONSTANT_X ).getTitle());
+        	entry.getFields().get(6).setValue(buildField( entry, CONSTANT_X, CONSTANT_X).getValue());
         	
-        	entry.getFields().get(7).setTitle(buildField( entry, CONSTANT_GEOMETRY, CONSTANT_GEOMETRY ).getTitle());
-        	entry.getFields().get(7).setValue(buildField( entry, CONSTANT_GEOMETRY, CONSTANT_GEOMETRY).getValue());
+        	entry.getFields().get(7).setTitle(buildField( entry, CONSTANT_Y, CONSTANT_Y ).getTitle());
+        	entry.getFields().get(7).setValue(buildField( entry, CONSTANT_Y, CONSTANT_Y).getValue());
+        	
+        	entry.getFields().get(8).setTitle(buildField( entry, CONSTANT_GEOMETRY, CONSTANT_GEOMETRY ).getTitle());
+        	entry.getFields().get(8).setValue(buildField( entry, CONSTANT_GEOMETRY, CONSTANT_GEOMETRY).getValue());
         }
         entry.setTitle( strTitle );
         entry.setHelpMessage( strHelpMessage );

@@ -79,5 +79,5 @@ public interface IMapProvider extends Serializable
      * returns the Parameter class contains all the parameters of the map
      * @return the Parameter 
      */
-    Object getParameter(  );
+    Object getParameter( int nKey );
 }
