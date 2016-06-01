@@ -13,6 +13,9 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
+import fr.paris.lutece.plugins.genericattributes.business.EntryType;
+import fr.paris.lutece.plugins.genericattributes.business.EntryTypeHome;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
@@ -31,6 +34,9 @@ import fr.paris.lutece.util.ReferenceList;
  *
  */
 public abstract class AbstractEntryTypeGeolocation extends EntryTypeService {
+	
+	public static final String PARAMETER_ID_ENTRY = "id_entry";
+	public static final String PARAMETER_ID_RESOURCE = "id_resource";
 
 	/** The Constant PARAMETER_MAP_PROVIDER. */
     public static final String PARAMETER_MAP_PROVIDER = "map_provider";
@@ -48,7 +54,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService {
     public static final String PARAMETER_SUFFIX_ADDRESS = "_address";
     
     /** The Constant PARAMETER_SUFFIX_ADDITIONAL_ADDRESS. */
-    public static final String PARAMETER_SUFFIX_ADDITIONAL_ADDRESS = "_additional_address";
+    //public static final String PARAMETER_SUFFIX_ADDITIONAL_ADDRESS = "_additional_address";
     
     /** The Constant PARAMETER_SUFFIX_X_ADDRESS. */
     public static final String PARAMETER_SUFFIX_X = "_x";
@@ -76,7 +82,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService {
     public static final String CONSTANT_ADDRESS = "address";
     
     /** The Constant CONSTANT_ADDRESS. */
-    public static final String CONSTANT_ADDITIONAL_ADDRESS = "additionalAddress";
+    //public static final String CONSTANT_ADDITIONAL_ADDRESS = "additionalAddress";
     
     /** The Constant CONSTANT_X. */
     public static final String CONSTANT_X = "X";
@@ -109,6 +115,12 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService {
         String strEditMode = request.getParameter( PARAMETER_EDIT_MODE );
         String strViewNumber = request.getParameter( PARAMETER_VIEW_NUMBER );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
+        
+        String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
+        int nIdEntry = Integer.parseInt(strIdEntry);
+        
+        String strIdResource = request.getParameter( PARAMETER_ID_RESOURCE );
+        int nIdResource = Integer.parseInt(strIdResource);
 
         String strFieldError = StringUtils.EMPTY;
 
@@ -139,7 +151,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService {
             listFields.add( buildField( entry, CONSTANT_VIEW_NUMBER, strViewNumber ) );
             listFields.add( buildField( entry, CONSTANT_ID_ADDRESS, CONSTANT_ID_ADDRESS ) );
             listFields.add( buildField( entry, CONSTANT_ADDRESS, CONSTANT_ADDRESS ) );
-            listFields.add( buildField( entry, CONSTANT_ADDITIONAL_ADDRESS, CONSTANT_ADDITIONAL_ADDRESS ) );
+            //listFields.add( buildField( entry, CONSTANT_ADDITIONAL_ADDRESS, CONSTANT_ADDITIONAL_ADDRESS ) );
             listFields.add( buildField( entry, CONSTANT_X, CONSTANT_X ) );
             listFields.add( buildField( entry, CONSTANT_Y, CONSTANT_Y ) );
             listFields.add( buildField( entry, CONSTANT_GEOMETRY, CONSTANT_GEOMETRY ) );
@@ -163,23 +175,41 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService {
         	entry.getFields().get(4).setTitle(buildField( entry, CONSTANT_ADDRESS, CONSTANT_ADDRESS ).getTitle());
         	entry.getFields().get(4).setValue(buildField( entry, CONSTANT_ADDRESS, CONSTANT_ADDRESS).getValue());
         	
-        	entry.getFields().get(5).setTitle(buildField( entry, CONSTANT_ADDITIONAL_ADDRESS, CONSTANT_ADDITIONAL_ADDRESS ).getTitle());
-        	entry.getFields().get(5).setValue(buildField( entry, CONSTANT_ADDITIONAL_ADDRESS, CONSTANT_ADDITIONAL_ADDRESS).getValue());
+        	//entry.getFields().get(5).setTitle(buildField( entry, CONSTANT_ADDITIONAL_ADDRESS, CONSTANT_ADDITIONAL_ADDRESS ).getTitle());
+        	//entry.getFields().get(5).setValue(buildField( entry, CONSTANT_ADDITIONAL_ADDRESS, CONSTANT_ADDITIONAL_ADDRESS).getValue());
         	
-        	entry.getFields().get(6).setTitle(buildField( entry, CONSTANT_X, CONSTANT_X ).getTitle());
-        	entry.getFields().get(6).setValue(buildField( entry, CONSTANT_X, CONSTANT_X).getValue());
+        	entry.getFields().get(5).setTitle(buildField( entry, CONSTANT_X, CONSTANT_X ).getTitle());
+        	entry.getFields().get(5).setValue(buildField( entry, CONSTANT_X, CONSTANT_X).getValue());
         	
-        	entry.getFields().get(7).setTitle(buildField( entry, CONSTANT_Y, CONSTANT_Y ).getTitle());
-        	entry.getFields().get(7).setValue(buildField( entry, CONSTANT_Y, CONSTANT_Y).getValue());
+        	entry.getFields().get(6).setTitle(buildField( entry, CONSTANT_Y, CONSTANT_Y ).getTitle());
+        	entry.getFields().get(6).setValue(buildField( entry, CONSTANT_Y, CONSTANT_Y).getValue());
         	
-        	entry.getFields().get(8).setTitle(buildField( entry, CONSTANT_GEOMETRY, CONSTANT_GEOMETRY ).getTitle());
-        	entry.getFields().get(8).setValue(buildField( entry, CONSTANT_GEOMETRY, CONSTANT_GEOMETRY).getValue());
+        	entry.getFields().get(7).setTitle(buildField( entry, CONSTANT_GEOMETRY, CONSTANT_GEOMETRY ).getTitle());
+        	entry.getFields().get(7).setValue(buildField( entry, CONSTANT_GEOMETRY, CONSTANT_GEOMETRY).getValue());
         }
         entry.setTitle( strTitle );
         entry.setHelpMessage( strHelpMessage );
         entry.setComment( strComment );
         entry.setCSSClass( strCSSClass );
         entry.setMandatory( strMandatory != null );
+        
+        Entry entryAdditionalAddress = EntryHome.findByPrimaryKey(nIdEntry);
+        boolean update = false;
+        if(entryAdditionalAddress != null)
+        {
+        	update = true;
+        	getAdditionalAddressEntry (entryAdditionalAddress, locale, update);
+        }
+        else
+        {
+        	entryAdditionalAddress =  new Entry();
+        	EntryType entryType = EntryTypeHome.findByPrimaryKey( 6 );
+            entryAdditionalAddress.setEntryType( entryType );
+            entryAdditionalAddress.setIdResource(nIdResource);
+            entryAdditionalAddress.setResourceType( "FORM_FORM_TYPE" );
+            
+            getAdditionalAddressEntry (entryAdditionalAddress, locale, update);
+        }
 
         return null;
     }
@@ -193,14 +223,14 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService {
     {
         String strIdAddressValue = request.getParameter( entry.getIdEntry(  ) + PARAMETER_SUFFIX_ID_ADDRESS );
         String strAddressValue = request.getParameter( entry.getIdEntry(  ) + PARAMETER_SUFFIX_ADDRESS );
-        String strAdditionalAddressValue = request.getParameter( entry.getIdEntry(  ) + PARAMETER_SUFFIX_ADDITIONAL_ADDRESS );
+        //String strAdditionalAddressValue = request.getParameter( entry.getIdEntry(  ) + PARAMETER_SUFFIX_ADDITIONAL_ADDRESS );
         String strXValue = request.getParameter( entry.getIdEntry(  ) + PARAMETER_SUFFIX_X );
         String strYValue = request.getParameter( entry.getIdEntry(  ) + PARAMETER_SUFFIX_Y );
         String strGeometryValue = request.getParameter( entry.getIdEntry(  ) + PARAMETER_SUFFIX_GEOMETRY );
         
         Field fieldIdAddress = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_ID_ADDRESS,entry.getFields(  ) );
         Field fieldAddress = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_ADDRESS, entry.getFields(  ) );
-        Field fieldAdditionalAddress = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_ADDITIONAL_ADDRESS, entry.getFields(  ) );
+        //Field fieldAdditionalAddress = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_ADDITIONAL_ADDRESS, entry.getFields(  ) );
         Field fieldX = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_X,entry.getFields(  ) );
         Field fieldY = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_Y,entry.getFields(  ) );
         Field fieldGeometry = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_GEOMETRY, entry.getFields(  ) );
@@ -232,12 +262,12 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService {
         listResponse.add( responseAddress );
         
         // 2 : Response Additional Address
-        Response responseAdditionalAddress = new Response(  );
+        /*Response responseAdditionalAddress = new Response(  );
         responseAdditionalAddress.setEntry( entry );
         responseAdditionalAddress.setResponseValue( strAdditionalAddressValue );
         responseAdditionalAddress.setField( fieldAdditionalAddress );
         responseAdditionalAddress.setToStringValueResponse( strAdditionalAddressValue );
-        listResponse.add( responseAdditionalAddress );
+        listResponse.add( responseAdditionalAddress );*/
         
         // 3 : Response X 
         Response responseX = new Response(  );
@@ -420,6 +450,56 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService {
         fieldMapProvider.setParentEntry( entry );
 
         return fieldMapProvider;
+    }
+    
+    public void getAdditionalAddressEntry (Entry entry, Locale locale, boolean update)
+    {
+    	entry.setTitle( I18nService.getLocalizedString( "form.additional_address.title", locale) );
+    	entry.setHelpMessage( "" );
+    	entry.setComment( "" );
+    	entry.setCSSClass( "" );
+    	entry.setErrorMessage( "" );
+       
+        if ( entry.getFields(  ) == null )
+        {
+            ArrayList<Field> listFields = new ArrayList<Field>(  );
+            Field field = new Field(  );
+            field.setTitle( "additionalAddress" );
+            field.setValue( "" );
+            //FieldHome.create(field, pluginDirectory);
+            listFields.add( field );
+            entry.setFields( listFields );
+        }
+        
+        entry.getFields(  ).get( 0 ).setWidth( 0 );
+        entry.getFields(  ).get( 0 ).setMaxSizeEnter( 250 );
+        
+        if(update)
+        {
+        	EntryHome.update( entry );
+            
+            if ( entry.getFields(  ) != null )
+            {
+                for ( Field field : entry.getFields(  ) )
+                {
+                    field.setParentEntry( entry );
+                    FieldHome.update( field );
+                }
+            }
+        }
+        else
+        {
+        	EntryHome.create( entry );
+            
+            if ( entry.getFields(  ) != null )
+            {
+                for ( Field field : entry.getFields(  ) )
+                {
+                    field.setParentEntry( entry );
+                    FieldHome.create( field );
+                }
+            }
+        }
     }
 
 }
