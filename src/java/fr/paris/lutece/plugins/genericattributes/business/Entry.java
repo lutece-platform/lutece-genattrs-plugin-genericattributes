@@ -78,7 +78,7 @@ public class Entry implements Serializable, Cloneable
     private int _nNumberColumn;
     private boolean _bRoleAssociated;
     private String _strEditMode;
-
+    private boolean _bOnlyDisplayInBack;
     /**
      * Get the list of children of this entry
      * @return the list of entry who are insert in the group
@@ -624,6 +624,14 @@ public class Entry implements Serializable, Cloneable
 	 */
 	public void setEditMode( String strEditMode ) {
 		this._strEditMode = strEditMode;
+	}
+
+	public boolean isOnlyDisplayInBack() {
+	    return _bOnlyDisplayInBack;
+	}
+
+	public void setOnlyDisplayInBack(boolean _bOnlyDisplayInBack) {
+	    this._bOnlyDisplayInBack = _bOnlyDisplayInBack;
 	}
     
 }

@@ -74,6 +74,9 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
         String strErrorMessage = request.getParameter( PARAMETER_ERROR_MESSAGE );
         String strFieldInLine = request.getParameter( PARAMETER_FIELD_IN_LINE );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
+        String strOnlyDisplayInBack= request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
+        
+        
         int nFieldInLine = -1;
 
         String strFieldError = StringUtils.EMPTY;
@@ -100,7 +103,7 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
         entry.setCSSClass( strCSSClass );
 
         entry.setMandatory( strMandatory != null );
-
+        entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
         entry.setErrorMessage( strErrorMessage );
 
         try

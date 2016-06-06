@@ -592,6 +592,7 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
             ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim(  ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
+        String strOnlyDisplayInBack= request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
 
         String strError = this.checkEntryData( request, locale );
@@ -610,6 +611,7 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
         setFields( entry, request );
 
         entry.setMandatory( strMandatory != null );
+        entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
 
         return null;
     }

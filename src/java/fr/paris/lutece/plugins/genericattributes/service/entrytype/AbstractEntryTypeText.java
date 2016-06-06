@@ -80,6 +80,7 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         String strConfirmFieldTitle = request.getParameter( PARAMETER_CONFIRM_FIELD_TITLE );
         String strUnique = request.getParameter( PARAMETER_UNIQUE );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
+        String strOnlyDisplayInBack= request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strErrorMessage = request.getParameter( PARAMETER_ERROR_MESSAGE );
 
         int nWidth = -1;
@@ -159,6 +160,7 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         entry.getFields(  ).get( 0 ).setMaxSizeEnter( nMaxSizeEnter );
 
         entry.setMandatory( strMandatory != null );
+        entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
 
         if ( strConfirmField != null )
         {

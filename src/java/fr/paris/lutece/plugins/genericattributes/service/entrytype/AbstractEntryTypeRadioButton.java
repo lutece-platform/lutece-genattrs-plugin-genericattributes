@@ -72,6 +72,7 @@ public abstract class AbstractEntryTypeRadioButton extends EntryTypeService
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
         String strFieldInLine = request.getParameter( PARAMETER_FIELD_IN_LINE );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
+        String strOnlyDisplayInBack= request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
 
         int nFieldInLine = -1;
 
@@ -99,6 +100,7 @@ public abstract class AbstractEntryTypeRadioButton extends EntryTypeService
         entry.setCSSClass( strCSSClass );
 
         entry.setMandatory( strMandatory != null );
+        entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
 
         try
         {

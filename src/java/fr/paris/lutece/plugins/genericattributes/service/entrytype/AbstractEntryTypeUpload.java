@@ -588,6 +588,8 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
+        String strOnlyDisplayInBack= request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
+
 
         String strError = this.checkEntryData( request, locale );
 
@@ -605,6 +607,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
         setFields( entry, request );
 
         entry.setMandatory( strMandatory != null );
+        entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
 
         return null;
     }

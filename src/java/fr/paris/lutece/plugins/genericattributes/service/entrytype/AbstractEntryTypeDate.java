@@ -75,6 +75,7 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
         String strValue = request.getParameter( PARAMETER_VALUE );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
+        String strOnlyDisplayInBack= request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
 
         String strFieldError = StringUtils.EMPTY;
 
@@ -118,6 +119,7 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
         entry.getFields(  ).get( 0 ).setValueTypeDate( dDateValue );
 
         entry.setMandatory( strMandatory != null );
+        entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
 
         return null;
     }

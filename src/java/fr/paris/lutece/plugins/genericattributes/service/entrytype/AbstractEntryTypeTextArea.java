@@ -79,6 +79,7 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
         String strUseRichText = request.getParameter( PARAMETER_USE_RICH_TEXT );
         String strFieldCode = request.getParameter( PARAMETER_FIELD_CODE );
+        String strOnlyDisplayInBack= request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
 
         int nWidth = -1;
         int nHeight = -1;
@@ -167,6 +168,7 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         entry.getFields(  ).get( 0 ).setMaxSizeEnter( nMaxSizeEnter );
         
         entry.setMandatory( strMandatory != null );
+        entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
 
         return null;
     }

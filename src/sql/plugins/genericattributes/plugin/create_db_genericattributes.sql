@@ -48,7 +48,8 @@ CREATE TABLE genatt_entry (
 	num_row smallint default 0,
 	num_column smallint default 0,
     is_role_associated smallint DEFAULT '0',
-	PRIMARY KEY (id_entry)
+    is_only_display_back smallint DEFAULT '0',
+    PRIMARY KEY (id_entry)
 );
 
 CREATE INDEX index_genatt_entry_resource ON genatt_entry (id_resource);
