@@ -33,12 +33,6 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
@@ -50,6 +44,12 @@ import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.ReferenceList;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -85,6 +85,7 @@ public abstract class AbstractEntryTypeMyLuteceUser extends EntryTypeService
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
         entry.setTitle( I18nService.getLocalizedString( PROPERTY_ENTRY_TITLE, locale ) );
+
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         entry.setHelpMessage( EMPTY_STRING );
         entry.setComment( EMPTY_STRING );
@@ -96,6 +97,7 @@ public abstract class AbstractEntryTypeMyLuteceUser extends EntryTypeService
             listFields.add( field );
             entry.setFields( listFields );
         }
+
         entry.setCode( strCode );
         entry.getFields(  ).get( 0 ).setValue( EMPTY_STRING );
         entry.getFields(  ).get( 0 ).setWidth( 50 );

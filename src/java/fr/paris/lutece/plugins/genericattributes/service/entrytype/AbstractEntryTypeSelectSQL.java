@@ -33,14 +33,6 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
@@ -53,6 +45,14 @@ import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.util.sql.DAOUtil;
 
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * Abstract entry type for selects that take values from SQL requests
@@ -62,7 +62,6 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
     /**
      * {@inheritDoc}
      */
-	
     @Override
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
@@ -88,7 +87,7 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
                 AdminMessage.TYPE_STOP );
         }
-        
+
         // for don't update fields listFields=null
         entry.setFields( null );
         entry.setCode( strCode );
@@ -99,21 +98,25 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
 
         entry.setMandatory( strMandatory != null );
 
-        try 
+        try
         {
-        	getSqlQueryFields( entry );
+            getSqlQueryFields( entry );
         }
-        catch ( AppException ae ) 
+        catch ( AppException ae )
         {
-            String strErrorMsg = ae.getMessage();
-            if ( strErrorMsg != null && strErrorMsg.contains( System.getProperty( "line.separator" ) ) ) 
+            String strErrorMsg = ae.getMessage(  );
+
+            if ( ( strErrorMsg != null ) && strErrorMsg.contains( System.getProperty( "line.separator" ) ) )
             {
                 strErrorMsg = strErrorMsg.substring( 0, strErrorMsg.indexOf( System.getProperty( "line.separator" ) ) );
             }
+
             Object[] tabErrorSQLMsg = { strErrorMsg };
-            return AdminMessageService.getMessageUrl( request, MESSAGE_INVALID_SQL_QUERY, tabErrorSQLMsg, AdminMessage.TYPE_STOP );
+
+            return AdminMessageService.getMessageUrl( request, MESSAGE_INVALID_SQL_QUERY, tabErrorSQLMsg,
+                AdminMessage.TYPE_STOP );
         }
-        
+
         return null;
     }
 
@@ -174,7 +177,7 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getField(  )  != null ? response.getField(  ) .getTitle(  ) : StringUtils.EMPTY;
+        return ( response.getField(  ) != null ) ? response.getField(  ).getTitle(  ) : StringUtils.EMPTY;
     }
 
     /**

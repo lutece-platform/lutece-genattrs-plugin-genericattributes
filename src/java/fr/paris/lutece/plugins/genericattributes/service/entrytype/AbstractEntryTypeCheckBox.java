@@ -33,14 +33,6 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
@@ -52,6 +44,14 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.util.AppLogService;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -74,9 +74,8 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
         String strErrorMessage = request.getParameter( PARAMETER_ERROR_MESSAGE );
         String strFieldInLine = request.getParameter( PARAMETER_FIELD_IN_LINE );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
-        String strOnlyDisplayInBack= request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
-        
-        
+        String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
+
         int nFieldInLine = -1;
 
         String strFieldError = StringUtils.EMPTY;

@@ -33,10 +33,11 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
-import java.io.Serializable;
-import java.util.List;
-
 import fr.paris.lutece.portal.service.util.AppLogService;
+
+import java.io.Serializable;
+
+import java.util.List;
 
 
 /**
@@ -79,6 +80,7 @@ public class Entry implements Serializable, Cloneable
     private boolean _bRoleAssociated;
     private String _strEditMode;
     private boolean _bOnlyDisplayInBack;
+
     /**
      * Get the list of children of this entry
      * @return the list of entry who are insert in the group
@@ -467,7 +469,7 @@ public class Entry implements Serializable, Cloneable
     {
         _mapProvider = mapProvider;
     }
-    
+
     /**
      * Get the error associated to the entry
      * @return the error
@@ -557,28 +559,29 @@ public class Entry implements Serializable, Cloneable
     {
         this._nNumberColumn = nNumberColumn;
     }
-    
-    
+
     /**
      * Check if this entry can has an associated roles
      * @return true if entry can has roles
      */
-    public boolean isRoleAssociated() {
+    public boolean isRoleAssociated(  )
+    {
         return _bRoleAssociated;
     }
-    
+
     /**
-     * Set true if the entry accept roles 
+     * Set true if the entry accept roles
      * @param _bRoleAssociated true if the entry accept roles
      */
-    public void setRoleAssociated(boolean _bRoleAssociated) {
+    public void setRoleAssociated( boolean _bRoleAssociated )
+    {
         this._bRoleAssociated = _bRoleAssociated;
     }
-    
+
     /**
      * @return the _strCode
      */
-    public String getCode()
+    public String getCode(  )
     {
         return _strCode;
     }
@@ -587,11 +590,11 @@ public class Entry implements Serializable, Cloneable
      * @param strCode
      *            the code to set
      */
-    public void setCode(String strCode)
+    public void setCode( String strCode )
     {
         this._strCode = strCode;
     }
-    
+
     /**
      * Creates and returns a copy of this object.
      * @return a clone of this instance.
@@ -612,26 +615,29 @@ public class Entry implements Serializable, Cloneable
         }
     }
 
-	/**
-	 * @return the _strEditMode
-	 */
-	public String getEditMode( ) {
-		return _strEditMode;
-	}
+    /**
+     * @return the _strEditMode
+     */
+    public String getEditMode(  )
+    {
+        return _strEditMode;
+    }
 
-	/**
-	 * @param _strEditMode the _strEditMode to set
-	 */
-	public void setEditMode( String strEditMode ) {
-		this._strEditMode = strEditMode;
-	}
+    /**
+     * @param _strEditMode the _strEditMode to set
+     */
+    public void setEditMode( String strEditMode )
+    {
+        this._strEditMode = strEditMode;
+    }
 
-	public boolean isOnlyDisplayInBack() {
-	    return _bOnlyDisplayInBack;
-	}
+    public boolean isOnlyDisplayInBack(  )
+    {
+        return _bOnlyDisplayInBack;
+    }
 
-	public void setOnlyDisplayInBack(boolean _bOnlyDisplayInBack) {
-	    this._bOnlyDisplayInBack = _bOnlyDisplayInBack;
-	}
-    
+    public void setOnlyDisplayInBack( boolean _bOnlyDisplayInBack )
+    {
+        this._bOnlyDisplayInBack = _bOnlyDisplayInBack;
+    }
 }

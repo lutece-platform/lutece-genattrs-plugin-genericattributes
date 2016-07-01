@@ -33,16 +33,16 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -73,6 +73,7 @@ public abstract class AbstractEntryTypeComment extends EntryTypeService
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
                 AdminMessage.TYPE_STOP );
         }
+
         entry.setCode( strCode );
         entry.setComment( strComment );
         entry.setCSSClass( strCSSClass );

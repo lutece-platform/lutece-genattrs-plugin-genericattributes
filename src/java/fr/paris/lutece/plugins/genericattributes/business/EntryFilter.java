@@ -64,7 +64,6 @@ public class EntryFilter
     private int _nIdIsComment = GenericAttributesUtils.CONSTANT_ID_NULL;
     private int _nIdEntryType = GenericAttributesUtils.CONSTANT_ID_NULL;
     private int _nIsOnlyDisplayInBack = GenericAttributesUtils.CONSTANT_ID_NULL;
-    
 
     /**
      * Get the id of the resource in the filter
@@ -313,25 +312,29 @@ public class EntryFilter
     }
 
     /**
-     * 
+     *
      * @return 1 if the entry must only display in back a comment,0 if the entry must not only display in back
      */
-    public int getIsOnlyDisplayInBack() {
-	return _nIsOnlyDisplayInBack;
+    public int getIsOnlyDisplayInBack(  )
+    {
+        return _nIsOnlyDisplayInBack;
     }
+
     /**
-     * 
+     *
      * @param _nIsOnlyDisplayInBack
      */
-    public void setIsOnlyDisplayInBack(int _nIsOnlyDisplayInBack) {
-	this._nIsOnlyDisplayInBack = _nIsOnlyDisplayInBack;
+    public void setIsOnlyDisplayInBack( int _nIsOnlyDisplayInBack )
+    {
+        this._nIsOnlyDisplayInBack = _nIsOnlyDisplayInBack;
     }
+
     /**
     *
     * @return true if the entry must be only display in back or must not be only display in back
     */
-   public boolean containsIsOnlyDisplayInBack(  )
-   {
-       return ( _nIsOnlyDisplayInBack != GenericAttributesUtils.CONSTANT_ID_NULL );
-   }
+    public boolean containsIsOnlyDisplayInBack(  )
+    {
+        return ( _nIsOnlyDisplayInBack != GenericAttributesUtils.CONSTANT_ID_NULL );
+    }
 }

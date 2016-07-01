@@ -33,15 +33,6 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
@@ -52,6 +43,15 @@ import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.string.StringUtil;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -75,7 +75,7 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
         String strValue = request.getParameter( PARAMETER_VALUE );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
-        String strOnlyDisplayInBack= request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
+        String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
 
         String strFieldError = StringUtils.EMPTY;
 
@@ -103,6 +103,7 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
                 return AdminMessageService.getMessageUrl( request, MESSAGE_ILLOGICAL_DATE, AdminMessage.TYPE_STOP );
             }
         }
+
         entry.setCode( strCode );
         entry.setTitle( strTitle );
         entry.setHelpMessage( strHelpMessage );
@@ -116,6 +117,7 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
             listFields.add( field );
             entry.setFields( listFields );
         }
+
         entry.getFields(  ).get( 0 ).setValueTypeDate( dDateValue );
 
         entry.setMandatory( strMandatory != null );
@@ -208,7 +210,6 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
     @Override
     public String getResponseValueForExport( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-
         return response.getResponseValue(  );
     }
 
@@ -218,8 +219,6 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        
-
         return response.getResponseValue(  );
     }
 

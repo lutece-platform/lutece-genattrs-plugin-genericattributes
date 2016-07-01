@@ -33,13 +33,6 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
@@ -51,6 +44,13 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.util.AppLogService;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -72,7 +72,7 @@ public abstract class AbstractEntryTypeRadioButton extends EntryTypeService
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
         String strFieldInLine = request.getParameter( PARAMETER_FIELD_IN_LINE );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
-        String strOnlyDisplayInBack= request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
+        String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
 
         int nFieldInLine = -1;
 
@@ -180,7 +180,7 @@ public abstract class AbstractEntryTypeRadioButton extends EntryTypeService
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-    	if ( response.getField(  ) != null )
+        if ( response.getField(  ) != null )
         {
             if ( response.getField(  ).getTitle(  ) == null )
             {

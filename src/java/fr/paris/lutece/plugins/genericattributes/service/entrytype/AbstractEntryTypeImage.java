@@ -1,19 +1,37 @@
+/*
+ * Copyright (c) 2002-2016, Mairie de Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
-
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-
-import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
-import javax.xml.bind.DatatypeConverter;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.asynchronousupload.service.IAsyncUploadHandler;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
@@ -41,6 +59,26 @@ import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.url.UrlItem;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
+
+import java.awt.image.BufferedImage;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+
+import javax.imageio.ImageIO;
+
+import javax.servlet.http.HttpServletRequest;
+
+import javax.xml.bind.DatatypeConverter;
+
 
 public abstract class AbstractEntryTypeImage extends EntryTypeService
 {
@@ -101,32 +139,25 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
      * @param strBaseUrl The base URL
      * @return The URL of to download the image
      */
-    
-    
-    
     @Override
     public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
         Locale locale )
     {
-
-
         if ( request instanceof MultipartHttpServletRequest )
         {
-           
             GenericAttributeError genAttError = null;
 
-            if (!entry.isMandatory(  ) )
+            if ( !entry.isMandatory(  ) )
             {
-            	String sourceBase = request.getParameter(( IEntryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry(  )  ));
-              
-                listResponse.add( getResponseFromImage( sourceBase, entry, false ) );
-                    
+                String sourceBase = request.getParameter( ( IEntryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry(  ) ) );
 
-          /*      genAttError = new GenericAttributeError(  );
-                genAttError.setErrorMessage( StringUtils.EMPTY );
-                genAttError.setMandatoryError( false );
-                genAttError.setIsDisplayableError( false );
-*/
+                listResponse.add( getResponseFromImage( sourceBase, entry, false ) );
+
+                /*      genAttError = new GenericAttributeError(  );
+                      genAttError.setErrorMessage( StringUtils.EMPTY );
+                      genAttError.setMandatoryError( false );
+                      genAttError.setIsDisplayableError( false );
+                */
                 return genAttError;
             }
 
@@ -145,8 +176,6 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
         return entry.isMandatory(  ) ? new MandatoryError( entry, locale ) : null;
     }
 
-    
-    
     protected String getUrlDownloadImage( int nResponseId, String strBaseUrl )
     {
         UrlItem url = new UrlItem( strBaseUrl + URL_IMAGE_SERVLET );
@@ -451,18 +480,19 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
      * @param request the HttpServletRequest
      * @return the file item
      */
-   /* protected List<FileItem> getImageSources( Entry entry, HttpServletRequest request )
-    {
-        if ( request != null )
-        {
-            String sourceBase = request.getParameter(( IEntryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry(  )  ));
-            
-            FileItem
-        
-        }
 
-        return null;
-    }*/
+    /* protected List<FileItem> getImageSources( Entry entry, HttpServletRequest request )
+     {
+         if ( request != null )
+         {
+             String sourceBase = request.getParameter(( IEntryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry(  )  ));
+
+             FileItem
+
+         }
+
+         return null;
+     }*/
 
     // SET
 
@@ -592,7 +622,7 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
             ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim(  ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
-        String strOnlyDisplayInBack= request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
+        String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
 
         String strError = this.checkEntryData( request, locale );
@@ -708,7 +738,7 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
 
         return null;
     }
-    
+
     /**
      * Get a generic attributes response from a file item
      * @param fileItem The file item
@@ -721,22 +751,21 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
      */
     private Response getResponseFromImage( String imageSource, Entry entry, boolean bCreatePhysicalFile )
     {
-        
         Response response = new Response(  );
         response.setEntry( entry );
 
         File file = new File(  );
-        DatatypeConverter.parseBase64Binary(imageSource);
-        
-        file.setTitle( "crop_"+entry.getTitle() );
-        //file.setSize( 1222 );
+        DatatypeConverter.parseBase64Binary( imageSource );
 
+        file.setTitle( "crop_" + entry.getTitle(  ) );
+
+        //file.setSize( 1222 );
         if ( bCreatePhysicalFile )
         {
             file.setMimeType( FileSystemUtil.getMIMEType( file.getTitle(  ) ) );
 
             PhysicalFile physicalFile = new PhysicalFile(  );
-            physicalFile.setValue( DatatypeConverter.parseBase64Binary(imageSource) );
+            physicalFile.setValue( DatatypeConverter.parseBase64Binary( imageSource ) );
             file.setPhysicalFile( physicalFile );
         }
 

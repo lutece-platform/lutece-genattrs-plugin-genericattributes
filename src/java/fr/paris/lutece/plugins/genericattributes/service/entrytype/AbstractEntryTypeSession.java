@@ -33,15 +33,6 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
@@ -49,6 +40,15 @@ import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 
 /**
@@ -95,6 +95,7 @@ public abstract class AbstractEntryTypeSession extends EntryTypeService
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
                 AdminMessage.TYPE_STOP );
         }
+
         entry.setCode( strCode );
         entry.setTitle( strTitle );
         entry.setHelpMessage( StringUtils.EMPTY );
@@ -111,6 +112,7 @@ public abstract class AbstractEntryTypeSession extends EntryTypeService
             listFields.add( field );
             entry.setFields( listFields );
         }
+
         entry.getFields(  ).get( 0 ).setValue( strAttibuteName );
         entry.getFields(  ).get( 0 ).setWidth( 0 );
         entry.getFields(  ).get( 0 ).setMaxSizeEnter( 0 );

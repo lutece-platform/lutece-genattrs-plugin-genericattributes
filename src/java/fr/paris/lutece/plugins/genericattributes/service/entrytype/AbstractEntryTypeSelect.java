@@ -33,13 +33,6 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
@@ -49,6 +42,13 @@ import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -68,10 +68,9 @@ public abstract class AbstractEntryTypeSelect extends EntryTypeService
             ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim(  ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
-        String strRoleAssociated = request.getParameter(PARAMETER_ROLE_ASSOCIATED);
+        String strRoleAssociated = request.getParameter( PARAMETER_ROLE_ASSOCIATED );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
-        String strOnlyDisplayInBack= request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
-
+        String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
 
         String strFieldError = StringUtils.EMPTY;
 
@@ -98,7 +97,7 @@ public abstract class AbstractEntryTypeSelect extends EntryTypeService
 
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
-        entry.setRoleAssociated(strRoleAssociated != null);
+        entry.setRoleAssociated( strRoleAssociated != null );
 
         return null;
     }

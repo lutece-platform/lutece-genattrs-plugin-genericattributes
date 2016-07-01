@@ -274,26 +274,27 @@ public final class EntryHome
 
         return _plugin;
     }
+
     /**
-     * 
+     *
      * @param plugin the plugin
      * @param nIdForm id form
      * @return list id entry with their titles
      */
-    public static Map<Integer , String> findEntryByForm( Plugin plugin, int nIdForm )
+    public static Map<Integer, String> findEntryByForm( Plugin plugin, int nIdForm )
     {
-    	return _dao.findEntryByForm( plugin, nIdForm );
+        return _dao.findEntryByForm( plugin, nIdForm );
     }
-    
+
     /**
-     * 
+     *
      * @param plugin the plugin
      * @param nIdEntry id entry
      * @param nIdResponse id entry response
      * @return entry value
      */
-    public static String getEntryValueByIdResponse(  Plugin plugin, int nIdEntry, int nIdResponse )
+    public static String getEntryValueByIdResponse( Plugin plugin, int nIdEntry, int nIdResponse )
     {
-    	return _dao.getEntryValueByIdResponse( plugin, nIdEntry, nIdResponse ) ;
+        return _dao.getEntryValueByIdResponse( plugin, nIdEntry, nIdResponse );
     }
 }

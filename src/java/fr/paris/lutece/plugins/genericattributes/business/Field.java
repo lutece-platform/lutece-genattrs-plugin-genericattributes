@@ -317,9 +317,7 @@ public class Field implements Serializable
     {
         _bNoDisplayTitle = bNoDisplayTitle;
     }
-    
-    
-    
+
     /**
      * Gets the field role
      * @return field role as a String
@@ -343,7 +341,7 @@ public class Field implements Serializable
     /**
      * @return the _strCode
      */
-    public String getCode()
+    public String getCode(  )
     {
         return _strCode;
     }
@@ -351,9 +349,8 @@ public class Field implements Serializable
     /**
      * @param strCode the code to set
      */
-    public void setCode(String strCode)
+    public void setCode( String strCode )
     {
         this._strCode = strCode;
     }
-    
 }

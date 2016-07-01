@@ -139,7 +139,7 @@ public final class FieldDAO implements IFieldDAO
             ( field.getValueTypeDate(  ) == null ) ? null : new Date( field.getValueTypeDate(  ).getTime(  ) ) );
         daoUtil.setBoolean( 12, field.isNoDisplayTitle(  ) );
         daoUtil.setString( 13, field.getComment(  ) );
-        daoUtil.setString(14, field.getRoleKey());
+        daoUtil.setString( 14, field.getRoleKey(  ) );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
 
@@ -178,7 +178,7 @@ public final class FieldDAO implements IFieldDAO
             field.setValueTypeDate( daoUtil.getDate( 11 ) );
             field.setNoDisplayTitle( daoUtil.getBoolean( 12 ) );
             field.setComment( daoUtil.getString( 13 ) );
-            field.setRoleKey(daoUtil.getString( 14 ) );
+            field.setRoleKey( daoUtil.getString( 14 ) );
         }
 
         daoUtil.free(  );
@@ -219,7 +219,7 @@ public final class FieldDAO implements IFieldDAO
             ( field.getValueTypeDate(  ) == null ) ? null : new Date( field.getValueTypeDate(  ).getTime(  ) ) );
         daoUtil.setBoolean( 12, field.isNoDisplayTitle(  ) );
         daoUtil.setString( 13, field.getComment(  ) );
-        daoUtil.setString( 14, field.getRoleKey() );
+        daoUtil.setString( 14, field.getRoleKey(  ) );
 
         daoUtil.setInt( 15, field.getIdField(  ) );
         daoUtil.executeUpdate(  );
@@ -259,7 +259,7 @@ public final class FieldDAO implements IFieldDAO
             field.setValueTypeDate( daoUtil.getDate( 11 ) );
             field.setNoDisplayTitle( daoUtil.getBoolean( 12 ) );
             field.setComment( daoUtil.getString( 13 ) );
-            field.setRoleKey(daoUtil.getString( 14 ) );
+            field.setRoleKey( daoUtil.getString( 14 ) );
             fieldList.add( field );
         }
 

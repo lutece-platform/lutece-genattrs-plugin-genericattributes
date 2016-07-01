@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.genericattributes.business;
 import fr.paris.lutece.util.ReferenceItem;
 
 import java.io.Serializable;
+
 import java.util.List;
 
 
@@ -74,10 +75,10 @@ public interface IMapProvider extends Serializable
      * @return the item created.
      */
     ReferenceItem toRefItem(  );
-    
+
     /**
      * returns the Parameter class contains all the parameters of the map
-     * @return the Parameter 
+     * @return the Parameter
      */
     Object getParameter( int nKey );
 }

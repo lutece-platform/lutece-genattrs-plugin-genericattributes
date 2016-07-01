@@ -33,14 +33,6 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.GenAttFileItem;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
@@ -53,6 +45,14 @@ import fr.paris.lutece.portal.business.file.FileHome;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -77,7 +77,7 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
         List<FileItem> listFilesSource = null;
 
         if ( request instanceof MultipartHttpServletRequest )
-         {
+        {
             List<FileItem> asynchronousFileItem = getFileSources( entry, request );
 
             if ( asynchronousFileItem != null )
@@ -135,15 +135,15 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
                 return genAttError;
             }
 
-            if ( entry.isMandatory( ) )
+            if ( entry.isMandatory(  ) )
             {
                 genAttError = new MandatoryError( entry, locale );
-             
-                Response response = new Response( );
+
+                Response response = new Response(  );
                 response.setEntry( entry );
                 listResponse.add( response );
             }
-        
+
             return genAttError;
         }
 

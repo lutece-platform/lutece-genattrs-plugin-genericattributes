@@ -33,14 +33,6 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
@@ -54,6 +46,14 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.string.StringUtil;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -80,7 +80,7 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         String strConfirmFieldTitle = request.getParameter( PARAMETER_CONFIRM_FIELD_TITLE );
         String strUnique = request.getParameter( PARAMETER_UNIQUE );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
-        String strOnlyDisplayInBack= request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
+        String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strErrorMessage = request.getParameter( PARAMETER_ERROR_MESSAGE );
 
         int nWidth = -1;
@@ -153,8 +153,9 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
             listFields.add( field );
             entry.setFields( listFields );
         }
+
         entry.setCode( strCode );
-        entry.getFields( ).get( 0 ).setCode( strCode );
+        entry.getFields(  ).get( 0 ).setCode( strCode );
         entry.getFields(  ).get( 0 ).setValue( strValue );
         entry.getFields(  ).get( 0 ).setWidth( nWidth );
         entry.getFields(  ).get( 0 ).setMaxSizeEnter( nMaxSizeEnter );

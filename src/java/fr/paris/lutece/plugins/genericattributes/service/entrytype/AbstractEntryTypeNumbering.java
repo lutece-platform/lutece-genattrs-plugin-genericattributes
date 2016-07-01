@@ -33,14 +33,6 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
@@ -50,6 +42,14 @@ import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -84,6 +84,7 @@ public abstract class AbstractEntryTypeNumbering extends EntryTypeService
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
                 AdminMessage.TYPE_STOP );
         }
+
         entry.setCode( strCode );
         entry.setTitle( strTitle );
 
@@ -94,7 +95,8 @@ public abstract class AbstractEntryTypeNumbering extends EntryTypeService
             listFields.add( field );
             entry.setFields( listFields );
         }
-        entry.getFields( ).get( 0 ).setCode( strCode );
+
+        entry.getFields(  ).get( 0 ).setCode( strCode );
         entry.getFields(  ).get( 0 ).setTitle( StringUtils.isNotEmpty( strPrefix ) ? strPrefix : StringUtils.EMPTY );
 
         return null;
