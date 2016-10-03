@@ -75,6 +75,7 @@ public interface IEntryTypeService
     String PARAMETER_NUMBER_ROWS = "num_row";
     String PARAMETER_NUMBER_COLUMNS = "num_column";
     String PARAMETER_ONLY_DISPLAY_IN_BACK = "only_display_in_back";
+    String PARAMETER_MAX_IMAGE_SIZE = "maxImageSize";
 
     //  message
     String MESSAGE_MANDATORY_FIELD = "portal.util.message.mandatoryField";

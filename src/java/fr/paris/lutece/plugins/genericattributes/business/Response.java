@@ -66,6 +66,7 @@ public class Response implements Serializable
     private String _strResponseValue;
     private int _nStatus;
     private File _file;
+    private boolean _bIsImage;
 
     /**
      * Default constructor
@@ -240,5 +241,23 @@ public class Response implements Serializable
     public void setFile( File file )
     {
         this._file = file;
+    }
+
+    /**
+     * Get the isImage of this response
+     * @return The bIsImage of this response
+     */
+    public boolean getIsImage(  )
+    {
+        return _bIsImage;
+    }
+
+    /**
+     * Set the isImage of this response
+     * @param bisImage of this response
+     */
+    public void setIsImage( boolean bIsImage )
+    {
+        this._bIsImage = bIsImage;
     }
 }

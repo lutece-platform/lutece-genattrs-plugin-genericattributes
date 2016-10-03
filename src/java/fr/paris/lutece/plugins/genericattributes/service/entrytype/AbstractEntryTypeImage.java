@@ -102,15 +102,15 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
 
     // PROPERTIES
     private static final String PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_MAX_FILES = "genericattributes.message.error.uploading_file.max_files";
-    private static final String PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_FILE_MAX_SIZE = "genericattributes.message.error.uploading_file.file_max_size";
-    private static final String PROPERTY_UPLOAD_FILE_DEFAULT_MAX_SIZE = "genericattributes.upload.file.default_max_size";
+    protected static final String PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_FILE_MAX_SIZE = "genericattributes.message.error.uploading_file.file_max_size";
+    protected static final String PROPERTY_UPLOAD_FILE_DEFAULT_MAX_SIZE = "genericattributes.upload.file.default_max_size";
 
     // FIELDS
     private static final String FIELD_MAX_FILES = "genericattributes.createEntry.labelMaxFiles";
     private static final String FIELD_FILE_MAX_SIZE = "genericattributes.createEntry.labelFileMaxSize";
 
     // MESSAGES
-    private static final String MESSAGE_ERROR_NOT_AN_IMAGE = "genericattributes.message.notAnImage";
+    protected static final String MESSAGE_ERROR_NOT_AN_IMAGE = "genericattributes.message.notAnImage";
 
     /**
      * Get the asynchronous upload handler to use for entries of this type
@@ -749,7 +749,7 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
      *            method, like any other created object.
      * @return The created response
      */
-    private Response getResponseFromImage( String imageSource, Entry entry, boolean bCreatePhysicalFile )
+    protected Response getResponseFromImage( String imageSource, Entry entry, boolean bCreatePhysicalFile )
     {
         Response response = new Response(  );
         response.setEntry( entry );
