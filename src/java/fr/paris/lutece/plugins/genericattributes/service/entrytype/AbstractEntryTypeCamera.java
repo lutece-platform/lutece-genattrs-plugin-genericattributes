@@ -265,10 +265,22 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
     {
         Response response = new Response(  );
         response.setEntry( entry );
+        String fileName=null;
 
         Calendar c = Calendar.getInstance(  );
-        String fileName = request.getParameter( PROPERTY_IMAGE_TITLE );
-
+        String [] imageTitle =PROPERTY_IMAGE_TITLE.trim( ).split(",");
+        if(imageTitle != null ){
+        	fileName = "";
+	        for(String imgTitle:imageTitle){
+	        	
+	        	if(request.getParameter( imgTitle ) != null && StringUtils.isNotBlank(request.getParameter( imgTitle ))){
+	        		
+	        		fileName= fileName.concat("_").concat(request.getParameter( imgTitle ));
+	        	}
+	        	
+	        }
+        }
+	        
         if ( StringUtils.isNotBlank( imageSource ) && StringUtils.isNotEmpty( imageSource ) )
         {
             File file = new File(  );
