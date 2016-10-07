@@ -52,18 +52,16 @@ import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import org.apache.commons.lang.StringUtils;
 
 import java.awt.image.BufferedImage;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
-
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -76,6 +74,8 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
 {
     private String PROPERTY_IMAGE_TITLE = AppPropertiesService.getProperty( "genericattributes.image.prefix.title",
             "default" );
+    private String PROPERTY_IMAGE_TITLE_DATE_FORMAT = AppPropertiesService.getProperty( "genericattributes.image.date.format.title",
+            "AAAA-MM-JJ hh:mm:ss" );
 
     /**
     * {@inheritDoc}
@@ -266,6 +266,7 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
         Response response = new Response(  );
         response.setEntry( entry );
         String fileName=null;
+        SimpleDateFormat dt = new SimpleDateFormat(PROPERTY_IMAGE_TITLE_DATE_FORMAT);
 
         Calendar c = Calendar.getInstance(  );
         String [] imageTitle =PROPERTY_IMAGE_TITLE.trim( ).split(",");
@@ -275,7 +276,7 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
 	        	
 	        	if(request.getParameter( imgTitle ) != null && StringUtils.isNotBlank(request.getParameter( imgTitle ))){
 	        		
-	        		fileName= fileName.concat("_").concat(request.getParameter( imgTitle ));
+	        		fileName= fileName.concat(request.getParameter( imgTitle )).concat("-");
 	        	}
 	        	
 	        }
@@ -287,11 +288,11 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
 
             if ( fileName != null )
             {
-                file.setTitle( fileName + "_" + c.getTime(  ) );
+                file.setTitle( fileName + "-" + dt.format(c.getTime(  )) );
             }
             else
             {
-                file.setTitle( entry.getTitle(  ) + "_" + c.getTime(  ) );
+                file.setTitle( entry.getTitle(  ) + "-" + dt.format(c.getTime(  )) );
             }
 
             if ( bCreatePhysicalFile )
