@@ -75,7 +75,7 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
     private String PROPERTY_IMAGE_TITLE = AppPropertiesService.getProperty( "genericattributes.image.prefix.title",
             "default" );
     private String PROPERTY_IMAGE_TITLE_DATE_FORMAT = AppPropertiesService.getProperty( "genericattributes.image.date.format.title",
-            "AAAA-MM-JJ hh:mm:ss" );
+            "YYYY-MM-DD hh:mm:ss" );
 
     /**
     * {@inheritDoc}
