@@ -76,6 +76,7 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
             "default" );
     private String PROPERTY_IMAGE_TITLE_DATE_FORMAT = AppPropertiesService.getProperty( "genericattributes.image.date.format.title",
             "YYYY-MM-DD hh:mm:ss" );
+    private final static String IMAGE_FORMAT=".png";
 
     /**
     * {@inheritDoc}
@@ -288,11 +289,11 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
 
             if ( fileName != null )
             {
-                file.setTitle( fileName + "-" + dt.format(c.getTime(  )) );
+                file.setTitle( fileName + dt.format(c.getTime(  )) +IMAGE_FORMAT );
             }
             else
             {
-                file.setTitle( entry.getTitle(  ) + "-" + dt.format(c.getTime(  )) );
+                file.setTitle( entry.getTitle(  )  + dt.format(c.getTime(  )) + IMAGE_FORMAT);
             }
 
             if ( bCreatePhysicalFile )
