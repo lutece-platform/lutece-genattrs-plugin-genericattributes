@@ -76,7 +76,6 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
             "default" );
     private String PROPERTY_IMAGE_TITLE_DATE_FORMAT = AppPropertiesService.getProperty( "genericattributes.image.date.format.title",
             "YYYY-MM-DD hh:mm:ss" );
-    private final static String IMAGE_FORMAT=".png";
 
     /**
     * {@inheritDoc}
@@ -97,6 +96,9 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strErrorMessage = request.getParameter( PARAMETER_ERROR_MESSAGE );
+        
+       String strTypeImage = request.getParameter( PARAMETER_IMAGE_TYPE );
+
 
         int nWidth = -1;
         int nheight = -1;
@@ -185,6 +187,7 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
 
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
+        entry.getFields(  ).get( 0 ).setImageType(strTypeImage);
 
         if ( strUnique != null )
         {
@@ -268,6 +271,8 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
         response.setEntry( entry );
         String fileName=null;
         SimpleDateFormat dt = new SimpleDateFormat(PROPERTY_IMAGE_TITLE_DATE_FORMAT);
+        String imageType= (entry.getFields().get(0).getImageType( )!=null && StringUtils.isNotEmpty(entry.getFields().get(0).getImageType( )))
+        		? "."+entry.getFields().get(0).getImageType( ):"";
 
         Calendar c = Calendar.getInstance(  );
         String [] imageTitle =PROPERTY_IMAGE_TITLE.trim( ).split(",");
@@ -289,11 +294,11 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
 
             if ( fileName != null )
             {
-                file.setTitle( fileName + dt.format(c.getTime(  )) +IMAGE_FORMAT );
+                file.setTitle( fileName + dt.format(c.getTime(  )) +imageType );
             }
             else
             {
-                file.setTitle( entry.getTitle(  )  + dt.format(c.getTime(  )) + IMAGE_FORMAT);
+                file.setTitle( entry.getTitle(  )  + dt.format(c.getTime(  )) + imageType);
             }
 
             if ( bCreatePhysicalFile )
@@ -385,6 +390,8 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
     public GenericAttributeError doCheckSize( BufferedImage image, Entry entry, Locale locale )
     {
         int nMaxSize = entry.getFields(  ).get( 0 ).getMaxSizeEnter(  );
+        String imageType= (entry.getFields().get(0).getImageType( )!=null && StringUtils.isNotEmpty(entry.getFields().get(0).getImageType( )))
+        		?entry.getFields().get(0).getImageType( ):"png";
 
         // If no max size defined in the db, then fetch the default max size from the properties file
         if ( nMaxSize == GenericAttributesUtils.CONSTANT_ID_NULL )
@@ -400,7 +407,7 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
 
             try
             {
-                ImageIO.write( image, "png", tmp );
+                ImageIO.write( image, imageType, tmp );
                 tmp.close(  );
             }
             catch ( IOException e )

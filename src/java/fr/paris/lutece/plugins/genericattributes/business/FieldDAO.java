@@ -49,17 +49,17 @@ public final class FieldDAO implements IFieldDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_field ) FROM genatt_field";
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_field,id_entry,code,title,value,height,width,default_value,max_size_enter,pos,value_type_date,no_display_title,comment,role_key" +
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_field,id_entry,code,title,value,height,width,default_value,max_size_enter,pos,value_type_date,no_display_title,comment,role_key,image_type" +
         " FROM genatt_field  WHERE id_field = ? ORDER BY pos";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_field(id_field,id_entry,code,title,value,height,width,default_value,max_size_enter,pos,value_type_date,no_display_title,comment,role_key)" +
-        " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_field(id_field,id_entry,code,title,value,height,width,default_value,max_size_enter,pos,value_type_date,no_display_title,comment,role_key, image_type)" +
+        " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM genatt_field WHERE id_field = ? ";
     private static final String SQL_QUERY_INSERT_VERIF_BY = "INSERT INTO genatt_verify_by(id_field,id_expression) VALUES(?,?) ";
     private static final String SQL_QUERY_DELETE_VERIF_BY = "DELETE FROM genatt_verify_by WHERE id_field = ? and id_expression= ?";
     private static final String SQL_QUERY_UPDATE = "UPDATE  genatt_field SET " +
-        "id_field=?,id_entry=?,code=?,title=?,value=?,height=?,width=?,default_value=?,max_size_enter=?,pos=?,value_type_date=?,no_display_title=?,comment=?, role_key=? WHERE id_field = ?";
+        "id_field=?,id_entry=?,code=?,title=?,value=?,height=?,width=?,default_value=?,max_size_enter=?,pos=?,value_type_date=?,no_display_title=?,comment=?, role_key=?, image_type=? WHERE id_field = ?";
     private static final String SQL_QUERY_SELECT_FIELD_BY_ID_ENTRY = "SELECT id_field,id_entry,code,title,value,height,width,default_value," +
-        "max_size_enter,pos,value_type_date,no_display_title,comment,role_key FROM genatt_field  WHERE id_entry = ? ORDER BY pos";
+        "max_size_enter,pos,value_type_date,no_display_title,comment,role_key, image_type FROM genatt_field  WHERE id_entry = ? ORDER BY pos";
     private static final String SQL_QUERY_NEW_POSITION = "SELECT MAX(pos)" + " FROM genatt_field ";
     private static final String SQL_QUERY_SELECT_REGULAR_EXPRESSION_BY_ID_FIELD = "SELECT id_expression " +
         " FROM genatt_verify_by where id_field=?";
@@ -140,6 +140,7 @@ public final class FieldDAO implements IFieldDAO
         daoUtil.setBoolean( 12, field.isNoDisplayTitle(  ) );
         daoUtil.setString( 13, field.getComment(  ) );
         daoUtil.setString( 14, field.getRoleKey(  ) );
+        daoUtil.setString( 15, field.getImageType(  ) );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
 
@@ -179,6 +180,7 @@ public final class FieldDAO implements IFieldDAO
             field.setNoDisplayTitle( daoUtil.getBoolean( 12 ) );
             field.setComment( daoUtil.getString( 13 ) );
             field.setRoleKey( daoUtil.getString( 14 ) );
+            field.setImageType( daoUtil.getString( 15 ) );
         }
 
         daoUtil.free(  );
@@ -220,8 +222,9 @@ public final class FieldDAO implements IFieldDAO
         daoUtil.setBoolean( 12, field.isNoDisplayTitle(  ) );
         daoUtil.setString( 13, field.getComment(  ) );
         daoUtil.setString( 14, field.getRoleKey(  ) );
-
-        daoUtil.setInt( 15, field.getIdField(  ) );
+        daoUtil.setString( 15, field.getImageType(  ) );
+        
+        daoUtil.setInt( 16, field.getIdField(  ) );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
@@ -260,6 +263,8 @@ public final class FieldDAO implements IFieldDAO
             field.setNoDisplayTitle( daoUtil.getBoolean( 12 ) );
             field.setComment( daoUtil.getString( 13 ) );
             field.setRoleKey( daoUtil.getString( 14 ) );
+            field.setImageType( daoUtil.getString( 15 ) );
+
             fieldList.add( field );
         }
 

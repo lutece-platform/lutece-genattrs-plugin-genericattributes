@@ -1,0 +1,1 @@
+ALTER TABLE genatt_field ADD COLUMN  image_type varchar(50) DEFAULT NULL;
