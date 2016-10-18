@@ -53,7 +53,6 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * Abstract entry type for check boxes
  */
@@ -67,8 +66,7 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
     {
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         String strTitle = request.getParameter( PARAMETER_TITLE );
-        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
-            ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim(  ) : null;
+        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
         String strErrorMessage = request.getParameter( PARAMETER_ERROR_MESSAGE );
@@ -87,10 +85,11 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                I18nService.getLocalizedString( strFieldError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         // for don't update fields listFields=null
@@ -109,7 +108,7 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
         {
             nFieldInLine = Integer.parseInt( strFieldInLine );
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             AppLogService.error( ne );
         }
@@ -123,11 +122,10 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-        Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String[] strTabIdField = request.getParameterValues( PREFIX_ATTRIBUTE + entry.getIdEntry(  ) );
-        List<Field> listFieldInResponse = new ArrayList<Field>(  );
+        String [ ] strTabIdField = request.getParameterValues( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
+        List<Field> listFieldInResponse = new ArrayList<Field>( );
         int nIdField = -1;
         Field field = null;
         Response response;
@@ -138,14 +136,14 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
             {
                 try
                 {
-                    nIdField = Integer.parseInt( strTabIdField[cpt] );
+                    nIdField = Integer.parseInt( strTabIdField [cpt] );
                 }
-                catch ( NumberFormatException ne )
+                catch( NumberFormatException ne )
                 {
-                    AppLogService.error( ne.getMessage(  ), ne );
+                    AppLogService.error( ne.getMessage( ), ne );
                 }
 
-                field = GenericAttributesUtils.findFieldByIdInTheList( nIdField, entry.getFields(  ) );
+                field = GenericAttributesUtils.findFieldByIdInTheList( nIdField, entry.getFields( ) );
 
                 if ( field != null )
                 {
@@ -154,25 +152,25 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
             }
         }
 
-        if ( listFieldInResponse.size(  ) != 0 )
+        if ( listFieldInResponse.size( ) != 0 )
         {
             for ( Field fieldInResponse : listFieldInResponse )
             {
-                response = new Response(  );
+                response = new Response( );
                 response.setEntry( entry );
-                response.setResponseValue( fieldInResponse.getValue(  ) );
+                response.setResponseValue( fieldInResponse.getValue( ) );
                 response.setField( fieldInResponse );
                 listResponse.add( response );
             }
         }
 
-        if ( entry.isMandatory(  ) )
+        if ( entry.isMandatory( ) )
         {
             boolean bAllFieldEmpty = true;
 
             for ( Field fieldInResponse : listFieldInResponse )
             {
-                if ( !fieldInResponse.getValue(  ).equals( StringUtils.EMPTY ) )
+                if ( !fieldInResponse.getValue( ).equals( StringUtils.EMPTY ) )
                 {
                     bAllFieldEmpty = false;
                 }
@@ -180,11 +178,11 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
 
             if ( bAllFieldEmpty )
             {
-                if ( StringUtils.isNotBlank( entry.getErrorMessage(  ) ) )
+                if ( StringUtils.isNotBlank( entry.getErrorMessage( ) ) )
                 {
-                    GenericAttributeError error = new GenericAttributeError(  );
+                    GenericAttributeError error = new GenericAttributeError( );
                     error.setMandatoryError( true );
-                    error.setErrorMessage( entry.getErrorMessage(  ) );
+                    error.setErrorMessage( entry.getErrorMessage( ) );
 
                     return error;
                 }
@@ -202,7 +200,7 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
     @Override
     public String getResponseValueForExport( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getResponseValue(  );
+        return response.getResponseValue( );
     }
 
     /**
@@ -211,11 +209,11 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        if ( response.getField(  ) != null )
+        if ( response.getField( ) != null )
         {
-            if ( response.getField(  ).getTitle(  ) == null )
+            if ( response.getField( ).getTitle( ) == null )
             {
-                Field field = FieldHome.findByPrimaryKey( response.getField(  ).getIdField(  ) );
+                Field field = FieldHome.findByPrimaryKey( response.getField( ).getIdField( ) );
 
                 if ( field != null )
                 {
@@ -223,7 +221,7 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
                 }
             }
 
-            return response.getField(  ).getTitle(  );
+            return response.getField( ).getTitle( );
         }
 
         return null;

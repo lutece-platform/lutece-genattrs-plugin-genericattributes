@@ -53,7 +53,6 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * Abstract entry type for selects that take values from SQL requests
  */
@@ -67,8 +66,7 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
     {
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
-        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
-            ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim(  ) : null;
+        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
@@ -82,10 +80,11 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                I18nService.getLocalizedString( strFieldError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         // for don't update fields listFields=null
@@ -102,19 +101,20 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
         {
             getSqlQueryFields( entry );
         }
-        catch ( AppException ae )
+        catch( AppException ae )
         {
-            String strErrorMsg = ae.getMessage(  );
+            String strErrorMsg = ae.getMessage( );
 
             if ( ( strErrorMsg != null ) && strErrorMsg.contains( System.getProperty( "line.separator" ) ) )
             {
                 strErrorMsg = strErrorMsg.substring( 0, strErrorMsg.indexOf( System.getProperty( "line.separator" ) ) );
             }
 
-            Object[] tabErrorSQLMsg = { strErrorMsg };
+            Object [ ] tabErrorSQLMsg = {
+                strErrorMsg
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_INVALID_SQL_QUERY, tabErrorSQLMsg,
-                AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_INVALID_SQL_QUERY, tabErrorSQLMsg, AdminMessage.TYPE_STOP );
         }
 
         return null;
@@ -124,13 +124,12 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-        Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String strIdField = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry(  ) );
+        String strIdField = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
         int nIdField = -1;
         Field field = null;
-        Response response = new Response(  );
+        Response response = new Response( );
         response.setEntry( entry );
 
         if ( StringUtils.isNotEmpty( strIdField ) && StringUtils.isNumeric( strIdField ) )
@@ -145,15 +144,15 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
 
         if ( field != null )
         {
-            response.setResponseValue( field.getValue(  ) );
+            response.setResponseValue( field.getValue( ) );
             response.setField( field );
         }
 
         listResponse.add( response );
 
-        if ( entry.isMandatory(  ) )
+        if ( entry.isMandatory( ) )
         {
-            if ( ( field == null ) || StringUtils.isBlank( field.getValue(  ) ) )
+            if ( ( field == null ) || StringUtils.isBlank( field.getValue( ) ) )
             {
                 return new MandatoryError( entry, locale );
             }
@@ -168,7 +167,7 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
     @Override
     public String getResponseValueForExport( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getResponseValue(  );
+        return response.getResponseValue( );
     }
 
     /**
@@ -177,31 +176,33 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        return ( response.getField(  ) != null ) ? response.getField(  ).getTitle(  ) : StringUtils.EMPTY;
+        return ( response.getField( ) != null ) ? response.getField( ).getTitle( ) : StringUtils.EMPTY;
     }
 
     /**
      * Return fields from a SQL query
-     * @param entry The entry
+     * 
+     * @param entry
+     *            The entry
      * @return A list of fields
      */
     protected List<Field> getSqlQueryFields( Entry entry )
     {
-        List<Field> list = new ArrayList<Field>(  );
-        String strSQL = entry.getComment(  );
-        DAOUtil daoUtil = new DAOUtil( strSQL, GenericAttributesUtils.getPlugin(  ) );
-        daoUtil.executeQuery(  );
+        List<Field> list = new ArrayList<Field>( );
+        String strSQL = entry.getComment( );
+        DAOUtil daoUtil = new DAOUtil( strSQL, GenericAttributesUtils.getPlugin( ) );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            Field field = new Field(  );
+            Field field = new Field( );
             field.setIdField( daoUtil.getInt( 1 ) );
             field.setTitle( daoUtil.getString( 2 ) );
-            field.setValue( field.getTitle(  ) );
+            field.setValue( field.getTitle( ) );
             list.add( field );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return list;
     }

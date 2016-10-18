@@ -52,7 +52,6 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * Abstract entry type for text areas
  */
@@ -68,8 +67,7 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
     {
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
-        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
-            ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim(  ) : null;
+        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strValue = request.getParameter( PARAMETER_VALUE );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
@@ -92,28 +90,31 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
             strFieldError = FIELD_TITLE;
         }
 
-        else if ( StringUtils.isBlank( strWidth ) )
-        {
-            strFieldError = FIELD_WIDTH;
-        }
-        else if ( StringUtils.isBlank( strHeight ) )
-        {
-            strFieldError = FIELD_HEIGHT;
-        }
+        else
+            if ( StringUtils.isBlank( strWidth ) )
+            {
+                strFieldError = FIELD_WIDTH;
+            }
+            else
+                if ( StringUtils.isBlank( strHeight ) )
+                {
+                    strFieldError = FIELD_HEIGHT;
+                }
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                I18nService.getLocalizedString( strFieldError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         try
         {
             nHeight = Integer.parseInt( strHeight );
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             strFieldError = FIELD_HEIGHT;
         }
@@ -122,7 +123,7 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         {
             nWidth = Integer.parseInt( strWidth );
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             strFieldError = FIELD_WIDTH;
         }
@@ -134,17 +135,18 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
                 nMaxSizeEnter = Integer.parseInt( strMaxSizeEnter );
             }
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             strFieldError = FIELD_MAX_SIZE_ENTER;
         }
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                I18nService.getLocalizedString( strFieldError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         entry.setTitle( strTitle );
@@ -154,19 +156,19 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         entry.setCSSClass( strCSSClass );
         setUseRichText( entry, Boolean.parseBoolean( strUseRichText ) );
 
-        if ( entry.getFields(  ) == null )
+        if ( entry.getFields( ) == null )
         {
-            ArrayList<Field> listFields = new ArrayList<Field>(  );
-            Field field = new Field(  );
+            ArrayList<Field> listFields = new ArrayList<Field>( );
+            Field field = new Field( );
             listFields.add( field );
             entry.setFields( listFields );
         }
 
-        entry.getFields(  ).get( 0 ).setCode( strFieldCode );
-        entry.getFields(  ).get( 0 ).setValue( strValue );
-        entry.getFields(  ).get( 0 ).setWidth( nWidth );
-        entry.getFields(  ).get( 0 ).setHeight( nHeight );
-        entry.getFields(  ).get( 0 ).setMaxSizeEnter( nMaxSizeEnter );
+        entry.getFields( ).get( 0 ).setCode( strFieldCode );
+        entry.getFields( ).get( 0 ).setValue( strValue );
+        entry.getFields( ).get( 0 ).setWidth( nWidth );
+        entry.getFields( ).get( 0 ).setHeight( nHeight );
+        entry.getFields( ).get( 0 ).setMaxSizeEnter( nMaxSizeEnter );
 
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
@@ -178,27 +180,26 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-        Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String strValueEntry = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry(  ) );
-        Response response = new Response(  );
+        String strValueEntry = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
+        Response response = new Response( );
         response.setEntry( entry );
 
         if ( strValueEntry != null )
         {
-            int nMaxSize = entry.getFields(  ).get( 0 ).getMaxSizeEnter(  );
+            int nMaxSize = entry.getFields( ).get( 0 ).getMaxSizeEnter( );
 
             if ( getUseRichText( entry ) )
             {
-                response.setResponseValue( EditorBbcodeService.getInstance(  ).parse( strValueEntry ) );
+                response.setResponseValue( EditorBbcodeService.getInstance( ).parse( strValueEntry ) );
             }
             else
             {
                 response.setResponseValue( strValueEntry );
             }
 
-            if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) )
+            if ( StringUtils.isNotBlank( response.getResponseValue( ) ) )
             {
                 // if we use a rich text, we set the toStringValueResponse to the BBCode string
                 if ( getUseRichText( entry ) )
@@ -220,29 +221,30 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
             // Checks if the entry value contains XSS characters
             if ( StringUtil.containsXssCharacters( strValueEntry ) )
             {
-                GenericAttributeError error = new GenericAttributeError(  );
+                GenericAttributeError error = new GenericAttributeError( );
                 error.setMandatoryError( false );
-                error.setTitleQuestion( entry.getTitle(  ) );
-                error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_XSS_FIELD, request.getLocale(  ) ) );
+                error.setTitleQuestion( entry.getTitle( ) );
+                error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_XSS_FIELD, request.getLocale( ) ) );
 
                 return error;
             }
 
             // check max size for the field. 0 means no limit
-            if ( ( nMaxSize != -1 ) && ( strValueEntry.length(  ) > nMaxSize ) )
+            if ( ( nMaxSize != -1 ) && ( strValueEntry.length( ) > nMaxSize ) )
             {
-                GenericAttributeError error = new GenericAttributeError(  );
+                GenericAttributeError error = new GenericAttributeError( );
                 error.setMandatoryError( false );
-                error.setTitleQuestion( entry.getTitle(  ) );
+                error.setTitleQuestion( entry.getTitle( ) );
 
-                Object[] messageArgs = new Object[] { nMaxSize, };
-                error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_MAXLENGTH, messageArgs,
-                        request.getLocale(  ) ) );
+                Object [ ] messageArgs = new Object [ ] {
+                    nMaxSize,
+                };
+                error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_MAXLENGTH, messageArgs, request.getLocale( ) ) );
 
                 return error;
             }
 
-            if ( entry.isMandatory(  ) && StringUtils.isBlank( strValueEntry ) )
+            if ( entry.isMandatory( ) && StringUtils.isBlank( strValueEntry ) )
             {
                 return new MandatoryError( entry, locale );
             }
@@ -257,7 +259,7 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
     @Override
     public String getResponseValueForExport( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getResponseValue(  );
+        return response.getResponseValue( );
     }
 
     /**
@@ -266,25 +268,29 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getResponseValue(  );
+        return response.getResponseValue( );
     }
 
     /**
      * Check if the text area should be a rich text
-     * @param entry The entry
+     * 
+     * @param entry
+     *            The entry
      * @return True if the text area should be a rich text, false otherwise
      */
     protected boolean getUseRichText( Entry entry )
     {
         // We use the fieldInLine attribute to avoid creating a specific attribute for entries of type text area
-        return entry.isFieldInLine(  );
+        return entry.isFieldInLine( );
     }
 
     /**
      * Set if the text area should be a rich text
-     * @param entry The entry
-     * @param bUseRichText True if the text area should be a rich text, false
-     *            otherwise
+     * 
+     * @param entry
+     *            The entry
+     * @param bUseRichText
+     *            True if the text area should be a rich text, false otherwise
      */
     protected void setUseRichText( Entry entry, boolean bUseRichText )
     {

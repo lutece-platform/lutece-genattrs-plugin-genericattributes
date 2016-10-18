@@ -39,7 +39,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
-
 /**
  * Will remove fileItems uploaded
  */
@@ -60,10 +59,9 @@ public class GenericAttributesSessionListener implements HttpSessionListener
     @Override
     public void sessionDestroyed( HttpSessionEvent se )
     {
-        String strSessionId = se.getSession(  ).getId(  );
+        String strSessionId = se.getSession( ).getId( );
 
-        for ( AbstractGenAttUploadHandler handler : SpringContextService.getBeansOfType( 
-                AbstractGenAttUploadHandler.class ) )
+        for ( AbstractGenAttUploadHandler handler : SpringContextService.getBeansOfType( AbstractGenAttUploadHandler.class ) )
         {
             handler.removeSessionFiles( strSessionId );
         }

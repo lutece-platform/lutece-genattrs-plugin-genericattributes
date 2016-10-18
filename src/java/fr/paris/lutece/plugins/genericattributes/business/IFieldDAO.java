@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
 
-
 /**
  * IFieldDAO Interface
  */
@@ -46,8 +45,10 @@ public interface IFieldDAO
     /**
      * Insert a new record in the table.
      *
-     * @param field instance of the Field object to insert
-     * @param plugin the plugin
+     * @param field
+     *            instance of the Field object to insert
+     * @param plugin
+     *            the plugin
      * @return the new field create
      */
     int insert( Field field, Plugin plugin );
@@ -55,70 +56,90 @@ public interface IFieldDAO
     /**
      * Update the field in the table
      *
-     * @param field instance of the Field object to update
-     * @param plugin the plugin
+     * @param field
+     *            instance of the Field object to update
+     * @param plugin
+     *            the plugin
      */
     void store( Field field, Plugin plugin );
 
     /**
      * Delete a record from the table
      *
-     * @param nIdField The identifier of the field
-     * @param plugin the plugin
+     * @param nIdField
+     *            The identifier of the field
+     * @param plugin
+     *            the plugin
      */
     void delete( int nIdField, Plugin plugin );
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
      * Load the data of the Field from the table
      *
-     * @param nIdField The identifier of the field
-     * @param plugin the plugin
+     * @param nIdField
+     *            The identifier of the field
+     * @param plugin
+     *            the plugin
      * @return the instance of the Field
      */
     Field load( int nIdField, Plugin plugin );
 
     /**
-     * Load the data of all the field of the entry  and returns them in a  list
-     * @param idEntry the id of the entry
-     * @param plugin the plugin
-     * @return  the list of field
+     * Load the data of all the field of the entry and returns them in a list
+     * 
+     * @param idEntry
+     *            the id of the entry
+     * @param plugin
+     *            the plugin
+     * @return the list of field
      */
     List<Field> selectFieldListByIdEntry( int idEntry, Plugin plugin );
 
     /**
-     * Delete an association between  field and a regular expression
+     * Delete an association between field and a regular expression
      *
-     * @param nIdField The identifier of the field
-     * @param nIdExpression The identifier of the regular expression
-     * @param plugin the plugin
+     * @param nIdField
+     *            The identifier of the field
+     * @param nIdExpression
+     *            The identifier of the regular expression
+     * @param plugin
+     *            the plugin
      */
     void deleteVerifyBy( int nIdField, int nIdExpression, Plugin plugin );
 
     /**
-     * insert an association between  field and a regular expression
+     * insert an association between field and a regular expression
      *
-     * @param nIdField The identifier of the field
-     * @param nIdExpression The identifier of the regular expression
-     * @param plugin the plugin
+     * @param nIdField
+     *            The identifier of the field
+     * @param nIdExpression
+     *            The identifier of the regular expression
+     * @param plugin
+     *            the plugin
      */
     void insertVerifyBy( int nIdField, int nIdExpression, Plugin plugin );
 
     /**
-     * Load the key of all the regularExpression  associate to the field and returns them in a  list
-     * @param nIdField the id of the field
-     * @param plugin the plugin
-     * @return  the list of regular expression key
+     * Load the key of all the regularExpression associate to the field and returns them in a list
+     * 
+     * @param nIdField
+     *            the id of the field
+     * @param plugin
+     *            the plugin
+     * @return the list of regular expression key
      */
     List<Integer> selectListRegularExpressionKeyByIdField( int nIdField, Plugin plugin );
 
     /**
      * verify if the regular expression is use
      *
-     * @param nIdExpression The identifier of the regular expression
-     * @param plugin the plugin
+     * @param nIdExpression
+     *            The identifier of the regular expression
+     * @param plugin
+     *            the plugin
      * @return true if the regular expression is use
      */
     boolean isRegularExpressionIsUse( int nIdExpression, Plugin plugin );

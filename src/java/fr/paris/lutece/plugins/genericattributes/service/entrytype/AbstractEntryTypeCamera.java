@@ -64,7 +64,6 @@ import java.util.Locale;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  *
  * @class AbstractEntryTypeCamera
@@ -72,21 +71,18 @@ import javax.servlet.http.HttpServletRequest;
  */
 public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
 {
-    private String PROPERTY_IMAGE_TITLE = AppPropertiesService.getProperty( "genericattributes.image.prefix.title",
-            "default" );
-    private String PROPERTY_IMAGE_TITLE_DATE_FORMAT = AppPropertiesService.getProperty( "genericattributes.image.date.format.title",
-            "YYYY-MM-DD hh:mm:ss" );
+    private String PROPERTY_IMAGE_TITLE = AppPropertiesService.getProperty( "genericattributes.image.prefix.title", "default" );
+    private String PROPERTY_IMAGE_TITLE_DATE_FORMAT = AppPropertiesService.getProperty( "genericattributes.image.date.format.title", "YYYY-MM-DD hh:mm:ss" );
 
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
     @Override
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         String strTitle = request.getParameter( PARAMETER_TITLE );
-        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
-            ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim(  ) : null;
+        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMaxImageSize = request.getParameter( PARAMETER_MAX_IMAGE_SIZE );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
@@ -96,9 +92,8 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strErrorMessage = request.getParameter( PARAMETER_ERROR_MESSAGE );
-        
-       String strTypeImage = request.getParameter( PARAMETER_IMAGE_TYPE );
 
+        String strTypeImage = request.getParameter( PARAMETER_IMAGE_TYPE );
 
         int nWidth = -1;
         int nheight = -1;
@@ -111,24 +106,26 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
             strFieldError = FIELD_TITLE;
         }
 
-        else if ( StringUtils.isBlank( strWidth ) )
-        {
-            strFieldError = FIELD_WIDTH;
-        }
+        else
+            if ( StringUtils.isBlank( strWidth ) )
+            {
+                strFieldError = FIELD_WIDTH;
+            }
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                I18nService.getLocalizedString( strFieldError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         try
         {
             nWidth = Integer.parseInt( strWidth );
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             strFieldError = FIELD_WIDTH;
         }
@@ -140,7 +137,7 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
                 nheight = Integer.parseInt( strHeight );
             }
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             strFieldError = FIELD_HEIGHT;
         }
@@ -152,17 +149,18 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
                 nMaxImageSize = Integer.parseInt( strMaxImageSize );
             }
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             strFieldError = FIELD_HEIGHT;
         }
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                I18nService.getLocalizedString( strFieldError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         entry.setTitle( strTitle );
@@ -171,23 +169,23 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
         entry.setCSSClass( strCSSClass );
         entry.setErrorMessage( strErrorMessage );
 
-        if ( entry.getFields(  ) == null )
+        if ( entry.getFields( ) == null )
         {
-            ArrayList<Field> listFields = new ArrayList<Field>(  );
-            Field field = new Field(  );
+            ArrayList<Field> listFields = new ArrayList<Field>( );
+            Field field = new Field( );
             listFields.add( field );
             entry.setFields( listFields );
         }
 
         entry.setCode( strCode );
-        entry.getFields(  ).get( 0 ).setCode( strCode );
-        entry.getFields(  ).get( 0 ).setMaxSizeEnter( nMaxImageSize );
-        entry.getFields(  ).get( 0 ).setWidth( nWidth );
-        entry.getFields(  ).get( 0 ).setHeight( nheight );
+        entry.getFields( ).get( 0 ).setCode( strCode );
+        entry.getFields( ).get( 0 ).setMaxSizeEnter( nMaxImageSize );
+        entry.getFields( ).get( 0 ).setWidth( nWidth );
+        entry.getFields( ).get( 0 ).setHeight( nheight );
 
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
-        entry.getFields(  ).get( 0 ).setImageType(strTypeImage);
+        entry.getFields( ).get( 0 ).setImageType( strTypeImage );
 
         if ( strUnique != null )
         {
@@ -205,17 +203,16 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-        Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
         if ( request instanceof MultipartHttpServletRequest )
         {
             GenericAttributeError genAttError = null;
-            String sourceBase = request.getParameter( ( IEntryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry(  ) ) );
+            String sourceBase = request.getParameter( ( IEntryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry( ) ) );
 
             if ( sourceBase != null )
             {
-                genAttError = doCheckforImages( sourceBase, entry, request.getLocale(  ) );
+                genAttError = doCheckforImages( sourceBase, entry, request.getLocale( ) );
 
                 if ( genAttError != null )
                 {
@@ -224,20 +221,20 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
 
                 listResponse.add( getResponseFromImage( request, sourceBase, entry, true ) );
 
-                if ( !entry.isMandatory(  ) )
+                if ( !entry.isMandatory( ) )
                 {
                     return genAttError;
                 }
 
-                if ( entry.isMandatory(  ) )
+                if ( entry.isMandatory( ) )
                 {
                     if ( StringUtils.isBlank( sourceBase ) || StringUtils.isEmpty( sourceBase ) )
                     {
-                        if ( StringUtils.isNotEmpty( entry.getErrorMessage(  ) ) )
+                        if ( StringUtils.isNotEmpty( entry.getErrorMessage( ) ) )
                         {
-                            GenericAttributeError error = new GenericAttributeError(  );
+                            GenericAttributeError error = new GenericAttributeError( );
                             error.setMandatoryError( true );
-                            error.setErrorMessage( entry.getErrorMessage(  ) );
+                            error.setErrorMessage( entry.getErrorMessage( ) );
 
                             return error;
                         }
@@ -250,64 +247,69 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
             return genAttError;
         }
 
-        return entry.isMandatory(  ) ? new MandatoryError( entry, locale ) : null;
+        return entry.isMandatory( ) ? new MandatoryError( entry, locale ) : null;
     }
 
     /**
      * Get a generic attributes response from a request
+     * 
      * @param request
-     * @param imageSource the image in base64 form
-     * @param entry The entry
-     * @param bCreatePhysicalFile True to create the physical file associated
-     *            with the file of the response, false otherwise. Note that the
-     *            physical file will never be saved in the database by this
-     *            method, like any other created object.
+     * @param imageSource
+     *            the image in base64 form
+     * @param entry
+     *            The entry
+     * @param bCreatePhysicalFile
+     *            True to create the physical file associated with the file of the response, false otherwise. Note that the physical file will never be saved in
+     *            the database by this method, like any other created object.
      * @return The created response
      */
-    protected Response getResponseFromImage( HttpServletRequest request, String imageSource, Entry entry,
-        boolean bCreatePhysicalFile )
+    protected Response getResponseFromImage( HttpServletRequest request, String imageSource, Entry entry, boolean bCreatePhysicalFile )
     {
-        Response response = new Response(  );
+        Response response = new Response( );
         response.setEntry( entry );
-        String fileName=null;
-        SimpleDateFormat dt = new SimpleDateFormat(PROPERTY_IMAGE_TITLE_DATE_FORMAT);
-        String imageType= (entry.getFields().get(0).getImageType( )!=null && StringUtils.isNotEmpty(entry.getFields().get(0).getImageType( )))
-        		? "."+entry.getFields().get(0).getImageType( ):"";
+        String fileName = null;
+        SimpleDateFormat dt = new SimpleDateFormat( PROPERTY_IMAGE_TITLE_DATE_FORMAT );
+        String imageType = ( entry.getFields( ).get( 0 ).getImageType( ) != null && StringUtils.isNotEmpty( entry.getFields( ).get( 0 ).getImageType( ) ) ) ? "."
+                + entry.getFields( ).get( 0 ).getImageType( )
+                : "";
 
-        Calendar c = Calendar.getInstance(  );
-        String [] imageTitle =PROPERTY_IMAGE_TITLE.trim( ).split(",");
-        if(imageTitle != null ){
-        	fileName = "";
-	        for(String imgTitle:imageTitle){
-	        	
-	        	if(request.getParameter( imgTitle ) != null && StringUtils.isNotBlank(request.getParameter( imgTitle ))){
-	        		
-	        		fileName= fileName.concat(request.getParameter( imgTitle )).concat("-");
-	        	}
-	        	
-	        }
+        Calendar c = Calendar.getInstance( );
+        String [ ] imageTitle = PROPERTY_IMAGE_TITLE.trim( ).split( "," );
+        if ( imageTitle != null )
+        {
+            fileName = "";
+            for ( String imgTitle : imageTitle )
+            {
+
+                if ( request.getParameter( imgTitle ) != null && StringUtils.isNotBlank( request.getParameter( imgTitle ) ) )
+                {
+
+                    fileName = fileName.concat( request.getParameter( imgTitle ) ).concat( "-" );
+                }
+
+            }
         }
-	        
+
         if ( StringUtils.isNotBlank( imageSource ) && StringUtils.isNotEmpty( imageSource ) )
         {
-            File file = new File(  );
+            File file = new File( );
 
             if ( fileName != null )
             {
-                file.setTitle( fileName + dt.format(c.getTime(  )) +imageType );
+                file.setTitle( fileName + dt.format( c.getTime( ) ) + imageType );
             }
             else
             {
-                file.setTitle( entry.getTitle(  )  + dt.format(c.getTime(  )) + imageType);
+                file.setTitle( entry.getTitle( ) + dt.format( c.getTime( ) ) + imageType );
             }
 
             if ( bCreatePhysicalFile )
             {
-                file.setMimeType( FileSystemUtil.getMIMEType( file.getTitle(  ) ) );
+                file.setMimeType( FileSystemUtil.getMIMEType( file.getTitle( ) ) );
 
-                PhysicalFile physicalFile = new PhysicalFile(  );
-                String base64Image = imageSource.split( "," )[1];
-                byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary( base64Image );
+                PhysicalFile physicalFile = new PhysicalFile( );
+                String base64Image = imageSource.split( "," ) [1];
+                byte [ ] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary( base64Image );
                 physicalFile.setValue( imageBytes );
                 file.setPhysicalFile( physicalFile );
             }
@@ -330,9 +332,9 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        if ( ( response.getFile(  ) != null ) && StringUtils.isNotBlank( response.getToStringValueResponse(  ) ) )
+        if ( ( response.getFile( ) != null ) && StringUtils.isNotBlank( response.getToStringValueResponse( ) ) )
         {
-            return response.getToStringValueResponse(  );
+            return response.getToStringValueResponse( );
         }
 
         return StringUtils.EMPTY;
@@ -340,33 +342,39 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
 
     /**
      * Do check that an uploaded source is an image
-     * @param imageSource The file imageSource
-     * @param entry the entry
-     * @param locale The locale
+     * 
+     * @param imageSource
+     *            The file imageSource
+     * @param entry
+     *            the entry
+     * @param locale
+     *            The locale
      * @return The error if any, or null if the file is a valid image
      */
     public GenericAttributeError doCheckforImages( String imageSource, Entry entry, Locale locale )
     {
         BufferedImage image = null;
-        GenericAttributeError genAttError = new GenericAttributeError(  );
+        GenericAttributeError genAttError = new GenericAttributeError( );
         genAttError.setMandatoryError( false );
 
-        Object[] args = { entry.getTitle(  ) };
+        Object [ ] args = {
+            entry.getTitle( )
+        };
         genAttError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_ERROR_NOT_AN_IMAGE, args, locale ) );
-        genAttError.setTitleQuestion( entry.getTitle(  ) );
+        genAttError.setTitleQuestion( entry.getTitle( ) );
 
         if ( ( imageSource != null ) && ( imageSource.split( "," ).length > 1 ) )
         {
-            String base64Image = imageSource.split( "," )[1];
-            byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary( base64Image );
+            String base64Image = imageSource.split( "," ) [1];
+            byte [ ] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary( base64Image );
             ByteArrayInputStream bis = new ByteArrayInputStream( imageBytes );
 
             try
             {
                 image = ImageIO.read( bis );
-                bis.close(  );
+                bis.close( );
             }
-            catch ( IOException e )
+            catch( IOException e )
             {
                 return genAttError;
             }
@@ -382,16 +390,19 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
 
     /**
      * Do check the size of image
+     * 
      * @param image
      * @param entry
-     * @param locale The locale
+     * @param locale
+     *            The locale
      * @return The error if any, or null if not erroe
      */
     public GenericAttributeError doCheckSize( BufferedImage image, Entry entry, Locale locale )
     {
-        int nMaxSize = entry.getFields(  ).get( 0 ).getMaxSizeEnter(  );
-        String imageType= (entry.getFields().get(0).getImageType( )!=null && StringUtils.isNotEmpty(entry.getFields().get(0).getImageType( )))
-        		?entry.getFields().get(0).getImageType( ):"png";
+        int nMaxSize = entry.getFields( ).get( 0 ).getMaxSizeEnter( );
+        String imageType = ( entry.getFields( ).get( 0 ).getImageType( ) != null && StringUtils.isNotEmpty( entry.getFields( ).get( 0 ).getImageType( ) ) ) ? entry
+                .getFields( ).get( 0 ).getImageType( )
+                : "png";
 
         // If no max size defined in the db, then fetch the default max size from the properties file
         if ( nMaxSize == GenericAttributesUtils.CONSTANT_ID_NULL )
@@ -403,27 +414,27 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
         if ( ( nMaxSize != GenericAttributesUtils.CONSTANT_ID_NULL ) && ( image != null ) )
         {
             boolean bHasFileMaxSizeError = false;
-            ByteArrayOutputStream tmp = new ByteArrayOutputStream(  );
+            ByteArrayOutputStream tmp = new ByteArrayOutputStream( );
 
             try
             {
                 ImageIO.write( image, imageType, tmp );
-                tmp.close(  );
+                tmp.close( );
             }
-            catch ( IOException e )
+            catch( IOException e )
             {
                 AppLogService.error( e );
 
                 String strMessage = "IOException when reading Image Size";
-                GenericAttributeError error = new GenericAttributeError(  );
+                GenericAttributeError error = new GenericAttributeError( );
                 error.setMandatoryError( false );
-                error.setTitleQuestion( entry.getTitle(  ) );
+                error.setTitleQuestion( entry.getTitle( ) );
                 error.setErrorMessage( strMessage );
 
                 return error;
             }
 
-            Integer contentLength = tmp.size(  );
+            Integer contentLength = tmp.size( );
 
             if ( contentLength > nMaxSize )
             {
@@ -432,12 +443,13 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
 
             if ( bHasFileMaxSizeError )
             {
-                Object[] params = { nMaxSize };
-                String strMessage = I18nService.getLocalizedString( PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_FILE_MAX_SIZE,
-                        params, locale );
-                GenericAttributeError error = new GenericAttributeError(  );
+                Object [ ] params = {
+                    nMaxSize
+                };
+                String strMessage = I18nService.getLocalizedString( PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_FILE_MAX_SIZE, params, locale );
+                GenericAttributeError error = new GenericAttributeError( );
                 error.setMandatoryError( false );
-                error.setTitleQuestion( entry.getTitle(  ) );
+                error.setTitleQuestion( entry.getTitle( ) );
                 error.setErrorMessage( strMessage );
 
                 return error;

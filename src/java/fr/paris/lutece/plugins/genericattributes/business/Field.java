@@ -40,7 +40,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * class Field
  */
@@ -69,14 +68,16 @@ public class Field implements Serializable
      *
      * @return the id of the field
      */
-    public int getIdField(  )
+    public int getIdField( )
     {
         return _nIdField;
     }
 
     /**
      * set the id of the field
-     * @param idField the id of the field
+     * 
+     * @param idField
+     *            the id of the field
      */
     public void setIdField( int idField )
     {
@@ -87,14 +88,16 @@ public class Field implements Serializable
      *
      * @return the position of the field in the list of the entry's fields
      */
-    public int getPosition(  )
+    public int getPosition( )
     {
         return _nPosition;
     }
 
     /**
      * set the position of the field in the list of the entry's fields
-     * @param position the position of the field in the list of fields
+     * 
+     * @param position
+     *            the position of the field in the list of fields
      */
     public void setPosition( int position )
     {
@@ -105,14 +108,16 @@ public class Field implements Serializable
      *
      * @return the entry of the field
      */
-    public Entry getParentEntry(  )
+    public Entry getParentEntry( )
     {
         return _parentEntry;
     }
 
     /**
      * set the entry of the field
-     * @param entry the entry of the field
+     * 
+     * @param entry
+     *            the entry of the field
      */
     public void setParentEntry( Entry entry )
     {
@@ -123,15 +128,16 @@ public class Field implements Serializable
      *
      * @return a list of regular expression which is associate to the field
      */
-    public List<RegularExpression> getRegularExpressionList(  )
+    public List<RegularExpression> getRegularExpressionList( )
     {
         return _listRegularExpressionList;
     }
 
     /**
      * set a list of regular expression which is associate to the field
-     * @param regularExpressionList a list of regular expression which is
-     *            associate to the field
+     * 
+     * @param regularExpressionList
+     *            a list of regular expression which is associate to the field
      */
     public void setRegularExpressionList( List<RegularExpression> regularExpressionList )
     {
@@ -142,14 +148,16 @@ public class Field implements Serializable
      *
      * @return the title of the field
      */
-    public String getTitle(  )
+    public String getTitle( )
     {
         return _strTitle;
     }
 
     /**
      * set the title of the field
-     * @param title the title of the field
+     * 
+     * @param title
+     *            the title of the field
      */
     public void setTitle( String title )
     {
@@ -160,14 +168,16 @@ public class Field implements Serializable
      *
      * @return the value of the field
      */
-    public String getValue(  )
+    public String getValue( )
     {
         return _strValue;
     }
 
     /**
      * set the value of the field
-     * @param value the value of the field
+     * 
+     * @param value
+     *            the value of the field
      */
     public void setValue( String value )
     {
@@ -176,16 +186,19 @@ public class Field implements Serializable
 
     /**
      * Get the comment of the field
+     * 
      * @return The comment of the field
      */
-    public String getComment(  )
+    public String getComment( )
     {
         return _strComment;
     }
 
     /**
      * Set the comment of the field
-     * @param strComment The comment of the field
+     * 
+     * @param strComment
+     *            The comment of the field
      */
     public void setComment( String strComment )
     {
@@ -196,14 +209,16 @@ public class Field implements Serializable
      *
      * @return the width of the field
      */
-    public int getWidth(  )
+    public int getWidth( )
     {
         return _nWidth;
     }
 
     /**
      * set the width of the field
-     * @param width the width of the field
+     * 
+     * @param width
+     *            the width of the field
      */
     public void setWidth( int width )
     {
@@ -214,14 +229,16 @@ public class Field implements Serializable
      *
      * @return the height of the field
      */
-    public int getHeight(  )
+    public int getHeight( )
     {
         return _nHeight;
     }
 
     /**
      * set the height of the field
-     * @param height the height of the field
+     * 
+     * @param height
+     *            the height of the field
      */
     public void setHeight( int height )
     {
@@ -232,15 +249,16 @@ public class Field implements Serializable
      *
      * @return a list of Entry which is associate to the field
      */
-    public List<Entry> getConditionalQuestions(  )
+    public List<Entry> getConditionalQuestions( )
     {
         return _listConditionalQuestions;
     }
 
     /**
      * set a list of Entry which is associate to the field
-     * @param conditionalQuestions a list of Entry which is associate to the
-     *            field
+     * 
+     * @param conditionalQuestions
+     *            a list of Entry which is associate to the field
      */
     public void setConditionalQuestions( List<Entry> conditionalQuestions )
     {
@@ -251,14 +269,16 @@ public class Field implements Serializable
      *
      * @return true if the field is a default field of the entry
      */
-    public boolean isDefaultValue(  )
+    public boolean isDefaultValue( )
     {
         return _bDefaultValue;
     }
 
     /**
      * set true if the field is a default field of the entry
-     * @param defaultValue true if the field is a default field of the entry
+     * 
+     * @param defaultValue
+     *            true if the field is a default field of the entry
      */
     public void setDefaultValue( boolean defaultValue )
     {
@@ -269,14 +289,16 @@ public class Field implements Serializable
      *
      * @return the max size of enter user
      */
-    public int getMaxSizeEnter(  )
+    public int getMaxSizeEnter( )
     {
         return _nMaxSizeEnter;
     }
 
     /**
      * set the max size of enter user
-     * @param maxSizeEnter the max size of enter user
+     * 
+     * @param maxSizeEnter
+     *            the max size of enter user
      */
     public void setMaxSizeEnter( int maxSizeEnter )
     {
@@ -287,14 +309,16 @@ public class Field implements Serializable
      *
      * @return the value of type Date
      */
-    public Date getValueTypeDate(  )
+    public Date getValueTypeDate( )
     {
         return _tValueTypeDate;
     }
 
     /**
      * set the value of type Date
-     * @param defaultValueTypeDate the value of type Date
+     * 
+     * @param defaultValueTypeDate
+     *            the value of type Date
      */
     public void setValueTypeDate( Date defaultValueTypeDate )
     {
@@ -305,14 +329,16 @@ public class Field implements Serializable
      *
      * @return true if the title of field is not display
      */
-    public boolean isNoDisplayTitle(  )
+    public boolean isNoDisplayTitle( )
     {
         return _bNoDisplayTitle;
     }
 
     /**
      * set true if the title of field is not display
-     * @param bNoDisplayTitle true if the title of field is not display
+     * 
+     * @param bNoDisplayTitle
+     *            true if the title of field is not display
      */
     public void setNoDisplayTitle( boolean bNoDisplayTitle )
     {
@@ -321,17 +347,20 @@ public class Field implements Serializable
 
     /**
      * Gets the field role
+     * 
      * @return field role as a String
      *
      */
-    public String getRoleKey(  )
+    public String getRoleKey( )
     {
         return _strRoleKey;
     }
 
     /**
      * Sets the field's role
-     * @param strRole The role
+     * 
+     * @param strRole
+     *            The role
      *
      */
     public void setRoleKey( String strRole )
@@ -342,36 +371,40 @@ public class Field implements Serializable
     /**
      * @return the _strCode
      */
-    public String getCode(  )
+    public String getCode( )
     {
         return _strCode;
     }
 
     /**
-     * @param strCode the code to set
+     * @param strCode
+     *            the code to set
      */
     public void setCode( String strCode )
     {
         this._strCode = strCode;
     }
-    
+
     /**
      * Gets the field ImageType
+     * 
      * @return field ImageType as a String
      *
      */
-    public String getImageType(  )
+    public String getImageType( )
     {
         return _strImageType;
     }
 
     /**
      * Sets the field's ImageType
-     * @param ImageType The Image Type
+     * 
+     * @param ImageType
+     *            The Image Type
      *
      */
     public void setImageType( String strImageType )
     {
-    	_strImageType = strImageType;
+        _strImageType = strImageType;
     }
 }

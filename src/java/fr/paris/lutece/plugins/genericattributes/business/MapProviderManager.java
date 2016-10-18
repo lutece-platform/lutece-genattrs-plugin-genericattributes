@@ -40,7 +40,6 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
 
-
 /**
  * Manages all map providers.
  */
@@ -49,15 +48,16 @@ public final class MapProviderManager
     /**
      * MapProviderManager empty constructor
      */
-    private MapProviderManager(  )
+    private MapProviderManager( )
     {
     }
 
     /**
      * Gets the mapProvider for the provided key.
-     * @param strKey the key
-     * @return <code>null</code> if <code>strKey</code> is blank, the map
-     *         provider if found, <code>null</code> otherwise.
+     * 
+     * @param strKey
+     *            the key
+     * @return <code>null</code> if <code>strKey</code> is blank, the map provider if found, <code>null</code> otherwise.
      * @see StringUtils#isBlank(String)
      */
     public static IMapProvider getMapProvider( String strKey )
@@ -67,24 +67,25 @@ public final class MapProviderManager
             return null;
         }
 
-        for ( IMapProvider mapProvider : getMapProvidersList(  ) )
+        for ( IMapProvider mapProvider : getMapProvidersList( ) )
         {
-            if ( strKey.equals( mapProvider.getKey(  ) ) )
+            if ( strKey.equals( mapProvider.getKey( ) ) )
             {
                 return mapProvider;
             }
         }
 
-        AppLogService.info( MapProviderManager.class.getName(  ) + " : No map provider found for key " + strKey );
+        AppLogService.info( MapProviderManager.class.getName( ) + " : No map provider found for key " + strKey );
 
         return null;
     }
 
     /**
      * Builds all available providers list
+     * 
      * @return all available providers
      */
-    public static List<IMapProvider> getMapProvidersList(  )
+    public static List<IMapProvider> getMapProvidersList( )
     {
         return SpringContextService.getBeansOfType( IMapProvider.class );
     }

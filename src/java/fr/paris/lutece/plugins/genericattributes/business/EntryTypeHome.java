@@ -39,7 +39,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.util.List;
 
-
 /**
  *
  * class EntryTypeHome
@@ -54,44 +53,46 @@ public final class EntryTypeHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private EntryTypeHome(  )
+    private EntryTypeHome( )
     {
     }
 
     /**
      * Get the generic attributes plugin
+     * 
      * @return The generic attributes plugin
      */
-    private static Plugin getPlugin(  )
+    private static Plugin getPlugin( )
     {
         if ( _plugin == null )
         {
-            _plugin = GenericAttributesUtils.getPlugin(  );
+            _plugin = GenericAttributesUtils.getPlugin( );
         }
 
         return _plugin;
     }
 
     /**
-     * Returns an instance of a EntryType whose identifier is specified in
-     * parameter
+     * Returns an instance of a EntryType whose identifier is specified in parameter
      *
-     * @param nKey The entry type primary key
+     * @param nKey
+     *            The entry type primary key
      * @return an instance of EntryType
      */
     public static EntryType findByPrimaryKey( int nKey )
     {
-        return _dao.load( nKey, getPlugin(  ) );
+        return _dao.load( nKey, getPlugin( ) );
     }
 
     /**
-     * Load entry types associated with a given plugin and returns them in a
-     * list
-     * @param strPluginName The name of plugin to get entry types of
+     * Load entry types associated with a given plugin and returns them in a list
+     * 
+     * @param strPluginName
+     *            The name of plugin to get entry types of
      * @return the list of entry type associated with the plugin
      */
     public static List<EntryType> getList( String strPluginName )
     {
-        return _dao.select( strPluginName, getPlugin(  ) );
+        return _dao.select( strPluginName, getPlugin( ) );
     }
 }

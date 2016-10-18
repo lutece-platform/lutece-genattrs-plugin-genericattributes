@@ -51,7 +51,6 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * Abstract entry type for MyLutece users
  */
@@ -90,18 +89,18 @@ public abstract class AbstractEntryTypeMyLuteceUser extends EntryTypeService
         entry.setHelpMessage( EMPTY_STRING );
         entry.setComment( EMPTY_STRING );
 
-        if ( entry.getFields(  ) == null )
+        if ( entry.getFields( ) == null )
         {
-            ArrayList<Field> listFields = new ArrayList<Field>(  );
-            Field field = new Field(  );
+            ArrayList<Field> listFields = new ArrayList<Field>( );
+            Field field = new Field( );
             listFields.add( field );
             entry.setFields( listFields );
         }
 
         entry.setCode( strCode );
-        entry.getFields(  ).get( 0 ).setValue( EMPTY_STRING );
-        entry.getFields(  ).get( 0 ).setWidth( 50 );
-        entry.getFields(  ).get( 0 ).setMaxSizeEnter( 0 );
+        entry.getFields( ).get( 0 ).setValue( EMPTY_STRING );
+        entry.getFields( ).get( 0 ).setWidth( 50 );
+        entry.getFields( ).get( 0 ).setMaxSizeEnter( 0 );
 
         return null;
     }
@@ -119,41 +118,38 @@ public abstract class AbstractEntryTypeMyLuteceUser extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-        Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        LuteceUser user = SecurityService.getInstance(  ).getRegisteredUser( request );
+        LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
 
-        if ( SecurityService.isAuthenticationEnable(  ) &&
-                SecurityService.getInstance(  ).isExternalAuthentication(  ) )
+        if ( SecurityService.isAuthenticationEnable( ) && SecurityService.getInstance( ).isExternalAuthentication( ) )
         {
             if ( user == null )
             {
                 try
                 {
-                    user = SecurityService.getInstance(  ).getRemoteUser( request );
+                    user = SecurityService.getInstance( ).getRemoteUser( request );
                 }
-                catch ( UserNotSignedException e )
+                catch( UserNotSignedException e )
                 {
-                    AppLogService.error( e.getMessage(  ), e );
+                    AppLogService.error( e.getMessage( ), e );
                 }
             }
         }
 
         if ( user == null )
         {
-            GenericAttributeError error = new GenericAttributeError(  );
+            GenericAttributeError error = new GenericAttributeError( );
             error.setMandatoryError( false );
-            error.setTitleQuestion( entry.getTitle(  ) );
-            error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_MYLUTECE_AUTHENTIFICATION_REQUIRED,
-                    request.getLocale(  ) ) );
+            error.setTitleQuestion( entry.getTitle( ) );
+            error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_MYLUTECE_AUTHENTIFICATION_REQUIRED, request.getLocale( ) ) );
 
             return error;
         }
 
-        Response response = new Response(  );
+        Response response = new Response( );
         response.setEntry( entry );
-        response.setResponseValue( user.getName(  ) );
+        response.setResponseValue( user.getName( ) );
 
         listResponse.add( response );
 
@@ -166,7 +162,7 @@ public abstract class AbstractEntryTypeMyLuteceUser extends EntryTypeService
     @Override
     public String getResponseValueForExport( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getResponseValue(  );
+        return response.getResponseValue( );
     }
 
     /**

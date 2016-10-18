@@ -50,7 +50,6 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * Abstract entry type for selects
  */
@@ -64,8 +63,7 @@ public abstract class AbstractEntryTypeSelect extends EntryTypeService
     {
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
-        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
-            ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim(  ) : null;
+        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
         String strRoleAssociated = request.getParameter( PARAMETER_ROLE_ASSOCIATED );
@@ -81,10 +79,11 @@ public abstract class AbstractEntryTypeSelect extends EntryTypeService
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                I18nService.getLocalizedString( strFieldError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         // for don't update fields listFields=null
@@ -106,13 +105,12 @@ public abstract class AbstractEntryTypeSelect extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-        Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String strIdField = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry(  ) );
+        String strIdField = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
         int nIdField = -1;
         Field field = null;
-        Response response = new Response(  );
+        Response response = new Response( );
         response.setEntry( entry );
 
         if ( StringUtils.isNotEmpty( strIdField ) && StringUtils.isNumeric( strIdField ) )
@@ -122,20 +120,20 @@ public abstract class AbstractEntryTypeSelect extends EntryTypeService
 
         if ( nIdField != -1 )
         {
-            field = GenericAttributesUtils.findFieldByIdInTheList( nIdField, entry.getFields(  ) );
+            field = GenericAttributesUtils.findFieldByIdInTheList( nIdField, entry.getFields( ) );
         }
 
         if ( field != null )
         {
-            response.setResponseValue( field.getValue(  ) );
+            response.setResponseValue( field.getValue( ) );
             response.setField( field );
         }
 
         listResponse.add( response );
 
-        if ( entry.isMandatory(  ) )
+        if ( entry.isMandatory( ) )
         {
-            if ( ( field == null ) || StringUtils.isBlank( field.getValue(  ) ) )
+            if ( ( field == null ) || StringUtils.isBlank( field.getValue( ) ) )
             {
                 return new MandatoryError( entry, locale );
             }
@@ -150,7 +148,7 @@ public abstract class AbstractEntryTypeSelect extends EntryTypeService
     @Override
     public String getResponseValueForExport( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getResponseValue(  );
+        return response.getResponseValue( );
     }
 
     /**
@@ -159,11 +157,11 @@ public abstract class AbstractEntryTypeSelect extends EntryTypeService
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        if ( response.getField(  ) != null )
+        if ( response.getField( ) != null )
         {
-            return response.getField(  ).getTitle(  );
+            return response.getField( ).getTitle( );
         }
 
-        return response.getToStringValueResponse(  );
+        return response.getToStringValueResponse( );
     }
 }

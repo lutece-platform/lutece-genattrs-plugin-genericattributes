@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.file.FileHome;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFileHome;
 
-
 /**
  *
  * FileService
@@ -52,18 +51,20 @@ public class FileService
 
     /**
      * Returns an instance of a file whose identifier is specified in parameter
-     * @param nKey The file primary key
-     * @param bGetFileData True to get the physical file of the file, false
-     *            otherwise
+     * 
+     * @param nKey
+     *            The file primary key
+     * @param bGetFileData
+     *            True to get the physical file of the file, false otherwise
      * @return an instance of file
      */
     public File findByPrimaryKey( int nKey, boolean bGetFileData )
     {
         File file = FileHome.findByPrimaryKey( nKey );
 
-        if ( bGetFileData && ( file != null ) && ( file.getPhysicalFile(  ) != null ) )
+        if ( bGetFileData && ( file != null ) && ( file.getPhysicalFile( ) != null ) )
         {
-            file.setPhysicalFile( PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile(  ).getIdPhysicalFile(  ) ) );
+            file.setPhysicalFile( PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile( ).getIdPhysicalFile( ) ) );
         }
 
         return file;

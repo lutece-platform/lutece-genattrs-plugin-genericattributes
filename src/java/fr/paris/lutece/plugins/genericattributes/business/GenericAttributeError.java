@@ -37,7 +37,6 @@ import fr.paris.lutece.util.ErrorMessage;
 
 import java.io.Serializable;
 
-
 /**
  * class GenericAttributeError
  */
@@ -52,16 +51,19 @@ public class GenericAttributeError implements Serializable, ErrorMessage
 
     /**
      * return true if the error is a mandatory error
+     * 
      * @return true if the error is a mandatory error
      */
-    public boolean isMandatoryError(  )
+    public boolean isMandatoryError( )
     {
         return _bMandatoryError;
     }
 
     /**
      * set true if the error is a mandatory error
-     * @param mandatoryError true if the error is a mandatory error
+     * 
+     * @param mandatoryError
+     *            true if the error is a mandatory error
      */
     public void setMandatoryError( boolean mandatoryError )
     {
@@ -70,16 +72,19 @@ public class GenericAttributeError implements Serializable, ErrorMessage
 
     /**
      * Gets the error Message
+     * 
      * @return the error Message
      */
-    public String getErrorMessage(  )
+    public String getErrorMessage( )
     {
         return _strErrorMessage;
     }
 
     /**
      * set the error message
-     * @param errorMessage the error message
+     * 
+     * @param errorMessage
+     *            the error message
      */
     public void setErrorMessage( String errorMessage )
     {
@@ -90,14 +95,16 @@ public class GenericAttributeError implements Serializable, ErrorMessage
      *
      * @return the title of the mandatory question
      */
-    public String getTitleQuestion(  )
+    public String getTitleQuestion( )
     {
         return _strTitleQuestion;
     }
 
     /**
      * set the title of the mandatory question
-     * @param titleMandatoryQuestion the title of the mandatory question
+     * 
+     * @param titleMandatoryQuestion
+     *            the title of the mandatory question
      */
     public void setTitleQuestion( String titleMandatoryQuestion )
     {
@@ -105,7 +112,8 @@ public class GenericAttributeError implements Serializable, ErrorMessage
     }
 
     /**
-     * @param strUrl the _strUrl to set
+     * @param strUrl
+     *            the _strUrl to set
      */
     public void setUrl( String strUrl )
     {
@@ -115,7 +123,7 @@ public class GenericAttributeError implements Serializable, ErrorMessage
     /**
      * @return the _strUrl
      */
-    public String getUrl(  )
+    public String getUrl( )
     {
         return _strUrl;
     }
@@ -124,26 +132,26 @@ public class GenericAttributeError implements Serializable, ErrorMessage
      * {@inheritDoc}
      */
     @Override
-    public String getMessage(  )
+    public String getMessage( )
     {
-        return getErrorMessage(  );
+        return getErrorMessage( );
     }
 
     /**
-     * Check if the error is a displayable error. Non displayable errors should
-     * not be displayed in any manners to users.
+     * Check if the error is a displayable error. Non displayable errors should not be displayed in any manners to users.
+     * 
      * @return True if the error is a displayable error, false otherwise
      */
-    public boolean getIsDisplayableError(  )
+    public boolean getIsDisplayableError( )
     {
         return _bDisplayableError;
     }
 
     /**
-     * Set the error as displayable or not. Non displayable errors should
-     * not be displayed in any manners to users.
-     * @param bDisplayableError True if the error is a displayable error, false
-     *            otherwise
+     * Set the error as displayable or not. Non displayable errors should not be displayed in any manners to users.
+     * 
+     * @param bDisplayableError
+     *            True if the error is a displayable error, false otherwise
      */
     public void setIsDisplayableError( boolean bDisplayableError )
     {

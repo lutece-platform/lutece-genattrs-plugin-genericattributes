@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
 
-
 /**
  *
  * interface IResponseDAO
@@ -47,56 +46,78 @@ public interface IResponseDAO
 {
     /**
      * Insert a new record in the table.
-     * @param response instance of the Response object to insert
-     * @param plugin the plugin
+     * 
+     * @param response
+     *            instance of the Response object to insert
+     * @param plugin
+     *            the plugin
      */
     void insert( Response response, Plugin plugin );
 
     /**
      * Load the data of the response from the table
-     * @param nIdResponse The identifier of the entry
-     * @param plugin the plugin
+     * 
+     * @param nIdResponse
+     *            The identifier of the entry
+     * @param plugin
+     *            the plugin
      * @return the instance of the Entry
      */
     Response load( int nIdResponse, Plugin plugin );
 
     /**
      * Delete a response from its id
-     * @param nIdResponse The identifier of the response
-     * @param plugin the plugin
+     * 
+     * @param nIdResponse
+     *            The identifier of the response
+     * @param plugin
+     *            the plugin
      */
     void delete( int nIdResponse, Plugin plugin );
 
     /**
      * Update the the response in the table
-     * @param response instance of the response object to update
-     * @param plugin the plugin
+     * 
+     * @param response
+     *            instance of the response object to update
+     * @param plugin
+     *            the plugin
      */
     void store( Response response, Plugin plugin );
 
     /**
-     * Load the data of all the response who verify the filter and returns them
-     * in a list
-     * @param filter the filter
-     * @param plugin the plugin
+     * Load the data of all the response who verify the filter and returns them in a list
+     * 
+     * @param filter
+     *            the filter
+     * @param plugin
+     *            the plugin
      * @return the list of response
      */
     List<Response> selectListByFilter( ResponseFilter filter, Plugin plugin );
 
     /**
      * return a list of statistic on the entry
-     * @param nIdEntry the id of the entry
-     * @param plugin the plugin
+     * 
+     * @param nIdEntry
+     *            the id of the entry
+     * @param plugin
+     *            the plugin
      * @return return a list of statistic on the entry
      */
     List<StatisticEntrySubmit> getStatisticByIdEntry( int nIdEntry, Plugin plugin );
 
     /**
      * Get the max number from a given id resource
-     * @param nIdEntry the id of the entry
-     * @param nIdResource the id resource
-     * @param strResourceType The resource type
-     * @param plugin {@link Plugin}
+     * 
+     * @param nIdEntry
+     *            the id of the entry
+     * @param nIdResource
+     *            the id resource
+     * @param strResourceType
+     *            The resource type
+     * @param plugin
+     *            {@link Plugin}
      * @return the max number
      */
     int getMaxNumber( int nIdEntry, int nIdResource, String strResourceType, Plugin plugin );

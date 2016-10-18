@@ -44,10 +44,8 @@ import fr.paris.lutece.util.sql.TransactionManager;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- * This class provides instances management methods (create, find, ...) for
- * Field objects
+ * This class provides instances management methods (create, find, ...) for Field objects
  */
 public final class FieldHome
 {
@@ -58,76 +56,82 @@ public final class FieldHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private FieldHome(  )
+    private FieldHome( )
     {
     }
 
     /**
      * Creation of an instance of field
-     * @param field The instance of the Field which contains the informations to
-     *            store
+     * 
+     * @param field
+     *            The instance of the Field which contains the informations to store
      * @return The primary key of the new Field.
      */
     public static int create( Field field )
     {
-        return _dao.insert( field, getPlugin(  ) );
+        return _dao.insert( field, getPlugin( ) );
     }
 
     /**
      * Copy of an instance of field
-     * @param field The instance of the Field who must copy
+     * 
+     * @param field
+     *            The instance of the Field who must copy
      */
     public static void copy( Field field )
     {
         Field fieldCopy = field;
 
-        TransactionManager.beginTransaction( getPlugin(  ) );
+        TransactionManager.beginTransaction( getPlugin( ) );
 
         try
         {
             fieldCopy.setIdField( create( field ) );
 
-            for ( Entry entry : field.getConditionalQuestions(  ) )
+            for ( Entry entry : field.getConditionalQuestions( ) )
             {
                 entry.setFieldDepend( fieldCopy );
                 EntryHome.copy( entry );
             }
 
-            for ( RegularExpression regularExpression : field.getRegularExpressionList(  ) )
+            for ( RegularExpression regularExpression : field.getRegularExpressionList( ) )
             {
-                createVerifyBy( fieldCopy.getIdField(  ), regularExpression.getIdExpression(  ) );
+                createVerifyBy( fieldCopy.getIdField( ), regularExpression.getIdExpression( ) );
             }
 
-            TransactionManager.commitTransaction( getPlugin(  ) );
+            TransactionManager.commitTransaction( getPlugin( ) );
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
-            TransactionManager.rollBack( getPlugin(  ) );
-            throw new AppException( e.getMessage(  ), e );
+            TransactionManager.rollBack( getPlugin( ) );
+            throw new AppException( e.getMessage( ), e );
         }
     }
 
     /**
      * Update of the field which is specified in parameter
-     * @param field The instance of the Field which contains the informations to
-     *            update
+     * 
+     * @param field
+     *            The instance of the Field which contains the informations to update
      */
     public static void update( Field field )
     {
-        _dao.store( field, getPlugin(  ) );
+        _dao.store( field, getPlugin( ) );
     }
 
     /**
      * Remove the field whose identifier is specified in parameter
-     * @param nIdField The field Id
+     * 
+     * @param nIdField
+     *            The field Id
      */
     public static void remove( int nIdField )
     {
         Field field = findByPrimaryKey( nIdField );
 
-        for ( Entry entry : field.getConditionalQuestions(  ) )
+        for ( Entry entry : field.getConditionalQuestions( ) )
         {
-            EntryHome.remove( entry.getIdEntry(  ) );
+            EntryHome.remove( entry.getIdEntry( ) );
         }
 
         List<Integer> listRegularExpressionKeyEntry = getListRegularExpressionKeyByIdField( nIdField );
@@ -137,41 +141,42 @@ public final class FieldHome
             removeVerifyBy( nIdField, regularExpressionKey );
         }
 
-        _dao.delete( nIdField, getPlugin(  ) );
+        _dao.delete( nIdField, getPlugin( ) );
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
      * Returns an instance of a Field whose identifier is specified in parameter
-     * @param nKey The field primary key
+     * 
+     * @param nKey
+     *            The field primary key
      * @return an instance of Field
      */
     public static Field findByPrimaryKey( int nKey )
     {
-        Field field = _dao.load( nKey, getPlugin(  ) );
+        Field field = _dao.load( nKey, getPlugin( ) );
 
         if ( field != null )
         {
-            EntryFilter filter = new EntryFilter(  );
+            EntryFilter filter = new EntryFilter( );
             filter.setIdFieldDepend( nKey );
             field.setConditionalQuestions( EntryHome.getEntryList( filter ) );
 
-            List<RegularExpression> listRegularExpression = new ArrayList<RegularExpression>(  );
+            List<RegularExpression> listRegularExpression = new ArrayList<RegularExpression>( );
 
-            if ( RegularExpressionService.getInstance(  ).isAvailable(  ) )
+            if ( RegularExpressionService.getInstance( ).isAvailable( ) )
             {
                 List<Integer> listRegularExpressionKeyEntry = getListRegularExpressionKeyByIdField( nKey );
 
-                if ( ( listRegularExpressionKeyEntry != null ) && ( listRegularExpressionKeyEntry.size(  ) != 0 ) )
+                if ( ( listRegularExpressionKeyEntry != null ) && ( listRegularExpressionKeyEntry.size( ) != 0 ) )
                 {
                     RegularExpression regularExpression = null;
 
                     for ( Integer regularExpressionKey : listRegularExpressionKeyEntry )
                     {
-                        regularExpression = RegularExpressionService.getInstance(  )
-                                                                    .getRegularExpressionByKey( regularExpressionKey );
+                        regularExpression = RegularExpressionService.getInstance( ).getRegularExpressionByKey( regularExpressionKey );
 
                         if ( regularExpression != null )
                         {
@@ -189,64 +194,76 @@ public final class FieldHome
 
     /**
      * Load the data of all the field of the entry and returns them in a list
-     * @param nIdEntry the id of the entry
+     * 
+     * @param nIdEntry
+     *            the id of the entry
      * @return the list of field
      */
     public static List<Field> getFieldListByIdEntry( int nIdEntry )
     {
-        return _dao.selectFieldListByIdEntry( nIdEntry, getPlugin(  ) );
+        return _dao.selectFieldListByIdEntry( nIdEntry, getPlugin( ) );
     }
 
     /**
      * Delete an association between field and a regular expression
-     * @param nIdField The identifier of the field
-     * @param nIdExpression The identifier of the regular expression
+     * 
+     * @param nIdField
+     *            The identifier of the field
+     * @param nIdExpression
+     *            The identifier of the regular expression
      */
     public static void removeVerifyBy( int nIdField, int nIdExpression )
     {
-        _dao.deleteVerifyBy( nIdField, nIdExpression, getPlugin(  ) );
+        _dao.deleteVerifyBy( nIdField, nIdExpression, getPlugin( ) );
     }
 
     /**
      * Insert an association between field and a regular expression
-     * @param nIdField The identifier of the field
-     * @param nIdExpression The identifier of the regular expression
+     * 
+     * @param nIdField
+     *            The identifier of the field
+     * @param nIdExpression
+     *            The identifier of the regular expression
      */
     public static void createVerifyBy( int nIdField, int nIdExpression )
     {
-        _dao.insertVerifyBy( nIdField, nIdExpression, getPlugin(  ) );
+        _dao.insertVerifyBy( nIdField, nIdExpression, getPlugin( ) );
     }
 
     /**
-     * Load the key of all the regularExpression associate to the field and
-     * returns them in a list
-     * @param nIdField the id of the field
+     * Load the key of all the regularExpression associate to the field and returns them in a list
+     * 
+     * @param nIdField
+     *            the id of the field
      * @return the list of regular expression key
      */
     public static List<Integer> getListRegularExpressionKeyByIdField( int nIdField )
     {
-        return _dao.selectListRegularExpressionKeyByIdField( nIdField, getPlugin(  ) );
+        return _dao.selectListRegularExpressionKeyByIdField( nIdField, getPlugin( ) );
     }
 
     /**
      * Verify if the regular expression is use
-     * @param nIdExpression The identifier of the regular expression
+     * 
+     * @param nIdExpression
+     *            The identifier of the regular expression
      * @return true if the regular expression is use
      */
     public static boolean isRegularExpressionIsUse( int nIdExpression )
     {
-        return _dao.isRegularExpressionIsUse( nIdExpression, getPlugin(  ) );
+        return _dao.isRegularExpressionIsUse( nIdExpression, getPlugin( ) );
     }
 
     /**
      * Get the generic attributes plugin
+     * 
      * @return The generic attributes plugin
      */
-    private static Plugin getPlugin(  )
+    private static Plugin getPlugin( )
     {
         if ( _plugin == null )
         {
-            _plugin = GenericAttributesUtils.getPlugin(  );
+            _plugin = GenericAttributesUtils.getPlugin( );
         }
 
         return _plugin;

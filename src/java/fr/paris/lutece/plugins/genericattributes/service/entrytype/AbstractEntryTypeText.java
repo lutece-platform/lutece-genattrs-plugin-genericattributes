@@ -55,7 +55,6 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * Abstract entry type for text
  */
@@ -69,8 +68,7 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
     {
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         String strTitle = request.getParameter( PARAMETER_TITLE );
-        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
-            ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim(  ) : null;
+        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strValue = request.getParameter( PARAMETER_VALUE );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
@@ -93,10 +91,11 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
             strFieldError = FIELD_TITLE;
         }
 
-        else if ( StringUtils.isBlank( strWidth ) )
-        {
-            strFieldError = FIELD_WIDTH;
-        }
+        else
+            if ( StringUtils.isBlank( strWidth ) )
+            {
+                strFieldError = FIELD_WIDTH;
+            }
 
         if ( ( strConfirmField != null ) && StringUtils.isBlank( strConfirmFieldTitle ) )
         {
@@ -105,17 +104,18 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                I18nService.getLocalizedString( strFieldError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         try
         {
             nWidth = Integer.parseInt( strWidth );
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             strFieldError = FIELD_WIDTH;
         }
@@ -127,17 +127,18 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
                 nMaxSizeEnter = Integer.parseInt( strMaxSizeEnter );
             }
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             strFieldError = FIELD_MAX_SIZE_ENTER;
         }
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                I18nService.getLocalizedString( strFieldError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         entry.setTitle( strTitle );
@@ -146,19 +147,19 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         entry.setCSSClass( strCSSClass );
         entry.setErrorMessage( strErrorMessage );
 
-        if ( entry.getFields(  ) == null )
+        if ( entry.getFields( ) == null )
         {
-            ArrayList<Field> listFields = new ArrayList<Field>(  );
-            Field field = new Field(  );
+            ArrayList<Field> listFields = new ArrayList<Field>( );
+            Field field = new Field( );
             listFields.add( field );
             entry.setFields( listFields );
         }
 
         entry.setCode( strCode );
-        entry.getFields(  ).get( 0 ).setCode( strCode );
-        entry.getFields(  ).get( 0 ).setValue( strValue );
-        entry.getFields(  ).get( 0 ).setWidth( nWidth );
-        entry.getFields(  ).get( 0 ).setMaxSizeEnter( nMaxSizeEnter );
+        entry.getFields( ).get( 0 ).setCode( strCode );
+        entry.getFields( ).get( 0 ).setValue( strValue );
+        entry.getFields( ).get( 0 ).setWidth( nWidth );
+        entry.getFields( ).get( 0 ).setMaxSizeEnter( nMaxSizeEnter );
 
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
@@ -194,19 +195,17 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
     {
         ReferenceList refListRegularExpression = null;
 
-        if ( RegularExpressionService.getInstance(  ).isAvailable(  ) )
+        if ( RegularExpressionService.getInstance( ).isAvailable( ) )
         {
-            refListRegularExpression = new ReferenceList(  );
+            refListRegularExpression = new ReferenceList( );
 
-            List<RegularExpression> listRegularExpression = RegularExpressionService.getInstance(  )
-                                                                                    .getAllRegularExpression(  );
+            List<RegularExpression> listRegularExpression = RegularExpressionService.getInstance( ).getAllRegularExpression( );
 
             for ( RegularExpression regularExpression : listRegularExpression )
             {
-                if ( !entry.getFields(  ).get( 0 ).getRegularExpressionList(  ).contains( regularExpression ) )
+                if ( !entry.getFields( ).get( 0 ).getRegularExpressionList( ).contains( regularExpression ) )
                 {
-                    refListRegularExpression.addItem( regularExpression.getIdExpression(  ),
-                        regularExpression.getTitle(  ) );
+                    refListRegularExpression.addItem( regularExpression.getIdExpression( ), regularExpression.getTitle( ) );
                 }
             }
         }
@@ -218,28 +217,26 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-        Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String strValueEntry = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry(  ) ).trim(  );
-        boolean bConfirmField = entry.isConfirmField(  );
+        String strValueEntry = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ).trim( );
+        boolean bConfirmField = entry.isConfirmField( );
         String strValueEntryConfirmField = null;
 
         if ( bConfirmField )
         {
-            strValueEntryConfirmField = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry(  ) +
-                    SUFFIX_CONFIRM_FIELD ).trim(  );
+            strValueEntryConfirmField = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) + SUFFIX_CONFIRM_FIELD ).trim( );
         }
 
-        List<RegularExpression> listRegularExpression = entry.getFields(  ).get( 0 ).getRegularExpressionList(  );
-        Response response = new Response(  );
+        List<RegularExpression> listRegularExpression = entry.getFields( ).get( 0 ).getRegularExpressionList( );
+        Response response = new Response( );
         response.setEntry( entry );
 
         if ( strValueEntry != null )
         {
             response.setResponseValue( strValueEntry );
 
-            if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) )
+            if ( StringUtils.isNotBlank( response.getResponseValue( ) ) )
             {
                 response.setToStringValueResponse( getResponseValueForRecap( entry, request, response, locale ) );
             }
@@ -253,23 +250,23 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
             // Checks if the entry value contains XSS characters
             if ( StringUtil.containsXssCharacters( strValueEntry ) )
             {
-                GenericAttributeError error = new GenericAttributeError(  );
+                GenericAttributeError error = new GenericAttributeError( );
                 error.setMandatoryError( false );
-                error.setTitleQuestion( entry.getTitle(  ) );
-                error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_XSS_FIELD, request.getLocale(  ) ) );
+                error.setTitleQuestion( entry.getTitle( ) );
+                error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_XSS_FIELD, request.getLocale( ) ) );
 
                 return error;
             }
 
-            if ( entry.isMandatory(  ) )
+            if ( entry.isMandatory( ) )
             {
                 if ( StringUtils.isBlank( strValueEntry ) )
                 {
-                    if ( StringUtils.isNotEmpty( entry.getErrorMessage(  ) ) )
+                    if ( StringUtils.isNotEmpty( entry.getErrorMessage( ) ) )
                     {
-                        GenericAttributeError error = new GenericAttributeError(  );
+                        GenericAttributeError error = new GenericAttributeError( );
                         error.setMandatoryError( true );
-                        error.setErrorMessage( entry.getErrorMessage(  ) );
+                        error.setErrorMessage( entry.getErrorMessage( ) );
 
                         return error;
                     }
@@ -278,32 +275,31 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
                 }
             }
 
-            if ( ( !strValueEntry.equals( StringUtils.EMPTY ) ) && ( listRegularExpression != null ) &&
-                    ( listRegularExpression.size(  ) != 0 ) &&
-                    RegularExpressionService.getInstance(  ).isAvailable(  ) )
+            if ( ( !strValueEntry.equals( StringUtils.EMPTY ) ) && ( listRegularExpression != null ) && ( listRegularExpression.size( ) != 0 )
+                    && RegularExpressionService.getInstance( ).isAvailable( ) )
             {
                 for ( RegularExpression regularExpression : listRegularExpression )
                 {
-                    if ( !RegularExpressionService.getInstance(  ).isMatches( strValueEntry, regularExpression ) )
+                    if ( !RegularExpressionService.getInstance( ).isMatches( strValueEntry, regularExpression ) )
                     {
-                        GenericAttributeError error = new GenericAttributeError(  );
+                        GenericAttributeError error = new GenericAttributeError( );
                         error.setMandatoryError( false );
-                        error.setTitleQuestion( entry.getTitle(  ) );
-                        error.setErrorMessage( regularExpression.getErrorMessage(  ) );
+                        error.setTitleQuestion( entry.getTitle( ) );
+                        error.setErrorMessage( regularExpression.getErrorMessage( ) );
 
                         return error;
                     }
                 }
             }
 
-            if ( bConfirmField &&
-                    ( ( strValueEntryConfirmField == null ) || !strValueEntry.equals( strValueEntryConfirmField ) ) )
+            if ( bConfirmField && ( ( strValueEntryConfirmField == null ) || !strValueEntry.equals( strValueEntryConfirmField ) ) )
             {
-                GenericAttributeError error = new GenericAttributeError(  );
+                GenericAttributeError error = new GenericAttributeError( );
                 error.setMandatoryError( false );
-                error.setTitleQuestion( entry.getConfirmFieldTitle(  ) );
-                error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_CONFIRM_FIELD,
-                        new String[] { entry.getTitle(  ) }, request.getLocale(  ) ) );
+                error.setTitleQuestion( entry.getConfirmFieldTitle( ) );
+                error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_CONFIRM_FIELD, new String [ ] {
+                    entry.getTitle( )
+                }, request.getLocale( ) ) );
 
                 return error;
             }
@@ -318,7 +314,7 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
     @Override
     public String getResponseValueForExport( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getResponseValue(  );
+        return response.getResponseValue( );
     }
 
     /**
@@ -327,6 +323,6 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getResponseValue(  );
+        return response.getResponseValue( );
     }
 }

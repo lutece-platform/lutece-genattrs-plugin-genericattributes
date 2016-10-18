@@ -51,7 +51,6 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * Abstract entry type for incremental fields
  */
@@ -79,25 +78,26 @@ public abstract class AbstractEntryTypeNumbering extends EntryTypeService
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                I18nService.getLocalizedString( strFieldError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         entry.setCode( strCode );
         entry.setTitle( strTitle );
 
-        if ( entry.getFields(  ) == null )
+        if ( entry.getFields( ) == null )
         {
-            List<Field> listFields = new ArrayList<Field>(  );
-            Field field = new Field(  );
+            List<Field> listFields = new ArrayList<Field>( );
+            Field field = new Field( );
             listFields.add( field );
             entry.setFields( listFields );
         }
 
-        entry.getFields(  ).get( 0 ).setCode( strCode );
-        entry.getFields(  ).get( 0 ).setTitle( StringUtils.isNotEmpty( strPrefix ) ? strPrefix : StringUtils.EMPTY );
+        entry.getFields( ).get( 0 ).setCode( strCode );
+        entry.getFields( ).get( 0 ).setTitle( StringUtils.isNotEmpty( strPrefix ) ? strPrefix : StringUtils.EMPTY );
 
         return null;
     }
@@ -106,12 +106,10 @@ public abstract class AbstractEntryTypeNumbering extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-        Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        int numbering = ResponseHome.findMaxNumber( entry.getIdEntry(  ), entry.getIdResource(  ),
-                entry.getResourceType(  ) );
-        Response response = new Response(  );
+        int numbering = ResponseHome.findMaxNumber( entry.getIdEntry( ), entry.getIdResource( ), entry.getResourceType( ) );
+        Response response = new Response( );
         response.setEntry( entry );
         response.setResponseValue( String.valueOf( numbering ) );
         listResponse.add( response );
@@ -139,29 +137,32 @@ public abstract class AbstractEntryTypeNumbering extends EntryTypeService
 
     /**
      * Get the response value
-     * @param entry The entry
+     * 
+     * @param entry
+     *            The entry
      * @return the response value of the response for this entry
-     * @param response The response
+     * @param response
+     *            The response
      */
     private String getResponseValue( Entry entry, Response response )
     {
         Field field = null;
 
-        if ( entry.getFields(  ) == null )
+        if ( entry.getFields( ) == null )
         {
-            entry.setFields( FieldHome.getFieldListByIdEntry( entry.getIdEntry(  ) ) );
+            entry.setFields( FieldHome.getFieldListByIdEntry( entry.getIdEntry( ) ) );
         }
 
-        if ( ( entry.getFields(  ) != null ) && !entry.getFields(  ).isEmpty(  ) )
+        if ( ( entry.getFields( ) != null ) && !entry.getFields( ).isEmpty( ) )
         {
-            field = entry.getFields(  ).get( 0 );
+            field = entry.getFields( ).get( 0 );
         }
 
-        if ( ( field != null ) && StringUtils.isNotBlank( field.getTitle(  ) ) )
+        if ( ( field != null ) && StringUtils.isNotBlank( field.getTitle( ) ) )
         {
-            return field.getTitle(  ) + response.getResponseValue(  );
+            return field.getTitle( ) + response.getResponseValue( );
         }
 
-        return response.getResponseValue(  );
+        return response.getResponseValue( );
     }
 }

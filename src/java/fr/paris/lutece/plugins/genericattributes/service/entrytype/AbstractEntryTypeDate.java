@@ -53,7 +53,6 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * Abstract entry type for dates
  */
@@ -69,8 +68,7 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
     {
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
-        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
-            ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim(  ) : null;
+        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strValue = request.getParameter( PARAMETER_VALUE );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
@@ -86,10 +84,11 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                I18nService.getLocalizedString( strFieldError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         Date dDateValue = null;
@@ -110,15 +109,15 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
         entry.setComment( strComment );
         entry.setCSSClass( strCSSClass );
 
-        if ( entry.getFields(  ) == null )
+        if ( entry.getFields( ) == null )
         {
-            ArrayList<Field> listFields = new ArrayList<Field>(  );
-            Field field = new Field(  );
+            ArrayList<Field> listFields = new ArrayList<Field>( );
+            Field field = new Field( );
             listFields.add( field );
             entry.setFields( listFields );
         }
 
-        entry.getFields(  ).get( 0 ).setValueTypeDate( dDateValue );
+        entry.getFields( ).get( 0 ).setValueTypeDate( dDateValue );
 
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
@@ -130,11 +129,10 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-        Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String strValueEntry = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry(  ) ).trim(  );
-        Response response = new Response(  );
+        String strValueEntry = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ).trim( );
+        Response response = new Response( );
         response.setEntry( entry );
 
         if ( strValueEntry != null )
@@ -150,9 +148,9 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
                 response.setResponseValue( strValueEntry );
             }
 
-            if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) )
+            if ( StringUtils.isNotBlank( response.getResponseValue( ) ) )
             {
-                Date date = DateUtil.formatDate( response.getResponseValue(  ), request.getLocale(  ) );
+                Date date = DateUtil.formatDate( response.getResponseValue( ), request.getLocale( ) );
 
                 if ( date != null )
                 {
@@ -173,15 +171,15 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
             // Checks if the entry value contains XSS characters
             if ( StringUtil.containsXssCharacters( strValueEntry ) )
             {
-                GenericAttributeError error = new GenericAttributeError(  );
+                GenericAttributeError error = new GenericAttributeError( );
                 error.setMandatoryError( false );
-                error.setTitleQuestion( entry.getTitle(  ) );
-                error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_XSS_FIELD, request.getLocale(  ) ) );
+                error.setTitleQuestion( entry.getTitle( ) );
+                error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_XSS_FIELD, request.getLocale( ) ) );
 
                 return error;
             }
 
-            if ( entry.isMandatory(  ) )
+            if ( entry.isMandatory( ) )
             {
                 if ( StringUtils.isBlank( strValueEntry ) )
                 {
@@ -192,8 +190,8 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
             if ( StringUtils.isNotBlank( strValueEntry ) && ( tDateValue == null ) )
             {
                 String strError = I18nService.getLocalizedString( MESSAGE_ILLOGICAL_DATE, locale );
-                GenericAttributeError error = new GenericAttributeError(  );
-                error.setTitleQuestion( entry.getTitle(  ) );
+                GenericAttributeError error = new GenericAttributeError( );
+                error.setTitleQuestion( entry.getTitle( ) );
                 error.setMandatoryError( false );
                 error.setErrorMessage( strError );
 
@@ -210,7 +208,7 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
     @Override
     public String getResponseValueForExport( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getResponseValue(  );
+        return response.getResponseValue( );
     }
 
     /**
@@ -219,7 +217,7 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getResponseValue(  );
+        return response.getResponseValue( );
     }
 
     /**
@@ -228,9 +226,9 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
     @Override
     public void setResponseToStringValue( Entry entry, Response response, Locale locale )
     {
-        if ( StringUtils.isNotBlank( response.getResponseValue(  ) ) )
+        if ( StringUtils.isNotBlank( response.getResponseValue( ) ) )
         {
-            response.setToStringValueResponse( response.getResponseValue(  ) );
+            response.setToStringValueResponse( response.getResponseValue( ) );
         }
     }
 }

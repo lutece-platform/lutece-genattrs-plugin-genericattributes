@@ -42,7 +42,6 @@ import java.sql.Timestamp;
 
 import java.util.List;
 
-
 /**
  *
  * class ResponseFilter
@@ -64,16 +63,19 @@ public class ResponseFilter
 
     /**
      * Get the id of a resource in the filter
+     * 
      * @return The id of the resource to insert in the filter
      */
-    public int getIdResource(  )
+    public int getIdResource( )
     {
         return _nIdResource;
     }
 
     /**
      * Set the id of a resource in the filter
-     * @param nIdResource the id of resource to insert in the filter
+     * 
+     * @param nIdResource
+     *            the id of resource to insert in the filter
      */
     public void setIdResource( int nIdResource )
     {
@@ -84,7 +86,7 @@ public class ResponseFilter
      *
      * @return true if the filter contain an id of a resource
      */
-    public boolean containsIdResource(  )
+    public boolean containsIdResource( )
     {
         return ( _nIdResource != GenericAttributesUtils.CONSTANT_ID_NULL );
     }
@@ -93,14 +95,16 @@ public class ResponseFilter
      *
      * @return the id of field insert in the filter
      */
-    public int getIdField(  )
+    public int getIdField( )
     {
         return _nIdField;
     }
 
     /**
      * set the id of field depend in the filter
-     * @param idField the id of field depend to insert in the filter
+     * 
+     * @param idField
+     *            the id of field depend to insert in the filter
      */
     public void setIdField( int idField )
     {
@@ -111,7 +115,7 @@ public class ResponseFilter
      *
      * @return true if the filter contain an id of field depend
      */
-    public boolean containsIdField(  )
+    public boolean containsIdField( )
     {
         return ( _nIdField != GenericAttributesUtils.CONSTANT_ID_NULL );
     }
@@ -120,14 +124,16 @@ public class ResponseFilter
      *
      * @return the id of entry insert in the filter
      */
-    public int getIdEntry(  )
+    public int getIdEntry( )
     {
         return _nIdEntry;
     }
 
     /**
      * set the id of entry depend in the filter
-     * @param idEntry the id of entry depend to insert in the filter
+     * 
+     * @param idEntry
+     *            the id of entry depend to insert in the filter
      */
     public void setIdEntry( int idEntry )
     {
@@ -138,7 +144,7 @@ public class ResponseFilter
      *
      * @return true if the filter contain an id of entry depend
      */
-    public boolean containsIdEntry(  )
+    public boolean containsIdEntry( )
     {
         return ( _nIdEntry != GenericAttributesUtils.CONSTANT_ID_NULL );
     }
@@ -147,14 +153,16 @@ public class ResponseFilter
      *
      * @return date of the first submit
      */
-    public Timestamp getDateFirst(  )
+    public Timestamp getDateFirst( )
     {
         return _tDateFirst;
     }
 
     /**
      * set the date of the first submit
-     * @param begin date of the first submit
+     * 
+     * @param begin
+     *            date of the first submit
      */
     public void setDateFirst( Timestamp begin )
     {
@@ -165,7 +173,7 @@ public class ResponseFilter
      *
      * @return true if the filter contain the date of the first submit
      */
-    public boolean containsDateFirst(  )
+    public boolean containsDateFirst( )
     {
         return ( _tDateFirst != null );
     }
@@ -174,14 +182,16 @@ public class ResponseFilter
      *
      * @return date of the last submit
      */
-    public Timestamp getDateLast(  )
+    public Timestamp getDateLast( )
     {
         return _tDateLast;
     }
 
     /**
      * set the date of the last submit
-     * @param end the date of the last submit
+     * 
+     * @param end
+     *            the date of the last submit
      */
     public void setDateLast( Timestamp end )
     {
@@ -192,7 +202,7 @@ public class ResponseFilter
      *
      * @return true if the filter contain the date of the last submit
      */
-    public boolean containsDateLast(  )
+    public boolean containsDateLast( )
     {
         return ( _tDateLast != null );
     }
@@ -201,14 +211,16 @@ public class ResponseFilter
      *
      * @return true if the response must be group by day
      */
-    public boolean isGroupbyDay(  )
+    public boolean isGroupbyDay( )
     {
         return _bGroupbyDay;
     }
 
     /**
      * set true if the response must be group by day
-     * @param groupbyDay true if the response must be group by day
+     * 
+     * @param groupbyDay
+     *            true if the response must be group by day
      */
     public void setGroupbyDay( boolean groupbyDay )
     {
@@ -217,16 +229,19 @@ public class ResponseFilter
 
     /**
      * true if the response must be group by month
+     * 
      * @return true if the response must be group by month
      */
-    public boolean isGroupbyMonth(  )
+    public boolean isGroupbyMonth( )
     {
         return _bGroupbyMonth;
     }
 
     /**
      * set true if the response must be group by month
-     * @param groupbyMonth true if the response must be group by month
+     * 
+     * @param groupbyMonth
+     *            true if the response must be group by month
      */
     public void setGroupbyMonth( boolean groupbyMonth )
     {
@@ -235,16 +250,19 @@ public class ResponseFilter
 
     /**
      * true if the response must be group by week
+     * 
      * @return true if the response must be group by week
      */
-    public boolean isGroupbyWeek(  )
+    public boolean isGroupbyWeek( )
     {
         return _bGroupbyWeek;
     }
 
     /**
      * set true if the response must be group by week
-     * @param groupbyWeek true if the response must be group by week
+     * 
+     * @param groupbyWeek
+     *            true if the response must be group by week
      */
     public void setGroupbyWeek( boolean groupbyWeek )
     {
@@ -253,7 +271,9 @@ public class ResponseFilter
 
     /**
      * Set order by
-     * @param strOrderBy The order by
+     * 
+     * @param strOrderBy
+     *            The order by
      */
     public void setOrderBy( String strOrderBy )
     {
@@ -262,25 +282,29 @@ public class ResponseFilter
 
     /**
      * Get order by
+     * 
      * @return the order by
      */
-    public String getOrderBy(  )
+    public String getOrderBy( )
     {
         return _strOrderBy;
     }
 
     /**
      * Check if the filter contains order by
+     * 
      * @return true if it contains, false otherwise
      */
-    public boolean containsOrderBy(  )
+    public boolean containsOrderBy( )
     {
         return StringUtils.isNotBlank( _strOrderBy );
     }
 
     /**
      * Set order by asc
-     * @param bIsOrderByAsc true if the order by is asc
+     * 
+     * @param bIsOrderByAsc
+     *            true if the order by is asc
      */
     public void setOrderByAsc( boolean bIsOrderByAsc )
     {
@@ -289,9 +313,10 @@ public class ResponseFilter
 
     /**
      * Check if the order by is asc
+     * 
      * @return true if the order by is asc;
      */
-    public boolean isOrderByAsc(  )
+    public boolean isOrderByAsc( )
     {
         return _bIsOrderByAsc;
     }
@@ -299,13 +324,14 @@ public class ResponseFilter
     /**
      * @return the _listId
      */
-    public List<Integer> getListId(  )
+    public List<Integer> getListId( )
     {
         return this._listId;
     }
 
     /**
-     * @param listId the _listId to set
+     * @param listId
+     *            the _listId to set
      */
     public void setListId( List<Integer> listId )
     {
@@ -316,7 +342,7 @@ public class ResponseFilter
      *
      * @return true if the filter contain an id of entry depend
      */
-    public boolean containsListIdResource(  )
+    public boolean containsListIdResource( )
     {
         return CollectionUtils.isNotEmpty( _listId );
     }

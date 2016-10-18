@@ -39,7 +39,6 @@ import java.io.Serializable;
 
 import java.util.List;
 
-
 /**
  *
  * IMapProvider : map provider for Geolocation <br/>
@@ -52,32 +51,36 @@ public interface IMapProvider extends Serializable
 {
     /**
      * Gets the key. This key <b>must be unique</b>.
+     * 
      * @return the key;
      */
-    String getKey(  );
+    String getKey( );
 
     /**
      * Gets the displayed name
+     * 
      * @return the displayed name
      */
-    String getDisplayedName(  );
+    String getDisplayedName( );
 
     /**
      * Gets the html template
+     * 
      * @return the html template
      */
-    String getHtmlCode(  );
+    String getHtmlCode( );
 
     /**
      * Builds a new {@link ReferenceItem} for the map provider.<br />
-     * <code>key == getKey(  )</code>,
-     * <code>value == getDisplayedName(  )</code>
+     * <code>key == getKey(  )</code>, <code>value == getDisplayedName(  )</code>
+     * 
      * @return the item created.
      */
-    ReferenceItem toRefItem(  );
+    ReferenceItem toRefItem( );
 
     /**
      * returns the Parameter class contains all the parameters of the map
+     * 
      * @return the Parameter
      */
     Object getParameter( int nKey );

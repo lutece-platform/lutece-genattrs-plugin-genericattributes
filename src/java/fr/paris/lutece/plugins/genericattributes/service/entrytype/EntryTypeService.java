@@ -47,7 +47,6 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * Abstract implementation of IEntryTypeService
  */
@@ -66,8 +65,7 @@ public abstract class EntryTypeService implements IEntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-        Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
         return null;
     }
@@ -105,15 +103,14 @@ public abstract class EntryTypeService implements IEntryTypeService
     @Override
     public void setResponseToStringValue( Entry entry, Response response, Locale locale )
     {
-        response.setToStringValueResponse( response.getResponseValue(  ) );
+        response.setToStringValueResponse( response.getResponseValue( ) );
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError canUploadFiles( Entry entry, List<FileItem> listUploadedFileItems,
-        List<FileItem> listFileItemsToUpload, Locale locale )
+    public GenericAttributeError canUploadFiles( Entry entry, List<FileItem> listUploadedFileItems, List<FileItem> listFileItemsToUpload, Locale locale )
     {
         return null;
     }

@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
-
 /**
  *
  * StatisticEntrySubmit
@@ -45,17 +44,20 @@ public class StatisticEntrySubmit
     private String _strFieldLibelle;
 
     /**
-     * return  the number of response
+     * return the number of response
+     * 
      * @return the number of response
      */
-    public int getNumberResponse(  )
+    public int getNumberResponse( )
     {
         return _nNumberResponse;
     }
 
     /**
      * set the number of response
-     * @param numberResponse the number of response
+     * 
+     * @param numberResponse
+     *            the number of response
      */
     public void setNumberResponse( int numberResponse )
     {
@@ -66,14 +68,16 @@ public class StatisticEntrySubmit
      *
      * @return the field libelle
      */
-    public String getFieldLibelle(  )
+    public String getFieldLibelle( )
     {
         return _strFieldLibelle;
     }
 
     /**
      * set the field libelle
-     * @param fieldLibelle the field libelle
+     * 
+     * @param fieldLibelle
+     *            the field libelle
      */
     public void setFieldLibelle( String fieldLibelle )
     {

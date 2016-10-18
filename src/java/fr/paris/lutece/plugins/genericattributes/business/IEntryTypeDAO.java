@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
 
-
 /**
  * interface IEntryTypeDAO
  */
@@ -46,17 +45,21 @@ public interface IEntryTypeDAO
     /**
      * Load the data of the entry type from the table
      *
-     * @param idKey The identifier of the entry type
-     * @param plugin the plugin
+     * @param idKey
+     *            The identifier of the entry type
+     * @param plugin
+     *            the plugin
      * @return the instance of the EntryType
      */
     EntryType load( int idKey, Plugin plugin );
 
     /**
-     * Load the data of all entry type associated with a given plugin and
-     * returns them in a list
-     * @param strPlugin The name of plugin to get entry types of
-     * @param plugin the plugin
+     * Load the data of all entry type associated with a given plugin and returns them in a list
+     * 
+     * @param strPlugin
+     *            The name of plugin to get entry types of
+     * @param plugin
+     *            the plugin
      * @return the list of entry type associated with the plugin
      */
     List<EntryType> select( String strPlugin, Plugin plugin );

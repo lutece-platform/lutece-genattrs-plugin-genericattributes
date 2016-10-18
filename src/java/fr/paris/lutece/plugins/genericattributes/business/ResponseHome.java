@@ -42,10 +42,8 @@ import fr.paris.lutece.util.sql.TransactionManager;
 
 import java.util.List;
 
-
 /**
- * This class provides instances management methods (create, find, ...) for
- * Response objects
+ * This class provides instances management methods (create, find, ...) for Response objects
  */
 public final class ResponseHome
 {
@@ -56,154 +54,164 @@ public final class ResponseHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private ResponseHome(  )
+    private ResponseHome( )
     {
     }
 
     /**
      * Creation of an instance of response
      *
-     * @param response The instance of the response which contains the
-     *            informations to store
+     * @param response
+     *            The instance of the response which contains the informations to store
      *
      */
     public static void create( Response response )
     {
-        TransactionManager.beginTransaction( getPlugin(  ) );
+        TransactionManager.beginTransaction( getPlugin( ) );
 
         try
         {
-            if ( response.getFile(  ) != null )
+            if ( response.getFile( ) != null )
             {
-                FileHome.create( response.getFile(  ) );
+                FileHome.create( response.getFile( ) );
             }
 
-            _dao.insert( response, getPlugin(  ) );
-            TransactionManager.commitTransaction( getPlugin(  ) );
+            _dao.insert( response, getPlugin( ) );
+            TransactionManager.commitTransaction( getPlugin( ) );
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
-            TransactionManager.rollBack( getPlugin(  ) );
-            throw new AppException( e.getMessage(  ), e );
+            TransactionManager.rollBack( getPlugin( ) );
+            throw new AppException( e.getMessage( ), e );
         }
     }
 
     /**
      * Update of the response which is specified in parameter
      *
-     * @param response The instance of the Response which contains the
-     *            informations to update
+     * @param response
+     *            The instance of the Response which contains the informations to update
      *
      */
     public static void update( Response response )
     {
-        TransactionManager.beginTransaction( getPlugin(  ) );
+        TransactionManager.beginTransaction( getPlugin( ) );
 
         try
         {
-            if ( response.getFile(  ) != null )
+            if ( response.getFile( ) != null )
             {
-                FileHome.update( response.getFile(  ) );
+                FileHome.update( response.getFile( ) );
             }
 
-            _dao.store( response, getPlugin(  ) );
-            TransactionManager.commitTransaction( getPlugin(  ) );
+            _dao.store( response, getPlugin( ) );
+            TransactionManager.commitTransaction( getPlugin( ) );
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
-            TransactionManager.rollBack( getPlugin(  ) );
-            throw new AppException( e.getMessage(  ), e );
+            TransactionManager.rollBack( getPlugin( ) );
+            throw new AppException( e.getMessage( ), e );
         }
     }
 
     /**
      * Remove a response from its id
-     * @param nIdResponse The id of the response
+     * 
+     * @param nIdResponse
+     *            The id of the response
      */
     public static void remove( int nIdResponse )
     {
         Response response = findByPrimaryKey( nIdResponse );
 
-        TransactionManager.beginTransaction( getPlugin(  ) );
+        TransactionManager.beginTransaction( getPlugin( ) );
 
         try
         {
             if ( response != null )
             {
-                if ( response.getFile(  ) != null )
+                if ( response.getFile( ) != null )
                 {
-                    FileHome.remove( response.getFile(  ).getIdFile(  ) );
+                    FileHome.remove( response.getFile( ).getIdFile( ) );
                 }
 
-                _dao.delete( nIdResponse, getPlugin(  ) );
+                _dao.delete( nIdResponse, getPlugin( ) );
             }
 
-            TransactionManager.commitTransaction( getPlugin(  ) );
+            TransactionManager.commitTransaction( getPlugin( ) );
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
-            TransactionManager.rollBack( getPlugin(  ) );
-            throw new AppException( e.getMessage(  ), e );
+            TransactionManager.rollBack( getPlugin( ) );
+            throw new AppException( e.getMessage( ), e );
         }
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
-     * Returns an instance of a Response whose identifier is specified in
-     * parameter
+     * Returns an instance of a Response whose identifier is specified in parameter
      *
-     * @param nKey The entry primary key
+     * @param nKey
+     *            The entry primary key
      * @return an instance of Response
      */
     public static Response findByPrimaryKey( int nKey )
     {
-        return _dao.load( nKey, getPlugin(  ) );
+        return _dao.load( nKey, getPlugin( ) );
     }
 
     /**
-     * Load the data of all the response who verify the filter and returns them
-     * in a list
-     * @param filter the filter
+     * Load the data of all the response who verify the filter and returns them in a list
+     * 
+     * @param filter
+     *            the filter
      * @return the list of response
      */
     public static List<Response> getResponseList( ResponseFilter filter )
     {
-        return _dao.selectListByFilter( filter, getPlugin(  ) );
+        return _dao.selectListByFilter( filter, getPlugin( ) );
     }
 
     /**
      * return a list of statistic on the entry
-     * @param nIdEntry the id of the entry
+     * 
+     * @param nIdEntry
+     *            the id of the entry
      * @return return a list of statistic on the entry
      */
     public static List<StatisticEntrySubmit> getStatisticByIdEntry( int nIdEntry )
     {
-        return _dao.getStatisticByIdEntry( nIdEntry, getPlugin(  ) );
+        return _dao.getStatisticByIdEntry( nIdEntry, getPlugin( ) );
     }
 
     /**
      * Get the max number from a given id resource
-     * @param nIdEntry the id of the entry
-     * @param nIdResource the id resource
-     * @param strResourceType The resource type
+     * 
+     * @param nIdEntry
+     *            the id of the entry
+     * @param nIdResource
+     *            the id resource
+     * @param strResourceType
+     *            The resource type
      * @return the max number
      */
     public static int findMaxNumber( int nIdEntry, int nIdResource, String strResourceType )
     {
-        return _dao.getMaxNumber( nIdEntry, nIdResource, strResourceType, getPlugin(  ) );
+        return _dao.getMaxNumber( nIdEntry, nIdResource, strResourceType, getPlugin( ) );
     }
 
     /**
      * Get the generic attributes plugin
+     * 
      * @return The generic attributes plugin
      */
-    private static Plugin getPlugin(  )
+    private static Plugin getPlugin( )
     {
         if ( _plugin == null )
         {
-            _plugin = GenericAttributesUtils.getPlugin(  );
+            _plugin = GenericAttributesUtils.getPlugin( );
         }
 
         return _plugin;

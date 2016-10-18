@@ -30,7 +30,6 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * @author bass
  *
@@ -56,7 +55,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
     public static final String PARAMETER_SUFFIX_ADDRESS = "_address";
 
     /** The Constant PARAMETER_SUFFIX_ADDITIONAL_ADDRESS. */
-    //public static final String PARAMETER_SUFFIX_ADDITIONAL_ADDRESS = "_additional_address";
+    // public static final String PARAMETER_SUFFIX_ADDITIONAL_ADDRESS = "_additional_address";
 
     /** The Constant PARAMETER_SUFFIX_X_ADDRESS. */
     public static final String PARAMETER_SUFFIX_X = "_x";
@@ -83,7 +82,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
     public static final String CONSTANT_ADDRESS = "address";
 
     /** The Constant CONSTANT_ADDRESS. */
-    //public static final String CONSTANT_ADDITIONAL_ADDRESS = "additionalAddress";
+    // public static final String CONSTANT_ADDITIONAL_ADDRESS = "additionalAddress";
 
     /** The Constant CONSTANT_X. */
     public static final String CONSTANT_X = "X";
@@ -94,7 +93,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
     /** The Constant CONSTANT_GEOMETRY. */
     public static final String CONSTANT_GEOMETRY = "geometry";
 
-    //private static final String MESSAGE_SPECIFY_GEO = "genericattributes.message.specifyGeo";
+    // private static final String MESSAGE_SPECIFY_GEO = "genericattributes.message.specifyGeo";
     private static final String MESSAGE_SPECIFY_BOTH_X_AND_Y = "genericattributes.message.specifyBothXAndY";
     public static final String PARAMETER_EDIT_MODE_LIST = "gismap.edit.mode.list";
 
@@ -105,8 +104,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
         String strTitle = request.getParameter( PARAMETER_TITLE );
-        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
-            ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim(  ) : null;
+        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
         String strMapProvider = request.getParameter( PARAMETER_MAP_PROVIDER );
@@ -129,27 +127,26 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                I18nService.getLocalizedString( strFieldError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         /**
-         * we need 10 fields : 1 for map provider, 1 for id address,
-         * 1 for label address, 1 for x address, 1 for y address, 1 for id geographical object,
-         * 1 for description geographical object, 1 for centroid geographical object, 1 for
-         * label geographical object and 1 for thematic geographical object
+         * we need 10 fields : 1 for map provider, 1 for id address, 1 for label address, 1 for x address, 1 for y address, 1 for id geographical object, 1 for
+         * description geographical object, 1 for centroid geographical object, 1 for label geographical object and 1 for thematic geographical object
          **/
-        if ( entry.getFields(  ) == null )
+        if ( entry.getFields( ) == null )
         {
-            List<Field> listFields = new ArrayList<Field>(  );
+            List<Field> listFields = new ArrayList<Field>( );
             listFields.add( buildFieldMapProvider( entry, strMapProvider ) );
             listFields.add( buildField( entry, CONSTANT_EDIT_MODE, strEditMode ) );
             listFields.add( buildField( entry, CONSTANT_VIEW_NUMBER, strViewNumber ) );
             listFields.add( buildField( entry, CONSTANT_ID_ADDRESS, CONSTANT_ID_ADDRESS ) );
             listFields.add( buildField( entry, CONSTANT_ADDRESS, CONSTANT_ADDRESS ) );
-            //listFields.add( buildField( entry, CONSTANT_ADDITIONAL_ADDRESS, CONSTANT_ADDITIONAL_ADDRESS ) );
+            // listFields.add( buildField( entry, CONSTANT_ADDITIONAL_ADDRESS, CONSTANT_ADDITIONAL_ADDRESS ) );
             listFields.add( buildField( entry, CONSTANT_X, CONSTANT_X ) );
             listFields.add( buildField( entry, CONSTANT_Y, CONSTANT_Y ) );
             listFields.add( buildField( entry, CONSTANT_GEOMETRY, CONSTANT_GEOMETRY ) );
@@ -158,33 +155,31 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         }
         else
         {
-            entry.getFields(  ).get( 0 ).setTitle( buildFieldMapProvider( entry, strMapProvider ).getTitle(  ) );
-            entry.getFields(  ).get( 0 ).setValue( buildFieldMapProvider( entry, strMapProvider ).getValue(  ) );
+            entry.getFields( ).get( 0 ).setTitle( buildFieldMapProvider( entry, strMapProvider ).getTitle( ) );
+            entry.getFields( ).get( 0 ).setValue( buildFieldMapProvider( entry, strMapProvider ).getValue( ) );
 
-            entry.getFields(  ).get( 1 ).setTitle( buildField( entry, CONSTANT_EDIT_MODE, strEditMode ).getTitle(  ) );
-            entry.getFields(  ).get( 1 ).setValue( buildField( entry, CONSTANT_EDIT_MODE, strEditMode ).getValue(  ) );
+            entry.getFields( ).get( 1 ).setTitle( buildField( entry, CONSTANT_EDIT_MODE, strEditMode ).getTitle( ) );
+            entry.getFields( ).get( 1 ).setValue( buildField( entry, CONSTANT_EDIT_MODE, strEditMode ).getValue( ) );
 
-            entry.getFields(  ).get( 2 ).setTitle( buildField( entry, CONSTANT_VIEW_NUMBER, strViewNumber ).getTitle(  ) );
-            entry.getFields(  ).get( 2 ).setValue( buildField( entry, CONSTANT_VIEW_NUMBER, strViewNumber ).getValue(  ) );
+            entry.getFields( ).get( 2 ).setTitle( buildField( entry, CONSTANT_VIEW_NUMBER, strViewNumber ).getTitle( ) );
+            entry.getFields( ).get( 2 ).setValue( buildField( entry, CONSTANT_VIEW_NUMBER, strViewNumber ).getValue( ) );
 
-            entry.getFields(  ).get( 3 )
-                 .setTitle( buildField( entry, CONSTANT_ID_ADDRESS, CONSTANT_ID_ADDRESS ).getTitle(  ) );
-            entry.getFields(  ).get( 3 )
-                 .setValue( buildField( entry, CONSTANT_ID_ADDRESS, CONSTANT_ID_ADDRESS ).getValue(  ) );
+            entry.getFields( ).get( 3 ).setTitle( buildField( entry, CONSTANT_ID_ADDRESS, CONSTANT_ID_ADDRESS ).getTitle( ) );
+            entry.getFields( ).get( 3 ).setValue( buildField( entry, CONSTANT_ID_ADDRESS, CONSTANT_ID_ADDRESS ).getValue( ) );
 
-            entry.getFields(  ).get( 4 ).setTitle( buildField( entry, CONSTANT_ADDRESS, CONSTANT_ADDRESS ).getTitle(  ) );
-            entry.getFields(  ).get( 4 ).setValue( buildField( entry, CONSTANT_ADDRESS, CONSTANT_ADDRESS ).getValue(  ) );
+            entry.getFields( ).get( 4 ).setTitle( buildField( entry, CONSTANT_ADDRESS, CONSTANT_ADDRESS ).getTitle( ) );
+            entry.getFields( ).get( 4 ).setValue( buildField( entry, CONSTANT_ADDRESS, CONSTANT_ADDRESS ).getValue( ) );
 
-            //entry.getFields().get(5).setTitle(buildField( entry, CONSTANT_ADDITIONAL_ADDRESS, CONSTANT_ADDITIONAL_ADDRESS ).getTitle());
-            //entry.getFields().get(5).setValue(buildField( entry, CONSTANT_ADDITIONAL_ADDRESS, CONSTANT_ADDITIONAL_ADDRESS).getValue());
-            entry.getFields(  ).get( 5 ).setTitle( buildField( entry, CONSTANT_X, CONSTANT_X ).getTitle(  ) );
-            entry.getFields(  ).get( 5 ).setValue( buildField( entry, CONSTANT_X, CONSTANT_X ).getValue(  ) );
+            // entry.getFields().get(5).setTitle(buildField( entry, CONSTANT_ADDITIONAL_ADDRESS, CONSTANT_ADDITIONAL_ADDRESS ).getTitle());
+            // entry.getFields().get(5).setValue(buildField( entry, CONSTANT_ADDITIONAL_ADDRESS, CONSTANT_ADDITIONAL_ADDRESS).getValue());
+            entry.getFields( ).get( 5 ).setTitle( buildField( entry, CONSTANT_X, CONSTANT_X ).getTitle( ) );
+            entry.getFields( ).get( 5 ).setValue( buildField( entry, CONSTANT_X, CONSTANT_X ).getValue( ) );
 
-            entry.getFields(  ).get( 6 ).setTitle( buildField( entry, CONSTANT_Y, CONSTANT_Y ).getTitle(  ) );
-            entry.getFields(  ).get( 6 ).setValue( buildField( entry, CONSTANT_Y, CONSTANT_Y ).getValue(  ) );
+            entry.getFields( ).get( 6 ).setTitle( buildField( entry, CONSTANT_Y, CONSTANT_Y ).getTitle( ) );
+            entry.getFields( ).get( 6 ).setValue( buildField( entry, CONSTANT_Y, CONSTANT_Y ).getValue( ) );
 
-            entry.getFields(  ).get( 7 ).setTitle( buildField( entry, CONSTANT_GEOMETRY, CONSTANT_GEOMETRY ).getTitle(  ) );
-            entry.getFields(  ).get( 7 ).setValue( buildField( entry, CONSTANT_GEOMETRY, CONSTANT_GEOMETRY ).getValue(  ) );
+            entry.getFields( ).get( 7 ).setTitle( buildField( entry, CONSTANT_GEOMETRY, CONSTANT_GEOMETRY ).getTitle( ) );
+            entry.getFields( ).get( 7 ).setValue( buildField( entry, CONSTANT_GEOMETRY, CONSTANT_GEOMETRY ).getValue( ) );
         }
 
         entry.setTitle( strTitle );
@@ -203,7 +198,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         }
         else
         {
-            entryAdditionalAddress = new Entry(  );
+            entryAdditionalAddress = new Entry( );
 
             EntryType entryType = EntryTypeHome.findByPrimaryKey( 6 );
             entryAdditionalAddress.setEntryType( entryType );
@@ -220,29 +215,26 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-        Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String strIdAddressValue = request.getParameter( entry.getIdEntry(  ) + PARAMETER_SUFFIX_ID_ADDRESS );
-        String strAddressValue = request.getParameter( entry.getIdEntry(  ) + PARAMETER_SUFFIX_ADDRESS );
+        String strIdAddressValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_ID_ADDRESS );
+        String strAddressValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_ADDRESS );
 
-        //String strAdditionalAddressValue = request.getParameter( entry.getIdEntry(  ) + PARAMETER_SUFFIX_ADDITIONAL_ADDRESS );
-        String strXValue = request.getParameter( entry.getIdEntry(  ) + PARAMETER_SUFFIX_X );
-        String strYValue = request.getParameter( entry.getIdEntry(  ) + PARAMETER_SUFFIX_Y );
-        String strGeometryValue = request.getParameter( entry.getIdEntry(  ) + PARAMETER_SUFFIX_GEOMETRY );
+        // String strAdditionalAddressValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_ADDITIONAL_ADDRESS );
+        String strXValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_X );
+        String strYValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_Y );
+        String strGeometryValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_GEOMETRY );
 
-        Field fieldIdAddress = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_ID_ADDRESS,
-                entry.getFields(  ) );
-        Field fieldAddress = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_ADDRESS, entry.getFields(  ) );
+        Field fieldIdAddress = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_ID_ADDRESS, entry.getFields( ) );
+        Field fieldAddress = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_ADDRESS, entry.getFields( ) );
 
-        //Field fieldAdditionalAddress = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_ADDITIONAL_ADDRESS, entry.getFields(  ) );
-        Field fieldX = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_X, entry.getFields(  ) );
-        Field fieldY = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_Y, entry.getFields(  ) );
-        Field fieldGeometry = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_GEOMETRY, entry.getFields(  ) );
+        // Field fieldAdditionalAddress = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_ADDITIONAL_ADDRESS, entry.getFields( ) );
+        Field fieldX = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_X, entry.getFields( ) );
+        Field fieldY = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_Y, entry.getFields( ) );
+        Field fieldGeometry = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_GEOMETRY, entry.getFields( ) );
 
         /**
-         * Create the field "idAddress" in case the field does not exist in the
-         * database.
+         * Create the field "idAddress" in case the field does not exist in the database.
          */
         if ( fieldIdAddress == null )
         {
@@ -251,7 +243,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         }
 
         // 1 : Response Id Address
-        Response responseIdAddress = new Response(  );
+        Response responseIdAddress = new Response( );
         responseIdAddress.setEntry( entry );
         responseIdAddress.setResponseValue( strIdAddressValue );
         responseIdAddress.setField( fieldIdAddress );
@@ -259,7 +251,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         listResponse.add( responseIdAddress );
 
         // 2 : Response Address
-        Response responseAddress = new Response(  );
+        Response responseAddress = new Response( );
         responseAddress.setEntry( entry );
         responseAddress.setResponseValue( strAddressValue );
         responseAddress.setField( fieldAddress );
@@ -267,23 +259,22 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         listResponse.add( responseAddress );
 
         // 2 : Response Additional Address
-        /*Response responseAdditionalAddress = new Response(  );
-        responseAdditionalAddress.setEntry( entry );
-        responseAdditionalAddress.setResponseValue( strAdditionalAddressValue );
-        responseAdditionalAddress.setField( fieldAdditionalAddress );
-        responseAdditionalAddress.setToStringValueResponse( strAdditionalAddressValue );
-        listResponse.add( responseAdditionalAddress );*/
+        /*
+         * Response responseAdditionalAddress = new Response( ); responseAdditionalAddress.setEntry( entry ); responseAdditionalAddress.setResponseValue(
+         * strAdditionalAddressValue ); responseAdditionalAddress.setField( fieldAdditionalAddress ); responseAdditionalAddress.setToStringValueResponse(
+         * strAdditionalAddressValue ); listResponse.add( responseAdditionalAddress );
+         */
 
-        // 3 : Response X 
-        Response responseX = new Response(  );
+        // 3 : Response X
+        Response responseX = new Response( );
         responseX.setEntry( entry );
         responseX.setResponseValue( strXValue );
         responseX.setField( fieldX );
         responseX.setToStringValueResponse( strXValue );
         listResponse.add( responseX );
 
-        // 4: Response Y 
-        Response responseY = new Response(  );
+        // 4: Response Y
+        Response responseY = new Response( );
         responseY.setEntry( entry );
         responseY.setResponseValue( strYValue );
         responseY.setField( fieldY );
@@ -291,14 +282,14 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         listResponse.add( responseY );
 
         // 6 : Response Desc Geo
-        Response responseGeomerty = new Response(  );
+        Response responseGeomerty = new Response( );
         responseGeomerty.setEntry( entry );
         responseGeomerty.setResponseValue( strGeometryValue );
         responseGeomerty.setField( fieldGeometry );
         responseGeomerty.setToStringValueResponse( strGeometryValue );
         listResponse.add( responseGeomerty );
 
-        if ( entry.isMandatory(  ) )
+        if ( entry.isMandatory( ) )
         {
             if ( StringUtils.isBlank( strAddressValue ) )
             {
@@ -306,15 +297,15 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
             }
         }
 
-        if ( ( StringUtils.isBlank( strXValue ) && StringUtils.isNotBlank( strYValue ) ) ||
-                ( StringUtils.isNotBlank( strXValue ) && StringUtils.isBlank( strYValue ) ) )
+        if ( ( StringUtils.isBlank( strXValue ) && StringUtils.isNotBlank( strYValue ) )
+                || ( StringUtils.isNotBlank( strXValue ) && StringUtils.isBlank( strYValue ) ) )
         {
             if ( StringUtils.isBlank( strAddressValue ) )
             {
-                GenericAttributeError error = new GenericAttributeError(  );
+                GenericAttributeError error = new GenericAttributeError( );
 
-                error.setMandatoryError( entry.isMandatory(  ) );
-                error.setTitleQuestion( entry.getTitle(  ) );
+                error.setMandatoryError( entry.isMandatory( ) );
+                error.setTitleQuestion( entry.getTitle( ) );
                 error.setErrorMessage( MESSAGE_SPECIFY_BOTH_X_AND_Y );
 
                 return error;
@@ -330,13 +321,13 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        if ( response.getField(  ) != null )
+        if ( response.getField( ) != null )
         {
-            String strTitle = response.getField(  ).getTitle(  );
+            String strTitle = response.getField( ).getTitle( );
 
             if ( CONSTANT_ADDRESS.equals( strTitle ) )
             {
-                return response.getResponseValue(  );
+                return response.getResponseValue( );
             }
         }
 
@@ -345,26 +336,28 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
 
     /**
      * Returns the available map providers
+     * 
      * @return all known map providers
      */
-    public List<IMapProvider> getMaproviders(  )
+    public List<IMapProvider> getMaproviders( )
     {
-        return MapProviderManager.getMapProvidersList(  );
+        return MapProviderManager.getMapProvidersList( );
     }
 
     /**
      * Builds the {@link ReferenceList} of all available map providers
+     * 
      * @return the {@link ReferenceList}
      */
-    public ReferenceList getMapProvidersRefList(  )
+    public ReferenceList getMapProvidersRefList( )
     {
-        ReferenceList refList = new ReferenceList(  );
+        ReferenceList refList = new ReferenceList( );
 
         refList.addItem( StringUtils.EMPTY, StringUtils.EMPTY );
 
-        for ( IMapProvider mapProvider : MapProviderManager.getMapProvidersList(  ) )
+        for ( IMapProvider mapProvider : MapProviderManager.getMapProvidersList( ) )
         {
-            refList.add( mapProvider.toRefItem(  ) );
+            refList.add( mapProvider.toRefItem( ) );
         }
 
         return refList;
@@ -372,21 +365,22 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
 
     /**
      * Builds the {@link ReferenceList} of all available edit mode
+     * 
      * @return the {@link ReferenceList}
      */
-    public ReferenceList getEditModeRefList(  )
+    public ReferenceList getEditModeRefList( )
     {
         String strEditModeListProperty = AppPropertiesService.getProperty( PARAMETER_EDIT_MODE_LIST );
-        ReferenceList refList = new ReferenceList(  );
+        ReferenceList refList = new ReferenceList( );
         refList.addItem( StringUtils.EMPTY, StringUtils.EMPTY );
 
         if ( strEditModeListProperty != null )
         {
-            String[] strEditModeListPropertyArray = strEditModeListProperty.split( "," );
+            String [ ] strEditModeListPropertyArray = strEditModeListProperty.split( "," );
 
             for ( int i = 0; i < strEditModeListPropertyArray.length; i++ )
             {
-                refList.addItem( strEditModeListPropertyArray[i], strEditModeListPropertyArray[i] );
+                refList.addItem( strEditModeListPropertyArray [i], strEditModeListPropertyArray [i] );
             }
         }
 
@@ -402,25 +396,28 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
     {
         String fieldName = StringUtils.EMPTY;
 
-        if ( response.getField(  ) != null )
+        if ( response.getField( ) != null )
         {
-            fieldName = ObjectUtils.toString( response.getField(  ).getTitle(  ) );
+            fieldName = ObjectUtils.toString( response.getField( ).getTitle( ) );
         }
 
-        return fieldName + GenericAttributesUtils.CONSTANT_EQUAL + response.getResponseValue(  );
+        return fieldName + GenericAttributesUtils.CONSTANT_EQUAL + response.getResponseValue( );
     }
 
     // PRIVATE METHODS
 
     /**
      * Builds the field.
-     * @param entry The entry
-     * @param strFieldTitle the str field title
+     * 
+     * @param entry
+     *            The entry
+     * @param strFieldTitle
+     *            the str field title
      * @return the field
      */
     private Field buildField( Entry entry, String strFieldTitle, String strFieldValue )
     {
-        Field field = new Field(  );
+        Field field = new Field( );
         field.setTitle( strFieldTitle );
         field.setValue( strFieldValue );
         field.setParentEntry( entry );
@@ -430,18 +427,21 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
 
     /**
      * Builds the field map provider.
-     * @param entry The entry
-     * @param strMapProvider the map provider
+     * 
+     * @param entry
+     *            The entry
+     * @param strMapProvider
+     *            the map provider
      * @return the field
      */
     private Field buildFieldMapProvider( Entry entry, String strMapProvider )
     {
-        Field fieldMapProvider = new Field(  );
+        Field fieldMapProvider = new Field( );
         fieldMapProvider.setTitle( CONSTANT_PROVIDER );
 
         if ( StringUtils.isNotBlank( strMapProvider ) )
         {
-            String strTrimedMapProvider = strMapProvider.trim(  );
+            String strTrimedMapProvider = strMapProvider.trim( );
             fieldMapProvider.setValue( strTrimedMapProvider );
             entry.setMapProvider( MapProviderManager.getMapProvider( strTrimedMapProvider ) );
         }
@@ -463,27 +463,27 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         entry.setCSSClass( "" );
         entry.setErrorMessage( "" );
 
-        if ( entry.getFields(  ) == null )
+        if ( entry.getFields( ) == null )
         {
-            ArrayList<Field> listFields = new ArrayList<Field>(  );
-            Field field = new Field(  );
+            ArrayList<Field> listFields = new ArrayList<Field>( );
+            Field field = new Field( );
             field.setTitle( "additionalAddress" );
             field.setValue( "" );
-            //FieldHome.create(field, pluginDirectory);
+            // FieldHome.create(field, pluginDirectory);
             listFields.add( field );
             entry.setFields( listFields );
         }
 
-        entry.getFields(  ).get( 0 ).setWidth( 0 );
-        entry.getFields(  ).get( 0 ).setMaxSizeEnter( 250 );
+        entry.getFields( ).get( 0 ).setWidth( 0 );
+        entry.getFields( ).get( 0 ).setMaxSizeEnter( 250 );
 
         if ( update )
         {
             EntryHome.update( entry );
 
-            if ( entry.getFields(  ) != null )
+            if ( entry.getFields( ) != null )
             {
-                for ( Field field : entry.getFields(  ) )
+                for ( Field field : entry.getFields( ) )
                 {
                     field.setParentEntry( entry );
                     FieldHome.update( field );
@@ -494,9 +494,9 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         {
             EntryHome.create( entry );
 
-            if ( entry.getFields(  ) != null )
+            if ( entry.getFields( ) != null )
             {
-                for ( Field field : entry.getFields(  ) )
+                for ( Field field : entry.getFields( ) )
                 {
                     field.setParentEntry( entry );
                     FieldHome.create( field );

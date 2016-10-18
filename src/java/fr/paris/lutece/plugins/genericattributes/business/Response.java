@@ -38,7 +38,6 @@ import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
 
 import java.io.Serializable;
 
-
 /**
  * class Response
  */
@@ -71,42 +70,44 @@ public class Response implements Serializable
     /**
      * Default constructor
      */
-    public Response(  )
+    public Response( )
     {
         // Do nothing
     }
 
     /**
      * Creates a response that is a copy of another response
-     * @param response The response to copy
+     * 
+     * @param response
+     *            The response to copy
      */
     public Response( Response response )
     {
-        this._nIdResponse = response.getIdResponse(  );
-        this._strToStringValueResponse = response.getToStringValueResponse(  );
-        this._entry = response.getEntry(  );
-        this._field = response.getField(  );
-        this._strResponseValue = response.getResponseValue(  );
-        this._nStatus = response.getStatus(  );
+        this._nIdResponse = response.getIdResponse( );
+        this._strToStringValueResponse = response.getToStringValueResponse( );
+        this._entry = response.getEntry( );
+        this._field = response.getField( );
+        this._strResponseValue = response.getResponseValue( );
+        this._nStatus = response.getStatus( );
 
-        File file = response.getFile(  );
+        File file = response.getFile( );
 
         if ( file != null )
         {
-            _file = new File(  );
-            _file.setExtension( file.getExtension(  ) );
-            _file.setIdFile( file.getIdFile(  ) );
-            _file.setMimeType( file.getMimeType(  ) );
-            _file.setSize( file.getSize(  ) );
-            _file.setTitle( file.getTitle(  ) );
+            _file = new File( );
+            _file.setExtension( file.getExtension( ) );
+            _file.setIdFile( file.getIdFile( ) );
+            _file.setMimeType( file.getMimeType( ) );
+            _file.setSize( file.getSize( ) );
+            _file.setTitle( file.getTitle( ) );
 
-            PhysicalFile physicalFile = file.getPhysicalFile(  );
+            PhysicalFile physicalFile = file.getPhysicalFile( );
 
             if ( physicalFile != null )
             {
-                PhysicalFile pfDuplicated = new PhysicalFile(  );
-                pfDuplicated.setIdPhysicalFile( pfDuplicated.getIdPhysicalFile(  ) );
-                pfDuplicated.setValue( pfDuplicated.getValue(  ) );
+                PhysicalFile pfDuplicated = new PhysicalFile( );
+                pfDuplicated.setIdPhysicalFile( pfDuplicated.getIdPhysicalFile( ) );
+                pfDuplicated.setValue( pfDuplicated.getValue( ) );
                 _file.setPhysicalFile( pfDuplicated );
             }
         }
@@ -116,14 +117,16 @@ public class Response implements Serializable
      *
      * @return the question associate to the response
      */
-    public Entry getEntry(  )
+    public Entry getEntry( )
     {
         return _entry;
     }
 
     /**
      * set the question associate to the response
-     * @param entry the question associate to the response
+     * 
+     * @param entry
+     *            the question associate to the response
      */
     public void setEntry( Entry entry )
     {
@@ -134,14 +137,16 @@ public class Response implements Serializable
      *
      * @return the id of the response
      */
-    public int getIdResponse(  )
+    public int getIdResponse( )
     {
         return _nIdResponse;
     }
 
     /**
      * set the id of the response
-     * @param idResponse the id of the response
+     * 
+     * @param idResponse
+     *            the id of the response
      */
     public void setIdResponse( int idResponse )
     {
@@ -150,16 +155,19 @@ public class Response implements Serializable
 
     /**
      * get the field associate to the response
+     * 
      * @return the field associate to the response
      */
-    public Field getField(  )
+    public Field getField( )
     {
         return _field;
     }
 
     /**
      * set the field associate to the response
-     * @param field field
+     * 
+     * @param field
+     *            field
      */
     public void setField( Field field )
     {
@@ -168,9 +176,10 @@ public class Response implements Serializable
 
     /**
      * return the string value response
+     * 
      * @return the string value of the response
      */
-    public String getToStringValueResponse(  )
+    public String getToStringValueResponse( )
     {
         if ( _strToStringValueResponse != null )
         {
@@ -182,7 +191,9 @@ public class Response implements Serializable
 
     /**
      * set the string value response
-     * @param strValueResponse the string value of the response
+     * 
+     * @param strValueResponse
+     *            the string value of the response
      */
     public void setToStringValueResponse( String strValueResponse )
     {
@@ -191,7 +202,9 @@ public class Response implements Serializable
 
     /**
      * Set the response value
-     * @param strResponseValue the response value
+     * 
+     * @param strResponseValue
+     *            the response value
      */
     public void setResponseValue( String strResponseValue )
     {
@@ -200,25 +213,29 @@ public class Response implements Serializable
 
     /**
      * Get the response value
+     * 
      * @return the response value
      */
-    public String getResponseValue(  )
+    public String getResponseValue( )
     {
         return _strResponseValue;
     }
 
     /**
      * Get the status of this response
+     * 
      * @return The status of this response
      */
-    public int getStatus(  )
+    public int getStatus( )
     {
         return _nStatus;
     }
 
     /**
      * Set the status of this response
-     * @param nStatus The status of this response
+     * 
+     * @param nStatus
+     *            The status of this response
      */
     public void setStatus( int nStatus )
     {
@@ -227,16 +244,19 @@ public class Response implements Serializable
 
     /**
      * Get the file associated with this response
+     * 
      * @return the file The file associated with this response
      */
-    public File getFile(  )
+    public File getFile( )
     {
         return _file;
     }
 
     /**
      * Set the file associated with this response
-     * @param file The file associated with this response
+     * 
+     * @param file
+     *            The file associated with this response
      */
     public void setFile( File file )
     {
@@ -245,16 +265,19 @@ public class Response implements Serializable
 
     /**
      * Get the isImage of this response
+     * 
      * @return The bIsImage of this response
      */
-    public boolean getIsImage(  )
+    public boolean getIsImage( )
     {
         return _bIsImage;
     }
 
     /**
      * Set the isImage of this response
-     * @param bisImage of this response
+     * 
+     * @param bisImage
+     *            of this response
      */
     public void setIsImage( boolean bIsImage )
     {

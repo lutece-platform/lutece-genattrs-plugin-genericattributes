@@ -50,7 +50,6 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * Abstract entry type for check boxes
  */
@@ -73,36 +72,43 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
         {
             strFieldError = FIELD_TITLE;
         }
-        else if ( StringUtils.isBlank( strNumberRows ) )
-        {
-            strFieldError = FIELD_NUMBER_ROWS;
-        }
-        else if ( StringUtils.isBlank( strNumberColumns ) )
-        {
-            strFieldError = FIELD_NUMBER_COLUMNS;
-        }
+        else
+            if ( StringUtils.isBlank( strNumberRows ) )
+            {
+                strFieldError = FIELD_NUMBER_ROWS;
+            }
+            else
+                if ( StringUtils.isBlank( strNumberColumns ) )
+                {
+                    strFieldError = FIELD_NUMBER_COLUMNS;
+                }
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                I18nService.getLocalizedString( strFieldError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
-        else if ( !isValid( strNumberRows ) )
-        {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( FIELD_NUMBER_ROWS, locale ) };
+        else
+            if ( !isValid( strNumberRows ) )
+            {
+                Object [ ] tabRequiredFields = {
+                    I18nService.getLocalizedString( FIELD_NUMBER_ROWS, locale )
+                };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
-        }
-        else if ( !isValid( strNumberColumns ) )
-        {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( FIELD_NUMBER_COLUMNS, locale ) };
+                return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
+            }
+            else
+                if ( !isValid( strNumberColumns ) )
+                {
+                    Object [ ] tabRequiredFields = {
+                        I18nService.getLocalizedString( FIELD_NUMBER_COLUMNS, locale )
+                    };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
-        }
+                    return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
+                }
 
         // for don't update fields listFields=null
         int row = Integer.valueOf( strNumberRows );
@@ -116,8 +122,8 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
         entry.setNumberColumn( column );
         entry.setNumberRow( row );
 
-        ArrayList<Field> listFields = new ArrayList<Field>(  );
-        List<Field> fields = FieldHome.getFieldListByIdEntry( entry.getIdEntry(  ) );
+        ArrayList<Field> listFields = new ArrayList<Field>( );
+        List<Field> fields = FieldHome.getFieldListByIdEntry( entry.getIdEntry( ) );
 
         for ( int i = 1; i <= ( row + 1 ); i++ )
         {
@@ -127,7 +133,7 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
 
                 for ( Field f : fields )
                 {
-                    if ( f.getValue(  ).equals( i + "_" + j ) )
+                    if ( f.getValue( ).equals( i + "_" + j ) )
                     {
                         existingFields = f;
 
@@ -139,21 +145,7 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
 
                 if ( ( i == 1 ) && ( j != 1 ) )
                 {
-                    Field field = new Field(  );
-
-                    if ( existingFields != null )
-                    {
-                        field = existingFields;
-                    }
-
-                    field.setParentEntry( entry );
-                    field.setValue( i + "_" + j );
-                    field.setTitle( StringUtils.defaultString( strTitleRow ) );
-                    listFields.add( field );
-                }
-                else if ( ( i != 1 ) && ( j == 1 ) )
-                {
-                    Field field = new Field(  );
+                    Field field = new Field( );
 
                     if ( existingFields != null )
                     {
@@ -166,12 +158,27 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
                     listFields.add( field );
                 }
                 else
-                {
-                    Field field = new Field(  );
-                    field.setParentEntry( entry );
-                    field.setValue( i + "_" + j );
-                    listFields.add( field );
-                }
+                    if ( ( i != 1 ) && ( j == 1 ) )
+                    {
+                        Field field = new Field( );
+
+                        if ( existingFields != null )
+                        {
+                            field = existingFields;
+                        }
+
+                        field.setParentEntry( entry );
+                        field.setValue( i + "_" + j );
+                        field.setTitle( StringUtils.defaultString( strTitleRow ) );
+                        listFields.add( field );
+                    }
+                    else
+                    {
+                        Field field = new Field( );
+                        field.setParentEntry( entry );
+                        field.setValue( i + "_" + j );
+                        listFields.add( field );
+                    }
             }
         }
 
@@ -184,20 +191,19 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-        Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        for ( int i = 1; i <= ( entry.getNumberRow(  ) + 1 ); i++ )
+        for ( int i = 1; i <= ( entry.getNumberRow( ) + 1 ); i++ )
         {
-            for ( int j = 1; j <= ( entry.getNumberColumn(  ) + 1 ); j++ )
+            for ( int j = 1; j <= ( entry.getNumberColumn( ) + 1 ); j++ )
             {
                 String strTitleRow = request.getParameter( "response_" + i + "_" + j );
 
                 Field existingFields = null;
 
-                for ( Field f : entry.getFields(  ) )
+                for ( Field f : entry.getFields( ) )
                 {
-                    if ( f.getValue(  ).equals( i + "_" + j ) )
+                    if ( f.getValue( ).equals( i + "_" + j ) )
                     {
                         existingFields = f;
 
@@ -205,7 +211,7 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
                     }
                 }
 
-                Response response = new Response(  );
+                Response response = new Response( );
                 response.setEntry( entry );
                 response.setResponseValue( strTitleRow );
                 response.setToStringValueResponse( strTitleRow );
@@ -223,7 +229,7 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
     @Override
     public String getResponseValueForExport( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getResponseValue(  );
+        return response.getResponseValue( );
     }
 
     /**
@@ -232,11 +238,11 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        if ( response.getField(  ) != null )
+        if ( response.getField( ) != null )
         {
-            if ( response.getField(  ).getTitle(  ) == null )
+            if ( response.getField( ).getTitle( ) == null )
             {
-                Field field = FieldHome.findByPrimaryKey( response.getField(  ).getIdField(  ) );
+                Field field = FieldHome.findByPrimaryKey( response.getField( ).getIdField( ) );
 
                 if ( field != null )
                 {
@@ -244,7 +250,7 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
                 }
             }
 
-            return response.getField(  ).getTitle(  );
+            return response.getField( ).getTitle( );
         }
 
         return null;
@@ -252,7 +258,9 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
 
     /**
      * Check if param is a valid integer
-     * @param strValue the value to check
+     * 
+     * @param strValue
+     *            the value to check
      * @return true if valid, false otherwise
      */
     private boolean isValid( String strValue )
@@ -261,10 +269,11 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
         {
             return false;
         }
-        else if ( Integer.valueOf( strValue ) <= 0 )
-        {
-            return false;
-        }
+        else
+            if ( Integer.valueOf( strValue ) <= 0 )
+            {
+                return false;
+            }
 
         return true;
     }

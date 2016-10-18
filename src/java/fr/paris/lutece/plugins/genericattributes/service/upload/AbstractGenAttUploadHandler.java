@@ -56,10 +56,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-
 /**
- * Abstract class to manage uploaded files for generic attributes entries of
- * type files
+ * Abstract class to manage uploaded files for generic attributes entries of type files
  */
 public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUploadHandler
 {
@@ -70,18 +68,17 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
 
     /** <sessionId,<fieldName,fileItems>> */
     /** contains uploaded file items */
-    private static Map<String, Map<String, List<FileItem>>> _mapAsynchronousUpload = new ConcurrentHashMap<String, Map<String, List<FileItem>>>(  );
+    private static Map<String, Map<String, List<FileItem>>> _mapAsynchronousUpload = new ConcurrentHashMap<String, Map<String, List<FileItem>>>( );
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String canUploadFiles( HttpServletRequest request, String strFieldName,
-        List<FileItem> listFileItemsToUpload, Locale locale )
+    public String canUploadFiles( HttpServletRequest request, String strFieldName, List<FileItem> listFileItemsToUpload, Locale locale )
     {
-        if ( StringUtils.isNotBlank( strFieldName ) && ( strFieldName.length(  ) > PREFIX_ENTRY_ID.length(  ) ) )
+        if ( StringUtils.isNotBlank( strFieldName ) && ( strFieldName.length( ) > PREFIX_ENTRY_ID.length( ) ) )
         {
-            initMap( request.getSession(  ).getId(  ), strFieldName );
+            initMap( request.getSession( ).getId( ), strFieldName );
 
             String strIdEntry = getEntryIdFromFieldName( strFieldName );
 
@@ -93,17 +90,16 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
             int nIdEntry = Integer.parseInt( strIdEntry );
             Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
 
-            List<FileItem> listUploadedFileItems = getListUploadedFiles( strFieldName, request.getSession(  ) );
+            List<FileItem> listUploadedFileItems = getListUploadedFiles( strFieldName, request.getSession( ) );
 
             if ( entry != null )
             {
-                GenericAttributeError error = EntryTypeServiceManager.getEntryTypeService( entry )
-                                                                     .canUploadFiles( entry, listUploadedFileItems,
+                GenericAttributeError error = EntryTypeServiceManager.getEntryTypeService( entry ).canUploadFiles( entry, listUploadedFileItems,
                         listFileItemsToUpload, locale );
 
                 if ( error != null )
                 {
-                    return error.getErrorMessage(  );
+                    return error.getErrorMessage( );
                 }
 
                 return null;
@@ -124,10 +120,10 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
             throw new AppException( "id field name is not provided for the current file upload" );
         }
 
-        initMap( session.getId(  ), strFieldName );
+        initMap( session.getId( ), strFieldName );
 
         // find session-related files in the map
-        Map<String, List<FileItem>> mapFileItemsSession = _mapAsynchronousUpload.get( session.getId(  ) );
+        Map<String, List<FileItem>> mapFileItemsSession = _mapAsynchronousUpload.get( session.getId( ) );
 
         return mapFileItemsSession.get( strFieldName );
     }
@@ -140,30 +136,29 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
     {
         // This is the name that will be displayed in the form. We keep
         // the original name, but clean it to make it cross-platform.
-        String strFileName = UploadUtil.cleanFileName( fileItem.getName(  ).trim(  ) );
+        String strFileName = UploadUtil.cleanFileName( fileItem.getName( ).trim( ) );
 
-        initMap( request.getSession(  ).getId(  ), buildFieldName( strFieldName ) );
+        initMap( request.getSession( ).getId( ), buildFieldName( strFieldName ) );
 
         // Check if this file has not already been uploaded
-        List<FileItem> uploadedFiles = getListUploadedFiles( strFieldName, request.getSession(  ) );
+        List<FileItem> uploadedFiles = getListUploadedFiles( strFieldName, request.getSession( ) );
 
         if ( uploadedFiles != null )
         {
             boolean bNew = true;
 
-            if ( !uploadedFiles.isEmpty(  ) )
+            if ( !uploadedFiles.isEmpty( ) )
             {
-                Iterator<FileItem> iterUploadedFiles = uploadedFiles.iterator(  );
+                Iterator<FileItem> iterUploadedFiles = uploadedFiles.iterator( );
 
-                while ( bNew && iterUploadedFiles.hasNext(  ) )
+                while ( bNew && iterUploadedFiles.hasNext( ) )
                 {
-                    FileItem uploadedFile = iterUploadedFiles.next(  );
-                    String strUploadedFileName = UploadUtil.cleanFileName( uploadedFile.getName(  ).trim(  ) );
+                    FileItem uploadedFile = iterUploadedFiles.next( );
+                    String strUploadedFileName = UploadUtil.cleanFileName( uploadedFile.getName( ).trim( ) );
                     // If we find a file with the same name and the same
                     // length, we consider that the current file has
                     // already been uploaded
-                    bNew = !( StringUtils.equals( strUploadedFileName, strFileName ) &&
-                        ( uploadedFile.getSize(  ) == fileItem.getSize(  ) ) );
+                    bNew = !( StringUtils.equals( strUploadedFileName, strFileName ) && ( uploadedFile.getSize( ) == fileItem.getSize( ) ) );
                 }
             }
 
@@ -183,17 +178,19 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
         // Remove the file (this will also delete the file physically)
         List<FileItem> uploadedFiles = getListUploadedFiles( strFieldName, session );
 
-        if ( ( uploadedFiles != null ) && !uploadedFiles.isEmpty(  ) && ( uploadedFiles.size(  ) > nIndex ) )
+        if ( ( uploadedFiles != null ) && !uploadedFiles.isEmpty( ) && ( uploadedFiles.size( ) > nIndex ) )
         {
             // Remove the object from the Hashmap
             FileItem fileItem = uploadedFiles.remove( nIndex );
-            fileItem.delete(  );
+            fileItem.delete( );
         }
     }
 
     /**
      * Removes all files associated to the session
-     * @param strSessionId the session id
+     * 
+     * @param strSessionId
+     *            the session id
      */
     public void removeSessionFiles( String strSessionId )
     {
@@ -201,9 +198,10 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
     }
 
     /**
-     * Build the field name from a given id entry
-     * i.e. : form_1
-     * @param strIdEntry the id entry
+     * Build the field name from a given id entry i.e. : form_1
+     * 
+     * @param strIdEntry
+     *            the id entry
      * @return the field name
      */
     protected String buildFieldName( String strIdEntry )
@@ -213,23 +211,28 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
 
     /**
      * Get the id of the entry associated with a given field name
-     * @param strFieldName The name of the field
+     * 
+     * @param strFieldName
+     *            The name of the field
      * @return The id of the entry
      */
     protected String getEntryIdFromFieldName( String strFieldName )
     {
-        if ( StringUtils.isEmpty( strFieldName ) || ( strFieldName.length(  ) < PREFIX_ENTRY_ID.length(  ) ) )
+        if ( StringUtils.isEmpty( strFieldName ) || ( strFieldName.length( ) < PREFIX_ENTRY_ID.length( ) ) )
         {
             return null;
         }
 
-        return strFieldName.substring( PREFIX_ENTRY_ID.length(  ) );
+        return strFieldName.substring( PREFIX_ENTRY_ID.length( ) );
     }
 
     /**
      * Init the map
-     * @param strSessionId the session id
-     * @param strFieldName the field name
+     * 
+     * @param strSessionId
+     *            the session id
+     * @param strFieldName
+     *            the field name
      */
     private void initMap( String strSessionId, String strFieldName )
     {
@@ -239,14 +242,14 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
         // create map if not exists
         if ( mapFileItemsSession == null )
         {
-            synchronized ( this )
+            synchronized( this )
             {
                 // Ignore double check locking error : assignation and instanciation of objects are separated.
                 mapFileItemsSession = _mapAsynchronousUpload.get( strSessionId );
 
                 if ( mapFileItemsSession == null )
                 {
-                    mapFileItemsSession = new ConcurrentHashMap<String, List<FileItem>>(  );
+                    mapFileItemsSession = new ConcurrentHashMap<String, List<FileItem>>( );
                     _mapAsynchronousUpload.put( strSessionId, mapFileItemsSession );
                 }
             }
@@ -256,7 +259,7 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
 
         if ( listFileItems == null )
         {
-            listFileItems = new ArrayList<FileItem>(  );
+            listFileItems = new ArrayList<FileItem>( );
             mapFileItemsSession.put( strFieldName, listFileItems );
         }
     }

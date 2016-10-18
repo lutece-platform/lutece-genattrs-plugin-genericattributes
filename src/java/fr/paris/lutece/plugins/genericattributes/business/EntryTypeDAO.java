@@ -39,7 +39,6 @@ import fr.paris.lutece.util.sql.DAOUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  *
  * class EntryTypeDAO
@@ -47,10 +46,10 @@ import java.util.List;
  */
 public class EntryTypeDAO implements IEntryTypeDAO
 {
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_type,title,is_group,is_comment,class_name,is_mylutece_user,plugin" +
-        " FROM genatt_entry_type WHERE id_type=?";
-    private static final String SQL_QUERY_SELECT = "SELECT id_type,title,is_group,is_comment,class_name,is_mylutece_user,plugin" +
-        " FROM genatt_entry_type WHERE plugin = ? ";
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_type,title,is_group,is_comment,class_name,is_mylutece_user,plugin"
+            + " FROM genatt_entry_type WHERE id_type=?";
+    private static final String SQL_QUERY_SELECT = "SELECT id_type,title,is_group,is_comment,class_name,is_mylutece_user,plugin"
+            + " FROM genatt_entry_type WHERE plugin = ? ";
 
     /**
      * {@inheritDoc}
@@ -60,13 +59,13 @@ public class EntryTypeDAO implements IEntryTypeDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
         daoUtil.setInt( 1, idKey );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         EntryType entryType = null;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            entryType = new EntryType(  );
+            entryType = new EntryType( );
             entryType.setIdType( daoUtil.getInt( 1 ) );
             entryType.setTitle( daoUtil.getString( 2 ) );
             entryType.setGroup( daoUtil.getBoolean( 3 ) );
@@ -76,7 +75,7 @@ public class EntryTypeDAO implements IEntryTypeDAO
             entryType.setPlugin( daoUtil.getString( 7 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return entryType;
     }
@@ -87,16 +86,16 @@ public class EntryTypeDAO implements IEntryTypeDAO
     @Override
     public List<EntryType> select( String strPlugin, Plugin plugin )
     {
-        List<EntryType> listEntryType = new ArrayList<EntryType>(  );
+        List<EntryType> listEntryType = new ArrayList<EntryType>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
         daoUtil.setString( 1, strPlugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         EntryType entryType = null;
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            entryType = new EntryType(  );
+            entryType = new EntryType( );
             entryType.setIdType( daoUtil.getInt( 1 ) );
             entryType.setTitle( daoUtil.getString( 2 ) );
             entryType.setGroup( daoUtil.getBoolean( 3 ) );
@@ -107,7 +106,7 @@ public class EntryTypeDAO implements IEntryTypeDAO
             listEntryType.add( entryType );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return listEntryType;
     }

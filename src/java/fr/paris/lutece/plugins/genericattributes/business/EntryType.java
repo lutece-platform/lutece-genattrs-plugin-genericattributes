@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.genericattributes.business;
 
 import java.io.Serializable;
 
-
 /**
  *
  * class entryType
@@ -56,14 +55,16 @@ public class EntryType implements Serializable
      *
      * @return the id of the entry type
      */
-    public int getIdType(  )
+    public int getIdType( )
     {
         return _nIdType;
     }
 
     /**
      * set the id of the entry type
-     * @param idType the id of the entry type
+     * 
+     * @param idType
+     *            the id of the entry type
      */
     public void setIdType( int idType )
     {
@@ -74,14 +75,16 @@ public class EntryType implements Serializable
      *
      * @return true if the type is a group
      */
-    public Boolean getGroup(  )
+    public Boolean getGroup( )
     {
         return _bGroup;
     }
 
     /**
      * set true if the type is a group
-     * @param isGroup if the type is a group
+     * 
+     * @param isGroup
+     *            if the type is a group
      */
     public void setGroup( Boolean isGroup )
     {
@@ -92,14 +95,16 @@ public class EntryType implements Serializable
      *
      * @return the title of the entry type
      */
-    public String getTitle(  )
+    public String getTitle( )
     {
         return _strTitle;
     }
 
     /**
      * set the title of the entry type
-     * @param title the title of the entry type
+     * 
+     * @param title
+     *            the title of the entry type
      */
     public void setTitle( String title )
     {
@@ -108,17 +113,19 @@ public class EntryType implements Serializable
 
     /**
      * Get the name of the bean of the entry type service
+     * 
      * @return The name of the bean of the entry type service
      */
-    public String getBeanName(  )
+    public String getBeanName( )
     {
         return _strBeanName;
     }
 
     /**
      * set the path for access to the Class Entry
-     * @param strBeanName The name of the bean of the entry type service of this
-     *            entry type
+     * 
+     * @param strBeanName
+     *            The name of the bean of the entry type service of this entry type
      */
     public void setBeanName( String strBeanName )
     {
@@ -129,14 +136,15 @@ public class EntryType implements Serializable
      *
      * @return true if the type is a comment
      */
-    public Boolean getComment(  )
+    public Boolean getComment( )
     {
         return _bComment;
     }
 
     /**
      *
-     * @param isComment set true if the type is a comment
+     * @param isComment
+     *            set true if the type is a comment
      */
     public void setComment( Boolean isComment )
     {
@@ -147,14 +155,15 @@ public class EntryType implements Serializable
      *
      * @return true if the type is MyLutece user
      */
-    public Boolean getMyLuteceUser(  )
+    public Boolean getMyLuteceUser( )
     {
         return _bMyLuteceUser;
     }
 
     /**
      *
-     * @param isMyLuteceUser set true if the type is MyLutece user
+     * @param isMyLuteceUser
+     *            set true if the type is MyLutece user
      */
     public void setMyLuteceUser( Boolean isMyLuteceUser )
     {
@@ -163,16 +172,19 @@ public class EntryType implements Serializable
 
     /**
      * Get the name of the plugin associated with this entry type
+     * 
      * @return The name of the plugin associated with this entry type
      */
-    public String getPlugin(  )
+    public String getPlugin( )
     {
         return _strPlugin;
     }
 
     /**
      * Set the name of the plugin associated with this entry type
-     * @param strPlugin The name of the plugin associated with this entry type
+     * 
+     * @param strPlugin
+     *            The name of the plugin associated with this entry type
      */
     public void setPlugin( String strPlugin )
     {

@@ -43,7 +43,6 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
 
-
 /**
  * Utility class of plugin generic attributes
  */
@@ -68,20 +67,23 @@ public final class GenericAttributesUtils
     /**
      * Private constructor
      */
-    private GenericAttributesUtils(  )
+    private GenericAttributesUtils( )
     {
         // Do nothing
     }
 
     /**
      * Return the field which title is specified in parameter
-     * @param strTitle the title
-     * @param listFields the list of fields
+     * 
+     * @param strTitle
+     *            the title
+     * @param listFields
+     *            the list of fields
      * @return the field which title is specified in parameter
      */
     public static Field findFieldByTitleInTheList( String strTitle, List<Field> listFields )
     {
-        if ( ( listFields == null ) || listFields.isEmpty(  ) )
+        if ( ( listFields == null ) || listFields.isEmpty( ) )
         {
             return null;
         }
@@ -90,15 +92,16 @@ public final class GenericAttributesUtils
         {
             if ( StringUtils.isNotBlank( strTitle ) )
             {
-                if ( StringUtils.equals( StringUtils.trim( strTitle ), StringUtils.trim( field.getTitle(  ) ) ) )
+                if ( StringUtils.equals( StringUtils.trim( strTitle ), StringUtils.trim( field.getTitle( ) ) ) )
                 {
                     return field;
                 }
             }
-            else if ( StringUtils.isBlank( field.getTitle(  ) ) )
-            {
-                return field;
-            }
+            else
+                if ( StringUtils.isBlank( field.getTitle( ) ) )
+                {
+                    return field;
+                }
         }
 
         return null;
@@ -106,15 +109,18 @@ public final class GenericAttributesUtils
 
     /**
      * return the field which key is specified in parameter
-     * @param nIdField the id of the field who is search
-     * @param listField the list of field
+     * 
+     * @param nIdField
+     *            the id of the field who is search
+     * @param listField
+     *            the list of field
      * @return the field which key is specified in parameter
      */
     public static Field findFieldByIdInTheList( int nIdField, List<Field> listField )
     {
         for ( Field field : listField )
         {
-            if ( field.getIdField(  ) == nIdField )
+            if ( field.getIdField( ) == nIdField )
             {
                 return field;
             }
@@ -125,16 +131,19 @@ public final class GenericAttributesUtils
 
     /**
      * Gets the generic attributes plugin
+     * 
      * @return the plugin
      */
-    public static Plugin getPlugin(  )
+    public static Plugin getPlugin( )
     {
         return PluginService.getPlugin( GenericAttributesPlugin.PLUGIN_NAME );
     }
 
     /**
      * Convert a string to int
-     * @param strParameter the string parameter to convert
+     * 
+     * @param strParameter
+     *            the string parameter to convert
      * @return the conversion
      */
     public static int convertStringToInt( String strParameter )
@@ -148,7 +157,7 @@ public final class GenericAttributesUtils
                 nIdParameter = Integer.parseInt( strParameter );
             }
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             AppLogService.error( ne );
         }

@@ -44,7 +44,6 @@ import fr.paris.lutece.portal.service.image.ImageResourceProvider;
 import fr.paris.lutece.util.file.FileUtil;
 import fr.paris.lutece.util.url.UrlItem;
 
-
 /**
  * Resource provider for images
  */
@@ -54,7 +53,7 @@ public class ResponseImageResourceProvider implements ImageResourceProvider
      * {@inheritDoc}
      */
     @Override
-    public String getResourceTypeId(  )
+    public String getResourceTypeId( )
     {
         return Response.RESOURCE_TYPE;
     }
@@ -67,17 +66,16 @@ public class ResponseImageResourceProvider implements ImageResourceProvider
     {
         Response response = ResponseHome.findByPrimaryKey( nIdResource );
 
-        if ( response.getFile(  ) != null )
+        if ( response.getFile( ) != null )
         {
-            File file = FileHome.findByPrimaryKey( response.getFile(  ).getIdFile(  ) );
+            File file = FileHome.findByPrimaryKey( response.getFile( ).getIdFile( ) );
 
-            if ( ( file.getPhysicalFile(  ) != null ) && FileUtil.hasImageExtension( file.getTitle(  ) ) )
+            if ( ( file.getPhysicalFile( ) != null ) && FileUtil.hasImageExtension( file.getTitle( ) ) )
             {
-                PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile(  )
-                                                                                   .getIdPhysicalFile(  ) );
-                ImageResource image = new ImageResource(  );
-                image.setImage( physicalFile.getValue(  ) );
-                image.setMimeType( file.getMimeType(  ) );
+                PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile( ).getIdPhysicalFile( ) );
+                ImageResource image = new ImageResource( );
+                image.setImage( physicalFile.getValue( ) );
+                image.setMimeType( file.getMimeType( ) );
 
                 return image;
             }
@@ -88,7 +86,9 @@ public class ResponseImageResourceProvider implements ImageResourceProvider
 
     /**
      * Get the URL to download an image response
-     * @param nIdResponse The id of the response
+     * 
+     * @param nIdResponse
+     *            The id of the response
      * @return The URl to download the image
      */
     public static String getUrlDownloadImageResponse( int nIdResponse )
@@ -97,6 +97,6 @@ public class ResponseImageResourceProvider implements ImageResourceProvider
         urlItem.addParameter( "resource_type", Response.RESOURCE_TYPE );
         urlItem.addParameter( "id", nIdResponse );
 
-        return urlItem.getUrl(  );
+        return urlItem.getUrl( );
     }
 }

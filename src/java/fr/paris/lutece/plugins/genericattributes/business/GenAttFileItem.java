@@ -43,24 +43,26 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
-
 /**
  * GenAttFileItem : builds a new fileItem
  */
 public class GenAttFileItem implements FileItem
 {
     private static final long serialVersionUID = -8540841906551362771L;
-    private byte[] _bValue;
+    private byte [ ] _bValue;
     private String _strFileName;
     private String _strFieldName;
     private int _nIdResponse;
 
     /**
      * Creates a new file item
-     * @param bValue the byte value
-     * @param strFileName the file name
+     * 
+     * @param bValue
+     *            the byte value
+     * @param strFileName
+     *            the file name
      */
-    public GenAttFileItem( byte[] bValue, String strFileName )
+    public GenAttFileItem( byte [ ] bValue, String strFileName )
     {
         _bValue = bValue;
         _strFileName = strFileName;
@@ -68,12 +70,15 @@ public class GenAttFileItem implements FileItem
 
     /**
      * Creates a new file item
-     * @param bValue the byte value
-     * @param strFileName the file name
-     * @param nIdResponse The id of the response associated with this file item
-     *            if any
+     * 
+     * @param bValue
+     *            the byte value
+     * @param strFileName
+     *            the file name
+     * @param nIdResponse
+     *            The id of the response associated with this file item if any
      */
-    public GenAttFileItem( byte[] bValue, String strFileName, int nIdResponse )
+    public GenAttFileItem( byte [ ] bValue, String strFileName, int nIdResponse )
     {
         _bValue = bValue;
         _strFileName = strFileName;
@@ -82,14 +87,17 @@ public class GenAttFileItem implements FileItem
 
     /**
      * Creates a new file item
-     * @param bValue the byte value
-     * @param strFileName the file name
-     * @param strFieldName The name of the HTML field associated with this file,
-     *            if any
-     * @param nIdResponse The id of the response associated with this file item
-     *            if any
+     * 
+     * @param bValue
+     *            the byte value
+     * @param strFileName
+     *            the file name
+     * @param strFieldName
+     *            The name of the HTML field associated with this file, if any
+     * @param nIdResponse
+     *            The id of the response associated with this file item if any
      */
-    public GenAttFileItem( byte[] bValue, String strFileName, String strFieldName, int nIdResponse )
+    public GenAttFileItem( byte [ ] bValue, String strFileName, String strFieldName, int nIdResponse )
     {
         _bValue = bValue;
         _strFileName = strFileName;
@@ -101,7 +109,7 @@ public class GenAttFileItem implements FileItem
      * {@inheritDoc}
      */
     @Override
-    public void delete(  )
+    public void delete( )
     {
         _bValue = null;
     }
@@ -110,7 +118,7 @@ public class GenAttFileItem implements FileItem
      * {@inheritDoc}
      */
     @Override
-    public byte[] get(  )
+    public byte [ ] get( )
     {
         return _bValue;
     }
@@ -119,7 +127,7 @@ public class GenAttFileItem implements FileItem
      * {@inheritDoc}
      */
     @Override
-    public String getContentType(  )
+    public String getContentType( )
     {
         return FileSystemUtil.getMIMEType( _strFileName );
     }
@@ -128,7 +136,7 @@ public class GenAttFileItem implements FileItem
      * {@inheritDoc}
      */
     @Override
-    public String getFieldName(  )
+    public String getFieldName( )
     {
         return _strFieldName;
     }
@@ -137,7 +145,7 @@ public class GenAttFileItem implements FileItem
      * {@inheritDoc}
      */
     @Override
-    public InputStream getInputStream(  ) throws IOException
+    public InputStream getInputStream( ) throws IOException
     {
         return new ByteArrayInputStream( _bValue );
     }
@@ -146,7 +154,7 @@ public class GenAttFileItem implements FileItem
      * {@inheritDoc}
      */
     @Override
-    public String getName(  )
+    public String getName( )
     {
         return _strFileName;
     }
@@ -155,7 +163,7 @@ public class GenAttFileItem implements FileItem
      * {@inheritDoc}
      */
     @Override
-    public OutputStream getOutputStream(  ) throws IOException
+    public OutputStream getOutputStream( ) throws IOException
     {
         return null;
     }
@@ -164,7 +172,7 @@ public class GenAttFileItem implements FileItem
      * {@inheritDoc}
      */
     @Override
-    public long getSize(  )
+    public long getSize( )
     {
         return _bValue.length;
     }
@@ -173,7 +181,7 @@ public class GenAttFileItem implements FileItem
      * {@inheritDoc}
      */
     @Override
-    public String getString(  )
+    public String getString( )
     {
         return new String( _bValue );
     }
@@ -189,9 +197,10 @@ public class GenAttFileItem implements FileItem
 
     /**
      * Get the id of the associated response, if any
+     * 
      * @return The id of the associated response, if any
      */
-    public int getIdResponse(  )
+    public int getIdResponse( )
     {
         return _nIdResponse;
     }
@@ -200,7 +209,7 @@ public class GenAttFileItem implements FileItem
      * {@inheritDoc}
      */
     @Override
-    public boolean isFormField(  )
+    public boolean isFormField( )
     {
         return false;
     }
@@ -209,7 +218,7 @@ public class GenAttFileItem implements FileItem
      * {@inheritDoc}
      */
     @Override
-    public boolean isInMemory(  )
+    public boolean isInMemory( )
     {
         return true;
     }
@@ -234,7 +243,9 @@ public class GenAttFileItem implements FileItem
 
     /**
      * Set the id of the associated response, if any
-     * @param nIdResponse The id of the associated response, if any
+     * 
+     * @param nIdResponse
+     *            The id of the associated response, if any
      */
     public void setIdResponse( int nIdResponse )
     {

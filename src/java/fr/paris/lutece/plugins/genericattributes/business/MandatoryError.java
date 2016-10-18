@@ -39,7 +39,6 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.Locale;
 
-
 /**
  * Error that indicates that a mandatory field has not been set
  */
@@ -50,16 +49,21 @@ public class MandatoryError extends GenericAttributeError
 
     /**
      * Creates a new mandatory error
-     * @param entry the entry
-     * @param locale the locale
+     * 
+     * @param entry
+     *            the entry
+     * @param locale
+     *            the locale
      */
     public MandatoryError( Entry entry, Locale locale )
     {
-        if ( ( entry != null ) && StringUtils.isNotBlank( entry.getTitle(  ) ) )
+        if ( ( entry != null ) && StringUtils.isNotBlank( entry.getTitle( ) ) )
         {
-            this.setTitleQuestion( entry.getTitle(  ) );
+            this.setTitleQuestion( entry.getTitle( ) );
 
-            Object[] param = { entry.getTitle(  ) };
+            Object [ ] param = {
+                entry.getTitle( )
+            };
             String strErrorMessage = I18nService.getLocalizedString( MESSAGE_MANDATORY_FIELD, param, locale );
             this.setErrorMessage( strErrorMessage );
         }
@@ -69,7 +73,7 @@ public class MandatoryError extends GenericAttributeError
      * {@inheritDoc}
      */
     @Override
-    public boolean isMandatoryError(  )
+    public boolean isMandatoryError( )
     {
         return true;
     }

@@ -52,7 +52,6 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * Abstract entry type for radio buttons
  */
@@ -66,8 +65,7 @@ public abstract class AbstractEntryTypeRadioButton extends EntryTypeService
     {
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
-        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
-            ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim(  ) : null;
+        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
         String strFieldInLine = request.getParameter( PARAMETER_FIELD_IN_LINE );
@@ -85,10 +83,11 @@ public abstract class AbstractEntryTypeRadioButton extends EntryTypeService
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                I18nService.getLocalizedString( strFieldError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         // for don't update fields listFields=null
@@ -106,9 +105,9 @@ public abstract class AbstractEntryTypeRadioButton extends EntryTypeService
         {
             nFieldInLine = Integer.parseInt( strFieldInLine );
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
-            AppLogService.error( ne.getMessage(  ), ne );
+            AppLogService.error( ne.getMessage( ), ne );
         }
 
         entry.setFieldInLine( nFieldInLine == 1 );
@@ -120,13 +119,12 @@ public abstract class AbstractEntryTypeRadioButton extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-        Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String strIdField = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry(  ) );
+        String strIdField = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
         int nIdField = -1;
         Field field = null;
-        Response response = new Response(  );
+        Response response = new Response( );
         response.setEntry( entry );
 
         if ( strIdField != null )
@@ -135,28 +133,28 @@ public abstract class AbstractEntryTypeRadioButton extends EntryTypeService
             {
                 nIdField = Integer.parseInt( strIdField );
             }
-            catch ( NumberFormatException ne )
+            catch( NumberFormatException ne )
             {
-                AppLogService.error( ne.getMessage(  ), ne );
+                AppLogService.error( ne.getMessage( ), ne );
             }
         }
 
         if ( nIdField != -1 )
         {
-            field = GenericAttributesUtils.findFieldByIdInTheList( nIdField, entry.getFields(  ) );
+            field = GenericAttributesUtils.findFieldByIdInTheList( nIdField, entry.getFields( ) );
         }
 
         if ( field != null )
         {
-            response.setResponseValue( field.getValue(  ) );
+            response.setResponseValue( field.getValue( ) );
             response.setField( field );
         }
 
         listResponse.add( response );
 
-        if ( entry.isMandatory(  ) )
+        if ( entry.isMandatory( ) )
         {
-            if ( ( field == null ) || StringUtils.isBlank( field.getValue(  ) ) )
+            if ( ( field == null ) || StringUtils.isBlank( field.getValue( ) ) )
             {
                 return new MandatoryError( entry, locale );
             }
@@ -171,7 +169,7 @@ public abstract class AbstractEntryTypeRadioButton extends EntryTypeService
     @Override
     public String getResponseValueForExport( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getResponseValue(  );
+        return response.getResponseValue( );
     }
 
     /**
@@ -180,11 +178,11 @@ public abstract class AbstractEntryTypeRadioButton extends EntryTypeService
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        if ( response.getField(  ) != null )
+        if ( response.getField( ) != null )
         {
-            if ( response.getField(  ).getTitle(  ) == null )
+            if ( response.getField( ).getTitle( ) == null )
             {
-                Field field = FieldHome.findByPrimaryKey( response.getField(  ).getIdField(  ) );
+                Field field = FieldHome.findByPrimaryKey( response.getField( ).getIdField( ) );
 
                 if ( field != null )
                 {
@@ -192,7 +190,7 @@ public abstract class AbstractEntryTypeRadioButton extends EntryTypeService
                 }
             }
 
-            return response.getField(  ).getTitle(  );
+            return response.getField( ).getTitle( );
         }
 
         return null;

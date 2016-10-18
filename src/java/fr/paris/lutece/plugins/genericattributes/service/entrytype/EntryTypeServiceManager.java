@@ -38,49 +38,49 @@ import fr.paris.lutece.plugins.genericattributes.business.EntryType;
 import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-
 /**
  * Class to manage entry type services
  */
 public final class EntryTypeServiceManager extends AbstractCacheableService
 {
     private static final String CACHE_SERVICE_NAME = "Entry Type Service Manager Cache";
-    private static EntryTypeServiceManager _instance = new EntryTypeServiceManager(  );
+    private static EntryTypeServiceManager _instance = new EntryTypeServiceManager( );
 
     /**
      * Default constructor
      */
-    private EntryTypeServiceManager(  )
+    private EntryTypeServiceManager( )
     {
-        initCache(  );
+        initCache( );
     }
 
     /**
      * Get the entry type service associated with an entry
-     * @param entry The entry to get the entry type service of
-     * @return The entry type service, or null if no entry type service was
-     *         found
+     * 
+     * @param entry
+     *            The entry to get the entry type service of
+     * @return The entry type service, or null if no entry type service was found
      */
     public static IEntryTypeService getEntryTypeService( Entry entry )
     {
         if ( entry != null )
         {
-            EntryType entryType = entry.getEntryType(  );
+            EntryType entryType = entry.getEntryType( );
 
             if ( entryType != null )
             {
-                IEntryTypeService entryTypeService = (IEntryTypeService) _instance.getFromCache( entryType.getBeanName(  ) );
+                IEntryTypeService entryTypeService = (IEntryTypeService) _instance.getFromCache( entryType.getBeanName( ) );
 
                 if ( entryTypeService != null )
                 {
                     return entryTypeService;
                 }
 
-                entryTypeService = SpringContextService.getBean( entryType.getBeanName(  ) );
+                entryTypeService = SpringContextService.getBean( entryType.getBeanName( ) );
 
-                synchronized ( entryType.getBeanName(  ) )
+                synchronized( entryType.getBeanName( ) )
                 {
-                    _instance.putInCache( entryType.getBeanName(  ), entryTypeService );
+                    _instance.putInCache( entryType.getBeanName( ), entryTypeService );
                 }
 
                 return entryTypeService;
@@ -94,7 +94,7 @@ public final class EntryTypeServiceManager extends AbstractCacheableService
      * {@inheritDoc}
      */
     @Override
-    public String getName(  )
+    public String getName( )
     {
         return CACHE_SERVICE_NAME;
     }

@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.genericattributes.service;
 import fr.paris.lutece.portal.service.image.ImageResourceManager;
 import fr.paris.lutece.portal.service.plugin.PluginDefaultImplementation;
 
-
 /**
  * Generic attributes plugin
  */
@@ -51,8 +50,8 @@ public class GenericAttributesPlugin extends PluginDefaultImplementation
      * {@inheritDoc}
      */
     @Override
-    public void init(  )
+    public void init( )
     {
-        ImageResourceManager.registerProvider( new ResponseImageResourceProvider(  ) );
+        ImageResourceManager.registerProvider( new ResponseImageResourceProvider( ) );
     }
 }

@@ -42,10 +42,8 @@ import fr.paris.lutece.util.sql.TransactionManager;
 import java.util.List;
 import java.util.Map;
 
-
 /**
- * This class provides instances management methods (create, find, ...) for
- * Entry objects
+ * This class provides instances management methods (create, find, ...) for Entry objects
  */
 public final class EntryHome
 {
@@ -56,31 +54,34 @@ public final class EntryHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private EntryHome(  )
+    private EntryHome( )
     {
     }
 
     /**
      * Creation of an instance of Entry
-     * @param entry The instance of the Entry which contains the informations to
-     *            store
+     * 
+     * @param entry
+     *            The instance of the Entry which contains the informations to store
      * @return The primary key of the new entry.
      */
     public static int create( Entry entry )
     {
-        return _dao.insert( entry, getPlugin(  ) );
+        return _dao.insert( entry, getPlugin( ) );
     }
 
     /**
      * Copy of an instance of Entry
-     * @param entry The instance of the Entry who must copy
+     * 
+     * @param entry
+     *            The instance of the Entry who must copy
      */
     public static void copy( Entry entry )
     {
-        Entry entryCopy = (Entry) entry.clone(  );
-        List<Field> listField = FieldHome.getFieldListByIdEntry( entry.getIdEntry(  ) );
+        Entry entryCopy = (Entry) entry.clone( );
+        List<Field> listField = FieldHome.getFieldListByIdEntry( entry.getIdEntry( ) );
 
-        TransactionManager.beginTransaction( getPlugin(  ) );
+        TransactionManager.beginTransaction( getPlugin( ) );
 
         try
         {
@@ -88,52 +89,55 @@ public final class EntryHome
 
             for ( Field field : listField )
             {
-                field = FieldHome.findByPrimaryKey( field.getIdField(  ) );
+                field = FieldHome.findByPrimaryKey( field.getIdField( ) );
 
-                for ( Entry entryConditionnal : field.getConditionalQuestions(  ) )
+                for ( Entry entryConditionnal : field.getConditionalQuestions( ) )
                 {
-                    entryConditionnal.setIdResource( entry.getIdResource(  ) );
-                    entryConditionnal.setResourceType( entry.getResourceType(  ) );
+                    entryConditionnal.setIdResource( entry.getIdResource( ) );
+                    entryConditionnal.setResourceType( entry.getResourceType( ) );
                 }
 
                 field.setParentEntry( entryCopy );
                 FieldHome.copy( field );
             }
 
-            if ( entryCopy.getEntryType(  ).getGroup(  ) )
+            if ( entryCopy.getEntryType( ).getGroup( ) )
             {
-                for ( Entry entryChild : entry.getChildren(  ) )
+                for ( Entry entryChild : entry.getChildren( ) )
                 {
-                    entryChild = EntryHome.findByPrimaryKey( entryChild.getIdEntry(  ) );
+                    entryChild = EntryHome.findByPrimaryKey( entryChild.getIdEntry( ) );
                     entryChild.setParent( entryCopy );
-                    entryChild.setIdResource( entryCopy.getIdResource(  ) );
-                    entryChild.setResourceType( entryCopy.getResourceType(  ) );
+                    entryChild.setIdResource( entryCopy.getIdResource( ) );
+                    entryChild.setResourceType( entryCopy.getResourceType( ) );
                     copy( entryChild );
                 }
             }
 
-            TransactionManager.commitTransaction( getPlugin(  ) );
+            TransactionManager.commitTransaction( getPlugin( ) );
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
-            TransactionManager.rollBack( getPlugin(  ) );
-            throw new AppException( e.getMessage(  ), e );
+            TransactionManager.rollBack( getPlugin( ) );
+            throw new AppException( e.getMessage( ), e );
         }
     }
 
     /**
      * Update of the entry which is specified in parameter
-     * @param entry The instance of the Entry which contains the informations to
-     *            update
+     * 
+     * @param entry
+     *            The instance of the Entry which contains the informations to update
      */
     public static void update( Entry entry )
     {
-        _dao.store( entry, getPlugin(  ) );
+        _dao.store( entry, getPlugin( ) );
     }
 
     /**
      * Remove the entry whose identifier is specified in parameter
-     * @param nIdEntry The entry Id
+     * 
+     * @param nIdEntry
+     *            The entry Id
      */
     public static void remove( int nIdEntry )
     {
@@ -141,47 +145,49 @@ public final class EntryHome
 
         if ( entry != null )
         {
-            TransactionManager.beginTransaction( getPlugin(  ) );
+            TransactionManager.beginTransaction( getPlugin( ) );
 
             try
             {
-                for ( Field field : entry.getFields(  ) )
+                for ( Field field : entry.getFields( ) )
                 {
-                    FieldHome.remove( field.getIdField(  ) );
+                    FieldHome.remove( field.getIdField( ) );
                 }
 
-                for ( Entry entryChild : entry.getChildren(  ) )
+                for ( Entry entryChild : entry.getChildren( ) )
                 {
-                    remove( entryChild.getIdEntry(  ) );
+                    remove( entryChild.getIdEntry( ) );
                 }
 
-                _dao.delete( nIdEntry, getPlugin(  ) );
-                TransactionManager.commitTransaction( getPlugin(  ) );
+                _dao.delete( nIdEntry, getPlugin( ) );
+                TransactionManager.commitTransaction( getPlugin( ) );
             }
-            catch ( Exception e )
+            catch( Exception e )
             {
-                TransactionManager.rollBack( getPlugin(  ) );
-                throw new AppException( e.getMessage(  ), e );
+                TransactionManager.rollBack( getPlugin( ) );
+                throw new AppException( e.getMessage( ), e );
             }
         }
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
      * Returns an instance of a Entry whose identifier is specified in parameter
-     * @param nKey The entry primary key
+     * 
+     * @param nKey
+     *            The entry primary key
      * @return an instance of Entry
      */
     public static Entry findByPrimaryKey( int nKey )
     {
-        Entry entry = _dao.load( nKey, getPlugin(  ) );
+        Entry entry = _dao.load( nKey, getPlugin( ) );
 
         if ( entry != null )
         {
-            EntryFilter filter = new EntryFilter(  );
-            filter.setIdEntryParent( entry.getIdEntry(  ) );
+            EntryFilter filter = new EntryFilter( );
+            filter.setIdEntryParent( entry.getIdEntry( ) );
             entry.setChildren( getEntryList( filter ) );
             entry.setFields( FieldHome.getFieldListByIdEntry( nKey ) );
         }
@@ -190,42 +196,48 @@ public final class EntryHome
     }
 
     /**
-     * Load the data of all the entry who verify the filter and returns them in
-     * a list
-     * @param filter the filter
+     * Load the data of all the entry who verify the filter and returns them in a list
+     * 
+     * @param filter
+     *            the filter
      * @return the list of entry
      */
     public static List<Entry> getEntryList( EntryFilter filter )
     {
-        return _dao.selectEntryListByFilter( filter, getPlugin(  ) );
+        return _dao.selectEntryListByFilter( filter, getPlugin( ) );
     }
 
     /**
      * Return the number of entry who verify the filter
-     * @param filter the filter
+     * 
+     * @param filter
+     *            the filter
      * @return the number of entry who verify the filter
      */
     public static int getNumberEntryByFilter( EntryFilter filter )
     {
-        return _dao.selectNumberEntryByFilter( filter, getPlugin(  ) );
+        return _dao.selectNumberEntryByFilter( filter, getPlugin( ) );
     }
 
     /**
      * Finds all the entries without any parent associated with a given resource
-     * @param nIdResource the id of the resource
-     * @param strResourceType The resource type
+     * 
+     * @param nIdResource
+     *            the id of the resource
+     * @param strResourceType
+     *            The resource type
      * @return List<IEntry> the list of all the entries without parent
      */
     public static List<Entry> findEntriesWithoutParent( int nIdResource, String strResourceType )
     {
-        List<Entry> listEntry = _dao.findEntriesWithoutParent( getPlugin(  ), nIdResource, strResourceType );
+        List<Entry> listEntry = _dao.findEntriesWithoutParent( getPlugin( ), nIdResource, strResourceType );
 
         for ( Entry entry : listEntry )
         {
             if ( entry != null )
             {
-                EntryFilter filter = new EntryFilter(  );
-                filter.setIdEntryParent( entry.getIdEntry(  ) );
+                EntryFilter filter = new EntryFilter( );
+                filter.setIdEntryParent( entry.getIdEntry( ) );
                 entry.setChildren( getEntryList( filter ) );
             }
         }
@@ -234,42 +246,50 @@ public final class EntryHome
     }
 
     /**
-     * Finds the entry (conditional question) with a given order, idDependField,
-     * id resource and resource type
-     * @param nOrder the order
-     * @param nIdField the id of the field
-     * @param nIdResource the id of the resource
-     * @param strResourceType The resource type of the entry to get
+     * Finds the entry (conditional question) with a given order, idDependField, id resource and resource type
+     * 
+     * @param nOrder
+     *            the order
+     * @param nIdField
+     *            the id of the field
+     * @param nIdResource
+     *            the id of the resource
+     * @param strResourceType
+     *            The resource type of the entry to get
      * @return List<IEntry> the list of all the entries without parent
      */
-    public static Entry findByOrderAndIdFieldAndIdResource( int nOrder, int nIdField, int nIdResource,
-        String strResourceType )
+    public static Entry findByOrderAndIdFieldAndIdResource( int nOrder, int nIdField, int nIdResource, String strResourceType )
     {
-        return _dao.findByOrderAndIdFieldAndIdResource( getPlugin(  ), nOrder, nIdField, nIdResource, strResourceType );
+        return _dao.findByOrderAndIdFieldAndIdResource( getPlugin( ), nOrder, nIdField, nIdResource, strResourceType );
     }
 
     /**
-     * Decrements the order of all the entries (conditional questions) after the
-     * one which will be removed
-     * @param nOrder the order of the entry which will be removed
-     * @param nIdField the id of the field
-     * @param nIdResource the id of the resource
-     * @param strResourceType The resource type
+     * Decrements the order of all the entries (conditional questions) after the one which will be removed
+     * 
+     * @param nOrder
+     *            the order of the entry which will be removed
+     * @param nIdField
+     *            the id of the field
+     * @param nIdResource
+     *            the id of the resource
+     * @param strResourceType
+     *            The resource type
      */
     public static void decrementOrderByOne( int nOrder, int nIdField, int nIdResource, String strResourceType )
     {
-        _dao.decrementOrderByOne( getPlugin(  ), nOrder, nIdField, nIdResource, strResourceType );
+        _dao.decrementOrderByOne( getPlugin( ), nOrder, nIdField, nIdResource, strResourceType );
     }
 
     /**
      * Get the generic attributes plugin
+     * 
      * @return The generic attributes plugin
      */
-    private static Plugin getPlugin(  )
+    private static Plugin getPlugin( )
     {
         if ( _plugin == null )
         {
-            _plugin = GenericAttributesUtils.getPlugin(  );
+            _plugin = GenericAttributesUtils.getPlugin( );
         }
 
         return _plugin;
@@ -277,8 +297,10 @@ public final class EntryHome
 
     /**
      *
-     * @param plugin the plugin
-     * @param nIdForm id form
+     * @param plugin
+     *            the plugin
+     * @param nIdForm
+     *            id form
      * @return list id entry with their titles
      */
     public static Map<Integer, String> findEntryByForm( Plugin plugin, int nIdForm )
@@ -288,9 +310,12 @@ public final class EntryHome
 
     /**
      *
-     * @param plugin the plugin
-     * @param nIdEntry id entry
-     * @param nIdResponse id entry response
+     * @param plugin
+     *            the plugin
+     * @param nIdEntry
+     *            id entry
+     * @param nIdResponse
+     *            id entry response
      * @return entry value
      */
     public static String getEntryValueByIdResponse( Plugin plugin, int nIdEntry, int nIdResponse )

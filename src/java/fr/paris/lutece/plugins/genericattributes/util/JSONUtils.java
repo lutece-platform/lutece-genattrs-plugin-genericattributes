@@ -62,7 +62,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-
 /**
  * Provides json utility methods for forms
  *
@@ -98,21 +97,25 @@ public final class JSONUtils
     /**
      * Empty constructor
      */
-    private JSONUtils(  )
+    private JSONUtils( )
     {
         // nothing
     }
 
     /**
      * Builds the response
-     * @param json the json
-     * @param locale the locale
-     * @param session the session
+     * 
+     * @param json
+     *            the json
+     * @param locale
+     *            the locale
+     * @param session
+     *            the session
      * @return response the response
      */
     private static Response buildResponse( JSONObject json, Locale locale, HttpSession session )
     {
-        Response response = new Response(  );
+        Response response = new Response( );
         response.setIdResponse( json.getInt( JSON_KEY_ID_RESPONSE ) );
 
         Entry entry = EntryHome.findByPrimaryKey( json.getInt( JSON_KEY_ID_ENTRY ) );
@@ -120,7 +123,7 @@ public final class JSONUtils
 
         if ( json.containsKey( JSON_KEY_FORM_ERROR ) )
         {
-            response.getEntry(  ).setError( buildFormError( json.getString( JSON_KEY_FORM_ERROR ) ) );
+            response.getEntry( ).setError( buildFormError( json.getString( JSON_KEY_FORM_ERROR ) ) );
         }
 
         if ( json.containsKey( JSON_KEY_VALUE_RESPONSE ) && !json.containsKey( JSON_KEY_FILE_NAME ) )
@@ -143,20 +146,20 @@ public final class JSONUtils
 
             try
             {
-                file = new File(  );
+                file = new File( );
                 file.setTitle( json.getString( JSON_KEY_FILE_NAME ) );
                 file.setMimeType( json.getString( JSON_KEY_MIME_TYPE ) );
             }
-            catch ( JSONException e )
+            catch( JSONException e )
             {
-                AppLogService.error( e.getMessage(  ), e );
+                AppLogService.error( e.getMessage( ), e );
             }
 
             response.setFile( file );
             bIsFile = true;
         }
 
-        if ( !bIsFile && ( response.getResponseValue(  ) != null ) )
+        if ( !bIsFile && ( response.getResponseValue( ) != null ) )
         {
             // if the entry is not a file, we can set the string value
             // data entry as specific behavior
@@ -167,13 +170,15 @@ public final class JSONUtils
     }
 
     /**
-     * Builds the responses list - null if {@link #JSON_KEY_RESPONSE} is
-     * missing.
-     * @param strJSON the json
-     * @param locale the locale
-     * @param session the session
-     * @return the responses list - null if {@link #JSON_KEY_RESPONSE} is
-     *         missing
+     * Builds the responses list - null if {@link #JSON_KEY_RESPONSE} is missing.
+     * 
+     * @param strJSON
+     *            the json
+     * @param locale
+     *            the locale
+     * @param session
+     *            the session
+     * @return the responses list - null if {@link #JSON_KEY_RESPONSE} is missing
      */
     @SuppressWarnings( "unchecked" )
     public static Map<Integer, List<Response>> buildListResponses( String strJSON, Locale locale, HttpSession session )
@@ -185,23 +190,23 @@ public final class JSONUtils
         {
             JSON jsonResponses = (JSON) jsonObject.get( JSON_KEY_RESPONSE );
 
-            if ( ( jsonResponses != null ) && !jsonResponses.isEmpty(  ) )
+            if ( ( jsonResponses != null ) && !jsonResponses.isEmpty( ) )
             {
                 // there is at least one result
-                mapResponses = new HashMap<Integer, List<Response>>(  );
+                mapResponses = new HashMap<Integer, List<Response>>( );
 
-                if ( jsonResponses.isArray(  ) )
+                if ( jsonResponses.isArray( ) )
                 {
                     // array
                     for ( JSONObject jsonResponse : ( (Collection<JSONObject>) ( (JSONArray) jsonResponses ) ) )
                     {
                         Response response = buildResponse( jsonResponse, locale, session );
-                        List<Response> listResponses = mapResponses.get( response.getEntry(  ).getIdEntry(  ) );
+                        List<Response> listResponses = mapResponses.get( response.getEntry( ).getIdEntry( ) );
 
                         if ( listResponses == null )
                         {
-                            listResponses = new ArrayList<Response>(  );
-                            mapResponses.put( response.getEntry(  ).getIdEntry(  ), listResponses );
+                            listResponses = new ArrayList<Response>( );
+                            mapResponses.put( response.getEntry( ).getIdEntry( ), listResponses );
                         }
 
                         listResponses.add( response );
@@ -214,9 +219,9 @@ public final class JSONUtils
 
                     Response response = buildResponse( jsonResponse, locale, session );
 
-                    List<Response> listResponses = new ArrayList<Response>(  );
+                    List<Response> listResponses = new ArrayList<Response>( );
                     listResponses.add( response );
-                    mapResponses.put( response.getEntry(  ).getIdEntry(  ), listResponses );
+                    mapResponses.put( response.getEntry( ).getIdEntry( ), listResponses );
                 }
             }
             else
@@ -225,7 +230,7 @@ public final class JSONUtils
                 mapResponses = null;
             }
         }
-        catch ( JSONException jsonEx )
+        catch( JSONException jsonEx )
         {
             // nothing to do - response might no be present
             mapResponses = null;
@@ -236,30 +241,33 @@ public final class JSONUtils
 
     /**
      * Builds json form {@link GenericAttributeError}
-     * @param formError {@link GenericAttributeError}
+     * 
+     * @param formError
+     *            {@link GenericAttributeError}
      * @return json string
      */
     public static String buildJson( GenericAttributeError formError )
     {
-        JSONObject jsonError = new JSONObject(  );
+        JSONObject jsonError = new JSONObject( );
 
-        jsonError.element( JSON_KEY_ERROR_MESSAGE,
-            StringUtils.isNotBlank( formError.getErrorMessage(  ) ) ? formError.getErrorMessage(  ) : StringUtils.EMPTY );
-        jsonError.element( JSON_KEY_MANDATORY_ERROR, formError.isMandatoryError(  ) );
-        jsonError.element( JSON_KEY_TITLE_QUESTION, formError.getTitleQuestion(  ) );
+        jsonError.element( JSON_KEY_ERROR_MESSAGE, StringUtils.isNotBlank( formError.getErrorMessage( ) ) ? formError.getErrorMessage( ) : StringUtils.EMPTY );
+        jsonError.element( JSON_KEY_MANDATORY_ERROR, formError.isMandatoryError( ) );
+        jsonError.element( JSON_KEY_TITLE_QUESTION, formError.getTitleQuestion( ) );
 
-        return jsonError.toString(  );
+        return jsonError.toString( );
     }
 
     /**
      * Builds {@link GenericAttributeError} from json string
-     * @param strJson json string
+     * 
+     * @param strJson
+     *            json string
      * @return the {@link GenericAttributeError}
      */
     public static GenericAttributeError buildFormError( String strJson )
     {
         JSONObject jsonObject = JSONObject.fromObject( strJson );
-        GenericAttributeError formError = new GenericAttributeError(  );
+        GenericAttributeError formError = new GenericAttributeError( );
         formError.setErrorMessage( jsonObject.getString( JSON_KEY_ERROR_MESSAGE ) );
         formError.setMandatoryError( jsonObject.getBoolean( JSON_KEY_MANDATORY_ERROR ) );
         formError.setTitleQuestion( jsonObject.getString( JSON_KEY_TITLE_QUESTION ) );
@@ -268,24 +276,24 @@ public final class JSONUtils
     }
 
     /**
-     * Builds a json object for the file item list.
-     * Key is {@link #JSON_KEY_UPLOADED_FILES}, value is the array of uploaded
-     * file.
-     * @param listFileItem the fileItem list
+     * Builds a json object for the file item list. Key is {@link #JSON_KEY_UPLOADED_FILES}, value is the array of uploaded file.
+     * 
+     * @param listFileItem
+     *            the fileItem list
      * @return the json
      */
     public static JSONObject getUploadedFileJSON( List<FileItem> listFileItem )
     {
-        JSONObject json = new JSONObject(  );
+        JSONObject json = new JSONObject( );
 
         if ( listFileItem != null )
         {
             for ( FileItem fileItem : listFileItem )
             {
-                json.accumulate( JSON_KEY_UPLOADED_FILES, fileItem.getName(  ) );
+                json.accumulate( JSON_KEY_UPLOADED_FILES, fileItem.getName( ) );
             }
 
-            json.element( JSON_KEY_FILE_COUNT, listFileItem.size(  ) );
+            json.element( JSON_KEY_FILE_COUNT, listFileItem.size( ) );
         }
         else
         {
@@ -298,23 +306,27 @@ public final class JSONUtils
 
     /**
      * Builds a json object with the error message.
-     * @param request the request
+     * 
+     * @param request
+     *            the request
      * @return the json object.
      */
     public static JSONObject buildJsonErrorRemovingFile( HttpServletRequest request )
     {
-        JSONObject json = new JSONObject(  );
+        JSONObject json = new JSONObject( );
 
-        json.element( JSONUtils.JSON_KEY_FORM_ERROR,
-            I18nService.getLocalizedString( PROPERTY_MESSAGE_ERROR_REMOVING_FILE, request.getLocale(  ) ) );
+        json.element( JSONUtils.JSON_KEY_FORM_ERROR, I18nService.getLocalizedString( PROPERTY_MESSAGE_ERROR_REMOVING_FILE, request.getLocale( ) ) );
 
         return json;
     }
 
     /**
      * Builds a json object with the error message.
-     * @param json the JSON
-     * @param strMessage the error message
+     * 
+     * @param json
+     *            the JSON
+     * @param strMessage
+     *            the error message
      */
     public static void buildJsonError( JSONObject json, String strMessage )
     {
