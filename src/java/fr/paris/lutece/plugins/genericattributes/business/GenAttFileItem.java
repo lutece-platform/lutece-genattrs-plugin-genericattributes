@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.genericattributes.business;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemHeaders;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -53,6 +54,7 @@ public class GenAttFileItem implements FileItem
     private String _strFileName;
     private String _strFieldName;
     private int _nIdResponse;
+    private FileItemHeaders _fileItemHeaders;
 
     /**
      * Creates a new file item
@@ -259,5 +261,23 @@ public class GenAttFileItem implements FileItem
     public void write( java.io.File file ) throws Exception
     {
         // nothing
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public FileItemHeaders getHeaders( )
+    {
+        return _fileItemHeaders;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setHeaders( FileItemHeaders headers )
+    {
+        _fileItemHeaders = headers;
     }
 }
