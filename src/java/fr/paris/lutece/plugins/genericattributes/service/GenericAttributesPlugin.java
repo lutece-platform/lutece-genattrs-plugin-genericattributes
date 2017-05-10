@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.genericattributes.service;
 
 import fr.paris.lutece.portal.service.image.ImageResourceManager;
 import fr.paris.lutece.portal.service.plugin.PluginDefaultImplementation;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 /**
  * Generic attributes plugin
@@ -46,12 +47,16 @@ public class GenericAttributesPlugin extends PluginDefaultImplementation
      */
     public static final String PLUGIN_NAME = "genericattributes";
 
+    private static final String PROPERTY_INSECURE_IMAGES_ENABLE = "genericattributes.insecureImageResourceEnable";
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void init( )
     {
-        ImageResourceManager.registerProvider( new ResponseImageResourceProvider( ) );
+        if ( AppPropertiesService.getPropertyBoolean( PROPERTY_INSECURE_IMAGES_ENABLE, false ) ) {
+            ImageResourceManager.registerProvider( new ResponseImageResourceProvider( ) );
+        }
     }
 }
