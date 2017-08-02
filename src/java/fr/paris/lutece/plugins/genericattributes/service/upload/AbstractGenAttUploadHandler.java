@@ -138,7 +138,7 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
         // the original name, but clean it to make it cross-platform.
         String strFileName = UploadUtil.cleanFileName( fileItem.getName( ).trim( ) );
 
-        initMap( request.getSession( ).getId( ), buildFieldName( strFieldName ) );
+        initMap( request.getSession( ).getId( ), strFieldName );
 
         // Check if this file has not already been uploaded
         List<FileItem> uploadedFiles = getListUploadedFiles( strFieldName, request.getSession( ) );
