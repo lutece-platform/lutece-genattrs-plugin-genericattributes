@@ -302,7 +302,7 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
             {
                 file.setTitle( entry.getTitle( ) + dt.format( c.getTime( ) ) + imageType );
             }
-            file.setExtension(imageType);
+            file.setExtension( imageType );
             if ( bCreatePhysicalFile )
             {
                 file.setMimeType( FileSystemUtil.getMIMEType( file.getTitle( ) ) );

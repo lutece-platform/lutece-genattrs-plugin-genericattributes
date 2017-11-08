@@ -162,7 +162,9 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
                 response.setField( fieldInResponse );
                 listResponse.add( response );
             }
-        } else {
+        }
+        else
+        {
             response = new Response( );
             response.setEntry( entry );
             listResponse.add( response );

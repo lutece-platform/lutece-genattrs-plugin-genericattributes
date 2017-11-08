@@ -55,7 +55,8 @@ public class GenericAttributesPlugin extends PluginDefaultImplementation
     @Override
     public void init( )
     {
-        if ( AppPropertiesService.getPropertyBoolean( PROPERTY_INSECURE_IMAGES_ENABLE, false ) ) {
+        if ( AppPropertiesService.getPropertyBoolean( PROPERTY_INSECURE_IMAGES_ENABLE, false ) )
+        {
             ImageResourceManager.registerProvider( new ResponseImageResourceProvider( ) );
         }
     }
