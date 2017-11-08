@@ -161,7 +161,7 @@ public final class ResponseDAO implements IResponseDAO
 
         return response;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -169,37 +169,37 @@ public final class ResponseDAO implements IResponseDAO
     public Response lazyLoading( int nIdResponse, Plugin plugin )
     {
         Response response = null;
-        
+
         DAOUtil daoUtil = new DAOUtil( SLQ_QUERY_LAZY_SELECT_RESPONSE, plugin );
         daoUtil.setInt( 1, nIdResponse );
-        
+
         daoUtil.executeQuery( );
 
         if ( daoUtil.next( ) )
         {
             int nIndex = 1;
-            
+
             response = new Response( );
             response.setIdResponse( daoUtil.getInt( nIndex++ ) );
             response.setResponseValue( daoUtil.getString( nIndex++ ) );
-            
+
             Entry entry = new Entry( );
             entry.setIdEntry( daoUtil.getInt( nIndex++ ) );
             response.setEntry( entry );
-            
+
             Field field = new Field( );
             field.setIdField( daoUtil.getInt( nIndex++ ) );
             response.setField( field );
-            
+
             File file = new File( );
             file.setIdFile( daoUtil.getInt( nIndex++ ) );
             response.setFile( file );
-            
+
             response.setStatus( daoUtil.getInt( nIndex++ ) );
         }
 
         daoUtil.free( );
-        
+
         return response;
     }
 

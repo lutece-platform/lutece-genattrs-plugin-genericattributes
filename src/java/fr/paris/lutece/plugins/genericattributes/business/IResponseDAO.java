@@ -64,7 +64,7 @@ public interface IResponseDAO
      * @return the instance of the Entry
      */
     Response load( int nIdResponse, Plugin plugin );
-    
+
     /**
      * Lazy loading of the data of the response from the table
      * 
