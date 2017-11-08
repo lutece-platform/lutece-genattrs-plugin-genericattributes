@@ -161,6 +161,18 @@ public final class ResponseHome
     {
         return _dao.load( nKey, getPlugin( ) );
     }
+    
+    /**
+     * Returns an instance of a Response whose identifier is specified in parameter
+     *
+     * @param nKey
+     *            The entry primary key
+     * @return an instance of Response
+     */
+    public static Response lazyFindByPrimaryKey( int nKey )
+    {
+        return _dao.lazyLoading( nKey, getPlugin( ) );
+    }
 
     /**
      * Load the data of all the response who verify the filter and returns them in a list

@@ -64,6 +64,17 @@ public interface IResponseDAO
      * @return the instance of the Entry
      */
     Response load( int nIdResponse, Plugin plugin );
+    
+    /**
+     * Lazy loading of the data of the response from the table
+     * 
+     * @param nIdResponse
+     *            The identifier of the entry
+     * @param plugin
+     *            the plugin
+     * @return the instance of the Entry
+     */
+    Response lazyLoading( int nIdResponse, Plugin plugin );
 
     /**
      * Delete a response from its id

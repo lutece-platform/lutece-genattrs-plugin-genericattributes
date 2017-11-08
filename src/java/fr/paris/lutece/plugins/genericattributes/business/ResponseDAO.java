@@ -65,6 +65,7 @@ public final class ResponseDAO implements IResponseDAO
     private static final String SQL_QUERY_SELECT_MAX_NUMBER = " SELECT fr.response_value FROM genatt_response fr "
             + " INNER JOIN genatt_entry ent ON fr.id_entry = ent.id_entry "
             + " WHERE ent.id_entry = ? AND ent.id_resource = ? AND ent.resource_type = ? ORDER BY CAST(fr.response_value AS DECIMAL) DESC LIMIT 1 ";
+    private static final String SLQ_QUERY_LAZY_SELECT_RESPONSE = "SELECT id_response, response_value, id_entry, id_field, id_file, status FROM genatt_response WHERE id_response = ?";
     private static final String SQL_FILTER_ID_RESOURCE = " AND ent.id_resource = ? ";
     private static final String SQL_FILTER_ID_ENTRY = " AND resp.id_entry = ? ";
     private static final String SQL_FILTER_ID_FIELD = " AND resp.id_field = ? ";
@@ -158,6 +159,47 @@ public final class ResponseDAO implements IResponseDAO
 
         daoUtil.free( );
 
+        return response;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Response lazyLoading( int nIdResponse, Plugin plugin )
+    {
+        Response response = null;
+        
+        DAOUtil daoUtil = new DAOUtil( SLQ_QUERY_LAZY_SELECT_RESPONSE, plugin );
+        daoUtil.setInt( 1, nIdResponse );
+        
+        daoUtil.executeQuery( );
+
+        if ( daoUtil.next( ) )
+        {
+            int nIndex = 1;
+            
+            response = new Response( );
+            response.setIdResponse( daoUtil.getInt( nIndex++ ) );
+            response.setResponseValue( daoUtil.getString( nIndex++ ) );
+            
+            Entry entry = new Entry( );
+            entry.setIdEntry( daoUtil.getInt( nIndex++ ) );
+            response.setEntry( entry );
+            
+            Field field = new Field( );
+            field.setIdField( daoUtil.getInt( nIndex++ ) );
+            response.setField( field );
+            
+            File file = new File( );
+            file.setIdFile( daoUtil.getInt( nIndex++ ) );
+            response.setFile( file );
+            
+            response.setStatus( daoUtil.getInt( nIndex++ ) );
+        }
+
+        daoUtil.free( );
+        
         return response;
     }
 
