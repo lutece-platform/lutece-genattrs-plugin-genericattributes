@@ -60,6 +60,7 @@ import fr.paris.lutece.util.url.UrlItem;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 
 import java.awt.image.BufferedImage;
 
@@ -463,13 +464,21 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
         {
             String strIdEntry = Integer.toString( entry.getIdEntry( ) );
 
+            // Compute a new attribute prefix to manage the iteration
+            String strAttributePrefix = IEntryTypeService.PREFIX_ATTRIBUTE + strIdEntry;
+            int nIterationNumber = getResponseIterationValue( request );
+            if ( nIterationNumber != NumberUtils.INTEGER_MINUS_ONE )
+            {
+                strAttributePrefix = IEntryTypeService.PREFIX_ITERATION_ATTRIBUTE + nIterationNumber + "_" + strAttributePrefix;
+            }
+
             // Files are only removed if a given flag is in the request
-            getAsynchronousUploadHandler( ).doRemoveFile( request, PREFIX_ATTRIBUTE + strIdEntry );
+            getAsynchronousUploadHandler( ).doRemoveFile( request, strAttributePrefix );
 
             // Files are only added if a given flag is in the request
-            getAsynchronousUploadHandler( ).addFilesUploadedSynchronously( request, IEntryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
+            getAsynchronousUploadHandler( ).addFilesUploadedSynchronously( request, strAttributePrefix );
 
-            return getAsynchronousUploadHandler( ).getListUploadedFiles( PREFIX_ATTRIBUTE + strIdEntry, request.getSession( ) );
+            return getAsynchronousUploadHandler( ).getListUploadedFiles( strAttributePrefix, request.getSession( ) );
         }
 
         return null;

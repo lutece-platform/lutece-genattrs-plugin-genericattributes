@@ -148,6 +148,8 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
             response.setField( field );
         }
 
+        response.setIterationNumber( getResponseIterationValue( request ) );
+
         listResponse.add( response );
 
         if ( entry.isMandatory( ) )

@@ -41,6 +41,7 @@ import fr.paris.lutece.util.ReferenceList;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 
 import java.util.List;
 import java.util.Locale;
@@ -113,5 +114,22 @@ public abstract class EntryTypeService implements IEntryTypeService
     public GenericAttributeError canUploadFiles( Entry entry, List<FileItem> listUploadedFileItems, List<FileItem> listFileItemsToUpload, Locale locale )
     {
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getResponseIterationValue( HttpServletRequest request )
+    {
+        int nIterationValue = NumberUtils.INTEGER_MINUS_ONE;
+
+        Object objAttributeResponseValue = request.getAttribute( ATTRIBUTE_RESPONSE_ITERATION_NUMBER );
+        if ( objAttributeResponseValue != null )
+        {
+            nIterationValue = (int) objAttributeResponseValue;
+        }
+
+        return nIterationValue;
     }
 }

@@ -150,6 +150,8 @@ public abstract class AbstractEntryTypeRadioButton extends EntryTypeService
             response.setField( field );
         }
 
+        response.setIterationNumber( getResponseIterationValue( request ) );
+
         listResponse.add( response );
 
         if ( entry.isMandatory( ) )

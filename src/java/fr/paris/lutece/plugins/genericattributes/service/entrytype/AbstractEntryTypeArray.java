@@ -216,6 +216,7 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
                 response.setResponseValue( strTitleRow );
                 response.setToStringValueResponse( strTitleRow );
                 response.setField( existingFields );
+                response.setIterationNumber( getResponseIterationValue( request ) );
                 listResponse.add( response );
             }
         }

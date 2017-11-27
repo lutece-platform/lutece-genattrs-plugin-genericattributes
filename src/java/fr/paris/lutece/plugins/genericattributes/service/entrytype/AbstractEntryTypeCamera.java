@@ -323,6 +323,8 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
             response.setToStringValueResponse( StringUtils.EMPTY );
         }
 
+        response.setIterationNumber( getResponseIterationValue( request ) );
+
         return response;
     }
 

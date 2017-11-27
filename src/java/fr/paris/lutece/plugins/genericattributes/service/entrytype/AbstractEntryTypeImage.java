@@ -156,7 +156,10 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
             {
                 String sourceBase = request.getParameter( ( IEntryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry( ) ) );
 
-                listResponse.add( getResponseFromImage( sourceBase, entry, false ) );
+                Response response = getResponseFromImage( sourceBase, entry, false );
+                response.setIterationNumber( getResponseIterationValue( request ) );
+
+                listResponse.add( response );
 
                 /*
                  * genAttError = new GenericAttributeError( ); genAttError.setErrorMessage( StringUtils.EMPTY ); genAttError.setMandatoryError( false );

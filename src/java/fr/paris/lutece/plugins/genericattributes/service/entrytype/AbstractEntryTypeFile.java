@@ -109,7 +109,10 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
 
                 for ( FileItem fileItem : listFilesSource )
                 {
-                    listResponse.add( getResponseFromFile( fileItem, entry, genAttError == null ) );
+                    Response response = getResponseFromFile( fileItem, entry, genAttError == null );
+                    response.setIterationNumber( getResponseIterationValue( request ) );
+
+                    listResponse.add( response );
                 }
 
                 if ( genAttError != null )
@@ -134,6 +137,7 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
 
                 Response response = new Response( );
                 response.setEntry( entry );
+                response.setIterationNumber( getResponseIterationValue( request ) );
                 listResponse.add( response );
             }
 

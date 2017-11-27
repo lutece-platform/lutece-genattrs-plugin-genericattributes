@@ -33,6 +33,21 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.upload;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.asynchronousupload.service.AbstractAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
@@ -43,25 +58,13 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.util.filesystem.UploadUtil;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 /**
  * Abstract class to manage uploaded files for generic attributes entries of type files
  */
 public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUploadHandler
 {
     private static final String PREFIX_ENTRY_ID = IEntryTypeService.PREFIX_ATTRIBUTE;
+    private static final Pattern PATTERN_PREFIX_ENTRY_ID = Pattern.compile( "[^0-9]+([0-9]+)$" );
 
     // Error messages
     private static final String ERROR_MESSAGE_UNKNOWN_ERROR = "genericattributes.message.unknownError";
@@ -223,7 +226,13 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
             return null;
         }
 
-        return strFieldName.substring( PREFIX_ENTRY_ID.length( ) );
+        Matcher matcher = PATTERN_PREFIX_ENTRY_ID.matcher( strFieldName );
+        if ( matcher.find( ) )
+        {
+            return matcher.group( 1 );
+        }
+
+        return null;
     }
 
     /**

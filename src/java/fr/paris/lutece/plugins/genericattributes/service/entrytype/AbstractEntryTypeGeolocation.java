@@ -248,6 +248,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         responseIdAddress.setResponseValue( strIdAddressValue );
         responseIdAddress.setField( fieldIdAddress );
         responseIdAddress.setToStringValueResponse( strIdAddressValue );
+        responseIdAddress.setIterationNumber( getResponseIterationValue( request ) );
         listResponse.add( responseIdAddress );
 
         // 2 : Response Address
@@ -256,6 +257,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         responseAddress.setResponseValue( strAddressValue );
         responseAddress.setField( fieldAddress );
         responseAddress.setToStringValueResponse( strAddressValue );
+        responseIdAddress.setIterationNumber( getResponseIterationValue( request ) );
         listResponse.add( responseAddress );
 
         // 2 : Response Additional Address
@@ -271,6 +273,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         responseX.setResponseValue( strXValue );
         responseX.setField( fieldX );
         responseX.setToStringValueResponse( strXValue );
+        responseIdAddress.setIterationNumber( getResponseIterationValue( request ) );
         listResponse.add( responseX );
 
         // 4: Response Y
@@ -279,6 +282,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         responseY.setResponseValue( strYValue );
         responseY.setField( fieldY );
         responseY.setToStringValueResponse( strYValue );
+        responseIdAddress.setIterationNumber( getResponseIterationValue( request ) );
         listResponse.add( responseY );
 
         // 6 : Response Desc Geo
@@ -287,6 +291,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         responseGeomerty.setResponseValue( strGeometryValue );
         responseGeomerty.setField( fieldGeometry );
         responseGeomerty.setToStringValueResponse( strGeometryValue );
+        responseIdAddress.setIterationNumber( getResponseIterationValue( request ) );
         listResponse.add( responseGeomerty );
 
         if ( entry.isMandatory( ) )

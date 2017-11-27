@@ -48,14 +48,14 @@ public final class ResponseDAO implements IResponseDAO
     // Constants
     private static final String SQL_QUERY_NEW_PK = " SELECT MAX( id_response ) FROM genatt_response ";
     private static final String SQL_QUERY_SELECT_RESPONSE = "SELECT resp.id_response, resp.response_value, type.class_name, ent.id_type, ent.id_entry, ent.title, ent.code, "
-            + " resp.id_field, resp.id_file, resp.status FROM genatt_response resp";
+            + " resp.iteration_number, resp.id_field, resp.id_file, resp.status FROM genatt_response resp";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_RESPONSE + ", genatt_entry ent, genatt_entry_type type "
             + " WHERE resp.id_response = ? and resp.id_entry = ent.id_entry and ent.id_type = type.id_type ";
     private static final String SQL_QUERY_SELECT_RESPONSE_BY_FILTER = SQL_QUERY_SELECT_RESPONSE + ", genatt_entry ent, genatt_entry_type type "
             + " WHERE resp.id_entry = ent.id_entry and ent.id_type = type.id_type ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_response ( "
-            + " id_response, response_value, id_entry, id_field, id_file, status ) VALUES ( ?,?,?,?,?,? )";
-    private static final String SQL_QUERY_UPDATE = "UPDATE genatt_response SET response_value = ?, id_entry = ?, id_field = ?, id_file = ?, status = ? WHERE id_response = ?";
+            + " id_response, response_value, id_entry, iteration_number, id_field, id_file, status ) VALUES ( ?,?,?,?,?,?,? )";
+    private static final String SQL_QUERY_UPDATE = "UPDATE genatt_response SET response_value = ?, id_entry = ?, iteration_number = ?, id_field = ?, id_file = ?, status = ? WHERE id_response = ?";
     private static final String SQL_QUERY_DELETE = "DELETE FROM genatt_response WHERE id_response = ? ";
     private static final String SQL_QUERY_SELECT_COUNT_RESPONSE_BY_ID_ENTRY = " SELECT field.title, COUNT( resp.id_response )"
             + " FROM genatt_entry e LEFT JOIN genatt_field field ON ( e.id_entry = field.id_entry ) LEFT JOIN genatt_response resp on ( resp.id_field = field.id_field ) "
@@ -65,7 +65,6 @@ public final class ResponseDAO implements IResponseDAO
     private static final String SQL_QUERY_SELECT_MAX_NUMBER = " SELECT fr.response_value FROM genatt_response fr "
             + " INNER JOIN genatt_entry ent ON fr.id_entry = ent.id_entry "
             + " WHERE ent.id_entry = ? AND ent.id_resource = ? AND ent.resource_type = ? ORDER BY CAST(fr.response_value AS DECIMAL) DESC LIMIT 1 ";
-    private static final String SLQ_QUERY_LAZY_SELECT_RESPONSE = "SELECT id_response, response_value, id_entry, id_field, id_file, status FROM genatt_response WHERE id_response = ?";
     private static final String SQL_FILTER_ID_RESOURCE = " AND ent.id_resource = ? ";
     private static final String SQL_FILTER_ID_ENTRY = " AND resp.id_entry = ? ";
     private static final String SQL_FILTER_ID_FIELD = " AND resp.id_field = ? ";
@@ -114,6 +113,7 @@ public final class ResponseDAO implements IResponseDAO
         daoUtil.setInt( nIndex++, response.getIdResponse( ) );
         daoUtil.setString( nIndex++, removeInvalidChars( response.getResponseValue( ) ) );
         daoUtil.setInt( nIndex++, response.getEntry( ).getIdEntry( ) );
+        daoUtil.setInt( nIndex++, response.getIterationNumber( ) );
 
         if ( response.getField( ) != null )
         {
@@ -166,47 +166,6 @@ public final class ResponseDAO implements IResponseDAO
      * {@inheritDoc}
      */
     @Override
-    public Response lazyLoading( int nIdResponse, Plugin plugin )
-    {
-        Response response = null;
-
-        DAOUtil daoUtil = new DAOUtil( SLQ_QUERY_LAZY_SELECT_RESPONSE, plugin );
-        daoUtil.setInt( 1, nIdResponse );
-
-        daoUtil.executeQuery( );
-
-        if ( daoUtil.next( ) )
-        {
-            int nIndex = 1;
-
-            response = new Response( );
-            response.setIdResponse( daoUtil.getInt( nIndex++ ) );
-            response.setResponseValue( daoUtil.getString( nIndex++ ) );
-
-            Entry entry = new Entry( );
-            entry.setIdEntry( daoUtil.getInt( nIndex++ ) );
-            response.setEntry( entry );
-
-            Field field = new Field( );
-            field.setIdField( daoUtil.getInt( nIndex++ ) );
-            response.setField( field );
-
-            File file = new File( );
-            file.setIdFile( daoUtil.getInt( nIndex++ ) );
-            response.setFile( file );
-
-            response.setStatus( daoUtil.getInt( nIndex++ ) );
-        }
-
-        daoUtil.free( );
-
-        return response;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void delete( int nIdResponse, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
@@ -226,6 +185,7 @@ public final class ResponseDAO implements IResponseDAO
 
         daoUtil.setString( nIndex++, response.getResponseValue( ) );
         daoUtil.setInt( nIndex++, response.getEntry( ).getIdEntry( ) );
+        daoUtil.setInt( nIndex++, response.getIterationNumber( ) );
 
         if ( response.getField( ) != null )
         {
@@ -411,6 +371,8 @@ public final class ResponseDAO implements IResponseDAO
         entry.setTitle( daoUtil.getString( nIndex++ ) );
         entry.setCode( daoUtil.getString( nIndex++ ) );
         response.setEntry( entry );
+
+        response.setIterationNumber( daoUtil.getInt( nIndex++ ) );
 
         // Get field if it exists
         if ( daoUtil.getObject( nIndex ) != null )

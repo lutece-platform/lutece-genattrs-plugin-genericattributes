@@ -93,6 +93,7 @@ CREATE TABLE genatt_response (
 	id_response int default 0 NOT NULL,
 	response_value long VARCHAR DEFAULT NULL,
 	id_entry int default NULL,
+	iteration_number int default -1,
 	id_field int default NULL,
 	id_file int default NULL,
 	status smallint default 1,

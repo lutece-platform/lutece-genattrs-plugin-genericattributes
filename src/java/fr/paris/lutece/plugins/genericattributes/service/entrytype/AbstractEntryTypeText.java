@@ -245,6 +245,8 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
                 response.setToStringValueResponse( StringUtils.EMPTY );
             }
 
+            response.setIterationNumber( getResponseIterationValue( request ) );
+
             listResponse.add( response );
 
             // Checks if the entry value contains XSS characters

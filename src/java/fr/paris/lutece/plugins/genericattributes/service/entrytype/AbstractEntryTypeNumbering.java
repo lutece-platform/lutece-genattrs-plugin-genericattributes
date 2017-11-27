@@ -112,6 +112,7 @@ public abstract class AbstractEntryTypeNumbering extends EntryTypeService
         Response response = new Response( );
         response.setEntry( entry );
         response.setResponseValue( String.valueOf( numbering ) );
+        response.setIterationNumber( getResponseIterationValue( request ) );
         listResponse.add( response );
 
         return null;

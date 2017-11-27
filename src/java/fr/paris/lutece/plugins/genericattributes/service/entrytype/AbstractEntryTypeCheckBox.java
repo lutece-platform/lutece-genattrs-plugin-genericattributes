@@ -160,6 +160,7 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
                 response.setEntry( entry );
                 response.setResponseValue( fieldInResponse.getValue( ) );
                 response.setField( fieldInResponse );
+                response.setIterationNumber( getResponseIterationValue( request ) );
                 listResponse.add( response );
             }
         }
@@ -167,6 +168,7 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
         {
             response = new Response( );
             response.setEntry( entry );
+            response.setIterationNumber( getResponseIterationValue( request ) );
             listResponse.add( response );
         }
 

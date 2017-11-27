@@ -38,6 +38,8 @@ import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 /**
  * class Response
  */
@@ -54,6 +56,11 @@ public class Response implements Serializable
     public static final int CONSTANT_STATUS_ANONYMIZED = 10;
 
     /**
+     * Default iteration number of a Response
+     */
+    private static final int DEFAULT_ITERATION_NUMBER = NumberUtils.INTEGER_MINUS_ONE;
+
+    /**
      * The resource type of responses
      */
     public static final String RESOURCE_TYPE = "GENERICATTRIBUTES_RESPONSE";
@@ -61,6 +68,7 @@ public class Response implements Serializable
     private int _nIdResponse;
     private String _strToStringValueResponse;
     private Entry _entry;
+    private int _nIterationNumber = DEFAULT_ITERATION_NUMBER;
     private Field _field;
     private String _strResponseValue;
     private int _nStatus;
@@ -131,6 +139,27 @@ public class Response implements Serializable
     public void setEntry( Entry entry )
     {
         _entry = entry;
+    }
+
+    /**
+     * Return the iteration number of the response
+     * 
+     * @return the nIterationNumber
+     */
+    public int getIterationNumber( )
+    {
+        return _nIterationNumber;
+    }
+
+    /**
+     * Set the iteration number of the response
+     * 
+     * @param nIterationNumber
+     *            the nIterationNumber to set
+     */
+    public void setIterationNumber( int nIterationNumber )
+    {
+        this._nIterationNumber = nIterationNumber;
     }
 
     /**

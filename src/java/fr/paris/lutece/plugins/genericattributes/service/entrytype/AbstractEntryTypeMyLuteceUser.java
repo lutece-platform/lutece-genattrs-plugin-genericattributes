@@ -150,6 +150,7 @@ public abstract class AbstractEntryTypeMyLuteceUser extends EntryTypeService
         Response response = new Response( );
         response.setEntry( entry );
         response.setResponseValue( user.getName( ) );
+        response.setIterationNumber( getResponseIterationValue( request ) );
 
         listResponse.add( response );
 

@@ -68,6 +68,7 @@ public interface IEntryTypeService
     String PARAMETER_CONFIRM_FIELD_TITLE = "confirm_field_title";
     String SUFFIX_CONFIRM_FIELD = "_confirm_field";
     String PREFIX_ATTRIBUTE = "attribute";
+    String PREFIX_ITERATION_ATTRIBUTE = "nIt";
     String PARAMETER_UNIQUE = "unique_field";
     String PARAMETER_CSS_CLASS = "css_class";
     String PARAMETER_ERROR_MESSAGE = "errorMessage";
@@ -76,6 +77,9 @@ public interface IEntryTypeService
     String PARAMETER_ONLY_DISPLAY_IN_BACK = "only_display_in_back";
     String PARAMETER_MAX_IMAGE_SIZE = "maxImageSize";
     String PARAMETER_IMAGE_TYPE = "image_type";
+
+    // attribute
+    String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";
 
     // message
     String MESSAGE_MANDATORY_FIELD = "portal.util.message.mandatoryField";
@@ -224,4 +228,13 @@ public interface IEntryTypeService
      *            the locale - will use a default one if not specified
      */
     void setResponseToStringValue( Entry entry, Response response, Locale locale );
+
+    /**
+     * Return the iteration number for a response from the request
+     * 
+     * @param request
+     *            the request to retrieve the iteration number of the response from
+     * @return the value of the iteration number
+     */
+    int getResponseIterationValue( HttpServletRequest request );
 }

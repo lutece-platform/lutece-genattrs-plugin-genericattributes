@@ -141,6 +141,7 @@ public abstract class AbstractEntryTypeSession extends EntryTypeService
             response.setEntry( entry );
             response.setResponseValue( strValueEntry );
             response.setToStringValueResponse( StringUtils.EMPTY );
+            response.setIterationNumber( getResponseIterationValue( request ) );
 
             listResponse.add( response );
         }
