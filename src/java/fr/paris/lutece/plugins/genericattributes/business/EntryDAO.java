@@ -117,7 +117,7 @@ public final class EntryDAO implements IEntryDAO
         }
 
         daoUtil.setString( 6, entry.getCode( ) );
-        daoUtil.setString( 7, entry.getTitle( ) );
+        daoUtil.setString( 7, trimEntryTitle( entry ) );
         daoUtil.setString( 8, entry.getHelpMessage( ) );
         daoUtil.setString( 9, entry.getComment( ) );
         daoUtil.setBoolean( 10, entry.isMandatory( ) );
@@ -218,7 +218,7 @@ public final class EntryDAO implements IEntryDAO
         }
 
         daoUtil.setString( nIndex++, entry.getCode( ) );
-        daoUtil.setString( nIndex++, entry.getTitle( ) );
+        daoUtil.setString( nIndex++, trimEntryTitle( entry ) );
         daoUtil.setString( nIndex++, entry.getHelpMessage( ) );
         daoUtil.setString( nIndex++, entry.getComment( ) );
         daoUtil.setBoolean( nIndex++, entry.isMandatory( ) );
@@ -750,6 +750,25 @@ public final class EntryDAO implements IEntryDAO
         entry.setOnlyDisplayInBack( daoUtil.getBoolean( nIndex++ ) );
 
         return entry;
+    }
+    
+    /**
+     * Return the trim of the title of the entry or null if the entry doesn't have a title
+     * 
+     * @param entry
+     *          The entry to retrieve the title from
+     * @return the trim of the title of the entry or null if the entry doesn't have a title
+     */
+    private String trimEntryTitle( Entry entry )
+    {
+        String strEntryTitle = entry.getTitle( );
+        
+        if ( strEntryTitle != null )
+        {
+            strEntryTitle = strEntryTitle.trim( );
+        }
+        
+        return strEntryTitle;
     }
 
     /**
