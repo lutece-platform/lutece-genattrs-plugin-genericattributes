@@ -159,8 +159,10 @@ public class EntryHomeTest extends LuteceTestCase
     }
 
     /**
-     * Create an entry of type Text
+     * Create an entry
      * 
+     * @param entryParent
+     *            The parent of the entry can be null
      * @param entryType
      *            The entry type of the entry to create
      * @return the created entry
@@ -310,6 +312,9 @@ public class EntryHomeTest extends LuteceTestCase
 
     /**
      * Remove all the created Responses
+     * 
+     * @param nIdEntry
+     *            The identifier of the entry to remove the responses
      */
     private void removeResponses( int nIdEntry )
     {
