@@ -64,7 +64,7 @@ public class EntryHomeTest extends LuteceTestCase
     private static final String SQL_QUERY_INSERT_ENTRY_TYPE = "INSERT INTO genatt_entry_type ( id_type, title, is_group, is_comment, is_mylutece_user, class_name, plugin ) "
             + " VALUES ( ?, ?, ?, ?, ?, ?, ? )";
     private static final String SQL_QUERY_DELETE_ENTRY_TYPE = "DELETE FROM genatt_entry_type WHERE id_type = ? ";
-    
+
     // Variables
     private static int _nIdEntry;
     private static int _nIdEntryGroup;
@@ -73,7 +73,7 @@ public class EntryHomeTest extends LuteceTestCase
     private static List<Entry> listEntry = new ArrayList<>( );
     private final Plugin _plugin = PluginService.getPlugin( GenericAttributesPlugin.PLUGIN_NAME );
     private IEntryDAO _entryDAO = new EntryDAO( );
-    
+
     /**
      * {@inheritDoc}
      */
@@ -81,26 +81,26 @@ public class EntryHomeTest extends LuteceTestCase
     public void setUp( ) throws Exception
     {
         super.setUp( );
-        
+
         // Create the entry type
         _nEntryTypeGroupPrimaryKey = createEntryType( ENTRY_TYPE_GROUP_TITLE, NumberUtils.INTEGER_ONE, StringUtils.EMPTY );
         _nEntryTypeTextPrimaryKey = createEntryType( ENTRY_TYPE_TEXT_TITLE, NumberUtils.INTEGER_ZERO, StringUtils.EMPTY );
-        
+
         // Create an entry of type group
         Entry entryGroup = createEntryGroup( );
         _nIdEntryGroup = entryGroup.getIdEntry( );
-        
+
         // Create entries
         Entry entryOne = manageCreateEntry( entryGroup, NUMBER_FIELDS_ENTRY_ONE, NUMBER_RESPONSE_ENTRY_ONE );
         _nIdEntry = entryOne.getIdEntry( );
-        
+
         Entry entryTwo = manageCreateEntry( entryGroup, NUMBER_FIELDS_ENTRY_TWO, NUMBER_RESPONSE_ENTRY_TWO );
-        
+
         listEntry.add( entryOne );
         listEntry.add( entryTwo );
         listEntry.add( entryGroup );
     }
-    
+
     /**
      * Generates a new primary key
      *
@@ -126,22 +126,22 @@ public class EntryHomeTest extends LuteceTestCase
 
         return nKey;
     }
-    
+
     /**
      * Create an EntryType
      * 
      * @param title
-     *          The title of the EntryType
+     *            The title of the EntryType
      * @param nIsGroup
-     *          1 if it's a group 0 otherwise    
+     *            1 if it's a group 0 otherwise
      * @param strClassName
-     *          The name of the class of the group 
+     *            The name of the class of the group
      * @return the identifier of the created entryType
      */
     private int createEntryType( String title, int nIsGroup, String strClassName )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_ENTRY_TYPE, _plugin );
-        
+
         int nIndex = NumberUtils.INTEGER_ZERO;
         int nEntryTypeId = newPrimaryKey( _plugin );
         daoUtil.setInt( ++nIndex, nEntryTypeId );
@@ -151,18 +151,18 @@ public class EntryHomeTest extends LuteceTestCase
         daoUtil.setInt( ++nIndex, NumberUtils.INTEGER_ZERO );
         daoUtil.setString( ++nIndex, strClassName );
         daoUtil.setString( ++nIndex, GenericAttributesPlugin.PLUGIN_NAME );
-        
+
         daoUtil.executeUpdate( );
         daoUtil.free( );
-        
+
         return nEntryTypeId;
     }
-    
+
     /**
      * Create an entry of type Text
      * 
      * @param entryType
-     *          The entry type of the entry to create
+     *            The entry type of the entry to create
      * @return the created entry
      */
     private Entry createEntry( Entry entryParent, EntryType entryType )
@@ -170,18 +170,18 @@ public class EntryHomeTest extends LuteceTestCase
         Entry entry = new Entry( );
         entry.setEntryType( entryType );
         entry.setResourceType( StringUtils.EMPTY );
-        
+
         if ( entryParent != null )
         {
             entry.setParent( entryParent );
         }
-        
+
         int nIdEntry = _entryDAO.insert( entry, _plugin );
         entry.setIdEntry( nIdEntry );
-        
+
         return entry;
     }
-    
+
     /**
      * Create an entry of Type group
      * 
@@ -190,26 +190,26 @@ public class EntryHomeTest extends LuteceTestCase
     private Entry createEntryGroup( )
     {
         Entry entry = new Entry( );
-        
+
         EntryType entryTypeGroup = EntryTypeHome.findByPrimaryKey( _nEntryTypeGroupPrimaryKey );
         entry.setResourceType( StringUtils.EMPTY );
         entry.setEntryType( entryTypeGroup );
-        
+
         int nIdEntryGroup = _entryDAO.insert( entry, _plugin );
         entry.setIdEntry( nIdEntryGroup );
-        
+
         return entry;
     }
-    
+
     /**
      * Manage the creation of an entry. Create an entry and its Fields and Responses objects
      * 
      * @param entryParent
-     *          The parent of the entry can be null       
+     *            The parent of the entry can be null
      * @param nNumberOfFields
-     *          The number of fields of the Entry
+     *            The number of fields of the Entry
      * @param nNumberOfResponses
-     *          The number of Response of the Entry
+     *            The number of Response of the Entry
      * @return the new created Entry
      */
     private Entry manageCreateEntry( Entry entryParent, int nNumberOfFields, int nNumberOfResponses )
@@ -217,27 +217,27 @@ public class EntryHomeTest extends LuteceTestCase
         // Create an entry
         EntryType entryType = EntryTypeHome.findByPrimaryKey( _nEntryTypeTextPrimaryKey );
         Entry entry = createEntry( entryParent, entryType );
-        
+
         // Create fields for the entry
-        for ( int i = 0 ; i < nNumberOfFields ; i++ )
+        for ( int i = 0; i < nNumberOfFields; i++ )
         {
             createField( entry );
         }
-        
+
         // Create responses for the entry
-        for ( int i = 0 ; i < nNumberOfResponses ; i++ )
+        for ( int i = 0; i < nNumberOfResponses; i++ )
         {
             createResponse( entry );
         }
-        
+
         return entry;
     }
-    
+
     /**
      * Create a Field for an entry
      * 
      * @param entry
-     *          The entry of the field
+     *            The entry of the field
      */
     private void createField( Entry entry )
     {
@@ -245,26 +245,26 @@ public class EntryHomeTest extends LuteceTestCase
         field.setParentEntry( entry );
         field.setTitle( FIELD_TITLE );
         field.setValue( FIELD_VALUE );
-        
+
         int nIdField = FieldHome.create( field );
         field.setIdField( nIdField );
     }
-    
+
     /**
      * Create a Response for an entry
      * 
      * @param entry
-     *          The entry of the Response
+     *            The entry of the Response
      */
     private void createResponse( Entry entry )
     {
         Response response = new Response( );
         response.setEntry( entry );
         response.setResponseValue( RESPONSE_VALUE );
-        
+
         ResponseHome.create( response );
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -272,29 +272,29 @@ public class EntryHomeTest extends LuteceTestCase
     public void tearDown( ) throws Exception
     {
         super.tearDown( );
-        
+
         for ( Entry entry : listEntry )
         {
             // Remove the fields
             removeFields( entry.getIdEntry( ) );
-            
+
             // Remove the Responses
             removeResponses( entry.getIdEntry( ) );
-            
+
             // Remove the entries
             removeEntry( entry.getIdEntry( ) );
         }
-        
+
         // Remove the entryType
         removeEntryType( _nEntryTypeGroupPrimaryKey );
         removeEntryType( _nEntryTypeTextPrimaryKey );
     }
-    
+
     /**
      * Remove all the created fields
      * 
      * @param nIdEntry
-     *          The identifier of the entry
+     *            The identifier of the entry
      */
     private void removeFields( int nIdEntry )
     {
@@ -307,7 +307,7 @@ public class EntryHomeTest extends LuteceTestCase
             }
         }
     }
-    
+
     /**
      * Remove all the created Responses
      */
@@ -324,31 +324,31 @@ public class EntryHomeTest extends LuteceTestCase
             }
         }
     }
-    
+
     /**
      * Remove an entry by its identifier
      * 
      * @param nIdEntry
-     *          The identifier of the entry
+     *            The identifier of the entry
      */
     private void removeEntry( int nIdEntry )
     {
         _entryDAO.delete( nIdEntry, _plugin );
     }
-    
+
     /**
      * Remove an EntryType
      * 
      * @param nIdEntryType
-     *          The identifier of the EntryType to remove
+     *            The identifier of the EntryType to remove
      */
     private void removeEntryType( int nIdEntryType )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_ENTRY_TYPE, _plugin );
-        
+
         int nIndex = NumberUtils.INTEGER_ZERO;
         daoUtil.setInt( ++nIndex, nIdEntryType );
-        
+
         daoUtil.executeUpdate( );
         daoUtil.free( );
     }
@@ -359,7 +359,7 @@ public class EntryHomeTest extends LuteceTestCase
     public void testRemoveEntry( )
     {
         EntryHome.remove( _nIdEntry );
-        
+
         checkEntryRemoving( _nIdEntry );
     }
 
@@ -371,36 +371,37 @@ public class EntryHomeTest extends LuteceTestCase
         EntryFilter entryFilter = new EntryFilter( );
         entryFilter.setIdEntryParent( _nIdEntryGroup );
         List<Entry> listEntryChildren = _entryDAO.selectEntryListByFilter( entryFilter, _plugin );
-        
+
         EntryHome.remove( _nIdEntryGroup );
-        
+
         checkEntryRemoving( _nIdEntryGroup );
-        
+
         // For each children of the group we will check if they have been removed with all their objects
         for ( Entry entry : listEntryChildren )
         {
             checkEntryRemoving( entry.getIdEntry( ) );
         }
     }
-    
+
     /**
      * Check if all data linked to the entry with the specified identifier has been correctly removed
      * 
      * @param nIdEntry
-     *          The identifier of the entry which has been removed
+     *            The identifier of the entry which has been removed
      */
     private void checkEntryRemoving( int nIdEntry )
     {
         Entry entry = _entryDAO.load( nIdEntry, _plugin );
         assertEquals( "The has not been removed !", Boolean.TRUE.booleanValue( ), entry == null );
-        
+
         List<Field> listFields = FieldHome.getFieldListByIdEntry( nIdEntry );
-        assertEquals( "There are Fields which are linked to the removed entry which are not been removed !",  Boolean.TRUE.booleanValue( ), listFields.isEmpty( ) );
-        
+        assertEquals( "There are Fields which are linked to the removed entry which are not been removed !", Boolean.TRUE.booleanValue( ), listFields.isEmpty( ) );
+
         ResponseFilter responseFilter = new ResponseFilter( );
         responseFilter.setIdEntry( nIdEntry );
         List<Response> listResponses = ResponseHome.getResponseList( responseFilter );
-        assertEquals( "There are Responses which are linked to the removed entry which are not been removed !", Boolean.TRUE.booleanValue( ), listResponses.isEmpty( ) );
-        
+        assertEquals( "There are Responses which are linked to the removed entry which are not been removed !", Boolean.TRUE.booleanValue( ),
+                listResponses.isEmpty( ) );
+
     }
 }

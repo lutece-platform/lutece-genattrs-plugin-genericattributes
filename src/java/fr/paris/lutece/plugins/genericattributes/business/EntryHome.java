@@ -153,7 +153,7 @@ public final class EntryHome
                 {
                     FieldHome.remove( field.getIdField( ) );
                 }
-                
+
                 // Remove the Responses of an Entry
                 removeEntryResponses( nIdEntry );
 
@@ -172,12 +172,12 @@ public final class EntryHome
             }
         }
     }
-    
+
     /**
      * Remove the Responses of an Entry
      * 
      * @param nIdEntry
-     *          The identifier of the Entry to remove
+     *            The identifier of the Entry to remove
      */
     private static void removeEntryResponses( int nIdEntry )
     {
