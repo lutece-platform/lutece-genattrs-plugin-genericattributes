@@ -153,6 +153,9 @@ public final class EntryHome
                 {
                     FieldHome.remove( field.getIdField( ) );
                 }
+                
+                // Remove the Responses of an Entry
+                removeEntryResponses( nIdEntry );
 
                 for ( Entry entryChild : entry.getChildren( ) )
                 {
@@ -166,6 +169,26 @@ public final class EntryHome
             {
                 TransactionManager.rollBack( getPlugin( ) );
                 throw new AppException( e.getMessage( ), e );
+            }
+        }
+    }
+    
+    /**
+     * Remove the Responses of an Entry
+     * 
+     * @param nIdEntry
+     *          The identifier of the Entry to remove
+     */
+    private static void removeEntryResponses( int nIdEntry )
+    {
+        ResponseFilter responseFilter = new ResponseFilter( );
+        responseFilter.setIdEntry( nIdEntry );
+        List<Response> listResponse = ResponseHome.getResponseList( responseFilter );
+        if ( listResponse != null && !listResponse.isEmpty( ) )
+        {
+            for ( Response response : listResponse )
+            {
+                ResponseHome.remove( response.getIdResponse( ) );
             }
         }
     }
