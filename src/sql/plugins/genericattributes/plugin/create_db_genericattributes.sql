@@ -14,6 +14,7 @@ CREATE TABLE genatt_entry_type (
 	is_comment int default NULL,
 	is_mylutece_user smallint default NULL,
 	class_name varchar(255),
+	icon_name varchar(255),
 	plugin varchar(255) NOT NULL,
 	PRIMARY KEY (id_type)
 );

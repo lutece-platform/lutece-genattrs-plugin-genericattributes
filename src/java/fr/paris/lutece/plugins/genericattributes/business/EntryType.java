@@ -46,6 +46,7 @@ public class EntryType implements Serializable
     private int _nIdType;
     private String _strTitle;
     private String _strBeanName;
+    private String _strIconName;
     private Boolean _bGroup;
     private Boolean _bComment;
     private Boolean _bMyLuteceUser;
@@ -130,6 +131,27 @@ public class EntryType implements Serializable
     public void setBeanName( String strBeanName )
     {
         _strBeanName = strBeanName;
+    }
+
+    /**
+     * Get the icon name
+     * 
+     * @return the strIconName
+     */
+    public String getIconName( )
+    {
+        return _strIconName;
+    }
+
+    /**
+     * Set the icon name
+     * 
+     * @param strIconName
+     *            the strIconName to set
+     */
+    public void setIconName( String strIconName )
+    {
+        _strIconName = strIconName;
     }
 
     /**

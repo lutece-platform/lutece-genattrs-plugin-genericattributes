@@ -46,10 +46,10 @@ import java.util.List;
  */
 public class EntryTypeDAO implements IEntryTypeDAO
 {
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_type,title,is_group,is_comment,class_name,is_mylutece_user,plugin"
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_type,title,is_group,is_comment,class_name,icon_name,is_mylutece_user,plugin"
             + " FROM genatt_entry_type WHERE id_type=?";
-    private static final String SQL_QUERY_SELECT = "SELECT id_type,title,is_group,is_comment,class_name,is_mylutece_user,plugin"
-            + " FROM genatt_entry_type WHERE plugin = ? ";
+    private static final String SQL_QUERY_SELECT = "SELECT id_type,title,is_group,is_comment,class_name,icon_name,is_mylutece_user,plugin"
+            + " FROM genatt_entry_type WHERE plugin = ?  order by id_type";
 
     /**
      * {@inheritDoc}
@@ -71,8 +71,9 @@ public class EntryTypeDAO implements IEntryTypeDAO
             entryType.setGroup( daoUtil.getBoolean( 3 ) );
             entryType.setComment( daoUtil.getBoolean( 4 ) );
             entryType.setBeanName( daoUtil.getString( 5 ) );
-            entryType.setMyLuteceUser( daoUtil.getBoolean( 6 ) );
-            entryType.setPlugin( daoUtil.getString( 7 ) );
+            entryType.setIconName( daoUtil.getString( 6 ) );
+            entryType.setMyLuteceUser( daoUtil.getBoolean( 7 ) );
+            entryType.setPlugin( daoUtil.getString( 8 ) );
         }
 
         daoUtil.free( );
@@ -101,8 +102,9 @@ public class EntryTypeDAO implements IEntryTypeDAO
             entryType.setGroup( daoUtil.getBoolean( 3 ) );
             entryType.setComment( daoUtil.getBoolean( 4 ) );
             entryType.setBeanName( daoUtil.getString( 5 ) );
-            entryType.setMyLuteceUser( daoUtil.getBoolean( 6 ) );
-            entryType.setPlugin( daoUtil.getString( 7 ) );
+            entryType.setIconName( daoUtil.getString( 6 ) );
+            entryType.setMyLuteceUser( daoUtil.getBoolean( 7 ) );
+            entryType.setPlugin( daoUtil.getString( 8 ) );
             listEntryType.add( entryType );
         }
 
