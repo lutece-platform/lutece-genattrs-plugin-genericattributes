@@ -50,7 +50,7 @@ public final class EntryDAO implements IEntryDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_entry ) FROM genatt_entry";
-    private static final String SQL_QUERY_SELECT_ENTRY_ATTRIBUTES = "SELECT ent.id_type,typ.title,typ.is_group,typ.is_comment,typ.class_name,typ.is_mylutece_user,"
+    private static final String SQL_QUERY_SELECT_ENTRY_ATTRIBUTES = "SELECT ent.id_type,typ.title,typ.is_group,typ.is_comment,typ.class_name,typ.is_mylutece_user,typ.icon_name,"
             + "ent.id_entry,ent.id_resource,ent.resource_type,ent.id_parent,ent.code,ent.title,ent.help_message, ent.comment,ent.mandatory,ent.fields_in_line,"
             + "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique, ent.map_provider, ent.css_class, ent.pos_conditional, ent.error_message, ent.num_row, ent.num_column, ent.is_role_associated,ent.is_only_display_back "
             + "FROM genatt_entry ent,genatt_entry_type typ WHERE ent.id_type=typ.id_type ";
@@ -701,6 +701,7 @@ public final class EntryDAO implements IEntryDAO
         entryType.setComment( daoUtil.getBoolean( nIndex++ ) );
         entryType.setBeanName( daoUtil.getString( nIndex++ ) );
         entryType.setMyLuteceUser( daoUtil.getBoolean( nIndex++ ) );
+        entryType.setIconName( daoUtil.getString( nIndex++ ) );
 
         entry = new Entry( );
 

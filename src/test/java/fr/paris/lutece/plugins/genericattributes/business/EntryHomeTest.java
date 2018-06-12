@@ -61,8 +61,8 @@ public class EntryHomeTest extends LuteceTestCase
     private static final int NUMBER_FIELDS_ENTRY_TWO = 5;
     private static final int NUMBER_RESPONSE_ENTRY_TWO = 0;
     private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_type ) FROM genatt_entry_type";
-    private static final String SQL_QUERY_INSERT_ENTRY_TYPE = "INSERT INTO genatt_entry_type ( id_type, title, is_group, is_comment, is_mylutece_user, class_name, plugin ) "
-            + " VALUES ( ?, ?, ?, ?, ?, ?, ? )";
+    private static final String SQL_QUERY_INSERT_ENTRY_TYPE = "INSERT INTO genatt_entry_type ( id_type, title, is_group, is_comment, is_mylutece_user, class_name, icon_name, plugin ) "
+            + " VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )";
     private static final String SQL_QUERY_DELETE_ENTRY_TYPE = "DELETE FROM genatt_entry_type WHERE id_type = ? ";
 
     // Variables
@@ -83,8 +83,8 @@ public class EntryHomeTest extends LuteceTestCase
         super.setUp( );
 
         // Create the entry type
-        _nEntryTypeGroupPrimaryKey = createEntryType( ENTRY_TYPE_GROUP_TITLE, NumberUtils.INTEGER_ONE, StringUtils.EMPTY );
-        _nEntryTypeTextPrimaryKey = createEntryType( ENTRY_TYPE_TEXT_TITLE, NumberUtils.INTEGER_ZERO, StringUtils.EMPTY );
+        _nEntryTypeGroupPrimaryKey = createEntryType( ENTRY_TYPE_GROUP_TITLE, NumberUtils.INTEGER_ONE, StringUtils.EMPTY, StringUtils.EMPTY );
+        _nEntryTypeTextPrimaryKey = createEntryType( ENTRY_TYPE_TEXT_TITLE, NumberUtils.INTEGER_ZERO, StringUtils.EMPTY, StringUtils.EMPTY );
 
         // Create an entry of type group
         Entry entryGroup = createEntryGroup( );
@@ -138,7 +138,7 @@ public class EntryHomeTest extends LuteceTestCase
      *            The name of the class of the group
      * @return the identifier of the created entryType
      */
-    private int createEntryType( String title, int nIsGroup, String strClassName )
+    private int createEntryType( String title, int nIsGroup, String strClassName, String strIconName )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_ENTRY_TYPE, _plugin );
 
@@ -150,6 +150,7 @@ public class EntryHomeTest extends LuteceTestCase
         daoUtil.setInt( ++nIndex, NumberUtils.INTEGER_ZERO );
         daoUtil.setInt( ++nIndex, NumberUtils.INTEGER_ZERO );
         daoUtil.setString( ++nIndex, strClassName );
+        daoUtil.setString( ++nIndex, strIconName );
         daoUtil.setString( ++nIndex, GenericAttributesPlugin.PLUGIN_NAME );
 
         daoUtil.executeUpdate( );
