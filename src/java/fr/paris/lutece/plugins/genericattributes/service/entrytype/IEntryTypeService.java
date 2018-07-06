@@ -237,7 +237,7 @@ public interface IEntryTypeService
      * @return the value of the iteration number
      */
     int getResponseIterationValue( HttpServletRequest request );
-    
+
     /**
      * Return the template associated to an EntryType for read only uses
      * 

@@ -132,7 +132,7 @@ public abstract class EntryTypeService implements IEntryTypeService
 
         return nIterationValue;
     }
-    
+
     /**
      * {@inheritDoc}
      */
