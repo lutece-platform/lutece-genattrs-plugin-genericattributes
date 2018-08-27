@@ -63,6 +63,7 @@ public class EntryFilter
     private int _nIdIsComment = GenericAttributesUtils.CONSTANT_ID_NULL;
     private int _nIdEntryType = GenericAttributesUtils.CONSTANT_ID_NULL;
     private int _nIsOnlyDisplayInBack = GenericAttributesUtils.CONSTANT_ID_NULL;
+    private int _nIsEditableBack = GenericAttributesUtils.CONSTANT_ID_NULL;
 
     /**
      * Get the id of the resource in the filter
@@ -357,5 +358,32 @@ public class EntryFilter
     public boolean containsIsOnlyDisplayInBack( )
     {
         return ( _nIsOnlyDisplayInBack != GenericAttributesUtils.CONSTANT_ID_NULL );
+    }
+
+    /**
+     *
+     * @return 1 if the entry must be editable back,0 if the entry must not be editable back
+     */
+    public int getIsEditableBack( )
+    {
+        return _nIsEditableBack;
+    }
+
+    /**
+     *
+     * @param _nIsEditableBack
+     */
+    public void setIsEditableBack( int _nIsEditableBack )
+    {
+        this._nIsEditableBack = _nIsEditableBack;
+    }
+
+    /**
+     *
+     * @return true if the entry must be editable back or must not be editable back
+     */
+    public boolean containsIsEditableBack( )
+    {
+        return ( _nIsEditableBack != GenericAttributesUtils.CONSTANT_ID_NULL );
     }
 }

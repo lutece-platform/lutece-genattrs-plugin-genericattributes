@@ -71,6 +71,7 @@ public abstract class AbstractEntryTypeRadioButton extends EntryTypeService
         String strFieldInLine = request.getParameter( PARAMETER_FIELD_IN_LINE );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
+        String strEditableBack = request.getParameter( PARAMETER_EDITABLE_BACK );
 
         int nFieldInLine = -1;
 
@@ -100,6 +101,7 @@ public abstract class AbstractEntryTypeRadioButton extends EntryTypeService
 
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
+        entry.setEditableBack( strEditableBack != null );
 
         try
         {

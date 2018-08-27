@@ -627,6 +627,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
+        String strEditableBack = request.getParameter( PARAMETER_EDITABLE_BACK );
 
         String strError = this.checkEntryData( request, locale );
 
@@ -645,6 +646,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
 
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
+        entry.setEditableBack( strEditableBack != null );
 
         return null;
     }

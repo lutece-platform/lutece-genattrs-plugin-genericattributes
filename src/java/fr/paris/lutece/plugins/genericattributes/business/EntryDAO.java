@@ -52,14 +52,14 @@ public final class EntryDAO implements IEntryDAO
     private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_entry ) FROM genatt_entry";
     private static final String SQL_QUERY_SELECT_ENTRY_ATTRIBUTES = "SELECT ent.id_type,typ.title,typ.is_group,typ.is_comment,typ.class_name,typ.is_mylutece_user,typ.icon_name,"
             + "ent.id_entry,ent.id_resource,ent.resource_type,ent.id_parent,ent.code,ent.title,ent.help_message, ent.comment,ent.mandatory,ent.fields_in_line,"
-            + "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique, ent.map_provider, ent.css_class, ent.pos_conditional, ent.error_message, ent.num_row, ent.num_column, ent.is_role_associated,ent.is_only_display_back "
+            + "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique, ent.map_provider, ent.css_class, ent.pos_conditional, ent.error_message, ent.num_row, ent.num_column, ent.is_role_associated,ent.is_only_display_back, ent.is_editable_back "
             + "FROM genatt_entry ent,genatt_entry_type typ WHERE ent.id_type=typ.id_type ";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_ENTRY_ATTRIBUTES + " AND ent.id_entry = ? ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_entry ( id_entry,id_resource,resource_type,id_type,id_parent,code,title,help_message, comment,mandatory,fields_in_line,"
-            + "pos,id_field_depend,confirm_field,confirm_field_title,field_unique,map_provider,css_class, pos_conditional, error_message, num_row, num_column, is_role_associated, is_only_display_back ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            + "pos,id_field_depend,confirm_field,confirm_field_title,field_unique,map_provider,css_class, pos_conditional, error_message, num_row, num_column, is_role_associated, is_only_display_back, is_editable_back ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM genatt_entry WHERE id_entry = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE genatt_entry SET id_entry=?,id_resource=?,resource_type=?,id_type=?,id_parent=?,code=?,title=?,help_message=?,"
-            + "comment=?,mandatory=?, fields_in_line=?,pos=?,id_field_depend=?,confirm_field=?,confirm_field_title=?,field_unique=?,map_provider=?,css_class=?, pos_conditional=?, error_message=?, num_row = ?, num_column = ?, is_role_associated = ?, is_only_display_back = ? WHERE id_entry=?";
+            + "comment=?,mandatory=?, fields_in_line=?,pos=?,id_field_depend=?,confirm_field=?,confirm_field_title=?,field_unique=?,map_provider=?,css_class=?, pos_conditional=?, error_message=?, num_row = ?, num_column = ?, is_role_associated = ?, is_only_display_back = ?, is_editable_back = ? WHERE id_entry=?";
     private static final String SQL_QUERY_SELECT_ENTRY_BY_FILTER = SQL_QUERY_SELECT_ENTRY_ATTRIBUTES;
     private static final String SQL_QUERY_SELECT_NUMBER_ENTRY_BY_FILTER = "SELECT COUNT(ent.id_entry) "
             + "FROM genatt_entry ent,genatt_entry_type typ WHERE ent.id_type=typ.id_type ";
@@ -77,6 +77,7 @@ public final class EntryDAO implements IEntryDAO
     private static final String SQL_FILTER_ID_FIELD_DEPEND_IS_NULL = " AND ent.id_field_depend IS NULL ";
     private static final String SQL_FILTER_ID_TYPE = " AND ent.id_type = ? ";
     private static final String SQL_FILTER_IS_ONLY_DISPLAY_IN_BACK = " AND ent.is_only_display_back = ? ";
+    private static final String SQL_FILTER_IS_EDITABLE_BACK = " AND ent.is_editable_back = ? ";
     private static final String SQL_ORDER_BY_POSITION = " ORDER BY ent.pos, ent.pos_conditional ";
     private static final String SQL_GROUP_BY_POSITION = " GROUP BY ent.pos, ent.pos_conditional ";
     private static final String SQL_GROUP_BY_ENTRY_ENTRY_TYPE = "GROUP BY ent.id_type,typ.title,typ.is_group,typ.is_comment,typ.class_name,typ.is_mylutece_user,"
@@ -148,6 +149,7 @@ public final class EntryDAO implements IEntryDAO
         daoUtil.setInt( 22, entry.getNumberColumn( ) );
         daoUtil.setBoolean( 23, entry.isRoleAssociated( ) );
         daoUtil.setBoolean( 24, entry.isOnlyDisplayInBack( ) );
+        daoUtil.setBoolean( 25, entry.isEditableBack( ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -265,6 +267,7 @@ public final class EntryDAO implements IEntryDAO
         daoUtil.setInt( nIndex++, entry.getNumberColumn( ) );
         daoUtil.setBoolean( nIndex++, entry.isRoleAssociated( ) );
         daoUtil.setBoolean( nIndex++, entry.isOnlyDisplayInBack( ) );
+        daoUtil.setBoolean( nIndex++, entry.isEditableBack( ) );
 
         daoUtil.setInt( nIndex++, entry.getIdEntry( ) );
 
@@ -292,6 +295,7 @@ public final class EntryDAO implements IEntryDAO
         sbSQL.append( ( filter.containsIdEntryType( ) ) ? SQL_FILTER_ID_TYPE : StringUtils.EMPTY );
         sbSQL.append( ( filter.containsIdIsComment( ) ) ? SQL_FILTER_IS_COMMENT : StringUtils.EMPTY );
         sbSQL.append( ( filter.containsIsOnlyDisplayInBack( ) ) ? SQL_FILTER_IS_ONLY_DISPLAY_IN_BACK : StringUtils.EMPTY );
+        sbSQL.append( ( filter.containsIsEditableBack( ) ) ? SQL_FILTER_IS_EDITABLE_BACK : StringUtils.EMPTY );
 
         sbSQL.append( SQL_GROUP_BY_ENTRY_ENTRY_TYPE );
         sbSQL.append( SQL_ORDER_BY_POSITION );
@@ -393,6 +397,7 @@ public final class EntryDAO implements IEntryDAO
         sbSQL.append( ( filter.containsIdField( ) ) ? SQL_FILTER_ID_FIELD_DEPEND : StringUtils.EMPTY );
         sbSQL.append( ( filter.containsIdEntryType( ) ) ? SQL_FILTER_ID_TYPE : StringUtils.EMPTY );
         sbSQL.append( ( filter.containsIsOnlyDisplayInBack( ) ) ? SQL_FILTER_IS_ONLY_DISPLAY_IN_BACK : StringUtils.EMPTY );
+        sbSQL.append( ( filter.containsIsEditableBack( ) ) ? SQL_FILTER_IS_EDITABLE_BACK : StringUtils.EMPTY );
 
         sbSQL.append( SQL_GROUP_BY_POSITION );
         sbSQL.append( SQL_ORDER_BY_POSITION );
@@ -749,6 +754,7 @@ public final class EntryDAO implements IEntryDAO
         entry.setNumberColumn( daoUtil.getInt( nIndex++ ) );
         entry.setRoleAssociated( daoUtil.getBoolean( nIndex++ ) );
         entry.setOnlyDisplayInBack( daoUtil.getBoolean( nIndex++ ) );
+        entry.setEditableBack( daoUtil.getBoolean( nIndex++ ) );
 
         return entry;
     }

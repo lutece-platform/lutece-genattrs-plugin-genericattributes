@@ -79,6 +79,7 @@ public class Entry implements Serializable, Cloneable
     private boolean _bRoleAssociated;
     private String _strEditMode;
     private boolean _bOnlyDisplayInBack;
+    private boolean _bEditableBack;
 
     /**
      * Get the list of children of this entry
@@ -701,8 +702,26 @@ public class Entry implements Serializable, Cloneable
         return _bOnlyDisplayInBack;
     }
 
-    public void setOnlyDisplayInBack( boolean _bOnlyDisplayInBack )
+    public void setOnlyDisplayInBack( boolean onlyDisplayInBack )
     {
-        this._bOnlyDisplayInBack = _bOnlyDisplayInBack;
+        this._bOnlyDisplayInBack = onlyDisplayInBack;
+    }
+
+    /**
+     * 
+     * @return the editableBack, true if editable in BO
+     */
+    public boolean isEditableBack( )
+    {
+        return _bEditableBack;
+    }
+
+    /**
+     * @param editableBack
+     *            the editableBack to set, true if editable in BO
+     */
+    public void setEditableBack( boolean editableBack )
+    {
+        this._bEditableBack = editableBack;
     }
 }
