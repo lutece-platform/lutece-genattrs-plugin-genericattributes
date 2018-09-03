@@ -75,7 +75,8 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
 
         if ( request instanceof MultipartHttpServletRequest )
         {
-            List<FileItem> asynchronousFileItem = getFileSources( entry, request );
+            String strAttributeName = getAttributeName( entry, request );
+            List<FileItem> asynchronousFileItem = getFileSources( request, strAttributeName );
 
             if ( asynchronousFileItem != null )
             {
@@ -84,8 +85,8 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
 
             GenericAttributeError genAttError = null;
 
-            if ( getAsynchronousUploadHandler( ).hasRemoveFlag( request, IEntryTypeService.PREFIX_ATTRIBUTE + Integer.toString( entry.getIdEntry( ) ) )
-                    || getAsynchronousUploadHandler( ).hasAddFileFlag( request, IEntryTypeService.PREFIX_ATTRIBUTE + Integer.toString( entry.getIdEntry( ) ) ) )
+            if ( getAsynchronousUploadHandler( ).hasRemoveFlag( request, strAttributeName )
+                    || getAsynchronousUploadHandler( ).hasAddFileFlag( request, strAttributeName ) )
             {
                 if ( ( listFilesSource != null ) && !listFilesSource.isEmpty( ) )
                 {

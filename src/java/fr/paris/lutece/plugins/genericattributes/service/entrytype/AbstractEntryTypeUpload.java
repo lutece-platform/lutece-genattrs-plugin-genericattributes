@@ -452,36 +452,48 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
     /**
      * Get the file source from the session
      * 
-     * @param entry
-     *            The entry
      * @param request
      *            the HttpServletRequest
+     * @param strAttributeName
+     *            the attribute name
      * @return the file item
      */
-    protected List<FileItem> getFileSources( Entry entry, HttpServletRequest request )
+    protected List<FileItem> getFileSources( HttpServletRequest request, String strAttributeName )
     {
         if ( request != null )
         {
-            String strIdEntry = Integer.toString( entry.getIdEntry( ) );
-
-            // Compute a new attribute prefix to manage the iteration
-            String strAttributePrefix = IEntryTypeService.PREFIX_ATTRIBUTE + strIdEntry;
-            int nIterationNumber = getResponseIterationValue( request );
-            if ( nIterationNumber != NumberUtils.INTEGER_MINUS_ONE )
-            {
-                strAttributePrefix = IEntryTypeService.PREFIX_ITERATION_ATTRIBUTE + nIterationNumber + "_" + strAttributePrefix;
-            }
-
             // Files are only removed if a given flag is in the request
-            getAsynchronousUploadHandler( ).doRemoveFile( request, strAttributePrefix );
+            getAsynchronousUploadHandler( ).doRemoveFile( request, strAttributeName );
 
             // Files are only added if a given flag is in the request
-            getAsynchronousUploadHandler( ).addFilesUploadedSynchronously( request, strAttributePrefix );
+            getAsynchronousUploadHandler( ).addFilesUploadedSynchronously( request, strAttributeName );
 
-            return getAsynchronousUploadHandler( ).getListUploadedFiles( strAttributePrefix, request.getSession( ) );
+            return getAsynchronousUploadHandler( ).getListUploadedFiles( strAttributeName, request.getSession( ) );
         }
 
         return null;
+    }
+
+    /**
+     * Gives the attribute name
+     * 
+     * @param entry
+     *            the entry
+     * @param request
+     *            the request
+     * @return the attribute name
+     */
+    protected String getAttributeName( Entry entry, HttpServletRequest request )
+    {
+        String strAttributePrefix = IEntryTypeService.PREFIX_ATTRIBUTE + Integer.toString( entry.getIdEntry( ) );
+        int nIterationNumber = getResponseIterationValue( request );
+
+        if ( nIterationNumber != NumberUtils.INTEGER_MINUS_ONE )
+        {
+            strAttributePrefix = IEntryTypeService.PREFIX_ITERATION_ATTRIBUTE + nIterationNumber + "_" + strAttributePrefix;
+        }
+
+        return strAttributePrefix;
     }
 
     // SET
