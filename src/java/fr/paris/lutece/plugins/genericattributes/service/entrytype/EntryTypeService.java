@@ -141,4 +141,13 @@ public abstract class EntryTypeService implements IEntryTypeService
     {
         return StringUtils.EMPTY;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getTemplateEntryReadOnly( boolean bIsDisplayFront )
+    {
+        return StringUtils.EMPTY;
+    }
 }
