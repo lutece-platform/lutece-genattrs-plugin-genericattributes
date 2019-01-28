@@ -78,6 +78,7 @@ public interface IEntryTypeService
     String PARAMETER_EDITABLE_BACK = "editable_back";
     String PARAMETER_MAX_IMAGE_SIZE = "maxImageSize";
     String PARAMETER_IMAGE_TYPE = "image_type";
+    String PARAMETER_INDEXED = "is_indexed";
 
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";

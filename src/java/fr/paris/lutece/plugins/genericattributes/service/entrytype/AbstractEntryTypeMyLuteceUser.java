@@ -83,12 +83,15 @@ public abstract class AbstractEntryTypeMyLuteceUser extends EntryTypeService
     @Override
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
+        String strIndexed = request.getParameter( PARAMETER_INDEXED );
+        
         entry.setTitle( I18nService.getLocalizedString( PROPERTY_ENTRY_TITLE, locale ) );
 
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         entry.setHelpMessage( EMPTY_STRING );
         entry.setComment( EMPTY_STRING );
-
+        entry.setIndexed( strIndexed != null );
+        
         if ( entry.getFields( ) == null )
         {
             ArrayList<Field> listFields = new ArrayList<Field>( );
@@ -101,7 +104,7 @@ public abstract class AbstractEntryTypeMyLuteceUser extends EntryTypeService
         entry.getFields( ).get( 0 ).setValue( EMPTY_STRING );
         entry.getFields( ).get( 0 ).setWidth( 50 );
         entry.getFields( ).get( 0 ).setMaxSizeEnter( 0 );
-
+        
         return null;
     }
 

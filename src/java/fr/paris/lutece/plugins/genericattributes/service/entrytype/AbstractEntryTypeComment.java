@@ -58,6 +58,7 @@ public abstract class AbstractEntryTypeComment extends EntryTypeService
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
+        String strIndexed = request.getParameter( PARAMETER_INDEXED );
         String strFieldError = StringUtils.EMPTY;
 
         if ( StringUtils.isBlank( strComment ) )
@@ -77,6 +78,7 @@ public abstract class AbstractEntryTypeComment extends EntryTypeService
         entry.setCode( strCode );
         entry.setComment( strComment );
         entry.setCSSClass( strCSSClass );
+        entry.setIndexed( strIndexed != null );
 
         return null;
     }

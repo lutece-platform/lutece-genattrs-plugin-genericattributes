@@ -652,6 +652,8 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strEditableBack = request.getParameter( PARAMETER_EDITABLE_BACK );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
+        String strIndexed = request.getParameter( PARAMETER_INDEXED );
+
 
         String strError = this.checkEntryData( request, locale );
 
@@ -665,6 +667,8 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
         entry.setComment( strComment );
         entry.setCSSClass( strCSSClass );
         entry.setCode( strCode );
+        entry.setIndexed( strIndexed != null );
+
 
         setFields( entry, request );
 

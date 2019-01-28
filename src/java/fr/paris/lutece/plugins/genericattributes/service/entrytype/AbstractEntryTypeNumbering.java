@@ -68,6 +68,7 @@ public abstract class AbstractEntryTypeNumbering extends EntryTypeService
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         String strPrefix = request.getParameter( PARAMETER_PREFIX );
+        String strIndexed = request.getParameter( PARAMETER_INDEXED );
 
         String strFieldError = StringUtils.EMPTY;
 
@@ -98,7 +99,8 @@ public abstract class AbstractEntryTypeNumbering extends EntryTypeService
 
         entry.getFields( ).get( 0 ).setCode( strCode );
         entry.getFields( ).get( 0 ).setTitle( StringUtils.isNotEmpty( strPrefix ) ? strPrefix : StringUtils.EMPTY );
-
+        entry.setIndexed( strIndexed != null );
+        
         return null;
     }
 

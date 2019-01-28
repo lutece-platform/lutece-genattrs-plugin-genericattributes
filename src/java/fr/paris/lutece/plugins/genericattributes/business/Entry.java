@@ -80,6 +80,7 @@ public class Entry implements Serializable, Cloneable
     private String _strEditMode;
     private boolean _bOnlyDisplayInBack;
     private boolean _bEditableBack;
+    private boolean _bIndexed;
 
     /**
      * Get the list of children of this entry
@@ -724,4 +725,16 @@ public class Entry implements Serializable, Cloneable
     {
         this._bEditableBack = editableBack;
     }
+
+    public boolean isIndexed() 
+    {
+        return _bIndexed;
+    }
+
+    public void setIndexed( boolean bIndexed) 
+    {
+        _bIndexed = bIndexed;
+    }
+    
+    
 }

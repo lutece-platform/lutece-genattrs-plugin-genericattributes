@@ -51,6 +51,7 @@ CREATE TABLE genatt_entry (
     is_role_associated smallint DEFAULT '0',
     is_only_display_back smallint DEFAULT '0',
 	is_editable_back smallint DEFAULT '0',
+	is_indexed smallint DEFAULT '0',
     PRIMARY KEY (id_entry)
 );
 

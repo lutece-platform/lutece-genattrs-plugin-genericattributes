@@ -79,6 +79,7 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         String strFieldCode = request.getParameter( PARAMETER_FIELD_CODE );
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strEditableBack = request.getParameter( PARAMETER_EDITABLE_BACK );
+        String strIndexed = request.getParameter( PARAMETER_INDEXED );
 
         int nWidth = -1;
         int nHeight = -1;
@@ -174,6 +175,7 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
         entry.setEditableBack( strEditableBack != null );
+        entry.setIndexed( strIndexed != null );
 
         return null;
     }

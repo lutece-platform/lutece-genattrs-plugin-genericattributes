@@ -81,6 +81,7 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strEditableBack = request.getParameter( PARAMETER_EDITABLE_BACK );
         String strErrorMessage = request.getParameter( PARAMETER_ERROR_MESSAGE );
+        String strIndexed = request.getParameter( PARAMETER_INDEXED );
 
         int nWidth = -1;
         int nMaxSizeEnter = -1;
@@ -146,6 +147,7 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         entry.setHelpMessage( strHelpMessage );
         entry.setComment( strComment );
         entry.setCSSClass( strCSSClass );
+        entry.setIndexed( strIndexed != null );
         entry.setErrorMessage( strErrorMessage );
 
         if ( entry.getFields( ) == null )

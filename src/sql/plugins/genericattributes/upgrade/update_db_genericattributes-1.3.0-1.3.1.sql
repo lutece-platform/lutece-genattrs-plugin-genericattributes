@@ -6,3 +6,5 @@ ALTER TABLE genatt_entry_type ADD COLUMN icon_name varchar(255) AFTER class_name
 -- Add a new column for the editable back in genatt_entry table
 --
 ALTER TABLE genatt_entry ADD COLUMN (is_editable_back smallint DEFAULT '0');
+
+ALTER TABLE genatt_entry ADD COLUMN (is_indexed SMALLINT default 0 NOT NULL);

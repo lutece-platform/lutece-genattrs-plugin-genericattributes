@@ -64,6 +64,7 @@ public class EntryFilter
     private int _nIdEntryType = GenericAttributesUtils.CONSTANT_ID_NULL;
     private int _nIsOnlyDisplayInBack = GenericAttributesUtils.CONSTANT_ID_NULL;
     private int _nIsEditableBack = GenericAttributesUtils.CONSTANT_ID_NULL;
+    private int _nIsIndexed = GenericAttributesUtils.CONSTANT_ID_NULL;
 
     /**
      * Get the id of the resource in the filter
@@ -386,4 +387,20 @@ public class EntryFilter
     {
         return ( _nIsEditableBack != GenericAttributesUtils.CONSTANT_ID_NULL );
     }
+
+    public int getIsIndexed( ) 
+    {
+        return _nIsIndexed;
+    }
+
+    public void setIsIndexed( int nIsIndexed ) 
+    {
+        _nIsIndexed = nIsIndexed;
+    }
+    
+    public boolean containsIsIndexed( )
+    {
+        return ( _nIsIndexed != GenericAttributesUtils.CONSTANT_ID_NULL );
+    }
+    
 }
