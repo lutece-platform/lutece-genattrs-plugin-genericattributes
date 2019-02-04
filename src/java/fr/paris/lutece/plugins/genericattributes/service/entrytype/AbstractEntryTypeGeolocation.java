@@ -114,6 +114,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
 
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
+        String strEditableBack = request.getParameter( PARAMETER_EDITABLE_BACK );
         int nIdEntry = Integer.parseInt( strIdEntry );
 
         String strIdResource = request.getParameter( PARAMETER_ID_RESOURCE );
@@ -189,6 +190,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         entry.setCSSClass( strCSSClass );
         entry.setIndexed( strIndexed != null );
         entry.setMandatory( strMandatory != null );
+        entry.setEditableBack( strEditableBack != null );
 
         Entry entryAdditionalAddress = EntryHome.findByPrimaryKey( nIdEntry );
         boolean update = false;
