@@ -75,8 +75,9 @@ public final class EntryHome
      * 
      * @param entry
      *            The instance of the Entry who must copy
+     * @return the copied Entry
      */
-    public static void copy( Entry entry )
+    public static Entry copy( Entry entry )
     {
         Entry entryCopy = (Entry) entry.clone( );
         List<Field> listField = FieldHome.getFieldListByIdEntry( entry.getIdEntry( ) );
@@ -114,6 +115,7 @@ public final class EntryHome
             }
 
             TransactionManager.commitTransaction( getPlugin( ) );
+            return entryCopy;
         }
         catch( Exception e )
         {
