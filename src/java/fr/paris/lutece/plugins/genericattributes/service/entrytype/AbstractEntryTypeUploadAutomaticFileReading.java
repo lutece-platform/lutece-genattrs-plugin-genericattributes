@@ -83,7 +83,6 @@ public abstract class AbstractEntryTypeUploadAutomaticFileReading extends EntryT
 {
     // PARAMETERS
     protected static final String PARAMETER_ID_RESPONSE = "id_response";
-    protected static final String PARAMETER_MAX_FILES = "max_files";
     protected static final String PARAMETER_FILE_MAX_SIZE = "file_max_size";
     protected static final String PARAMETER_EXPORT_BINARY = "export_binary";
     protected static final String PARAMETER_FILE_TYPE = "file_type";
