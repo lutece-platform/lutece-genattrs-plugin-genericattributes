@@ -57,6 +57,7 @@ CREATE TABLE genatt_entry (
 
 CREATE INDEX index_genatt_entry_resource ON genatt_entry (id_resource);
 CREATE INDEX index_genatt_entry_parent ON genatt_entry (id_parent);
+CREATE INDEX index_genatt_code ON genatt_entry ( code);
 
 ALTER TABLE genatt_entry ADD CONSTRAINT fk_genatt_entry_type FOREIGN KEY (id_type)
 	REFERENCES genatt_entry_type (id_type);
