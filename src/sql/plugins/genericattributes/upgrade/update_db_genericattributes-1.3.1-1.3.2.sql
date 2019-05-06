@@ -1,0 +1,12 @@
+-- 
+-- Add a new table for the mapping of automatic file reading
+-- 
+CREATE TABLE genatt_mapping_file_reading (
+  id_mapping int AUTO_INCREMENT,
+  id_step INT DEFAULT 0 NOT NULL,
+  id_question INT DEFAULT 0 NOT NULL,
+  question_title varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  id_field_ocr INT DEFAULT 0 NOT NULL,
+  field_ocr_title varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  PRIMARY KEY (id_mapping)
+);
