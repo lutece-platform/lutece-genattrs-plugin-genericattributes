@@ -94,4 +94,11 @@ public interface ITypeDocumentOcrProvider extends Serializable
      * @return the field by id
      */
     ReferenceItem getFieldById(int idField);
+    
+    /**
+     * Gets the authorized entry type for the document type.
+     *
+     * @return the authorized type
+     */
+    List<Integer> getAuthorizedEntryType();
 }
