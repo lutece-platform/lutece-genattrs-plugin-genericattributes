@@ -1,0 +1,116 @@
+/*
+ * Copyright (c) 2002-2019, Mairie de Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
+
+package fr.paris.lutece.plugins.genericattributes.service.field;
+
+import java.util.List;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.Field;
+import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
+import fr.paris.lutece.plugins.referencelist.service.ReferenceListService;
+import fr.paris.lutece.util.ReferenceItem;
+import fr.paris.lutece.util.ReferenceList;
+
+/**
+ *
+ * FileService
+ *
+ */
+public class FieldService
+{
+    /**
+     * The name of the bean of this service
+     */
+    public static final String BEAN_SERVICE = "genericattributes.fieldService";
+    /**
+     * The name of the bean of reference list entry type
+     */
+    public static final String ENTRY_TYPE_REFERENCELIST = "entryTypeReferenceList";
+
+    /**
+     * Load the entry fields
+     * 
+     * @param entry
+     *            The entry
+     * @return a list of fields
+     */
+    public static List<Field> getFieldListByEntry( Entry entry )
+    {
+
+        List<Field> fields = FieldHome.getFieldListByIdEntry( entry.getIdEntry( ) );
+
+        // add fields of the reference list entry type.
+        if ( entry.getEntryType( ).getBeanName( ).contains( ENTRY_TYPE_REFERENCELIST ) )
+        {
+            addReferenceListFields( entry.getCode( ), fields );
+        }
+
+        return fields;
+    }
+
+    /**
+     * add reference list entry fields
+     * 
+     * @param IdReference
+     *            The id of reference
+     * 
+     * @param fields
+     *            Fields of entry
+     * 
+     */
+    public static void addReferenceListFields( String IdReference, List<Field> fields )
+    {
+
+        if ( IdReference != null )
+        {
+
+            ReferenceList listofReferenceItems = ReferenceListService.getInstance( ).getReferenceList( Integer.parseInt( IdReference ) );
+
+            int fakeId = 1;
+            for ( ReferenceItem item : listofReferenceItems )
+
+            {
+                Field field = new Field( );
+                field.setIdField( fakeId );
+                field.setTitle( item.getName( ) );
+                field.setValue( item.getCode( ) );
+                fields.add( field );
+                fakeId++;
+            }
+
+        }
+
+    }
+
+}
