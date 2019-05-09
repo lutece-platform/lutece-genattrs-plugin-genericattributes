@@ -47,6 +47,9 @@ public final class MappingDAO implements IMappingDAO
 	
 	private static final String SQL_QUERY_FIND_BY_ID = "SELECT id_mapping,id_step,id_question,id_field_ocr, question_title, field_ocr_title"
             + " FROM genatt_mapping_file_reading  WHERE id_step = ? ORDER BY id_mapping";
+	private static final String SQL_QUERY_FIND_QUESTIONS_MAPPED_BY_ENTRY_ID = "select mapping.id_question from forms_question question  " + 
+			"join genatt_mapping_file_reading mapping on mapping.id_step = question.id_step " + 
+			"where question.id_entry=?";
     private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_mapping_file_reading(id_mapping, id_step, id_question, id_field_ocr, question_title, field_ocr_title)"
             + " VALUES(?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM genatt_mapping_file_reading WHERE id_mapping = ? ";
@@ -112,6 +115,23 @@ public final class MappingDAO implements IMappingDAO
         daoUtil.close( );
 
         return mappingList;
+	}
+	
+	public List<Integer> loadQuestionsMappedByEntryId( int nIdEntry, Plugin plugin ) {
+		DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_QUESTIONS_MAPPED_BY_ENTRY_ID, plugin );
+        daoUtil.setInt( 1, nIdEntry );
+        daoUtil.executeQuery( );
+
+        List<Integer> questionMappedList = new ArrayList<>();
+
+        while ( daoUtil.next( ) )
+        {
+        	questionMappedList.add( daoUtil.getInt( 1 ) );
+        }
+
+        daoUtil.close( );
+
+        return questionMappedList;
 	}
     
 	/**

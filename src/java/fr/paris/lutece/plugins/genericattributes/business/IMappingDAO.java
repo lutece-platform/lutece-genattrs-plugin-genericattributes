@@ -72,4 +72,13 @@ public interface IMappingDAO
      */
     List<Mapping> loadByStepId( int nIdStep, Plugin plugin );
 
+    /**
+     * Load questions mapped by entry id.
+     *
+     * @param nIdEntry the n id entry
+     * @param plugin the plugin
+     * @return the list
+     */
+    List<Integer> loadQuestionsMappedByEntryId( int nIdEntry, Plugin plugin );
+    
 }
