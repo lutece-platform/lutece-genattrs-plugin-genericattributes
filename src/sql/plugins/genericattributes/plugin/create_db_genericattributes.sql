@@ -32,7 +32,7 @@ CREATE TABLE genatt_entry (
 	id_type int default 0 NOT NULL,
 	id_parent int default NULL,
 	title long varchar,
-	code varchar(20) default NULL,	
+	code varchar(100) default NULL,	
 	help_message long varchar,
 	comment long varchar,
 	mandatory smallint default NULL,
@@ -57,6 +57,7 @@ CREATE TABLE genatt_entry (
 
 CREATE INDEX index_genatt_entry_resource ON genatt_entry (id_resource);
 CREATE INDEX index_genatt_entry_parent ON genatt_entry (id_parent);
+CREATE INDEX index_genatt_code ON genatt_entry ( code);
 
 ALTER TABLE genatt_entry ADD CONSTRAINT fk_genatt_entry_type FOREIGN KEY (id_type)
 	REFERENCES genatt_entry_type (id_type);
@@ -68,7 +69,7 @@ CREATE TABLE genatt_field (
 	id_field int default 0 NOT NULL,
 	id_entry int default 0 NOT NULL,
 	title varchar(255),
-	code varchar(20) default NULL,
+	code varchar(100) default NULL,
 	value long varchar,
 	height int default NULL,
 	width int default NULL,
