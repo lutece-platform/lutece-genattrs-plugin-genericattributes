@@ -89,6 +89,16 @@ public final class MappingHome
     public static List<Mapping> loadByStepId(int nIdStep) {
     	return _dao.loadByStepId(nIdStep, getPlugin());
     }
+    
+    /**
+     * Load by entry id.
+     *
+     * @param nIdEntry the n id entry
+     * @return the list
+     */
+    public static List<Integer> loadQuestionsMappedByEntryId(int nIdEntry) {
+    	return _dao.loadQuestionsMappedByEntryId(nIdEntry, getPlugin());
+    }
 
 
     /**
