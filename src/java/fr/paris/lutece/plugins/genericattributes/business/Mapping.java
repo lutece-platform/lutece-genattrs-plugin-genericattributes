@@ -33,72 +33,67 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
-import fr.paris.lutece.util.ReferenceItem;
-import fr.paris.lutece.util.ReferenceList;
-
 import java.io.Serializable;
 
-import java.util.List;
-
 /**
- *
- * ITypeDocumentOcrProvider : type document provider for automatic reading of documents<br/>
- * <ul>
- * <li><code>getKey(  )</code> must return the unique key.</li>
- * <li><code>getDisplayedName(  )</code> will be displayed in reference lists.</li>
- * </ul>
+ * class Field
  */
-public interface ITypeDocumentOcrProvider extends Serializable
+public class Mapping implements Serializable
 {
-    /**
-     * Gets the key. This key <b>must be unique</b>.
-     * 
-     * @return the key;
-     */
-    String getKey( );
-
-    /**
-     * Gets the displayed name
-     * 
-     * @return the displayed name
-     */
-    String getDisplayedName( );
-
-    /**
-     * Builds a new {@link ReferenceItem} for the type document provider.<br />
-     * <code>key == getKey(  )</code>, <code>value == getDisplayedName(  )</code>
-     * 
-     * @return the item created.
-     */
-    ReferenceItem toRefItem( );
-
-    /**
-     * returns the Parameter class contains all the parameters of the map
-     * 
-     * @return the Parameter
-     */
-    Object getParameter( int nKey );
+	private static final long serialVersionUID = -4198261124477108458L;
+	
+	private int _nIdMapping;
+    private int _nIdStep;
+    private int _nIdQuestion;
+    private String _strQuestionTitle;
+    private int _nIdFieldOcr;
+    private String _strFieldOcrTitle;
     
-  
-    /**
-     * Gets the list field.
-     *
-     * @return the list field
-     */
-    ReferenceList getListField();
-    
-    /**
-     * Gets the field by id.
-     *
-     * @param idField the id field
-     * @return the field by id
-     */
-    ReferenceItem getFieldById(int idField);
-    
-    /**
-     * Gets the authorized entry type for the document type.
-     *
-     * @return the authorized type
-     */
-    List<Integer> getAuthorizedEntryType();
+	public int getIdMapping() {
+		return _nIdMapping;
+	}
+	
+	public void setIdMapping(int idMapping) {
+		this._nIdMapping = idMapping;
+	}
+	
+	public int getIdStep() {
+		return _nIdStep;
+	}
+	
+	public void setIdStep(int idStep) {
+		this._nIdStep = idStep;
+	}
+	
+	public int getIdQuestion() {
+		return _nIdQuestion;
+	}
+	
+	public void setIdQuestion(int idQuestion) {
+		this._nIdQuestion = idQuestion;
+	}
+	public int getIdFieldOcr() {
+		return _nIdFieldOcr;
+	}
+	public void setIdFieldOcr(int idFieldOcr) {
+		this._nIdFieldOcr = idFieldOcr;
+	}
+
+	public String getQuestionTitle() {
+		return _strQuestionTitle;
+	}
+
+	public void setQuestionTitle(String _questionTitle) {
+		this._strQuestionTitle = _questionTitle;
+	}
+
+	public String getFieldOcrTitle() {
+		return _strFieldOcrTitle;
+	}
+
+	public void setFieldOcrTitle(String fieldOcrTitle) {
+		this._strFieldOcrTitle = fieldOcrTitle;
+	}
+	
+	
 }

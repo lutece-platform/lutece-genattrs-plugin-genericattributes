@@ -33,72 +33,76 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
-import fr.paris.lutece.util.ReferenceItem;
-import fr.paris.lutece.util.ReferenceList;
-
-import java.io.Serializable;
-
 import java.util.List;
 
+import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
+import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
+
 /**
- *
- * ITypeDocumentOcrProvider : type document provider for automatic reading of documents<br/>
- * <ul>
- * <li><code>getKey(  )</code> must return the unique key.</li>
- * <li><code>getDisplayedName(  )</code> will be displayed in reference lists.</li>
- * </ul>
+ * This class provides instances management methods (create, find, ...) for mapping objects
  */
-public interface ITypeDocumentOcrProvider extends Serializable
+public final class MappingHome
 {
-    /**
-     * Gets the key. This key <b>must be unique</b>.
-     * 
-     * @return the key;
-     */
-    String getKey( );
+    // Static variable pointed at the DAO instance
+    private static IMappingDAO _dao = SpringContextService.getBean( "genericattributes.mappingDAO" );
+    private static Plugin _plugin;
 
     /**
-     * Gets the displayed name
-     * 
-     * @return the displayed name
+     * Private constructor - this class need not be instantiated
      */
-    String getDisplayedName( );
+    private MappingHome( )
+    {
+    }
+
+    
+    /**
+     * Creates the mapping.
+     *
+     * @param mapping the mapping
+     * @return the int
+     */
+    public static int create( Mapping mapping )
+    {
+        return _dao.insert(mapping, getPlugin( ));
+    }
+    
+    /**
+     * Removes the.
+     *
+     * @param nIdMapping the n id mapping
+     */
+    public static void remove( int nIdMapping )
+    {
+    	_dao.delete(nIdMapping, getPlugin());
+    }
+
+    // /////////////////////////////////////////////////////////////////////////
+    // Finders
 
     /**
-     * Builds a new {@link ReferenceItem} for the type document provider.<br />
-     * <code>key == getKey(  )</code>, <code>value == getDisplayedName(  )</code>
-     * 
-     * @return the item created.
+     * Load by step id.
+     *
+     * @param nIdStep the n id step
+     * @return the list
      */
-    ReferenceItem toRefItem( );
+    public static List<Mapping> loadByStepId(int nIdStep) {
+    	return _dao.loadByStepId(nIdStep, getPlugin());
+    }
+
 
     /**
-     * returns the Parameter class contains all the parameters of the map
+     * Get the generic attributes plugin
      * 
-     * @return the Parameter
+     * @return The generic attributes plugin
      */
-    Object getParameter( int nKey );
-    
-  
-    /**
-     * Gets the list field.
-     *
-     * @return the list field
-     */
-    ReferenceList getListField();
-    
-    /**
-     * Gets the field by id.
-     *
-     * @param idField the id field
-     * @return the field by id
-     */
-    ReferenceItem getFieldById(int idField);
-    
-    /**
-     * Gets the authorized entry type for the document type.
-     *
-     * @return the authorized type
-     */
-    List<Integer> getAuthorizedEntryType();
+    private static Plugin getPlugin( )
+    {
+        if ( _plugin == null )
+        {
+            _plugin = GenericAttributesUtils.getPlugin( );
+        }
+
+        return _plugin;
+    }
 }
