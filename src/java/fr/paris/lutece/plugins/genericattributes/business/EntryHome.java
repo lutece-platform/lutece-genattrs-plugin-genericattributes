@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
+import fr.paris.lutece.plugins.genericattributes.service.field.FieldService;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -214,7 +215,7 @@ public final class EntryHome
             EntryFilter filter = new EntryFilter( );
             filter.setIdEntryParent( entry.getIdEntry( ) );
             entry.setChildren( getEntryList( filter ) );
-            entry.setFields( FieldHome.getFieldListByIdEntry( nKey ) );
+            entry.setFields( FieldService.getFieldListByEntry( entry ) );
         }
 
         return entry;
