@@ -65,6 +65,7 @@ public abstract class AbstractEntryTypeNumbering extends EntryTypeService
     @Override
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
+    	initCommonRequestData( entry, request );
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         String strPrefix = request.getParameter( PARAMETER_PREFIX );
