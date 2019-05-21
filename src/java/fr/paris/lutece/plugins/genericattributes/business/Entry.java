@@ -81,6 +81,7 @@ public class Entry implements Serializable, Cloneable
     private boolean _bOnlyDisplayInBack;
     private boolean _bEditableBack;
     private boolean _bIndexed;
+    private boolean _bShownInCompleteness;
 
     /**
      * Get the list of children of this entry
@@ -735,6 +736,22 @@ public class Entry implements Serializable, Cloneable
     {
         _bIndexed = bIndexed;
     }
+
+	/**
+	 * @return the _bShownInCompletness
+	 */
+	public boolean isShownInCompleteness( )
+	{
+		return _bShownInCompleteness;
+	}
+
+	/**
+	 * @param _bShownInCompleteness the _bShownInCompletness to set
+	 */
+	public void setShownInCompleteness( boolean bShownInCompletness )
+	{
+		_bShownInCompleteness = bShownInCompletness;
+	}
     
     
 }
