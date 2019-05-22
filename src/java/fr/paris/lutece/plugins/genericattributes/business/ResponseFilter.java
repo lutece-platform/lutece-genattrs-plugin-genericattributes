@@ -60,6 +60,7 @@ public class ResponseFilter
     private String _strOrderBy;
     private boolean _bIsOrderByAsc = true;
     private List<Integer> _listId;
+    private String _strCodeEntry;
 
     /**
      * Get the id of a resource in the filter
@@ -346,4 +347,30 @@ public class ResponseFilter
     {
         return CollectionUtils.isNotEmpty( _listId );
     }
+    
+    /**
+     * Check if the filter contains code entry
+     * 
+     * @return true if it contains, false otherwise
+     */
+    public boolean containsCodeEntry( )
+    {
+        return StringUtils.isNotBlank( _strCodeEntry );
+    }
+
+	/**
+	 * @return the _strCodeEntry
+	 */
+	public String getCodeEntry( )
+	{
+		return _strCodeEntry;
+	}
+
+	/**
+	 * @param _strCodeEntry the _strCodeEntry to set
+	 */
+	public void setCodeEntry( String _strCodeEntry )
+	{
+		this._strCodeEntry = _strCodeEntry;
+	}
 }
