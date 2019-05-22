@@ -68,6 +68,7 @@ public final class ResponseDAO implements IResponseDAO
     private static final String SQL_FILTER_ID_RESOURCE = " AND ent.id_resource = ? ";
     private static final String SQL_FILTER_ID_ENTRY = " AND resp.id_entry = ? ";
     private static final String SQL_FILTER_ID_FIELD = " AND resp.id_field = ? ";
+    private static final String SQL_FILTER_CODE_ENTRY = " AND ent.code = ? ";
     private static final String SQL_FILTER_ID_RESPONSE = " resp.id_response ";
     private static final String SQL_FILTER_MULTI_ID_RESPONSE = "AND resp.id_response IN ";
     private static final String SQL_ORDER_BY = " ORDER BY ";
@@ -236,6 +237,11 @@ public final class ResponseDAO implements IResponseDAO
         {
             sbSQL.append( SQL_FILTER_ID_FIELD );
         }
+        
+        if ( filter.containsCodeEntry( ) )
+        {
+        	sbSQL.append( SQL_FILTER_CODE_ENTRY );
+        }
 
         if ( filter.containsListIdResource( ) )
         {
@@ -280,6 +286,11 @@ public final class ResponseDAO implements IResponseDAO
         if ( filter.containsIdField( ) )
         {
             daoUtil.setInt( nIndex++, filter.getIdField( ) );
+        }
+        
+        if ( filter.containsCodeEntry( ) )
+        {
+        	 daoUtil.setString( nIndex++, filter.getCodeEntry( ) );
         }
 
         daoUtil.executeQuery( );
