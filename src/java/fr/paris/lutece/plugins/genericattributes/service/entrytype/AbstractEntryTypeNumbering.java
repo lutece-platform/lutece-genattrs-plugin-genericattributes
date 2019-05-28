@@ -39,6 +39,7 @@ import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
+import fr.paris.lutece.plugins.genericattributes.util.EntryTypeNumberingUtil;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -111,7 +112,7 @@ public abstract class AbstractEntryTypeNumbering extends EntryTypeService
     @Override
     public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        int numbering = ResponseHome.findMaxNumber( entry.getIdEntry( ), entry.getIdResource( ), entry.getResourceType( ) );
+        int numbering = EntryTypeNumberingUtil.getInstance().getNextValue( entry.getIdEntry( ) );
         Response response = new Response( );
         response.setEntry( entry );
         response.setResponseValue( String.valueOf( numbering ) );
