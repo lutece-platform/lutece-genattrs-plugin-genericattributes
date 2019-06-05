@@ -191,15 +191,11 @@ public final class ResponseHome
      * 
      * @param nIdEntry
      *            the id of the entry
-     * @param nIdResource
-     *            the id resource
-     * @param strResourceType
-     *            The resource type
      * @return the max number
      */
-    public static int findMaxNumber( int nIdEntry, int nIdResource, String strResourceType )
+    public static int findMaxNumber( int nIdEntry )
     {
-        return _dao.getMaxNumber( nIdEntry, nIdResource, strResourceType, getPlugin( ) );
+        return _dao.getMaxNumber( nIdEntry, getPlugin( ) );
     }
 
     /**

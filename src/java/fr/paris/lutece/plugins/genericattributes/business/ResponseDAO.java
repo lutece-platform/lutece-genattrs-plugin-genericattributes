@@ -63,11 +63,12 @@ public final class ResponseDAO implements IResponseDAO
 
     // Special query in order to sort numerically and not alphabetically (thus avoiding list like 1, 10, 11, 2, ... instead of 1, 2, ..., 10, 11)
     private static final String SQL_QUERY_SELECT_MAX_NUMBER = " SELECT fr.response_value FROM genatt_response fr "
-            + " INNER JOIN genatt_entry ent ON fr.id_entry = ent.id_entry "
-            + " WHERE ent.id_entry = ? AND ent.id_resource = ? AND ent.resource_type = ? ORDER BY CAST(fr.response_value AS DECIMAL) DESC LIMIT 1 ";
+            + " WHERE fr.id_entry = ? ORDER BY CAST(fr.response_value AS DECIMAL) DESC LIMIT 1 ";
     private static final String SQL_FILTER_ID_RESOURCE = " AND ent.id_resource = ? ";
     private static final String SQL_FILTER_ID_ENTRY = " AND resp.id_entry = ? ";
     private static final String SQL_FILTER_ID_FIELD = " AND resp.id_field = ? ";
+    private static final String SQL_FILTER_CODE_ENTRY = " AND ent.code = ? ";
+    private static final String SQL_FILTER_RESPONSE_VALUE = " AND resp.response_value = ? ";
     private static final String SQL_FILTER_ID_RESPONSE = " resp.id_response ";
     private static final String SQL_FILTER_MULTI_ID_RESPONSE = "AND resp.id_response IN ";
     private static final String SQL_ORDER_BY = " ORDER BY ";
@@ -236,6 +237,16 @@ public final class ResponseDAO implements IResponseDAO
         {
             sbSQL.append( SQL_FILTER_ID_FIELD );
         }
+        
+        if ( filter.containsCodeEntry( ) )
+        {
+        	sbSQL.append( SQL_FILTER_CODE_ENTRY );
+        }
+        
+        if ( filter.containsResponseValue( ) )
+        {
+        	sbSQL.append( SQL_FILTER_RESPONSE_VALUE );
+        }
 
         if ( filter.containsListIdResource( ) )
         {
@@ -281,6 +292,16 @@ public final class ResponseDAO implements IResponseDAO
         {
             daoUtil.setInt( nIndex++, filter.getIdField( ) );
         }
+        
+        if ( filter.containsCodeEntry( ) )
+        {
+        	daoUtil.setString( nIndex++, filter.getCodeEntry( ) );
+        }
+        
+        if ( filter.containsResponseValue( ) )
+        {
+        	daoUtil.setString( nIndex++, filter.getResponseValue( ) );
+        }
 
         daoUtil.executeQuery( );
 
@@ -323,24 +344,21 @@ public final class ResponseDAO implements IResponseDAO
      * {@inheritDoc}
      */
     @Override
-    public int getMaxNumber( int nIdEntry, int nIdResource, String strResourceType, Plugin plugin )
+    public int getMaxNumber( int nIdEntry, Plugin plugin )
     {
         int nIndex = 1;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_MAX_NUMBER, plugin );
-        daoUtil.setInt( nIndex++, nIdEntry );
-        daoUtil.setInt( nIndex++, nIdResource );
-        daoUtil.setString( nIndex++, strResourceType );
-        daoUtil.executeQuery( );
-
         int nKey = 1;
-
-        if ( daoUtil.next( ) )
+        try (DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_MAX_NUMBER, plugin ))
         {
-            nKey = daoUtil.getInt( 1 ) + 1;
+	        daoUtil.setInt( nIndex++, nIdEntry );
+	        daoUtil.executeQuery( );
+	
+	        if ( daoUtil.next( ) )
+	        {
+	            nKey = daoUtil.getInt( 1 ) + 1;
+	        }
+
         }
-
-        daoUtil.free( );
-
         return nKey;
     }
 

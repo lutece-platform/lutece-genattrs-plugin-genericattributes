@@ -112,13 +112,9 @@ public interface IResponseDAO
      * 
      * @param nIdEntry
      *            the id of the entry
-     * @param nIdResource
-     *            the id resource
-     * @param strResourceType
-     *            The resource type
      * @param plugin
      *            {@link Plugin}
      * @return the max number
      */
-    int getMaxNumber( int nIdEntry, int nIdResource, String strResourceType, Plugin plugin );
+    int getMaxNumber( int nIdEntry, Plugin plugin );
 }

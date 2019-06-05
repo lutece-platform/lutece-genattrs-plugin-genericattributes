@@ -31,56 +31,62 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.genericattributes.service.entrytype;
+package fr.paris.lutece.plugins.genericattributes.business;
 
-import fr.paris.lutece.plugins.genericattributes.business.Entry;
-import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.message.AdminMessage;
-import fr.paris.lutece.portal.service.message.AdminMessageService;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 
 /**
- * Abstract entry type for comments
+ * Manages all type document providers.
  */
-public abstract class AbstractEntryTypeComment extends EntryTypeService
+public final class TypeDocumentProviderManager
 {
     /**
-     * {@inheritDoc}
+     * TypeDocumentProviderManager empty constructor
      */
-    @Override
-    public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
+    private TypeDocumentProviderManager( )
     {
-    	initCommonRequestData( entry, request );
-        String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
-        String strComment = request.getParameter( PARAMETER_COMMENT );
-        String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
-        String strIndexed = request.getParameter( PARAMETER_INDEXED );
-        String strFieldError = StringUtils.EMPTY;
+    }
 
-        if ( StringUtils.isBlank( strComment ) )
+    /**
+     * Gets the TypeDocument for the provided key.
+     * 
+     * @param strKey
+     *            the key
+     * @return <code>null</code> if <code>strKey</code> is blank, the TypeDocument provider if found, <code>null</code> otherwise.
+     * @see StringUtils#isBlank(String)
+     */
+    public static ITypeDocumentOcrProvider getTypeDocumentProvider( String strKey )
+    {
+        if ( StringUtils.isBlank( strKey ) )
         {
-            strFieldError = FIELD_COMMENT;
+            return null;
         }
 
-        if ( StringUtils.isNotBlank( strFieldError ) )
+        for ( ITypeDocumentOcrProvider typeDocumentOcr : getTypeDocumentProvidersList( ) )
         {
-            Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, locale )
-            };
-
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
+            if ( strKey.equals( typeDocumentOcr.getKey( ) ) )
+            {
+                return typeDocumentOcr;
+            }
         }
 
-        entry.setCode( strCode );
-        entry.setComment( strComment );
-        entry.setCSSClass( strCSSClass );
-        entry.setIndexed( strIndexed != null );
+        AppLogService.info( TypeDocumentProviderManager.class.getName( ) + " : No type document provider found for key " + strKey );
 
         return null;
+    }
+
+    /**
+     * Builds all available providers list
+     * 
+     * @return all available providers
+     */
+    public static List<ITypeDocumentOcrProvider> getTypeDocumentProvidersList( )
+    {
+        return SpringContextService.getBeansOfType( ITypeDocumentOcrProvider.class );
     }
 }
