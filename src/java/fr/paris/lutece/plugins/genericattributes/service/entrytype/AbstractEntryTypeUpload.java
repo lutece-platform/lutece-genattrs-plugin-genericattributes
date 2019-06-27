@@ -92,7 +92,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
     protected static final String CONSTANT_EXPORT_BINARY = "export_binary";
     protected static final String ALL = "*";
     protected static final String COMMA = ",";
-    protected static final String CONSTANT_FILE_TYPE = "file_type";
+    public static final String CONSTANT_FILE_TYPE = "file_type";
 
     
     // Private parameters
