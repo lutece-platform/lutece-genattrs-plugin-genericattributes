@@ -82,8 +82,16 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
                 MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
                 List<FileItem> listFileItemsToUpload = multipartRequest.getFileList( strAttributeName );
                 List<FileItem> listUploadedFileItems = getAsynchronousUploadHandler( ).getListUploadedFiles( strAttributeName, request.getSession( ) );
+                GenericAttributeError error = null;
+
+                // remove when multipartRequest.getFileList( ) will be fixed.
+                if( listFileItemsToUpload.size() == 1 && listFileItemsToUpload.get(0).getName( ).isEmpty( ) ) {
+                    listFileItemsToUpload = null;
+                }
                 
-                GenericAttributeError error = this.canUploadFiles( entry, listUploadedFileItems, listFileItemsToUpload, locale );
+                if( listFileItemsToUpload != null ) {
+                    error = this.canUploadFiles( entry, listUploadedFileItems, listFileItemsToUpload, locale );
+                }                
 
                 if ( error != null )
                 {
