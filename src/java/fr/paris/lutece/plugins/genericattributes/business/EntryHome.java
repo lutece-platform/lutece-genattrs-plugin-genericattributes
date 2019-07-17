@@ -219,6 +219,18 @@ public final class EntryHome
 
         return entry;
     }
+    
+    /**
+     * Returns a list of a Entry whose identifier is specified in parameter
+     * 
+     * @param idList
+     *            The primary keys
+     * @return an instance of Entry
+     */
+    public static List<Entry> findByPrimaryKeyList( List<Integer> idList )
+    {
+    	return _dao.loadMultiple( idList, getPlugin( ) );
+    }
 
     /**
      * Load the data of all the entry who verify the filter and returns them in a list
