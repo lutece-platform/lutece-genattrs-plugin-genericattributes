@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
+import fr.paris.lutece.plugins.genericattributes.util.CopyEntryEventParam;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.event.ResourceEvent;
 import fr.paris.lutece.portal.service.event.ResourceEventManager;
@@ -81,6 +82,7 @@ public final class EntryHome
      */
     public static Entry copy( Entry entry )
     {
+    	int oldId = entry.getIdEntry( );
         Entry entryCopy = (Entry) entry.clone( );
         List<Field> listField = FieldHome.getFieldListByIdEntry( entry.getIdEntry( ) );
 
@@ -115,7 +117,12 @@ public final class EntryHome
                     copy( entryChild );
                 }
             }
-
+            ResourceEvent event = new ResourceEvent( );
+            event.setIdResource( String.valueOf( entryCopy.getIdEntry( ) ) );
+            event.setTypeResource( entry.getResourceType( ) );
+            event.setParam( new CopyEntryEventParam( oldId ) );
+            ResourceEventManager.fireAddedResource( event );
+            
             TransactionManager.commitTransaction( getPlugin( ) );
             return entryCopy;
         }
