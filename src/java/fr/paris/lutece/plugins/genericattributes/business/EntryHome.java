@@ -135,6 +135,10 @@ public final class EntryHome
     public static void update( Entry entry )
     {
         _dao.store( entry, getPlugin( ) );
+        ResourceEvent event = new ResourceEvent( );
+        event.setIdResource( String.valueOf( entry.getIdEntry( ) ) );
+        event.setTypeResource( entry.getResourceType( ) );
+        ResourceEventManager.fireUpdatedResource( event );
     }
 
     /**
