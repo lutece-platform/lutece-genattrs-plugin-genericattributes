@@ -34,6 +34,8 @@
 package fr.paris.lutece.plugins.genericattributes.business;
 
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
+import fr.paris.lutece.portal.business.event.ResourceEvent;
+import fr.paris.lutece.portal.service.event.ResourceEventManager;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppException;
@@ -165,6 +167,12 @@ public final class EntryHome
                 }
 
                 _dao.delete( nIdEntry, getPlugin( ) );
+                
+                ResourceEvent event = new ResourceEvent( );
+                event.setIdResource( String.valueOf( nIdEntry ) );
+                event.setTypeResource( entry.getResourceType( ) );
+                ResourceEventManager.fireDeletedResource( event );
+                
                 TransactionManager.commitTransaction( getPlugin( ) );
             }
             catch( Exception e )
