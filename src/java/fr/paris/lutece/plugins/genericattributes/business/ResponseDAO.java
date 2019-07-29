@@ -54,7 +54,7 @@ public final class ResponseDAO implements IResponseDAO
     private static final String SQL_QUERY_SELECT_RESPONSE_BY_FILTER = SQL_QUERY_SELECT_RESPONSE + ", genatt_entry ent, genatt_entry_type type "
             + " WHERE resp.id_entry = ent.id_entry and ent.id_type = type.id_type ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_response ( "
-            + " id_response, response_value, id_entry, iteration_number, id_field, id_file, status ) VALUES ( ?,?,?,?,?,?,? )";
+            + " response_value, id_entry, iteration_number, id_field, id_file, status ) VALUES ( ?,?,?,?,?,?)";
     private static final String SQL_QUERY_UPDATE = "UPDATE genatt_response SET response_value = ?, id_entry = ?, iteration_number = ?, id_field = ?, id_file = ?, status = ? WHERE id_response = ?";
     private static final String SQL_QUERY_DELETE = "DELETE FROM genatt_response WHERE id_response = ? ";
     private static final String SQL_QUERY_SELECT_COUNT_RESPONSE_BY_ID_ENTRY = " SELECT field.title, COUNT( resp.id_response )"
@@ -86,8 +86,6 @@ public final class ResponseDAO implements IResponseDAO
         int nIndex = 1;
 
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin );
-        int nKey= daoUtil.getGeneratedKeyInt(1);
-        response.setIdResponse(nKey);
         daoUtil.setInt( nIndex++, response.getIdResponse( ) );
         daoUtil.setString( nIndex++, removeInvalidChars( response.getResponseValue( ) ) );
         daoUtil.setInt( nIndex++, response.getEntry( ).getIdEntry( ) );
@@ -114,6 +112,11 @@ public final class ResponseDAO implements IResponseDAO
         daoUtil.setInt( nIndex, Response.CONSTANT_STATUS_ACTIVE );
 
         daoUtil.executeUpdate( );
+        
+        if ( daoUtil.nextGeneratedKey( ) )
+        {
+        	response.setIdResponse( daoUtil.getGeneratedKeyInt( 1 ) );
+        }
 
         daoUtil.free( );
     }
