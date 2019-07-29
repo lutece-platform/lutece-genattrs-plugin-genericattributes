@@ -86,7 +86,7 @@ public final class ResponseDAO implements IResponseDAO
         int nIndex = 1;
 
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin );
-        daoUtil.setInt( nIndex++, response.getIdResponse( ) );
+       // daoUtil.setInt( nIndex++, response.getIdResponse( ) );
         daoUtil.setString( nIndex++, removeInvalidChars( response.getResponseValue( ) ) );
         daoUtil.setInt( nIndex++, response.getEntry( ).getIdEntry( ) );
         daoUtil.setInt( nIndex++, response.getIterationNumber( ) );
