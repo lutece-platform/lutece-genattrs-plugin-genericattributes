@@ -37,6 +37,7 @@ import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,7 +85,7 @@ public final class ResponseDAO implements IResponseDAO
     {
         int nIndex = 1;
 
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin );
         int nKey= daoUtil.getGeneratedKeyInt(1);
         response.setIdResponse(nKey);
         daoUtil.setInt( nIndex++, response.getIdResponse( ) );
