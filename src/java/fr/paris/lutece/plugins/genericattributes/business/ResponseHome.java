@@ -185,6 +185,22 @@ public final class ResponseHome
     {
         return _dao.getStatisticByIdEntry( nIdEntry, getPlugin( ) );
     }
+    /**
+     * Get the max number from a given id resource
+     * 
+     * @param nIdEntry
+     *            the id of the entry
+     * @param nIdResource
+     *            the id resource
+     * @param strResourceType
+     *            The resource type
+     * @return the max number
+     */
+    @Deprecated 
+    public static int findMaxNumber( int nIdEntry, int nIdResource, String strResourceType )
+    {
+        return findMaxNumber(  nIdEntry );
+}
 
     /**
      * Get the max number from a given id resource
