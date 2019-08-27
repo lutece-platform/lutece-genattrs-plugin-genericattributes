@@ -644,7 +644,7 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
     @Override
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
-    	initCommonRequestData( entry, request );
+        initCommonRequestData( entry, request );
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
@@ -654,7 +654,6 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
         String strEditableBack = request.getParameter( PARAMETER_EDITABLE_BACK );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
-
 
         String strError = this.checkEntryData( request, locale );
 
@@ -669,7 +668,6 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
         entry.setCSSClass( strCSSClass );
         entry.setCode( strCode );
         entry.setIndexed( strIndexed != null );
-
 
         setFields( entry, request );
 

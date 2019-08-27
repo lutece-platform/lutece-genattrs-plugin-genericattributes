@@ -191,27 +191,27 @@ public final class EntryDAO implements IEntryDAO
 
         return entry;
     }
-    
+
     @Override
     public List<Entry> loadMultiple( List<Integer> idList, Plugin plugin )
     {
-    	List<Entry> list = new ArrayList<>( );
-    	String query = SQL_QUERY_FIND_BY_PRIMARY_KEY_LIST + idList.stream( ).distinct( ).map( i -> "?" ).collect( Collectors.joining( "," ) ) + " )";
-    	
-    	try (  DAOUtil daoUtil = new DAOUtil( query, plugin ) )
-    	{
-    		for ( int i = 0; i < idList.size( ); i++ )
-    		{
-    			daoUtil.setInt( i + 1 , idList.get( i ) );
-    		}
-    		daoUtil.executeQuery( );
-    		
-    		while ( daoUtil.next( ) )
+        List<Entry> list = new ArrayList<>( );
+        String query = SQL_QUERY_FIND_BY_PRIMARY_KEY_LIST + idList.stream( ).distinct( ).map( i -> "?" ).collect( Collectors.joining( "," ) ) + " )";
+
+        try( DAOUtil daoUtil = new DAOUtil( query, plugin ) )
+        {
+            for ( int i = 0; i < idList.size( ); i++ )
             {
-    			list.add( getEntryValues( daoUtil ) );
+                daoUtil.setInt( i + 1, idList.get( i ) );
             }
-    	}
-    	return list;
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                list.add( getEntryValues( daoUtil ) );
+            }
+        }
+        return list;
     }
 
     /**
@@ -397,7 +397,7 @@ public final class EntryDAO implements IEntryDAO
                 daoUtil.setBoolean( nIndex++, true );
             }
         }
-        
+
         if ( filter.containsIsIndexed( ) )
         {
             if ( filter.getIsIndexed( ) == 0 )
@@ -409,10 +409,10 @@ public final class EntryDAO implements IEntryDAO
                 daoUtil.setBoolean( nIndex++, true );
             }
         }
-        
+
         if ( filter.containsIsShownInCompleteness( ) )
         {
-        	if ( filter.getIsShownInCompleteness( ) == 0 )
+            if ( filter.getIsShownInCompleteness( ) == 0 )
             {
                 daoUtil.setBoolean( nIndex++, false );
             }
@@ -458,7 +458,7 @@ public final class EntryDAO implements IEntryDAO
         sbSQL.append( ( filter.containsIsEditableBack( ) ) ? SQL_FILTER_IS_EDITABLE_BACK : StringUtils.EMPTY );
         sbSQL.append( ( filter.containsIsIndexed( ) ) ? SQL_FILTER_IS_INDEXED : StringUtils.EMPTY );
         sbSQL.append( ( filter.containsIsShownInCompleteness( ) ) ? SQL_FILTER_IS_SHOWN_COMPLETNESS : StringUtils.EMPTY );
-        
+
         sbSQL.append( SQL_GROUP_BY_POSITION );
         sbSQL.append( SQL_ORDER_BY_POSITION );
 
@@ -528,7 +528,7 @@ public final class EntryDAO implements IEntryDAO
                 daoUtil.setBoolean( nIndex++, true );
             }
         }
-        
+
         if ( filter.containsIsIndexed( ) )
         {
             if ( filter.getIsIndexed( ) == 0 )
@@ -540,10 +540,10 @@ public final class EntryDAO implements IEntryDAO
                 daoUtil.setBoolean( nIndex++, true );
             }
         }
-        
+
         if ( filter.containsIsShownInCompleteness( ) )
         {
-        	if ( filter.getIsShownInCompleteness( ) == 0 )
+            if ( filter.getIsShownInCompleteness( ) == 0 )
             {
                 daoUtil.setBoolean( nIndex++, false );
             }

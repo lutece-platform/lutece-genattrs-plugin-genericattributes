@@ -67,7 +67,7 @@ public abstract class AbstractEntryTypeSession extends EntryTypeService
     @Override
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
-    	initCommonRequestData( entry, request );
+        initCommonRequestData( entry, request );
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         String strAttibuteName = request.getParameter( PARAMETER_VALUE );

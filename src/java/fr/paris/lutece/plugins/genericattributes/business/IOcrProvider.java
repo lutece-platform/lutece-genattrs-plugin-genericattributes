@@ -67,20 +67,27 @@ public interface IOcrProvider extends Serializable
 
     /**
      * Gets the html template
-     * @param nIdTargetEntry The File reading entry id
-     * @param strResourceType the resource type
+     * 
+     * @param nIdTargetEntry
+     *            The File reading entry id
+     * @param strResourceType
+     *            the resource type
      * @return the html template
      */
     String getHtmlCode( int nIdTargetEntry, String strResourceType );
-    
+
     /**
      * Gets the html template configuration
-     * @param lisEntry The entry list to mapping for prefill
-     * @param nIdTargetEntry The File reading entry id
-     * @param strResourceType the resource type
-     * @return the the html template 
+     * 
+     * @param lisEntry
+     *            The entry list to mapping for prefill
+     * @param nIdTargetEntry
+     *            The File reading entry id
+     * @param strResourceType
+     *            the resource type
+     * @return the the html template
      */
-    String getConfigHtmlCode( ReferenceList listEntry, int nIdTargetEntry, String strResourceType);
+    String getConfigHtmlCode( ReferenceList listEntry, int nIdTargetEntry, String strResourceType );
 
     /**
      * Builds a new {@link ReferenceItem} for the type document provider.<br />
@@ -97,31 +104,34 @@ public interface IOcrProvider extends Serializable
      */
     Object getParameter( int nKey );
 
-
     /**
      * Gets the list field.
      *
      * @return the list field
      */
-    ReferenceList getListField();
+    ReferenceList getListField( );
 
     /**
      * Gets the field by id.
      *
-     * @param idField the id field
+     * @param idField
+     *            the id field
      * @return the field by id
      */
-    ReferenceItem getFieldById(int idField);
+    ReferenceItem getFieldById( int idField );
 
     /**
      * Call WS OCR with the uploaded file.
      *
-     * @param fileUploaded fileUploaded
-     * @param nIdTargetEntry The File reading entry id
-     * @param strResourceType the resource type
+     * @param fileUploaded
+     *            fileUploaded
+     * @param nIdTargetEntry
+     *            The File reading entry id
+     * @param strResourceType
+     *            the resource type
      * @return the Ocr result
-     * @throws Exception 
+     * @throws Exception
      */
-    List<Response> process(FileItem fileUploaded, int nIdTargetEntry, String strResourceType) throws Exception;
-  
+    List<Response> process( FileItem fileUploaded, int nIdTargetEntry, String strResourceType ) throws Exception;
+
 }

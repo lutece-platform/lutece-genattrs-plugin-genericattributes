@@ -727,31 +727,31 @@ public class Entry implements Serializable, Cloneable
         this._bEditableBack = editableBack;
     }
 
-    public boolean isIndexed() 
+    public boolean isIndexed( )
     {
         return _bIndexed;
     }
 
-    public void setIndexed( boolean bIndexed) 
+    public void setIndexed( boolean bIndexed )
     {
         _bIndexed = bIndexed;
     }
 
-	/**
-	 * @return the _bShownInCompletness
-	 */
-	public boolean isShownInCompleteness( )
-	{
-		return _bShownInCompleteness;
-	}
+    /**
+     * @return the _bShownInCompletness
+     */
+    public boolean isShownInCompleteness( )
+    {
+        return _bShownInCompleteness;
+    }
 
-	/**
-	 * @param _bShownInCompleteness the _bShownInCompletness to set
-	 */
-	public void setShownInCompleteness( boolean bShownInCompletness )
-	{
-		_bShownInCompleteness = bShownInCompletness;
-	}
-    
-    
+    /**
+     * @param _bShownInCompleteness
+     *            the _bShownInCompletness to set
+     */
+    public void setShownInCompleteness( boolean bShownInCompletness )
+    {
+        _bShownInCompleteness = bShownInCompletness;
+    }
+
 }

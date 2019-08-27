@@ -66,7 +66,7 @@ public abstract class AbstractEntryTypeNumbering extends EntryTypeService
     @Override
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
-    	initCommonRequestData( entry, request );
+        initCommonRequestData( entry, request );
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         String strPrefix = request.getParameter( PARAMETER_PREFIX );
@@ -102,7 +102,7 @@ public abstract class AbstractEntryTypeNumbering extends EntryTypeService
         entry.getFields( ).get( 0 ).setCode( strCode );
         entry.getFields( ).get( 0 ).setTitle( StringUtils.isNotEmpty( strPrefix ) ? strPrefix : StringUtils.EMPTY );
         entry.setIndexed( strIndexed != null );
-        
+
         return null;
     }
 
@@ -112,7 +112,7 @@ public abstract class AbstractEntryTypeNumbering extends EntryTypeService
     @Override
     public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        int numbering = EntryTypeNumberingUtil.getInstance().getNextValue( entry.getIdEntry( ) );
+        int numbering = EntryTypeNumberingUtil.getInstance( ).getNextValue( entry.getIdEntry( ) );
         Response response = new Response( );
         response.setEntry( entry );
         response.setResponseValue( String.valueOf( numbering ) );

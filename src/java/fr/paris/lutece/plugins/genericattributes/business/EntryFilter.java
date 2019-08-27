@@ -389,33 +389,33 @@ public class EntryFilter
         return ( _nIsEditableBack != GenericAttributesUtils.CONSTANT_ID_NULL );
     }
 
-    public int getIsIndexed( ) 
+    public int getIsIndexed( )
     {
         return _nIsIndexed;
     }
 
-    public void setIsIndexed( int nIsIndexed ) 
+    public void setIsIndexed( int nIsIndexed )
     {
         _nIsIndexed = nIsIndexed;
     }
-    
+
     public boolean containsIsIndexed( )
     {
         return ( _nIsIndexed != GenericAttributesUtils.CONSTANT_ID_NULL );
     }
-    
-    public int getIsShownInCompleteness( ) 
+
+    public int getIsShownInCompleteness( )
     {
         return _nIsShownInCompleteness;
     }
-    
+
     public void setIsShownInCompleteness( int nIsShownInCompleteness )
     {
-    	_nIsShownInCompleteness = nIsShownInCompleteness;
+        _nIsShownInCompleteness = nIsShownInCompleteness;
     }
-    
+
     public boolean containsIsShownInCompleteness( )
     {
-    	return _nIsShownInCompleteness != GenericAttributesUtils.CONSTANT_ID_NULL;
+        return _nIsShownInCompleteness != GenericAttributesUtils.CONSTANT_ID_NULL;
     }
 }

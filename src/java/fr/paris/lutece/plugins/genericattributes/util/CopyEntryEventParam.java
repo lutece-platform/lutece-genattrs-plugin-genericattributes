@@ -7,16 +7,16 @@ import fr.paris.lutece.portal.business.event.IEventParam;
  */
 public class CopyEntryEventParam implements IEventParam<Integer>
 {
-	private final Integer _oldEntryId;
-	
-	public CopyEntryEventParam( Integer oldEntryId )
-	{
-		_oldEntryId = oldEntryId;
-	}
+    private final Integer _oldEntryId;
 
-	@Override
-	public Integer getValue( )
-	{
-		return _oldEntryId;
-	}
+    public CopyEntryEventParam( Integer oldEntryId )
+    {
+        _oldEntryId = oldEntryId;
+    }
+
+    @Override
+    public Integer getValue( )
+    {
+        return _oldEntryId;
+    }
 }

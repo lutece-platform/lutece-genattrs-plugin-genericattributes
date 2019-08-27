@@ -100,7 +100,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
     @Override
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
-    	initCommonRequestData( entry, request );
+        initCommonRequestData( entry, request );
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
@@ -133,19 +133,19 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
          **/
         if ( entry.getFields( ) == null )
         {
-        	entry.setFields( new ArrayList<Field>( ) );
+            entry.setFields( new ArrayList<Field>( ) );
         }
-        
+
         createOrUpdateProviderField( entry, strMapProvider );
-    	createOrUpdateField( entry, CONSTANT_EDIT_MODE, strEditMode );
-    	createOrUpdateField( entry, CONSTANT_VIEW_NUMBER, strViewNumber );
-    	createOrUpdateField( entry, CONSTANT_ID_ADDRESS, CONSTANT_ID_ADDRESS );
-    	createOrUpdateField( entry, CONSTANT_ADDRESS, CONSTANT_ADDRESS );
-    	createOrUpdateField( entry, CONSTANT_ADDITIONAL_ADDRESS, CONSTANT_ADDITIONAL_ADDRESS );
-    	createOrUpdateField( entry, CONSTANT_X, CONSTANT_X );
-    	createOrUpdateField( entry, CONSTANT_Y, CONSTANT_Y );
-    	createOrUpdateField( entry, CONSTANT_GEOMETRY, CONSTANT_GEOMETRY );
-    	
+        createOrUpdateField( entry, CONSTANT_EDIT_MODE, strEditMode );
+        createOrUpdateField( entry, CONSTANT_VIEW_NUMBER, strViewNumber );
+        createOrUpdateField( entry, CONSTANT_ID_ADDRESS, CONSTANT_ID_ADDRESS );
+        createOrUpdateField( entry, CONSTANT_ADDRESS, CONSTANT_ADDRESS );
+        createOrUpdateField( entry, CONSTANT_ADDITIONAL_ADDRESS, CONSTANT_ADDITIONAL_ADDRESS );
+        createOrUpdateField( entry, CONSTANT_X, CONSTANT_X );
+        createOrUpdateField( entry, CONSTANT_Y, CONSTANT_Y );
+        createOrUpdateField( entry, CONSTANT_GEOMETRY, CONSTANT_GEOMETRY );
+
         entry.setTitle( strTitle );
         entry.setHelpMessage( strHelpMessage );
         entry.setComment( strComment );
@@ -156,32 +156,34 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
 
         return null;
     }
-    
+
     private void createOrUpdateField( Entry entry, String fieldTitle, String fieldValue )
     {
-    	Field field = GenericAttributesUtils.findFieldByTitleInTheList( fieldTitle, entry.getFields( ) );
-    	if ( field == null )
-    	{
-    		entry.getFields( ).add( buildField( entry, fieldTitle, fieldValue ) );
-    	}
-    	else {
-    		field.setTitle( fieldTitle );
-    		field.setValue( fieldValue );
-    	}
+        Field field = GenericAttributesUtils.findFieldByTitleInTheList( fieldTitle, entry.getFields( ) );
+        if ( field == null )
+        {
+            entry.getFields( ).add( buildField( entry, fieldTitle, fieldValue ) );
+        }
+        else
+        {
+            field.setTitle( fieldTitle );
+            field.setValue( fieldValue );
+        }
     }
-    
+
     private void createOrUpdateProviderField( Entry entry, String fieldValue )
     {
-    	Field field = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_PROVIDER, entry.getFields( ) );
-    	if ( field == null )
-    	{
-    		entry.getFields( ).add( buildFieldMapProvider( entry, fieldValue ) );
-    	}
-    	else {
-    		Field newProvider = buildFieldMapProvider( entry, fieldValue );
-    		field.setTitle( newProvider.getTitle( ) );
-    		field.setValue( newProvider.getValue( ));
-    	}
+        Field field = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_PROVIDER, entry.getFields( ) );
+        if ( field == null )
+        {
+            entry.getFields( ).add( buildFieldMapProvider( entry, fieldValue ) );
+        }
+        else
+        {
+            Field newProvider = buildFieldMapProvider( entry, fieldValue );
+            field.setTitle( newProvider.getTitle( ) );
+            field.setValue( newProvider.getValue( ) );
+        }
     }
 
     /**
@@ -192,14 +194,14 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
     {
         String strIdAddressValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_ID_ADDRESS );
         String strAddressValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_ADDRESS );
-        String strAdditionalAddressValue = request.getParameter( entry.getIdEntry(  ) + PARAMETER_SUFFIX_ADDITIONAL_ADDRESS );
+        String strAdditionalAddressValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_ADDITIONAL_ADDRESS );
         String strXValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_X );
         String strYValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_Y );
         String strGeometryValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_GEOMETRY );
 
         Field fieldIdAddress = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_ID_ADDRESS, entry.getFields( ) );
         Field fieldAddress = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_ADDRESS, entry.getFields( ) );
-        Field fieldAdditionalAddress = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_ADDITIONAL_ADDRESS, entry.getFields(  ) );
+        Field fieldAdditionalAddress = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_ADDITIONAL_ADDRESS, entry.getFields( ) );
         Field fieldX = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_X, entry.getFields( ) );
         Field fieldY = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_Y, entry.getFields( ) );
         Field fieldGeometry = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_GEOMETRY, entry.getFields( ) );
@@ -232,7 +234,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         listResponse.add( responseAddress );
 
         // 3 : Response Additional Address
-        Response responseAdditionalAddress = new Response(  );
+        Response responseAdditionalAddress = new Response( );
         responseAdditionalAddress.setEntry( entry );
         responseAdditionalAddress.setResponseValue( strAdditionalAddressValue );
         responseAdditionalAddress.setField( fieldAdditionalAddress );

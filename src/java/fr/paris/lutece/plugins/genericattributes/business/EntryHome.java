@@ -82,7 +82,7 @@ public final class EntryHome
      */
     public static Entry copy( Entry entry )
     {
-    	int oldId = entry.getIdEntry( );
+        int oldId = entry.getIdEntry( );
         Entry entryCopy = (Entry) entry.clone( );
         List<Field> listField = FieldHome.getFieldListByIdEntry( entry.getIdEntry( ) );
 
@@ -122,7 +122,7 @@ public final class EntryHome
             event.setTypeResource( entry.getResourceType( ) );
             event.setParam( new CopyEntryEventParam( oldId ) );
             ResourceEventManager.fireAddedResource( event );
-            
+
             TransactionManager.commitTransaction( getPlugin( ) );
             return entryCopy;
         }
@@ -178,12 +178,12 @@ public final class EntryHome
                 }
 
                 _dao.delete( nIdEntry, getPlugin( ) );
-                
+
                 ResourceEvent event = new ResourceEvent( );
                 event.setIdResource( String.valueOf( nIdEntry ) );
                 event.setTypeResource( entry.getResourceType( ) );
                 ResourceEventManager.fireDeletedResource( event );
-                
+
                 TransactionManager.commitTransaction( getPlugin( ) );
             }
             catch( Exception e )
@@ -238,7 +238,7 @@ public final class EntryHome
 
         return entry;
     }
-    
+
     /**
      * Returns a list of a Entry whose identifier is specified in parameter
      * 
@@ -248,7 +248,7 @@ public final class EntryHome
      */
     public static List<Entry> findByPrimaryKeyList( List<Integer> idList )
     {
-    	return _dao.loadMultiple( idList, getPlugin( ) );
+        return _dao.loadMultiple( idList, getPlugin( ) );
     }
 
     /**

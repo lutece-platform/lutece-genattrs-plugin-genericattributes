@@ -87,16 +87,16 @@ public interface IEntryDAO
      * @return the instance of the Entry
      */
     Entry load( int nIdEntry, Plugin plugin );
-    
+
     /**
-    * Load the data of the entry from the table
-    *
-    * @param idList
-    *            The identifiers of the entries
-    * @param plugin
-    *            the plugin
-    * @return the instance of the Entry
-    */
+     * Load the data of the entry from the table
+     *
+     * @param idList
+     *            The identifiers of the entries
+     * @param plugin
+     *            the plugin
+     * @return the instance of the Entry
+     */
     List<Entry> loadMultiple( List<Integer> idList, Plugin plugin );
 
     /**

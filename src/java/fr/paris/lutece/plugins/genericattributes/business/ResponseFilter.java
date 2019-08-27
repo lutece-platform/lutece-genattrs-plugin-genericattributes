@@ -348,7 +348,7 @@ public class ResponseFilter
     {
         return CollectionUtils.isNotEmpty( _listId );
     }
-    
+
     /**
      * Check if the filter contains code entry
      * 
@@ -359,38 +359,43 @@ public class ResponseFilter
         return StringUtils.isNotBlank( _strCodeEntry );
     }
 
-	/**
-	 * @return the _strCodeEntry
-	 */
-	public String getCodeEntry( )
-	{
-		return _strCodeEntry;
-	}
+    /**
+     * @return the _strCodeEntry
+     */
+    public String getCodeEntry( )
+    {
+        return _strCodeEntry;
+    }
 
-	/**
-	 * @param _strCodeEntry the _strCodeEntry to set
-	 */
-	public void setCodeEntry( String _strCodeEntry )
-	{
-		this._strCodeEntry = _strCodeEntry;
-	}
+    /**
+     * @param _strCodeEntry
+     *            the _strCodeEntry to set
+     */
+    public void setCodeEntry( String _strCodeEntry )
+    {
+        this._strCodeEntry = _strCodeEntry;
+    }
 
-	/**
-	 * @return the _strResponseValue
-	 */
-	public String getResponseValue() {
-		return _strResponseValue;
-	}
+    /**
+     * @return the _strResponseValue
+     */
+    public String getResponseValue( )
+    {
+        return _strResponseValue;
+    }
 
-	/**
-	 * @param _strResponseValue the _strResponseValue to set
-	 */
-	public void setResponseValue(String strResponseValue) {
-		_strResponseValue = strResponseValue;
-	}
-	
-	/**
+    /**
+     * @param _strResponseValue
+     *            the _strResponseValue to set
+     */
+    public void setResponseValue( String strResponseValue )
+    {
+        _strResponseValue = strResponseValue;
+    }
+
+    /**
      * Check if the filter contains response value
+     * 
      * @return true if it contains, false otherwise
      */
     public boolean containsResponseValue( )

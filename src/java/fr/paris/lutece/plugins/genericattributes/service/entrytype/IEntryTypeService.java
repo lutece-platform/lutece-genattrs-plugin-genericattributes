@@ -248,12 +248,12 @@ public interface IEntryTypeService
      * @return the template associated to an EntryType for read only uses
      */
     String getTemplateEntryReadOnly( );
-    
+
     /**
      * Return the template associated to an EntryType for read only uses
      * 
      * @param bDisplayFront
-     *          true 
+     *            true
      * @return the template associated to an EntryType for read only uses
      */
     String getTemplateEntryReadOnly( boolean bDisplayFront );

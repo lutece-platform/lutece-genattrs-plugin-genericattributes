@@ -85,7 +85,6 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
     protected static final String PARAMETER_EXPORT_BINARY = "export_binary";
     protected static final String PARAMETER_FILE_TYPE = "file_type";
 
-
     // CONSTANTS
     protected static final String CONSTANT_MAX_FILES = "max_files";
     protected static final String CONSTANT_FILE_MAX_SIZE = "file_max_size";
@@ -94,7 +93,6 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
     protected static final String COMMA = ",";
     public static final String CONSTANT_FILE_TYPE = "file_type";
 
-    
     // Private parameters
     private static final String PARAMETER_RESOURCE_TYPE = "resource_type";
     private static final String PARAMETER_ID = "id";
@@ -633,7 +631,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
     @Override
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
-    	initCommonRequestData( entry, request );
+        initCommonRequestData( entry, request );
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );

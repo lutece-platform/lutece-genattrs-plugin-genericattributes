@@ -75,8 +75,6 @@ public final class ResponseDAO implements IResponseDAO
     private static final String SQL_ASC = " ASC ";
     private static final String SQL_DESC = " DESC ";
 
- 
-
     /**
      * {@inheritDoc}
      */
@@ -86,7 +84,7 @@ public final class ResponseDAO implements IResponseDAO
         int nIndex = 1;
 
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin );
-       // daoUtil.setInt( nIndex++, response.getIdResponse( ) );
+        // daoUtil.setInt( nIndex++, response.getIdResponse( ) );
         daoUtil.setString( nIndex++, removeInvalidChars( response.getResponseValue( ) ) );
         daoUtil.setInt( nIndex++, response.getEntry( ).getIdEntry( ) );
         daoUtil.setInt( nIndex++, response.getIterationNumber( ) );
@@ -112,10 +110,10 @@ public final class ResponseDAO implements IResponseDAO
         daoUtil.setInt( nIndex, Response.CONSTANT_STATUS_ACTIVE );
 
         daoUtil.executeUpdate( );
-        
+
         if ( daoUtil.nextGeneratedKey( ) )
         {
-        	response.setIdResponse( daoUtil.getGeneratedKeyInt( 1 ) );
+            response.setIdResponse( daoUtil.getGeneratedKeyInt( 1 ) );
         }
 
         daoUtil.free( );
@@ -217,15 +215,15 @@ public final class ResponseDAO implements IResponseDAO
         {
             sbSQL.append( SQL_FILTER_ID_FIELD );
         }
-        
+
         if ( filter.containsCodeEntry( ) )
         {
-        	sbSQL.append( SQL_FILTER_CODE_ENTRY );
+            sbSQL.append( SQL_FILTER_CODE_ENTRY );
         }
-        
+
         if ( filter.containsResponseValue( ) )
         {
-        	sbSQL.append( SQL_FILTER_RESPONSE_VALUE );
+            sbSQL.append( SQL_FILTER_RESPONSE_VALUE );
         }
 
         if ( filter.containsListIdResource( ) )
@@ -272,15 +270,15 @@ public final class ResponseDAO implements IResponseDAO
         {
             daoUtil.setInt( nIndex++, filter.getIdField( ) );
         }
-        
+
         if ( filter.containsCodeEntry( ) )
         {
-        	daoUtil.setString( nIndex++, filter.getCodeEntry( ) );
+            daoUtil.setString( nIndex++, filter.getCodeEntry( ) );
         }
-        
+
         if ( filter.containsResponseValue( ) )
         {
-        	daoUtil.setString( nIndex++, filter.getResponseValue( ) );
+            daoUtil.setString( nIndex++, filter.getResponseValue( ) );
         }
 
         daoUtil.executeQuery( );
@@ -328,15 +326,15 @@ public final class ResponseDAO implements IResponseDAO
     {
         int nIndex = 1;
         int nKey = 1;
-        try (DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_MAX_NUMBER, plugin ))
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_MAX_NUMBER, plugin ) )
         {
-	        daoUtil.setInt( nIndex++, nIdEntry );
-	        daoUtil.executeQuery( );
-	
-	        if ( daoUtil.next( ) )
-	        {
-	            nKey = daoUtil.getInt( 1 ) + 1;
-	        }
+            daoUtil.setInt( nIndex++, nIdEntry );
+            daoUtil.executeQuery( );
+
+            if ( daoUtil.next( ) )
+            {
+                nKey = daoUtil.getInt( 1 ) + 1;
+            }
 
         }
         return nKey;

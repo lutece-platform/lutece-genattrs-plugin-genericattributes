@@ -85,13 +85,15 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
                 GenericAttributeError error = null;
 
                 // remove when multipartRequest.getFileList( ) will be fixed.
-                if( listFileItemsToUpload.size() == 1 && listFileItemsToUpload.get(0).getName( ).isEmpty( ) ) {
+                if ( listFileItemsToUpload.size( ) == 1 && listFileItemsToUpload.get( 0 ).getName( ).isEmpty( ) )
+                {
                     listFileItemsToUpload = null;
                 }
-                
-                if( listFileItemsToUpload != null ) {
+
+                if ( listFileItemsToUpload != null )
+                {
                     error = this.canUploadFiles( entry, listUploadedFileItems, listFileItemsToUpload, locale );
-                }                
+                }
 
                 if ( error != null )
                 {
