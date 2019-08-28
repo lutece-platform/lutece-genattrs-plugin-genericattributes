@@ -153,8 +153,8 @@ public abstract class EntryTypeService implements IEntryTypeService
 
     protected void initCommonRequestData( Entry entry, HttpServletRequest request )
     {
-        String strShownCompletness = request.getParameter( PARAMETER_SHOWN_COMPLETENESS );
+        String strShownCompletness = request.getParameter( PARAMETER_USED_CORRECT_RESPONSE );
 
-        entry.setShownInCompleteness( strShownCompletness != null );
+        entry.setUsedInCorrectFormResponse( strShownCompletness != null );
     }
 }

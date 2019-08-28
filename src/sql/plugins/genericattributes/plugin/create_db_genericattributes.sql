@@ -52,7 +52,7 @@ CREATE TABLE genatt_entry (
     is_only_display_back smallint DEFAULT '0',
 	is_editable_back smallint DEFAULT '0',
 	is_indexed smallint DEFAULT '0',
-	is_shown_in_completeness smallint DEFAULT '0',
+	used_in_correct_form_response smallint DEFAULT '0',
     PRIMARY KEY (id_entry)
 );
 

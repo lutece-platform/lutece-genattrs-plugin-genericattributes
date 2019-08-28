@@ -65,7 +65,7 @@ public class EntryFilter
     private int _nIsOnlyDisplayInBack = GenericAttributesUtils.CONSTANT_ID_NULL;
     private int _nIsEditableBack = GenericAttributesUtils.CONSTANT_ID_NULL;
     private int _nIsIndexed = GenericAttributesUtils.CONSTANT_ID_NULL;
-    private int _nIsShownInCompleteness = GenericAttributesUtils.CONSTANT_ID_NULL;
+    private int _nIsUsedInCorrectFormResponse = GenericAttributesUtils.CONSTANT_ID_NULL;
 
     /**
      * Get the id of the resource in the filter
@@ -404,18 +404,18 @@ public class EntryFilter
         return ( _nIsIndexed != GenericAttributesUtils.CONSTANT_ID_NULL );
     }
 
-    public int getIsShownInCompleteness( )
+    public int getIsUsedInCorrectFormResponse( )
     {
-        return _nIsShownInCompleteness;
+        return _nIsUsedInCorrectFormResponse;
     }
 
-    public void setIsShownInCompleteness( int nIsShownInCompleteness )
+    public void setIsUsedInCorrectFormResponse( int nIsUsedInCorrectFormResponse )
     {
-        _nIsShownInCompleteness = nIsShownInCompleteness;
+        _nIsUsedInCorrectFormResponse = nIsUsedInCorrectFormResponse;
     }
 
-    public boolean containsIsShownInCompleteness( )
+    public boolean containsIsUsedInCorrectFormResponse( )
     {
-        return _nIsShownInCompleteness != GenericAttributesUtils.CONSTANT_ID_NULL;
+        return _nIsUsedInCorrectFormResponse != GenericAttributesUtils.CONSTANT_ID_NULL;
     }
 }

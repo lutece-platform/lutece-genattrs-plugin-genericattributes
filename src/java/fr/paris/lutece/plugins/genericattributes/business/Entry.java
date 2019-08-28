@@ -81,7 +81,7 @@ public class Entry implements Serializable, Cloneable
     private boolean _bOnlyDisplayInBack;
     private boolean _bEditableBack;
     private boolean _bIndexed;
-    private boolean _bShownInCompleteness;
+    private boolean _bUsedInCorrectFormResponse;
 
     /**
      * Get the list of children of this entry
@@ -740,18 +740,18 @@ public class Entry implements Serializable, Cloneable
     /**
      * @return the _bShownInCompletness
      */
-    public boolean isShownInCompleteness( )
+    public boolean isUsedInCorrectFormResponse( )
     {
-        return _bShownInCompleteness;
+        return _bUsedInCorrectFormResponse;
     }
 
     /**
-     * @param _bShownInCompleteness
-     *            the _bShownInCompletness to set
+     * @param bUsedInCorrectFormResponse
+     *            the bUsedInCorrectFormResponse to set
      */
-    public void setShownInCompleteness( boolean bShownInCompletness )
+    public void setUsedInCorrectFormResponse( boolean bUsedInCorrectFormResponse )
     {
-        _bShownInCompleteness = bShownInCompletness;
+        _bUsedInCorrectFormResponse = bUsedInCorrectFormResponse;
     }
 
 }
