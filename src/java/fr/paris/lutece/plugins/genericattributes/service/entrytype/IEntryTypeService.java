@@ -92,6 +92,7 @@ public interface IEntryTypeService
     String FIELD_X = "X";
     String FIELD_Y = "Y";
     String FIELD_GEOMETRY = "geometry";
+    String FIELD_PREFIX = "prefix";
     
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";

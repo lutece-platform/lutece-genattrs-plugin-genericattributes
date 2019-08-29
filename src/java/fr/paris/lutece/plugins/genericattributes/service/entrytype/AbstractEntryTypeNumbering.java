@@ -33,24 +33,22 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
-import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 import fr.paris.lutece.plugins.genericattributes.util.EntryTypeNumberingUtil;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Abstract entry type for incremental fields
@@ -91,18 +89,8 @@ public abstract class AbstractEntryTypeNumbering extends EntryTypeService
         entry.setCode( strCode );
         entry.setTitle( strTitle );
 
-        if ( entry.getFields( ) == null )
-        {
-            List<Field> listFields = new ArrayList<Field>( );
-            Field field = new Field( );
-            listFields.add( field );
-            entry.setFields( listFields );
-        }
-
-        entry.getFields( ).get( 0 ).setCode( strCode );
-        entry.getFields( ).get( 0 ).setTitle( StringUtils.isNotEmpty( strPrefix ) ? strPrefix : StringUtils.EMPTY );
+        createOrUpdateField( entry, FIELD_PREFIX, null, StringUtils.isNotEmpty( strPrefix ) ? strPrefix : StringUtils.EMPTY );
         entry.setIndexed( strIndexed != null );
-
         return null;
     }
 
@@ -141,33 +129,25 @@ public abstract class AbstractEntryTypeNumbering extends EntryTypeService
     }
 
     /**
-     * Get the response value
-     * 
-     * @param entry
-     *            The entry
-     * @return the response value of the response for this entry
-     * @param response
-     *            The response
-     */
-    private String getResponseValue( Entry entry, Response response )
-    {
-        Field field = null;
+	 * Get the response value
+	 * 
+	 * @param entry The entry
+	 * @return the response value of the response for this entry
+	 * @param response The response
+	 */
+	private String getResponseValue( Entry entry, Response response )
+	{
+		if ( entry.getFields( ) == null )
+		{
+			entry.setFields( FieldHome.getFieldListByIdEntry( entry.getIdEntry( ) ) );
+		}
+		Field field = entry.getFieldByCode( FIELD_PREFIX );
 
-        if ( entry.getFields( ) == null )
-        {
-            entry.setFields( FieldHome.getFieldListByIdEntry( entry.getIdEntry( ) ) );
-        }
+		if ( field != null && StringUtils.isNotBlank( field.getValue( ) ) )
+		{
+			return field.getValue( ) + response.getResponseValue( );
+		}
 
-        if ( ( entry.getFields( ) != null ) && !entry.getFields( ).isEmpty( ) )
-        {
-            field = entry.getFields( ).get( 0 );
-        }
-
-        if ( ( field != null ) && StringUtils.isNotBlank( field.getTitle( ) ) )
-        {
-            return field.getTitle( ) + response.getResponseValue( );
-        }
-
-        return response.getResponseValue( );
-    }
+		return response.getResponseValue( );
+	}
 }
