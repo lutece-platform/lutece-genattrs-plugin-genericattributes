@@ -83,6 +83,15 @@ public interface IEntryTypeService
 
     // Fields codes
     String FIELD_DATE_VALUE = "default_date_value";
+    String FIELD_PROVIDER = "provider";
+    String FIELD_EDIT_MODE = "editMode";
+    String FIELD_VIEW_NUMBER = "viewNumber";
+    String FIELD_ID_ADDRESS = "idAddress";
+    String FIELD_ADDRESS = "address";
+    String FIELD_ADDITIONAL_ADDRESS = "additionalAddress";
+    String FIELD_X = "X";
+    String FIELD_Y = "Y";
+    String FIELD_GEOMETRY = "geometry";
     
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";
