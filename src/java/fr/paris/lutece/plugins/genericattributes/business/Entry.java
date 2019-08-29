@@ -754,4 +754,18 @@ public class Entry implements Serializable, Cloneable
         _bUsedInCorrectFormResponse = bUsedInCorrectFormResponse;
     }
 
+    /**
+     * Get the field by its code.
+     * @param strCode
+     * @return
+     */
+    public Field getFieldByCode( String strCode )
+    {
+    	if ( _listFields == null || _listFields.isEmpty( ) )
+        {
+            return null;
+        }
+    	
+    	return _listFields.stream( ).filter( field -> field.getCode( ).equals( strCode ) ).findFirst( ).orElse( null );
+    }
 }

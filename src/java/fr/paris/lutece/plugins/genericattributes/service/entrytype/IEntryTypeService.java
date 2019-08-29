@@ -81,6 +81,9 @@ public interface IEntryTypeService
     String PARAMETER_INDEXED = "is_indexed";
     String PARAMETER_USED_CORRECT_RESPONSE = "used_in_correct_form_response";
 
+    // Fields codes
+    String FIELD_DATE_VALUE = "default_date_value";
+    
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";
 

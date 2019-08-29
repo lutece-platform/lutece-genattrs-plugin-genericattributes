@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -43,6 +44,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -153,8 +155,27 @@ public abstract class EntryTypeService implements IEntryTypeService
 
     protected void initCommonRequestData( Entry entry, HttpServletRequest request )
     {
+    	if ( entry.getFields( ) == null )
+    	{
+    		entry.setFields( new ArrayList<>( ) );
+    	}
         String strShownCompletness = request.getParameter( PARAMETER_USED_CORRECT_RESPONSE );
 
         entry.setUsedInCorrectFormResponse( strShownCompletness != null );
+    }
+    
+    protected Field createOrUpdateField( Entry entry, String strCode, String strTitle, String strValue )
+    {
+    	Field field = entry.getFieldByCode( strCode );
+    	if ( field == null )
+    	{
+    		field = new Field( );
+    		field.setCode( strCode );
+    		field.setParentEntry( entry );
+    		entry.getFields( ).add( field );
+    	}
+    	field.setTitle( strTitle );
+    	field.setValue( strValue );
+    	return field;
     }
 }
