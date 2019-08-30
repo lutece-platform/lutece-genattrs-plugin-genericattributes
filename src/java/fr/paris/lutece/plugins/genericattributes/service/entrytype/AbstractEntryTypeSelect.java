@@ -89,8 +89,6 @@ public abstract class AbstractEntryTypeSelect extends EntryTypeService
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
-        // for don't update fields listFields=null
-        entry.setFields( null );
         entry.setCode( strCode );
         entry.setTitle( strTitle );
         entry.setHelpMessage( strHelpMessage );

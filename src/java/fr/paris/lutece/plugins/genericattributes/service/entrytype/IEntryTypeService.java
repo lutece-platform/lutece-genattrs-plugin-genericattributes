@@ -98,6 +98,7 @@ public interface IEntryTypeService
     String FIELD_MAX_FILES = "max_files";
     String FIELD_FILE_BINARY = "export_binary";
     String FIELD_FILE_TYPE = "file_type";
+    String FIELD_ANSWER_CHOICE = "answer_choice";
     
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";
