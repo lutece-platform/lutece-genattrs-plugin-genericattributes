@@ -99,6 +99,7 @@ public interface IEntryTypeService
     String FIELD_FILE_BINARY = "export_binary";
     String FIELD_FILE_TYPE = "file_type";
     String FIELD_ANSWER_CHOICE = "answer_choice";
+    String FIELD_ARRAY_CELL = "array_cell";
     
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";

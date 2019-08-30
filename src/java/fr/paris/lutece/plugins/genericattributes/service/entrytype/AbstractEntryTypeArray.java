@@ -47,6 +47,7 @@ import org.apache.commons.lang.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -122,70 +123,58 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
         entry.setMapProvider( null );
         entry.setNumberColumn( column );
         entry.setNumberRow( row );
+        
+        List<Field> newFields = new ArrayList<>( );
+        
+        // Keep the non array_cell fields
+        newFields.addAll( entry.getFields( ).stream( ).filter( field -> !field.getCode( ).equals( FIELD_ARRAY_CELL ) ).collect( Collectors.toList( ) ) );
+        
+        // Update the array_cell fields
+        newFields.addAll( buildArrayCells( entry, row, column, request ) );
+        entry.setFields( newFields );
 
-        ArrayList<Field> listFields = new ArrayList<Field>( );
-        List<Field> fields = FieldHome.getFieldListByIdEntry( entry.getIdEntry( ) );
-
-        for ( int i = 1; i <= ( row + 1 ); i++ )
+        return null;
+    }
+    
+    private List<Field> buildArrayCells( Entry entry, int row, int column, HttpServletRequest request )
+    {
+    	List<Field> existingFields = entry.getFields( );
+    	List<Field> listFields = new ArrayList<Field>( );
+    	for ( int i = 1; i <= ( row + 1 ); i++ )
         {
             for ( int j = 1; j <= ( column + 1 ); j++ )
             {
-                Field existingFields = null;
+                Field existingField = null;
 
-                for ( Field f : fields )
+                for ( Field f : existingFields )
                 {
                     if ( f.getValue( ).equals( i + "_" + j ) )
                     {
-                        existingFields = f;
-
+                        existingField = f;
                         break;
                     }
                 }
 
                 String strTitleRow = request.getParameter( "field_" + i + "_" + j );
-
-                if ( ( i == 1 ) && ( j != 1 ) )
+                
+                Field field = new Field( );
+                if ( existingField != null )
                 {
-                    Field field = new Field( );
-
-                    if ( existingFields != null )
-                    {
-                        field = existingFields;
-                    }
-
-                    field.setParentEntry( entry );
-                    field.setValue( i + "_" + j );
-                    field.setTitle( StringUtils.defaultString( strTitleRow ) );
-                    listFields.add( field );
+                    field = existingField;
                 }
-                else
-                    if ( ( i != 1 ) && ( j == 1 ) )
-                    {
-                        Field field = new Field( );
+                field.setParentEntry( entry );
+                field.setCode( FIELD_ARRAY_CELL );
+                field.setValue( i + "_" + j );
 
-                        if ( existingFields != null )
-                        {
-                            field = existingFields;
-                        }
-
-                        field.setParentEntry( entry );
-                        field.setValue( i + "_" + j );
-                        field.setTitle( StringUtils.defaultString( strTitleRow ) );
-                        listFields.add( field );
-                    }
-                    else
-                    {
-                        Field field = new Field( );
-                        field.setParentEntry( entry );
-                        field.setValue( i + "_" + j );
-                        listFields.add( field );
-                    }
+                if ( i == 1 && j != 1 ||  i != 1 && j == 1)
+                {
+                    field.setTitle( StringUtils.defaultString( strTitleRow ) );
+                }
+                listFields.add( field );
             }
         }
-
-        entry.setFields( listFields );
-
-        return null;
+    	
+    	return listFields;
     }
 
     /**

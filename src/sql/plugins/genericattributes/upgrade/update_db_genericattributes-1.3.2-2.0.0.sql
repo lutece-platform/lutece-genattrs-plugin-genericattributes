@@ -70,3 +70,10 @@ SELECT e.id_entry FROM genatt_entry e
 INNER JOIN genatt_entry_type t ON t.id_type = e.id_type
 WHERE t.class_name IN( 'forms.entryTypeSelect', 'forms.entryTypeRadioButton', 'forms.entryTypeCheckBox')
 AND e.id_entry = f.id_entry);
+
+UPDATE genatt_field f SET f.CODE = 'array_cell'
+WHERE f.id_entry IN  (
+SELECT e.id_entry FROM genatt_entry e
+INNER JOIN genatt_entry_type t ON t.id_type = e.id_type
+WHERE t.class_name IN( 'forms.entryTypeArray')
+AND e.id_entry = f.id_entry);
