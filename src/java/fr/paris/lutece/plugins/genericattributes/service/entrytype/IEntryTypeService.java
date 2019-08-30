@@ -100,6 +100,7 @@ public interface IEntryTypeService
     String FIELD_FILE_TYPE = "file_type";
     String FIELD_ANSWER_CHOICE = "answer_choice";
     String FIELD_ARRAY_CELL = "array_cell";
+    String FIELD_ATTRIBUTE_NAME = "attribute_name";
     
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";
