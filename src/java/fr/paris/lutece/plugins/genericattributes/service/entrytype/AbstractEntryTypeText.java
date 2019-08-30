@@ -91,13 +91,13 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
 
         if ( StringUtils.isBlank( strTitle ) )
         {
-            strFieldError = FIELD_TITLE;
+            strFieldError = ERROR_FIELD_TITLE;
         }
 
         else
             if ( StringUtils.isBlank( strWidth ) )
             {
-                strFieldError = FIELD_WIDTH;
+                strFieldError = ERROR_FIELD_WIDTH;
             }
 
         if ( ( strConfirmField != null ) && StringUtils.isBlank( strConfirmFieldTitle ) )
@@ -120,7 +120,7 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         }
         catch( NumberFormatException ne )
         {
-            strFieldError = FIELD_WIDTH;
+            strFieldError = ERROR_FIELD_WIDTH;
         }
 
         try

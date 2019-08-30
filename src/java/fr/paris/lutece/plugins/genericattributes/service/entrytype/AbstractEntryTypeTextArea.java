@@ -90,18 +90,18 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
 
         if ( StringUtils.isBlank( strTitle ) )
         {
-            strFieldError = FIELD_TITLE;
+            strFieldError = ERROR_FIELD_TITLE;
         }
 
         else
             if ( StringUtils.isBlank( strWidth ) )
             {
-                strFieldError = FIELD_WIDTH;
+                strFieldError = ERROR_FIELD_WIDTH;
             }
             else
                 if ( StringUtils.isBlank( strHeight ) )
                 {
-                    strFieldError = FIELD_HEIGHT;
+                    strFieldError = ERROR_FIELD_HEIGHT;
                 }
 
         if ( StringUtils.isNotBlank( strFieldError ) )
@@ -119,7 +119,7 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         }
         catch( NumberFormatException ne )
         {
-            strFieldError = FIELD_HEIGHT;
+            strFieldError = ERROR_FIELD_HEIGHT;
         }
 
         try
@@ -128,7 +128,7 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         }
         catch( NumberFormatException ne )
         {
-            strFieldError = FIELD_WIDTH;
+            strFieldError = ERROR_FIELD_WIDTH;
         }
 
         try

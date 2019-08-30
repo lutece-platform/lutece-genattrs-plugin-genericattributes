@@ -104,13 +104,13 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
 
         if ( StringUtils.isBlank( strTitle ) )
         {
-            strFieldError = FIELD_TITLE;
+            strFieldError = ERROR_FIELD_TITLE;
         }
 
         else
             if ( StringUtils.isBlank( strWidth ) )
             {
-                strFieldError = FIELD_WIDTH;
+                strFieldError = ERROR_FIELD_WIDTH;
             }
 
         if ( StringUtils.isNotBlank( strFieldError ) )
@@ -128,7 +128,7 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
         }
         catch( NumberFormatException ne )
         {
-            strFieldError = FIELD_WIDTH;
+            strFieldError = ERROR_FIELD_WIDTH;
         }
 
         try
@@ -140,7 +140,7 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
         }
         catch( NumberFormatException ne )
         {
-            strFieldError = FIELD_HEIGHT;
+            strFieldError = ERROR_FIELD_HEIGHT;
         }
 
         try
@@ -152,7 +152,7 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
         }
         catch( NumberFormatException ne )
         {
-            strFieldError = FIELD_HEIGHT;
+            strFieldError = ERROR_FIELD_HEIGHT;
         }
 
         if ( StringUtils.isNotBlank( strFieldError ) )

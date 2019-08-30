@@ -77,7 +77,7 @@ public abstract class AbstractEntryTypeSession extends EntryTypeService
 
         if ( StringUtils.isBlank( strTitle ) )
         {
-            strFieldError = FIELD_TITLE;
+            strFieldError = ERROR_FIELD_TITLE;
         }
         else
             if ( StringUtils.isBlank( strAttibuteName ) )

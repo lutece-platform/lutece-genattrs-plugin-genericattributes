@@ -93,6 +93,11 @@ public interface IEntryTypeService
     String FIELD_Y = "Y";
     String FIELD_GEOMETRY = "geometry";
     String FIELD_PREFIX = "prefix";
+    String FIELD_FILE_CONFIG = "file_config";
+    String FIELD_FILE_MAX_SIZE = "file_max_size";
+    String FIELD_MAX_FILES = "max_files";
+    String FIELD_FILE_BINARY = "export_binary";
+    String FIELD_FILE_TYPE = "file_type";
     
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";
@@ -106,16 +111,18 @@ public interface IEntryTypeService
     String MESSAGE_MAXLENGTH = "genericattributes.message.maxLength";
     String MESSAGE_INVALID_SQL_QUERY = "genericattributes.message.invalidSqlQuery";
     String MESSAGE_MYLUTECE_AUTHENTIFICATION_REQUIRED = "genericattributes.message.myLuteceAuthentificationRequired";
-    String FIELD_TITLE = "genericattributes.createEntry.labelTitle";
+    String ERROR_FIELD_TITLE = "genericattributes.createEntry.labelTitle";
+    String ERROR_FIELD_MAX_FILES = "genericattributes.createEntry.labelMaxFiles";
+    String ERROR_FIELD_FILE_MAX_SIZE = "genericattributes.createEntry.labelFileMaxSize";
     String FIELD_INSERT_GROUP = "genericattributes.labelInsertGroup";
     String FIELD_COMMENT = "genericattributes.createEntry.labelComment";
-    String FIELD_WIDTH = "genericattributes.createEntry.labelWidth";
-    String FIELD_HEIGHT = "genericattributes.createEntry.labelHeight";
+    String ERROR_FIELD_WIDTH = "genericattributes.createEntry.labelWidth";
+    String ERROR_FIELD_HEIGHT = "genericattributes.createEntry.labelHeight";
     String FIELD_MAX_SIZE_ENTER = "genericattributes.createEntry.labelMaxSizeEnter";
     String FIELD_NUMBER_ROWS = "genericattributes.createEntry.labelNumberRows";
     String FIELD_NUMBER_COLUMNS = "genericattributes.createEntry.labelNumberColumns";
     String FIELD_CONFIRM_FIELD_TITLE = "genericattributes.createEntry.labelConfirmFieldTitle";
-    String FIELD_FILE_TYPE = "genericattributes.createEntry.fileType";
+    String ERROR_FIELD_FILE_TYPE = "genericattributes.createEntry.fileType";
 
     /**
      * Get the template to display the creation or modification form of an entry of this entry type
