@@ -33,6 +33,20 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
@@ -48,21 +62,6 @@ import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-
-import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -169,34 +168,17 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
         entry.setComment( strComment );
         entry.setCSSClass( strCSSClass );
         entry.setErrorMessage( strErrorMessage );
-
-        if ( entry.getFields( ) == null )
-        {
-            ArrayList<Field> listFields = new ArrayList<Field>( );
-            Field field = new Field( );
-            listFields.add( field );
-            entry.setFields( listFields );
-        }
-
         entry.setCode( strCode );
-        entry.getFields( ).get( 0 ).setCode( strCode );
-        entry.getFields( ).get( 0 ).setMaxSizeEnter( nMaxImageSize );
-        entry.getFields( ).get( 0 ).setWidth( nWidth );
-        entry.getFields( ).get( 0 ).setHeight( nheight );
+        
+        Field config = createOrUpdateField( entry, FIELD_CAMERA_CONF, null, null );
+        config.setMaxSizeEnter( nMaxImageSize );
+        config.setWidth( nWidth );
+        config.setHeight( nheight );
+        config.setImageType( strTypeImage );
 
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
-        entry.getFields( ).get( 0 ).setImageType( strTypeImage );
-
-        if ( strUnique != null )
-        {
-            entry.setUnique( true );
-        }
-        else
-        {
-            entry.setUnique( false );
-        }
-
+        entry.setUnique( strUnique != null );
         return null;
     }
 
@@ -270,9 +252,8 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
         response.setEntry( entry );
         String fileName = null;
         SimpleDateFormat dt = new SimpleDateFormat( PROPERTY_IMAGE_TITLE_DATE_FORMAT );
-        String imageType = ( entry.getFields( ).get( 0 ).getImageType( ) != null && StringUtils.isNotEmpty( entry.getFields( ).get( 0 ).getImageType( ) ) ) ? "."
-                + entry.getFields( ).get( 0 ).getImageType( )
-                : "";
+        Field config = entry.getFieldByCode( FIELD_CAMERA_CONF );
+        String imageType = StringUtils.isNotEmpty( config.getImageType( ) ) ? "." + config.getImageType( ) : "";
 
         Calendar c = Calendar.getInstance( );
         String [ ] imageTitle = PROPERTY_IMAGE_TITLE.trim( ).split( "," );
@@ -402,10 +383,10 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
      */
     public GenericAttributeError doCheckSize( BufferedImage image, Entry entry, Locale locale )
     {
-        int nMaxSize = entry.getFields( ).get( 0 ).getMaxSizeEnter( );
-        String imageType = ( entry.getFields( ).get( 0 ).getImageType( ) != null && StringUtils.isNotEmpty( entry.getFields( ).get( 0 ).getImageType( ) ) ) ? entry
-                .getFields( ).get( 0 ).getImageType( )
-                : "png";
+    	Field config = entry.getFieldByCode( FIELD_CAMERA_CONF );
+        int nMaxSize = config.getMaxSizeEnter( );
+        
+        String imageType = StringUtils.isNotEmpty( config.getImageType( ) ) ? config.getImageType( ) : "png";
 
         // If no max size defined in the db, then fetch the default max size from the properties file
         if ( nMaxSize == GenericAttributesUtils.CONSTANT_ID_NULL )

@@ -101,6 +101,7 @@ public interface IEntryTypeService
     String FIELD_ANSWER_CHOICE = "answer_choice";
     String FIELD_ARRAY_CELL = "array_cell";
     String FIELD_ATTRIBUTE_NAME = "attribute_name";
+    String FIELD_CAMERA_CONF = "camera_config";
     
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";
