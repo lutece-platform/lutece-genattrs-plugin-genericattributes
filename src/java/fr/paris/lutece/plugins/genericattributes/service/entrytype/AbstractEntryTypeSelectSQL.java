@@ -89,7 +89,6 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
         }
 
         // for don't update fields listFields=null
-        entry.setFields( null );
         entry.setCode( strCode );
         entry.setTitle( strTitle );
         entry.setHelpMessage( strHelpMessage );
