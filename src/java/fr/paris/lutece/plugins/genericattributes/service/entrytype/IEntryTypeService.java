@@ -53,7 +53,6 @@ public interface IEntryTypeService
 {
     // parameters Entry
     String PARAMETER_ENTRY_CODE = "entry_code";
-    String PARAMETER_FIELD_CODE = "field_code";
     String PARAMETER_TITLE = "title";
     String PARAMETER_HELP_MESSAGE = "help_message";
     String PARAMETER_COMMENT = "comment";
