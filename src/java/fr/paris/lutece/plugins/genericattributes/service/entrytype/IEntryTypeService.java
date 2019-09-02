@@ -102,6 +102,8 @@ public interface IEntryTypeService
     String FIELD_ATTRIBUTE_NAME = "attribute_name";
     String FIELD_CAMERA_CONF = "camera_config";
     String FIELD_TEXT_CONF = "text_config";
+    String FIELD_MYLUTECE_ATTRIBUTE_NAME_CODE = "attribute_name";
+    String FIELD_USER_CONF = "user_config";
     
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";
