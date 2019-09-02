@@ -161,6 +161,9 @@ public abstract class EntryTypeService implements IEntryTypeService
     	}
     	String strUsedCorrectResponse = request.getParameter( PARAMETER_USED_CORRECT_RESPONSE );
     	createOrUpdateField( entry, FIELD_USED_CORRECT_RESPONSE, null, String.valueOf( strUsedCorrectResponse != null ) );
+    	
+    	String strUsedCompleteResponse = request.getParameter( PARAMETER_USED_COMPLETE_RESPONSE );
+    	createOrUpdateField( entry, FIELD_USED_COMPLETE_RESPONSE, null, String.valueOf( strUsedCompleteResponse != null ) );
     }
     
     protected Field createOrUpdateField( Entry entry, String strCode, String strTitle, String strValue )

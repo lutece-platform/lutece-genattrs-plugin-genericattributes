@@ -79,6 +79,7 @@ public interface IEntryTypeService
     String PARAMETER_IMAGE_TYPE = "image_type";
     String PARAMETER_INDEXED = "is_indexed";
     String PARAMETER_USED_CORRECT_RESPONSE = "used_in_correct_form_response";
+    String PARAMETER_USED_COMPLETE_RESPONSE = "used_in_complete_form_response";
 
     // Fields codes
     String FIELD_DATE_VALUE = "default_date_value";
@@ -105,6 +106,7 @@ public interface IEntryTypeService
     String FIELD_MYLUTECE_ATTRIBUTE_NAME_CODE = "attribute_name";
     String FIELD_USER_CONF = "user_config";
     String FIELD_USED_CORRECT_RESPONSE = PARAMETER_USED_CORRECT_RESPONSE;
+    String FIELD_USED_COMPLETE_RESPONSE = PARAMETER_USED_COMPLETE_RESPONSE;
     
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";

@@ -738,12 +738,21 @@ public class Entry implements Serializable, Cloneable
     }
 
     /**
-     * @return the _bShownInCompletness
+     * @return true if the field used_in_correct_form_response is present and set to true
      */
     public boolean isUsedInCorrectFormResponse( )
     {
     	Field fieldUsedCorrectResponse = getFieldByCode( IEntryTypeService.FIELD_USED_CORRECT_RESPONSE );
         return fieldUsedCorrectResponse != null && Boolean.valueOf( fieldUsedCorrectResponse.getValue( ) );
+    }
+    
+    /**
+     * @return true if the field used_in_complete_form_response is present and set to true
+     */
+    public boolean isUsedInCompleteFormResponse( )
+    {
+    	Field fieldUsedCompleteResponse = getFieldByCode( IEntryTypeService.FIELD_USED_COMPLETE_RESPONSE );
+        return fieldUsedCompleteResponse != null && Boolean.valueOf( fieldUsedCompleteResponse.getValue( ) );
     }
 
     /**
