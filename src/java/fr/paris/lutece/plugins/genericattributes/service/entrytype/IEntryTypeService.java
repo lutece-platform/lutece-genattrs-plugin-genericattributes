@@ -104,6 +104,7 @@ public interface IEntryTypeService
     String FIELD_TEXT_CONF = "text_config";
     String FIELD_MYLUTECE_ATTRIBUTE_NAME_CODE = "attribute_name";
     String FIELD_USER_CONF = "user_config";
+    String FIELD_USED_CORRECT_RESPONSE = PARAMETER_USED_CORRECT_RESPONSE;
     
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";

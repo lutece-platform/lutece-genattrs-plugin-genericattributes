@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
 import java.io.Serializable;
@@ -81,7 +82,6 @@ public class Entry implements Serializable, Cloneable
     private boolean _bOnlyDisplayInBack;
     private boolean _bEditableBack;
     private boolean _bIndexed;
-    private boolean _bUsedInCorrectFormResponse;
 
     /**
      * Get the list of children of this entry
@@ -742,16 +742,8 @@ public class Entry implements Serializable, Cloneable
      */
     public boolean isUsedInCorrectFormResponse( )
     {
-        return _bUsedInCorrectFormResponse;
-    }
-
-    /**
-     * @param bUsedInCorrectFormResponse
-     *            the bUsedInCorrectFormResponse to set
-     */
-    public void setUsedInCorrectFormResponse( boolean bUsedInCorrectFormResponse )
-    {
-        _bUsedInCorrectFormResponse = bUsedInCorrectFormResponse;
+    	Field fieldUsedCorrectResponse = getFieldByCode( IEntryTypeService.FIELD_USED_CORRECT_RESPONSE );
+        return fieldUsedCorrectResponse != null && Boolean.valueOf( fieldUsedCorrectResponse.getValue( ) );
     }
 
     /**

@@ -159,9 +159,8 @@ public abstract class EntryTypeService implements IEntryTypeService
     	{
     		entry.setFields( new ArrayList<>( ) );
     	}
-        String strShownCompletness = request.getParameter( PARAMETER_USED_CORRECT_RESPONSE );
-
-        entry.setUsedInCorrectFormResponse( strShownCompletness != null );
+    	String strUsedCorrectResponse = request.getParameter( PARAMETER_USED_CORRECT_RESPONSE );
+    	createOrUpdateField( entry, FIELD_USED_CORRECT_RESPONSE, null, String.valueOf( strUsedCorrectResponse != null ) );
     }
     
     protected Field createOrUpdateField( Entry entry, String strCode, String strTitle, String strValue )
