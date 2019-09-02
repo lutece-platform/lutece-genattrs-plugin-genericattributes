@@ -33,6 +33,13 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
@@ -46,14 +53,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.string.StringUtil;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Abstract entry type for text
@@ -150,20 +149,11 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         entry.setCSSClass( strCSSClass );
         entry.setIndexed( strIndexed != null );
         entry.setErrorMessage( strErrorMessage );
-
-        if ( entry.getFields( ) == null )
-        {
-            ArrayList<Field> listFields = new ArrayList<Field>( );
-            Field field = new Field( );
-            listFields.add( field );
-            entry.setFields( listFields );
-        }
-
         entry.setCode( strCode );
-        entry.getFields( ).get( 0 ).setCode( strCode );
-        entry.getFields( ).get( 0 ).setValue( strValue );
-        entry.getFields( ).get( 0 ).setWidth( nWidth );
-        entry.getFields( ).get( 0 ).setMaxSizeEnter( nMaxSizeEnter );
+        
+        Field fieldConfig = createOrUpdateField( entry, FIELD_TEXT_CONF, null, strValue );
+        fieldConfig.setWidth( nWidth );
+        fieldConfig.setMaxSizeEnter( nMaxSizeEnter );
 
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
@@ -179,15 +169,7 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
             entry.setConfirmFieldTitle( null );
         }
 
-        if ( strUnique != null )
-        {
-            entry.setUnique( true );
-        }
-        else
-        {
-            entry.setUnique( false );
-        }
-
+        entry.setUnique( strUnique != null );
         return null;
     }
 
@@ -207,7 +189,7 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
 
             for ( RegularExpression regularExpression : listRegularExpression )
             {
-                if ( !entry.getFields( ).get( 0 ).getRegularExpressionList( ).contains( regularExpression ) )
+                if ( !entry.getFieldByCode( FIELD_TEXT_CONF ).getRegularExpressionList( ).contains( regularExpression ) )
                 {
                     refListRegularExpression.addItem( regularExpression.getIdExpression( ), regularExpression.getTitle( ) );
                 }
@@ -232,7 +214,7 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
             strValueEntryConfirmField = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) + SUFFIX_CONFIRM_FIELD ).trim( );
         }
 
-        List<RegularExpression> listRegularExpression = entry.getFields( ).get( 0 ).getRegularExpressionList( );
+        List<RegularExpression> listRegularExpression = entry.getFieldByCode( FIELD_TEXT_CONF ).getRegularExpressionList( );
         Response response = new Response( );
         response.setEntry( entry );
 
