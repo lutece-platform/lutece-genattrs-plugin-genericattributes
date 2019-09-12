@@ -123,24 +123,24 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
         entry.setMapProvider( null );
         entry.setNumberColumn( column );
         entry.setNumberRow( row );
-        
+
         List<Field> newFields = new ArrayList<>( );
-        
+
         // Keep the non array_cell fields
         newFields.addAll( entry.getFields( ).stream( ).filter( field -> !field.getCode( ).equals( FIELD_ARRAY_CELL ) ).collect( Collectors.toList( ) ) );
-        
+
         // Update the array_cell fields
         newFields.addAll( buildArrayCells( entry, row, column, request ) );
         entry.setFields( newFields );
 
         return null;
     }
-    
+
     private List<Field> buildArrayCells( Entry entry, int row, int column, HttpServletRequest request )
     {
-    	List<Field> existingFields = entry.getFields( );
-    	List<Field> listFields = new ArrayList<Field>( );
-    	for ( int i = 1; i <= ( row + 1 ); i++ )
+        List<Field> existingFields = entry.getFields( );
+        List<Field> listFields = new ArrayList<Field>( );
+        for ( int i = 1; i <= ( row + 1 ); i++ )
         {
             for ( int j = 1; j <= ( column + 1 ); j++ )
             {
@@ -156,7 +156,7 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
                 }
 
                 String strTitleRow = request.getParameter( "field_" + i + "_" + j );
-                
+
                 Field field = new Field( );
                 if ( existingField != null )
                 {
@@ -166,15 +166,15 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
                 field.setCode( FIELD_ARRAY_CELL );
                 field.setValue( i + "_" + j );
 
-                if ( i == 1 && j != 1 ||  i != 1 && j == 1)
+                if ( i == 1 && j != 1 || i != 1 && j == 1 )
                 {
                     field.setTitle( StringUtils.defaultString( strTitleRow ) );
                 }
                 listFields.add( field );
             }
         }
-    	
-    	return listFields;
+
+        return listFields;
     }
 
     /**

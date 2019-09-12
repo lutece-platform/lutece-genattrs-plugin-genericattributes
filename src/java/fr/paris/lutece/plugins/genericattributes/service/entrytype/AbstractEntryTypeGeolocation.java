@@ -153,11 +153,11 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         String strGeometryValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_GEOMETRY );
 
         Field fieldIdAddress = entry.getFieldByCode( FIELD_ID_ADDRESS );
-        Field fieldAddress =  entry.getFieldByCode( FIELD_ADDRESS );
-        Field fieldAdditionalAddress =  entry.getFieldByCode( FIELD_ADDITIONAL_ADDRESS );
-        Field fieldX =  entry.getFieldByCode( FIELD_X );
-        Field fieldY =  entry.getFieldByCode( FIELD_Y );
-        Field fieldGeometry =  entry.getFieldByCode( FIELD_GEOMETRY );
+        Field fieldAddress = entry.getFieldByCode( FIELD_ADDRESS );
+        Field fieldAdditionalAddress = entry.getFieldByCode( FIELD_ADDITIONAL_ADDRESS );
+        Field fieldX = entry.getFieldByCode( FIELD_X );
+        Field fieldY = entry.getFieldByCode( FIELD_Y );
+        Field fieldGeometry = entry.getFieldByCode( FIELD_GEOMETRY );
 
         /**
          * Create the field "idAddress" in case the field does not exist in the database.

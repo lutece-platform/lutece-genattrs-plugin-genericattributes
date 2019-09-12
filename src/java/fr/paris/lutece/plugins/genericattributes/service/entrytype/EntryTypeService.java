@@ -155,29 +155,29 @@ public abstract class EntryTypeService implements IEntryTypeService
 
     protected void initCommonRequestData( Entry entry, HttpServletRequest request )
     {
-    	if ( entry.getFields( ) == null )
-    	{
-    		entry.setFields( new ArrayList<>( ) );
-    	}
-    	String strUsedCorrectResponse = request.getParameter( PARAMETER_USED_CORRECT_RESPONSE );
-    	createOrUpdateField( entry, FIELD_USED_CORRECT_RESPONSE, null, String.valueOf( strUsedCorrectResponse != null ) );
-    	
-    	String strUsedCompleteResponse = request.getParameter( PARAMETER_USED_COMPLETE_RESPONSE );
-    	createOrUpdateField( entry, FIELD_USED_COMPLETE_RESPONSE, null, String.valueOf( strUsedCompleteResponse != null ) );
+        if ( entry.getFields( ) == null )
+        {
+            entry.setFields( new ArrayList<>( ) );
+        }
+        String strUsedCorrectResponse = request.getParameter( PARAMETER_USED_CORRECT_RESPONSE );
+        createOrUpdateField( entry, FIELD_USED_CORRECT_RESPONSE, null, String.valueOf( strUsedCorrectResponse != null ) );
+
+        String strUsedCompleteResponse = request.getParameter( PARAMETER_USED_COMPLETE_RESPONSE );
+        createOrUpdateField( entry, FIELD_USED_COMPLETE_RESPONSE, null, String.valueOf( strUsedCompleteResponse != null ) );
     }
-    
+
     protected Field createOrUpdateField( Entry entry, String strCode, String strTitle, String strValue )
     {
-    	Field field = entry.getFieldByCode( strCode );
-    	if ( field == null )
-    	{
-    		field = new Field( );
-    		field.setCode( strCode );
-    		field.setParentEntry( entry );
-    		entry.getFields( ).add( field );
-    	}
-    	field.setTitle( strTitle );
-    	field.setValue( strValue );
-    	return field;
+        Field field = entry.getFieldByCode( strCode );
+        if ( field == null )
+        {
+            field = new Field( );
+            field.setCode( strCode );
+            field.setParentEntry( entry );
+            entry.getFields( ).add( field );
+        }
+        field.setTitle( strTitle );
+        field.setValue( strValue );
+        return field;
     }
 }

@@ -110,7 +110,7 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
         entry.setHelpMessage( strHelpMessage );
         entry.setComment( strComment );
         entry.setCSSClass( strCSSClass );
-        
+
         Field field = createOrUpdateField( entry, FIELD_DATE_VALUE, null, null );
         field.setValueTypeDate( dDateValue );
 

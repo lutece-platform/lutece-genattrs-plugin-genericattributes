@@ -169,7 +169,7 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
         entry.setCSSClass( strCSSClass );
         entry.setErrorMessage( strErrorMessage );
         entry.setCode( strCode );
-        
+
         Field config = createOrUpdateField( entry, FIELD_CAMERA_CONF, null, null );
         config.setMaxSizeEnter( nMaxImageSize );
         config.setWidth( nWidth );
@@ -383,9 +383,9 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
      */
     public GenericAttributeError doCheckSize( BufferedImage image, Entry entry, Locale locale )
     {
-    	Field config = entry.getFieldByCode( FIELD_CAMERA_CONF );
+        Field config = entry.getFieldByCode( FIELD_CAMERA_CONF );
         int nMaxSize = config.getMaxSizeEnter( );
-        
+
         String imageType = StringUtils.isNotEmpty( config.getImageType( ) ) ? config.getImageType( ) : "png";
 
         // If no max size defined in the db, then fetch the default max size from the properties file

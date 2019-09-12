@@ -156,7 +156,7 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         entry.setComment( strComment );
         entry.setCSSClass( strCSSClass );
         setUseRichText( entry, Boolean.parseBoolean( strUseRichText ) );
-        
+
         Field fieldConfig = createOrUpdateField( entry, FIELD_TEXT_CONF, null, strValue );
         fieldConfig.setWidth( nWidth );
         fieldConfig.setHeight( nHeight );

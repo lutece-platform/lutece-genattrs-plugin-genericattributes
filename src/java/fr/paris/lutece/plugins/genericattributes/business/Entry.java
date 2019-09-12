@@ -742,31 +742,32 @@ public class Entry implements Serializable, Cloneable
      */
     public boolean isUsedInCorrectFormResponse( )
     {
-    	Field fieldUsedCorrectResponse = getFieldByCode( IEntryTypeService.FIELD_USED_CORRECT_RESPONSE );
+        Field fieldUsedCorrectResponse = getFieldByCode( IEntryTypeService.FIELD_USED_CORRECT_RESPONSE );
         return fieldUsedCorrectResponse != null && Boolean.valueOf( fieldUsedCorrectResponse.getValue( ) );
     }
-    
+
     /**
      * @return true if the field used_in_complete_form_response is present and set to true
      */
     public boolean isUsedInCompleteFormResponse( )
     {
-    	Field fieldUsedCompleteResponse = getFieldByCode( IEntryTypeService.FIELD_USED_COMPLETE_RESPONSE );
+        Field fieldUsedCompleteResponse = getFieldByCode( IEntryTypeService.FIELD_USED_COMPLETE_RESPONSE );
         return fieldUsedCompleteResponse != null && Boolean.valueOf( fieldUsedCompleteResponse.getValue( ) );
     }
 
     /**
      * Get the field by its code.
+     * 
      * @param strCode
      * @return
      */
     public Field getFieldByCode( String strCode )
     {
-    	if ( _listFields == null || _listFields.isEmpty( ) )
+        if ( _listFields == null || _listFields.isEmpty( ) )
         {
             return null;
         }
-    	
-    	return _listFields.stream( ).filter( field -> field.getCode( ).equals( strCode ) ).findFirst( ).orElse( null );
+
+        return _listFields.stream( ).filter( field -> field.getCode( ).equals( strCode ) ).findFirst( ).orElse( null );
     }
 }

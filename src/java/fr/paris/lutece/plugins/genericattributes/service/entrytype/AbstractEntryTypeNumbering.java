@@ -129,25 +129,27 @@ public abstract class AbstractEntryTypeNumbering extends EntryTypeService
     }
 
     /**
-	 * Get the response value
-	 * 
-	 * @param entry The entry
-	 * @return the response value of the response for this entry
-	 * @param response The response
-	 */
-	private String getResponseValue( Entry entry, Response response )
-	{
-		if ( entry.getFields( ) == null )
-		{
-			entry.setFields( FieldHome.getFieldListByIdEntry( entry.getIdEntry( ) ) );
-		}
-		Field field = entry.getFieldByCode( FIELD_PREFIX );
+     * Get the response value
+     * 
+     * @param entry
+     *            The entry
+     * @return the response value of the response for this entry
+     * @param response
+     *            The response
+     */
+    private String getResponseValue( Entry entry, Response response )
+    {
+        if ( entry.getFields( ) == null )
+        {
+            entry.setFields( FieldHome.getFieldListByIdEntry( entry.getIdEntry( ) ) );
+        }
+        Field field = entry.getFieldByCode( FIELD_PREFIX );
 
-		if ( field != null && StringUtils.isNotBlank( field.getValue( ) ) )
-		{
-			return field.getValue( ) + response.getResponseValue( );
-		}
+        if ( field != null && StringUtils.isNotBlank( field.getValue( ) ) )
+        {
+            return field.getValue( ) + response.getResponseValue( );
+        }
 
-		return response.getResponseValue( );
-	}
+        return response.getResponseValue( );
+    }
 }
