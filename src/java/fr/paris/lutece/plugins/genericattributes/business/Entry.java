@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
 import java.io.Serializable;
@@ -81,7 +82,6 @@ public class Entry implements Serializable, Cloneable
     private boolean _bOnlyDisplayInBack;
     private boolean _bEditableBack;
     private boolean _bIndexed;
-    private boolean _bShownInCompleteness;
 
     /**
      * Get the list of children of this entry
@@ -738,20 +738,36 @@ public class Entry implements Serializable, Cloneable
     }
 
     /**
-     * @return the _bShownInCompletness
+     * @return true if the field used_in_correct_form_response is present and set to true
      */
-    public boolean isShownInCompleteness( )
+    public boolean isUsedInCorrectFormResponse( )
     {
-        return _bShownInCompleteness;
+        Field fieldUsedCorrectResponse = getFieldByCode( IEntryTypeService.FIELD_USED_CORRECT_RESPONSE );
+        return fieldUsedCorrectResponse != null && Boolean.valueOf( fieldUsedCorrectResponse.getValue( ) );
     }
 
     /**
-     * @param _bShownInCompleteness
-     *            the _bShownInCompletness to set
+     * @return true if the field used_in_complete_form_response is present and set to true
      */
-    public void setShownInCompleteness( boolean bShownInCompletness )
+    public boolean isUsedInCompleteFormResponse( )
     {
-        _bShownInCompleteness = bShownInCompletness;
+        Field fieldUsedCompleteResponse = getFieldByCode( IEntryTypeService.FIELD_USED_COMPLETE_RESPONSE );
+        return fieldUsedCompleteResponse != null && Boolean.valueOf( fieldUsedCompleteResponse.getValue( ) );
     }
 
+    /**
+     * Get the field by its code.
+     * 
+     * @param strCode
+     * @return
+     */
+    public Field getFieldByCode( String strCode )
+    {
+        if ( _listFields == null || _listFields.isEmpty( ) )
+        {
+            return null;
+        }
+
+        return _listFields.stream( ).filter( field -> field.getCode( ).equals( strCode ) ).findFirst( ).orElse( null );
+    }
 }

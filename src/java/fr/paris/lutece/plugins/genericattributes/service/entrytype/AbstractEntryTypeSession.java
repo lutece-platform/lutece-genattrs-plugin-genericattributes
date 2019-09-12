@@ -33,6 +33,14 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
@@ -40,15 +48,6 @@ import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -59,7 +58,7 @@ import javax.servlet.http.HttpSession;
  */
 public abstract class AbstractEntryTypeSession extends EntryTypeService
 {
-    private static final String FIELD_ATTRIBUTE_NAME = "genericattributes.createEntry.labelAttributeName";
+    private static final String ERROR_FIELD_ATTRIBUTE_NAME = "genericattributes.createEntry.labelAttributeName";
 
     /**
      * {@inheritDoc}
@@ -77,12 +76,12 @@ public abstract class AbstractEntryTypeSession extends EntryTypeService
 
         if ( StringUtils.isBlank( strTitle ) )
         {
-            strFieldError = FIELD_TITLE;
+            strFieldError = ERROR_FIELD_TITLE;
         }
         else
             if ( StringUtils.isBlank( strAttibuteName ) )
             {
-                strFieldError = FIELD_ATTRIBUTE_NAME;
+                strFieldError = ERROR_FIELD_ATTRIBUTE_NAME;
             }
 
         if ( StringUtils.isNotBlank( strFieldError ) )
@@ -103,18 +102,9 @@ public abstract class AbstractEntryTypeSession extends EntryTypeService
         entry.setConfirmFieldTitle( null );
         entry.setUnique( false );
 
-        if ( entry.getFields( ) == null )
-        {
-            List<Field> listFields = new ArrayList<Field>( );
-            Field field = new Field( );
-            listFields.add( field );
-            entry.setFields( listFields );
-        }
-
-        entry.getFields( ).get( 0 ).setValue( strAttibuteName );
-        entry.getFields( ).get( 0 ).setWidth( 0 );
-        entry.getFields( ).get( 0 ).setMaxSizeEnter( 0 );
-
+        Field attributeName = createOrUpdateField( entry, FIELD_ATTRIBUTE_NAME, strTitle, strAttibuteName );
+        attributeName.setWidth( 0 );
+        attributeName.setMaxSizeEnter( 0 );
         return null;
     }
 
@@ -131,7 +121,7 @@ public abstract class AbstractEntryTypeSession extends EntryTypeService
         {
             if ( ( entry.getFields( ) != null ) && !entry.getFields( ).isEmpty( ) && ( entry.getFields( ).get( 0 ) != null ) )
             {
-                String strAttributeName = entry.getFields( ).get( 0 ).getValue( );
+                String strAttributeName = entry.getFieldByCode( FIELD_ATTRIBUTE_NAME ).getValue( );
                 strValueEntry = (String) session.getAttribute( strAttributeName );
             }
         }

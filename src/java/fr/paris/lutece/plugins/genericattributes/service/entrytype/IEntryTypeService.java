@@ -53,7 +53,6 @@ public interface IEntryTypeService
 {
     // parameters Entry
     String PARAMETER_ENTRY_CODE = "entry_code";
-    String PARAMETER_FIELD_CODE = "field_code";
     String PARAMETER_TITLE = "title";
     String PARAMETER_HELP_MESSAGE = "help_message";
     String PARAMETER_COMMENT = "comment";
@@ -79,7 +78,35 @@ public interface IEntryTypeService
     String PARAMETER_MAX_IMAGE_SIZE = "maxImageSize";
     String PARAMETER_IMAGE_TYPE = "image_type";
     String PARAMETER_INDEXED = "is_indexed";
-    String PARAMETER_SHOWN_COMPLETENESS = "is_shown_in_completeness";
+    String PARAMETER_USED_CORRECT_RESPONSE = "used_in_correct_form_response";
+    String PARAMETER_USED_COMPLETE_RESPONSE = "used_in_complete_form_response";
+
+    // Fields codes
+    String FIELD_DATE_VALUE = "default_date_value";
+    String FIELD_PROVIDER = "provider";
+    String FIELD_EDIT_MODE = "editMode";
+    String FIELD_VIEW_NUMBER = "viewNumber";
+    String FIELD_ID_ADDRESS = "idAddress";
+    String FIELD_ADDRESS = "address";
+    String FIELD_ADDITIONAL_ADDRESS = "additionalAddress";
+    String FIELD_X = "X";
+    String FIELD_Y = "Y";
+    String FIELD_GEOMETRY = "geometry";
+    String FIELD_PREFIX = "prefix";
+    String FIELD_FILE_CONFIG = "file_config";
+    String FIELD_FILE_MAX_SIZE = "file_max_size";
+    String FIELD_MAX_FILES = "max_files";
+    String FIELD_FILE_BINARY = "export_binary";
+    String FIELD_FILE_TYPE = "file_type";
+    String FIELD_ANSWER_CHOICE = "answer_choice";
+    String FIELD_ARRAY_CELL = "array_cell";
+    String FIELD_ATTRIBUTE_NAME = "attribute_name";
+    String FIELD_CAMERA_CONF = "camera_config";
+    String FIELD_TEXT_CONF = "text_config";
+    String FIELD_MYLUTECE_ATTRIBUTE_NAME_CODE = "attribute_name";
+    String FIELD_USER_CONF = "user_config";
+    String FIELD_USED_CORRECT_RESPONSE = PARAMETER_USED_CORRECT_RESPONSE;
+    String FIELD_USED_COMPLETE_RESPONSE = PARAMETER_USED_COMPLETE_RESPONSE;
 
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";
@@ -93,16 +120,18 @@ public interface IEntryTypeService
     String MESSAGE_MAXLENGTH = "genericattributes.message.maxLength";
     String MESSAGE_INVALID_SQL_QUERY = "genericattributes.message.invalidSqlQuery";
     String MESSAGE_MYLUTECE_AUTHENTIFICATION_REQUIRED = "genericattributes.message.myLuteceAuthentificationRequired";
-    String FIELD_TITLE = "genericattributes.createEntry.labelTitle";
+    String ERROR_FIELD_TITLE = "genericattributes.createEntry.labelTitle";
+    String ERROR_FIELD_MAX_FILES = "genericattributes.createEntry.labelMaxFiles";
+    String ERROR_FIELD_FILE_MAX_SIZE = "genericattributes.createEntry.labelFileMaxSize";
     String FIELD_INSERT_GROUP = "genericattributes.labelInsertGroup";
     String FIELD_COMMENT = "genericattributes.createEntry.labelComment";
-    String FIELD_WIDTH = "genericattributes.createEntry.labelWidth";
-    String FIELD_HEIGHT = "genericattributes.createEntry.labelHeight";
+    String ERROR_FIELD_WIDTH = "genericattributes.createEntry.labelWidth";
+    String ERROR_FIELD_HEIGHT = "genericattributes.createEntry.labelHeight";
     String FIELD_MAX_SIZE_ENTER = "genericattributes.createEntry.labelMaxSizeEnter";
     String FIELD_NUMBER_ROWS = "genericattributes.createEntry.labelNumberRows";
     String FIELD_NUMBER_COLUMNS = "genericattributes.createEntry.labelNumberColumns";
     String FIELD_CONFIRM_FIELD_TITLE = "genericattributes.createEntry.labelConfirmFieldTitle";
-    String FIELD_FILE_TYPE = "genericattributes.createEntry.fileType";
+    String ERROR_FIELD_FILE_TYPE = "genericattributes.createEntry.fileType";
 
     /**
      * Get the template to display the creation or modification form of an entry of this entry type

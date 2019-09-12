@@ -88,9 +88,6 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
     protected static final String PARAMETER_EXPORT_BINARY = "export_binary";
 
     // CONSTANTS
-    protected static final String CONSTANT_MAX_FILES = "max_files";
-    protected static final String CONSTANT_FILE_MAX_SIZE = "file_max_size";
-    protected static final String CONSTANT_EXPORT_BINARY = "export_binary";
     protected static final String ALL = "*";
     protected static final String COMMA = ",";
 
@@ -103,10 +100,6 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
     private static final String PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_MAX_FILES = "genericattributes.message.error.uploading_file.max_files";
     protected static final String PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_FILE_MAX_SIZE = "genericattributes.message.error.uploading_file.file_max_size";
     protected static final String PROPERTY_UPLOAD_FILE_DEFAULT_MAX_SIZE = "genericattributes.upload.file.default_max_size";
-
-    // FIELDS
-    private static final String FIELD_MAX_FILES = "genericattributes.createEntry.labelMaxFiles";
-    private static final String FIELD_FILE_MAX_SIZE = "genericattributes.createEntry.labelFileMaxSize";
 
     // MESSAGES
     protected static final String MESSAGE_ERROR_NOT_AN_IMAGE = "genericattributes.message.notAnImage";
@@ -199,7 +192,7 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
     public GenericAttributeError canUploadFiles( Entry entry, List<FileItem> listUploadedFileItems, List<FileItem> listFileItemsToUpload, Locale locale )
     {
         /** 1) Check max files */
-        Field fieldMaxFiles = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_MAX_FILES, entry.getFields( ) );
+        Field fieldMaxFiles = entry.getFieldByCode( FIELD_MAX_FILES );
 
         // By default, max file is set at 1
         int nMaxFiles = 1;
@@ -229,7 +222,7 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
         }
 
         /** 2) Check files size */
-        Field fieldFileMaxSize = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_FILE_MAX_SIZE, entry.getFields( ) );
+        Field fieldFileMaxSize = entry.getFieldByCode( FIELD_FILE_MAX_SIZE );
         int nMaxSize = GenericAttributesUtils.CONSTANT_ID_NULL;
 
         if ( ( fieldFileMaxSize != null ) && StringUtils.isNotBlank( fieldFileMaxSize.getValue( ) ) && StringUtils.isNumeric( fieldFileMaxSize.getValue( ) ) )
@@ -307,7 +300,7 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
             entry.setFields( FieldHome.getFieldListByIdEntry( entry.getIdEntry( ) ) );
         }
 
-        Field field = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_EXPORT_BINARY, entry.getFields( ) );
+        Field field = entry.getFieldByCode( FIELD_FILE_BINARY );
 
         if ( ( field != null ) && StringUtils.isNotBlank( field.getValue( ) ) && Boolean.valueOf( field.getValue( ) ) )
         {
@@ -357,22 +350,22 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
 
         if ( StringUtils.isBlank( strTitle ) )
         {
-            strFieldError = FIELD_TITLE;
+            strFieldError = ERROR_FIELD_TITLE;
         }
         else
             if ( StringUtils.isBlank( strMaxFiles ) )
             {
-                strFieldError = FIELD_MAX_FILES;
+                strFieldError = ERROR_FIELD_MAX_FILES;
             }
             else
                 if ( StringUtils.isBlank( strFileMaxSize ) )
                 {
-                    strFieldError = FIELD_FILE_MAX_SIZE;
+                    strFieldError = ERROR_FIELD_FILE_MAX_SIZE;
                 }
                 else
                     if ( StringUtils.isBlank( strWidth ) )
                     {
-                        strFieldError = FIELD_WIDTH;
+                        strFieldError = ERROR_FIELD_WIDTH;
                     }
 
         if ( StringUtils.isNotBlank( strFieldError ) )
@@ -386,17 +379,17 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
 
         if ( !StringUtils.isNumeric( strMaxFiles ) )
         {
-            strFieldError = FIELD_MAX_FILES;
+            strFieldError = ERROR_FIELD_MAX_FILES;
         }
         else
             if ( !StringUtils.isNumeric( strFileMaxSize ) )
             {
-                strFieldError = FIELD_FILE_MAX_SIZE;
+                strFieldError = ERROR_FIELD_FILE_MAX_SIZE;
             }
 
         if ( !StringUtils.isNumeric( strWidth ) )
         {
-            strFieldError = FIELD_WIDTH;
+            strFieldError = ERROR_FIELD_WIDTH;
         }
 
         if ( StringUtils.isNotBlank( strFieldError ) )
@@ -518,125 +511,27 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
      * @param request
      *            the HTTP request
      */
-    protected void setFields( Entry entry, HttpServletRequest request )
-    {
-        List<Field> listFields = new ArrayList<Field>( );
-        listFields.add( buildDefaultField( entry, request ) );
-        listFields.add( buildFieldMaxFiles( entry, request ) );
-        listFields.add( buildFieldFileMaxSize( entry, request ) );
-        listFields.add( buildExportBinaryField( entry, request ) );
-
-        entry.setFields( listFields );
-    }
-
-    // PRIVATE METHODS
-
-    /**
-     * Build the field for max files
-     * 
-     * @param entry
-     *            The entry
-     * @param request
-     *            the HTTP request
-     * @return the field
-     */
-    private Field buildFieldMaxFiles( Entry entry, HttpServletRequest request )
-    {
-        String strMaxFiles = request.getParameter( PARAMETER_MAX_FILES );
-        int nMaxFiles = GenericAttributesUtils.convertStringToInt( strMaxFiles );
-        Field fieldMaxFiles = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_MAX_FILES, entry.getFields( ) );
-
-        if ( fieldMaxFiles == null )
-        {
-            fieldMaxFiles = new Field( );
-        }
-
-        fieldMaxFiles.setParentEntry( entry );
-        fieldMaxFiles.setTitle( CONSTANT_MAX_FILES );
-        fieldMaxFiles.setValue( Integer.toString( nMaxFiles ) );
-
-        return fieldMaxFiles;
-    }
-
-    /**
-     * Build the field for file max size
-     * 
-     * @param entry
-     *            The entry
-     * @param request
-     *            the HTTP request
-     * @return the field
-     */
-    private Field buildFieldFileMaxSize( Entry entry, HttpServletRequest request )
-    {
-        String strFileMaxSize = request.getParameter( PARAMETER_FILE_MAX_SIZE );
-        int nFileMaxSize = GenericAttributesUtils.convertStringToInt( strFileMaxSize );
-        Field fieldMaxFiles = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_FILE_MAX_SIZE, entry.getFields( ) );
-
-        if ( fieldMaxFiles == null )
-        {
-            fieldMaxFiles = new Field( );
-        }
-
-        fieldMaxFiles.setParentEntry( entry );
-        fieldMaxFiles.setTitle( CONSTANT_FILE_MAX_SIZE );
-        fieldMaxFiles.setValue( Integer.toString( nFileMaxSize ) );
-
-        return fieldMaxFiles;
-    }
-
-    /**
-     * Build the default field
-     * 
-     * @param entry
-     *            The entry
-     * @param request
-     *            the HTTP request
-     * @return the default field
-     */
-    private Field buildDefaultField( Entry entry, HttpServletRequest request )
+    protected void createOrUpdateFileFields( Entry entry, HttpServletRequest request )
     {
         String strWidth = request.getParameter( PARAMETER_WIDTH );
         int nWidth = GenericAttributesUtils.convertStringToInt( strWidth );
 
-        Field field = GenericAttributesUtils.findFieldByTitleInTheList( null, entry.getFields( ) );
+        String strFileMaxSize = request.getParameter( PARAMETER_FILE_MAX_SIZE );
+        int nFileMaxSize = GenericAttributesUtils.convertStringToInt( strFileMaxSize );
 
-        if ( field == null )
-        {
-            field = new Field( );
-        }
+        String strMaxFiles = request.getParameter( PARAMETER_MAX_FILES );
+        int nMaxFiles = GenericAttributesUtils.convertStringToInt( strMaxFiles );
 
-        field.setParentEntry( entry );
-        field.setWidth( nWidth );
-
-        return field;
-    }
-
-    /**
-     * Build the field for exporting the binary
-     * 
-     * @param entry
-     *            The entry
-     * @param request
-     *            the HTTP request
-     * @return the field
-     */
-    private Field buildExportBinaryField( Entry entry, HttpServletRequest request )
-    {
         String strExportBinary = request.getParameter( PARAMETER_EXPORT_BINARY );
-        Field field = GenericAttributesUtils.findFieldByTitleInTheList( CONSTANT_EXPORT_BINARY, entry.getFields( ) );
+        Field defaultField = createOrUpdateField( entry, FIELD_FILE_CONFIG, null, null );
+        defaultField.setWidth( nWidth );
 
-        if ( field == null )
-        {
-            field = new Field( );
-        }
-
-        field.setParentEntry( entry );
-        field.setTitle( CONSTANT_EXPORT_BINARY );
-        field.setValue( Boolean.toString( StringUtils.isNotBlank( strExportBinary ) ) );
-
-        return field;
+        createOrUpdateField( entry, FIELD_FILE_MAX_SIZE, null, String.valueOf( nFileMaxSize ) );
+        createOrUpdateField( entry, FIELD_MAX_FILES, null, String.valueOf( nMaxFiles ) );
+        createOrUpdateField( entry, FIELD_FILE_BINARY, null, Boolean.toString( StringUtils.isNotBlank( strExportBinary ) ) );
     }
+
+    // PRIVATE METHODS
 
     /**
      * {@inheritDoc}
@@ -669,7 +564,7 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
         entry.setCode( strCode );
         entry.setIndexed( strIndexed != null );
 
-        setFields( entry, request );
+        createOrUpdateFileFields( entry, request );
 
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );

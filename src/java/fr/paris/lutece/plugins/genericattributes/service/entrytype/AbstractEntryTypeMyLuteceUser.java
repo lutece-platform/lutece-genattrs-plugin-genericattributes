@@ -33,6 +33,11 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
@@ -44,12 +49,6 @@ import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.ReferenceList;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Abstract entry type for MyLutece users
@@ -93,18 +92,10 @@ public abstract class AbstractEntryTypeMyLuteceUser extends EntryTypeService
         entry.setComment( EMPTY_STRING );
         entry.setIndexed( strIndexed != null );
 
-        if ( entry.getFields( ) == null )
-        {
-            ArrayList<Field> listFields = new ArrayList<Field>( );
-            Field field = new Field( );
-            listFields.add( field );
-            entry.setFields( listFields );
-        }
-
         entry.setCode( strCode );
-        entry.getFields( ).get( 0 ).setValue( EMPTY_STRING );
-        entry.getFields( ).get( 0 ).setWidth( 50 );
-        entry.getFields( ).get( 0 ).setMaxSizeEnter( 0 );
+        Field config = createOrUpdateField( entry, FIELD_USER_CONF, null, EMPTY_STRING );
+        config.setWidth( 50 );
+        config.setMaxSizeEnter( 0 );
 
         return null;
     }

@@ -33,6 +33,13 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
@@ -43,14 +50,6 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.util.string.StringUtil;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Abstract entry type for text areas
@@ -77,7 +76,6 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         String strMaxSizeEnter = request.getParameter( PARAMETER_MAX_SIZE_ENTER );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
         String strUseRichText = request.getParameter( PARAMETER_USE_RICH_TEXT );
-        String strFieldCode = request.getParameter( PARAMETER_FIELD_CODE );
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strEditableBack = request.getParameter( PARAMETER_EDITABLE_BACK );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
@@ -90,18 +88,18 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
 
         if ( StringUtils.isBlank( strTitle ) )
         {
-            strFieldError = FIELD_TITLE;
+            strFieldError = ERROR_FIELD_TITLE;
         }
 
         else
             if ( StringUtils.isBlank( strWidth ) )
             {
-                strFieldError = FIELD_WIDTH;
+                strFieldError = ERROR_FIELD_WIDTH;
             }
             else
                 if ( StringUtils.isBlank( strHeight ) )
                 {
-                    strFieldError = FIELD_HEIGHT;
+                    strFieldError = ERROR_FIELD_HEIGHT;
                 }
 
         if ( StringUtils.isNotBlank( strFieldError ) )
@@ -119,7 +117,7 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         }
         catch( NumberFormatException ne )
         {
-            strFieldError = FIELD_HEIGHT;
+            strFieldError = ERROR_FIELD_HEIGHT;
         }
 
         try
@@ -128,7 +126,7 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         }
         catch( NumberFormatException ne )
         {
-            strFieldError = FIELD_WIDTH;
+            strFieldError = ERROR_FIELD_WIDTH;
         }
 
         try
@@ -159,25 +157,15 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         entry.setCSSClass( strCSSClass );
         setUseRichText( entry, Boolean.parseBoolean( strUseRichText ) );
 
-        if ( entry.getFields( ) == null )
-        {
-            ArrayList<Field> listFields = new ArrayList<Field>( );
-            Field field = new Field( );
-            listFields.add( field );
-            entry.setFields( listFields );
-        }
-
-        entry.getFields( ).get( 0 ).setCode( strFieldCode );
-        entry.getFields( ).get( 0 ).setValue( strValue );
-        entry.getFields( ).get( 0 ).setWidth( nWidth );
-        entry.getFields( ).get( 0 ).setHeight( nHeight );
-        entry.getFields( ).get( 0 ).setMaxSizeEnter( nMaxSizeEnter );
+        Field fieldConfig = createOrUpdateField( entry, FIELD_TEXT_CONF, null, strValue );
+        fieldConfig.setWidth( nWidth );
+        fieldConfig.setHeight( nHeight );
+        fieldConfig.setMaxSizeEnter( nMaxSizeEnter );
 
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
         entry.setEditableBack( strEditableBack != null );
         entry.setIndexed( strIndexed != null );
-
         return null;
     }
 
@@ -193,7 +181,7 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
 
         if ( strValueEntry != null )
         {
-            int nMaxSize = entry.getFields( ).get( 0 ).getMaxSizeEnter( );
+            int nMaxSize = entry.getFieldByCode( FIELD_TEXT_CONF ).getMaxSizeEnter( );
 
             if ( getUseRichText( entry ) )
             {

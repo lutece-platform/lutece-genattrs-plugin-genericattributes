@@ -76,7 +76,7 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
 
         if ( StringUtils.isBlank( strTitle ) )
         {
-            strFieldError = FIELD_TITLE;
+            strFieldError = ERROR_FIELD_TITLE;
         }
 
         if ( StringUtils.isNotBlank( strFieldError ) )
@@ -89,7 +89,6 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
         }
 
         // for don't update fields listFields=null
-        entry.setFields( null );
         entry.setCode( strCode );
         entry.setTitle( strTitle );
         entry.setHelpMessage( strHelpMessage );

@@ -33,6 +33,14 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
@@ -43,15 +51,6 @@ import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.string.StringUtil;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Abstract entry type for dates
@@ -82,7 +81,7 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
 
         if ( StringUtils.isBlank( strTitle ) )
         {
-            strFieldError = FIELD_TITLE;
+            strFieldError = ERROR_FIELD_TITLE;
         }
 
         if ( StringUtils.isNotBlank( strFieldError ) )
@@ -112,15 +111,8 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
         entry.setComment( strComment );
         entry.setCSSClass( strCSSClass );
 
-        if ( entry.getFields( ) == null )
-        {
-            ArrayList<Field> listFields = new ArrayList<Field>( );
-            Field field = new Field( );
-            listFields.add( field );
-            entry.setFields( listFields );
-        }
-
-        entry.getFields( ).get( 0 ).setValueTypeDate( dDateValue );
+        Field field = createOrUpdateField( entry, FIELD_DATE_VALUE, null, null );
+        field.setValueTypeDate( dDateValue );
 
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
