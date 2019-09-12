@@ -100,19 +100,10 @@ AND f.VALUE = '1');
 
 DELETE FROM genatt_field WHERE CODE = 'only_display_in_back';
 
-SET @id_field_max := (SELECT MAX(id_field) FROM genatt_field) ;
-DROP PROCEDURE IF EXISTS updateFieldUsedCorrectFormResponse;
+ALTER TABLE genatt_field MODIFY id_field INT AUTO_INCREMENT;
 
-delimiter //
-CREATE PROCEDURE updateFieldUsedCorrectFormResponse()
-BEGIN 
-	INSERT INTO genatt_field (id_field, id_entry, code, value)
-	SELECT @id_field_max := (@id_field_max + 1), id_entry, 'used_in_correct_form_response', CASE used_in_correct_form_response
+INSERT INTO genatt_field ( id_entry, code, value)
+	SELECT id_entry, 'used_in_correct_form_response', CASE used_in_correct_form_response
     WHEN 1 THEN 'true' ELSE 'false' END from genatt_entry WHERE resource_type = 'FORMS_FORM';
-END; //
-
-CALL updateFieldUsedCorrectFormResponse;
-
-DROP PROCEDURE IF EXISTS updateFieldUsedCorrectFormResponse;
 
 ALTER TABLE genatt_entry DROP COLUMN used_in_correct_form_response;

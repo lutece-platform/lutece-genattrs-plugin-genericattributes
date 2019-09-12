@@ -37,7 +37,7 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 import java.sql.Date;
-
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,11 +47,10 @@ import java.util.List;
 public final class FieldDAO implements IFieldDAO
 {
     // Constants
-    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_field ) FROM genatt_field";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_field,id_entry,code,title,value,height,width,default_value,max_size_enter,pos,value_type_date,no_display_title,comment,role_key,image_type"
             + " FROM genatt_field  WHERE id_field = ? ORDER BY pos";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_field(id_field,id_entry,code,title,value,height,width,default_value,max_size_enter,pos,value_type_date,no_display_title,comment,role_key, image_type)"
-            + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_field(id_entry,code,title,value,height,width,default_value,max_size_enter,pos,value_type_date,no_display_title,comment,role_key, image_type)"
+            + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM genatt_field WHERE id_field = ? ";
     private static final String SQL_QUERY_INSERT_VERIF_BY = "INSERT INTO genatt_verify_by(id_field,id_expression) VALUES(?,?) ";
     private static final String SQL_QUERY_DELETE_VERIF_BY = "DELETE FROM genatt_verify_by WHERE id_field = ? and id_expression= ?";
@@ -62,32 +61,6 @@ public final class FieldDAO implements IFieldDAO
     private static final String SQL_QUERY_NEW_POSITION = "SELECT MAX(pos)" + " FROM genatt_field ";
     private static final String SQL_QUERY_SELECT_REGULAR_EXPRESSION_BY_ID_FIELD = "SELECT id_expression " + " FROM genatt_verify_by where id_field=?";
     private static final String SQL_QUERY_COUNT_FIELD_BY_ID_REGULAR_EXPRESSION = "SELECT COUNT(id_field) " + " FROM genatt_verify_by where id_expression = ?";
-
-    /**
-     * Generates a new primary key
-     *
-     * @param plugin
-     *            the plugin
-     * @return The new primary key
-     */
-    public int newPrimaryKey( Plugin plugin )
-    {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
-        daoUtil.executeQuery( );
-
-        int nKey;
-
-        if ( !daoUtil.next( ) )
-        {
-            // if the table is empty
-            nKey = 1;
-        }
-
-        nKey = daoUtil.getInt( 1 ) + 1;
-        daoUtil.free( );
-
-        return nKey;
-    }
 
     /**
      * Generates a new field position
@@ -121,28 +94,27 @@ public final class FieldDAO implements IFieldDAO
     @Override
     public synchronized int insert( Field field, Plugin plugin )
     {
-        field.setIdField( newPrimaryKey( plugin ) );
         field.setPosition( newPosition( plugin ) );
 
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-        daoUtil.setInt( 1, field.getIdField( ) );
-        daoUtil.setInt( 2, field.getParentEntry( ).getIdEntry( ) );
-        daoUtil.setString( 3, field.getCode( ) );
-        daoUtil.setString( 4, field.getTitle( ) );
-        daoUtil.setString( 5, field.getValue( ) );
-        daoUtil.setInt( 6, field.getHeight( ) );
-        daoUtil.setInt( 7, field.getWidth( ) );
-        daoUtil.setBoolean( 8, field.isDefaultValue( ) );
-        daoUtil.setInt( 9, field.getMaxSizeEnter( ) );
-        daoUtil.setInt( 10, field.getPosition( ) );
-        daoUtil.setDate( 11, ( field.getValueTypeDate( ) == null ) ? null : new Date( field.getValueTypeDate( ).getTime( ) ) );
-        daoUtil.setBoolean( 12, field.isNoDisplayTitle( ) );
-        daoUtil.setString( 13, field.getComment( ) );
-        daoUtil.setString( 14, field.getRoleKey( ) );
-        daoUtil.setString( 15, field.getImageType( ) );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
-
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin ) )
+        {
+        	int nIndex = 1;
+        	daoUtil.setInt( nIndex++, field.getParentEntry( ).getIdEntry( ) );
+            daoUtil.setString( nIndex++, field.getCode( ) );
+            daoUtil.setString( nIndex++, field.getTitle( ) );
+            daoUtil.setString( nIndex++, field.getValue( ) );
+            daoUtil.setInt( nIndex++, field.getHeight( ) );
+            daoUtil.setInt( nIndex++, field.getWidth( ) );
+            daoUtil.setBoolean( nIndex++, field.isDefaultValue( ) );
+            daoUtil.setInt( nIndex++, field.getMaxSizeEnter( ) );
+            daoUtil.setInt( nIndex++, field.getPosition( ) );
+            daoUtil.setDate( nIndex++, ( field.getValueTypeDate( ) == null ) ? null : new Date( field.getValueTypeDate( ).getTime( ) ) );
+            daoUtil.setBoolean( nIndex++, field.isNoDisplayTitle( ) );
+            daoUtil.setString( nIndex++, field.getComment( ) );
+            daoUtil.setString( nIndex++, field.getRoleKey( ) );
+            daoUtil.setString( nIndex++, field.getImageType( ) );
+            daoUtil.executeUpdate( );
+        }
         return field.getIdField( );
     }
 

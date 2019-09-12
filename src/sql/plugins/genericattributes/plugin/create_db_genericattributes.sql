@@ -66,7 +66,7 @@ ALTER TABLE genatt_entry ADD CONSTRAINT fk_genatt_entry_type FOREIGN KEY (id_typ
 -- Table structure for table genatt_field
 --
 CREATE TABLE genatt_field (
-	id_field int default 0 NOT NULL,
+	id_field int AUTO_INCREMENT,
 	id_entry int default 0 NOT NULL,
 	title varchar(255),
 	code varchar(100) default NULL,
