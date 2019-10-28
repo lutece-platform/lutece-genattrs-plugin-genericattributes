@@ -40,7 +40,6 @@ CREATE TABLE genatt_entry (
 	pos int default NULL,
 	id_field_depend int default NULL,
 	field_unique smallint default NULL,
-	map_provider varchar(45) default NULL,
 	css_class varchar(255) default NULL,
 	pos_conditional int default 0,
 	error_message long varchar default NULL,

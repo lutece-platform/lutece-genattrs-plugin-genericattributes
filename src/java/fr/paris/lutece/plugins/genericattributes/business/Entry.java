@@ -57,7 +57,6 @@ public class Entry implements Serializable, Cloneable
     private String _strComment;
     private boolean _bMandatory;
     private boolean _bFieldInLine;
-    private IMapProvider _mapProvider;
     private int _nPosition;
     private int _nIdResource;
     private String _strResourceType;
@@ -457,28 +456,6 @@ public class Entry implements Serializable, Cloneable
     }
 
     /**
-     * Get the selected map provider
-     * 
-     * @see IMapProvider
-     * @return the select map provider
-     */
-    public IMapProvider getMapProvider( )
-    {
-        return _mapProvider;
-    }
-
-    /**
-     * Sets the map provider
-     * 
-     * @param mapProvider
-     *            the map provider
-     */
-    public void setMapProvider( IMapProvider mapProvider )
-    {
-        _mapProvider = mapProvider;
-    }
-
-    /**
      * Get the error associated to the entry
      * 
      * @return the error
@@ -673,6 +650,22 @@ public class Entry implements Serializable, Cloneable
     {
         Field fieldUsedCompleteResponse = getFieldByCode( IEntryTypeService.FIELD_USED_COMPLETE_RESPONSE );
         return fieldUsedCompleteResponse != null && Boolean.valueOf( fieldUsedCompleteResponse.getValue( ) );
+    }
+    
+    /**
+     * Get the selected map provider
+     * 
+     * @see IMapProvider
+     * @return the select map provider
+     */
+    public IMapProvider getMapProvider( )
+    {
+    	Field fieldProvider = getFieldByCode( IEntryTypeService.FIELD_PROVIDER );
+    	if ( fieldProvider == null )
+    	{
+    		return null;
+    	}
+        return MapProviderManager.getMapProvider( fieldProvider.getValue( ) );
     }
 
     /**

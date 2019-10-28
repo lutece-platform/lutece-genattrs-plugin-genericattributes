@@ -120,7 +120,6 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
         entry.setHelpMessage( null );
         entry.setComment( strComment );
         entry.setCSSClass( null );
-        entry.setMapProvider( null );
         
         createOrUpdateField( entry, FIELD_ARRAY_ROW, null, String.valueOf( row ) );
         createOrUpdateField( entry, FIELD_ARRAY_COLUMN, null, String.valueOf( column ) );
