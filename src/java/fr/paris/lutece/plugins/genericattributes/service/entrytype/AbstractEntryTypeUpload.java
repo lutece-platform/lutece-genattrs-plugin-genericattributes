@@ -501,9 +501,6 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
      */
     protected void createOrUpdateFileFields( Entry entry, HttpServletRequest request )
     {
-        String strWidth = request.getParameter( PARAMETER_WIDTH );
-        int nWidth = GenericAttributesUtils.convertStringToInt( strWidth );
-
         String strFileMaxSize = request.getParameter( PARAMETER_FILE_MAX_SIZE );
         int nFileMaxSize = GenericAttributesUtils.convertStringToInt( strFileMaxSize );
 
@@ -511,8 +508,6 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
         int nMaxFiles = GenericAttributesUtils.convertStringToInt( strMaxFiles );
 
         String strExportBinary = request.getParameter( PARAMETER_EXPORT_BINARY );
-        Field defaultField = createOrUpdateField( entry, FIELD_FILE_CONFIG, null, null );
-        defaultField.setWidth( nWidth );
 
         createOrUpdateField( entry, FIELD_FILE_MAX_SIZE, null, String.valueOf( nFileMaxSize ) );
         createOrUpdateField( entry, FIELD_MAX_FILES, null, String.valueOf( nMaxFiles ) );

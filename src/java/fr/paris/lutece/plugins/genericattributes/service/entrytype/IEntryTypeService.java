@@ -93,7 +93,6 @@ public interface IEntryTypeService
     String FIELD_Y = "Y";
     String FIELD_GEOMETRY = "geometry";
     String FIELD_PREFIX = "prefix";
-    String FIELD_FILE_CONFIG = "file_config";
     String FIELD_FILE_MAX_SIZE = "file_max_size";
     String FIELD_MAX_FILES = "max_files";
     String FIELD_FILE_BINARY = "export_binary";
@@ -105,12 +104,12 @@ public interface IEntryTypeService
     String FIELD_TEXT_CONF = "text_config";
     String FIELD_CONFIRM = "confirm_field";
     String FIELD_MYLUTECE_ATTRIBUTE_NAME_CODE = "attribute_name";
-    String FIELD_USER_CONF = "user_config";
     String FIELD_USED_CORRECT_RESPONSE = PARAMETER_USED_CORRECT_RESPONSE;
     String FIELD_USED_COMPLETE_RESPONSE = PARAMETER_USED_COMPLETE_RESPONSE;
     String FIELD_ARRAY_ROW = "array_row";
     String FIELD_ARRAY_COLUMN = "array_column";
     String FIELD_IMAGE_TYPE = "image_type";
+    String FIELD_WIDTH = "width";
 
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";

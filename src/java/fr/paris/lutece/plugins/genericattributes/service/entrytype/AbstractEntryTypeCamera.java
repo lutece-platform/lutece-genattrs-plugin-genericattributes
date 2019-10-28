@@ -172,9 +172,9 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
         
         Field config = createOrUpdateField( entry, FIELD_CAMERA_CONF, null, null );
         config.setMaxSizeEnter( nMaxImageSize );
-        config.setWidth( nWidth );
         config.setHeight( nheight );
         createOrUpdateField( entry, FIELD_IMAGE_TYPE, null, strTypeImage );
+        createOrUpdateField( entry, FIELD_WIDTH, null, String.valueOf( nWidth ) );
         
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );

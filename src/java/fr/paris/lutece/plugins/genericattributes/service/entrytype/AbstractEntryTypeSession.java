@@ -101,8 +101,6 @@ public abstract class AbstractEntryTypeSession extends EntryTypeService
         entry.setUnique( false );
 
         Field attributeName = createOrUpdateField( entry, FIELD_ATTRIBUTE_NAME, strTitle, strAttibuteName );
-        attributeName.setWidth( 0 );
-        attributeName.setMaxSizeEnter( 0 );
         return null;
     }
 

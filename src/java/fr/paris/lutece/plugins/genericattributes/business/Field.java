@@ -53,7 +53,6 @@ public class Field implements Serializable
     private String _strValue;
     private String _strComment;
     private int _nHeight;
-    private int _nWidth;
     private int _nMaxSizeEnter;
     private int _nPosition;
     private boolean _bDefaultValue;
@@ -202,26 +201,6 @@ public class Field implements Serializable
     public void setComment( String strComment )
     {
         this._strComment = strComment;
-    }
-
-    /**
-     *
-     * @return the width of the field
-     */
-    public int getWidth( )
-    {
-        return _nWidth;
-    }
-
-    /**
-     * set the width of the field
-     * 
-     * @param width
-     *            the width of the field
-     */
-    public void setWidth( int width )
-    {
-        this._nWidth = width;
     }
 
     /**
