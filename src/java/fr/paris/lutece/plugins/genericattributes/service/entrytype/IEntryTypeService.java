@@ -110,6 +110,7 @@ public interface IEntryTypeService
     String FIELD_ARRAY_COLUMN = "array_column";
     String FIELD_IMAGE_TYPE = "image_type";
     String FIELD_WIDTH = "width";
+    String FIELD_HEIGHT = "height";
 
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";

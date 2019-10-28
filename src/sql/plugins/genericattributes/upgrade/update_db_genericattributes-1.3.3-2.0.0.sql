@@ -8,3 +8,5 @@
 --ALTER TABLE genatt_entry DROP COLUMN confirm_field_title
 
 --ALTER TABLE genatt_field DROP COLUMN width;
+
+-- ALTER TABLE genatt_field DROP COLUMN height;

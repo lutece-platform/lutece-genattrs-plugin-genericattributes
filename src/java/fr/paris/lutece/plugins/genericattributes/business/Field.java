@@ -52,7 +52,6 @@ public class Field implements Serializable
     private String _strTitle;
     private String _strValue;
     private String _strComment;
-    private int _nHeight;
     private int _nMaxSizeEnter;
     private int _nPosition;
     private boolean _bDefaultValue;
@@ -201,26 +200,6 @@ public class Field implements Serializable
     public void setComment( String strComment )
     {
         this._strComment = strComment;
-    }
-
-    /**
-     *
-     * @return the height of the field
-     */
-    public int getHeight( )
-    {
-        return _nHeight;
-    }
-
-    /**
-     * set the height of the field
-     * 
-     * @param height
-     *            the height of the field
-     */
-    public void setHeight( int height )
-    {
-        _nHeight = height;
     }
 
     /**
