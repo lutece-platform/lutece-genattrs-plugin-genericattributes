@@ -100,8 +100,6 @@ public interface IEntryTypeService
     String FIELD_ANSWER_CHOICE = "answer_choice";
     String FIELD_ARRAY_CELL = "array_cell";
     String FIELD_ATTRIBUTE_NAME = "attribute_name";
-    String FIELD_CAMERA_CONF = "camera_config";
-    String FIELD_TEXT_CONF = "text_config";
     String FIELD_CONFIRM = "confirm_field";
     String FIELD_MYLUTECE_ATTRIBUTE_NAME_CODE = "attribute_name";
     String FIELD_USED_CORRECT_RESPONSE = PARAMETER_USED_CORRECT_RESPONSE;
@@ -111,6 +109,8 @@ public interface IEntryTypeService
     String FIELD_IMAGE_TYPE = "image_type";
     String FIELD_WIDTH = "width";
     String FIELD_HEIGHT = "height";
+    String FIELD_MAX_SIZE = "max_size";
+    String FIELD_TEXT_CONF = "text_config";
 
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";

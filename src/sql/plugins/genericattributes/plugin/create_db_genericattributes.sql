@@ -69,7 +69,6 @@ CREATE TABLE genatt_field (
 	value long varchar,
 	height int default NULL,
 	default_value smallint default NULL,
-	max_size_enter int default NULL,
 	pos int default NULL,
 	value_type_date date NULL,
 	no_display_title smallint default NULL,

@@ -41,7 +41,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
-import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
@@ -157,9 +156,8 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         entry.setCSSClass( strCSSClass );
         setUseRichText( entry, Boolean.parseBoolean( strUseRichText ) );
 
-        Field fieldConfig = createOrUpdateField( entry, FIELD_TEXT_CONF, null, strValue );
-        fieldConfig.setMaxSizeEnter( nMaxSizeEnter );
-        
+        createOrUpdateField( entry, FIELD_TEXT_CONF, null, strValue );
+        createOrUpdateField( entry, FIELD_MAX_SIZE, null, String.valueOf( nMaxSizeEnter ) );
         createOrUpdateField( entry, FIELD_WIDTH, null, String.valueOf( nWidth ) );
         createOrUpdateField( entry, FIELD_HEIGHT, null, String.valueOf( nHeight ) );
 
@@ -182,7 +180,7 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
 
         if ( strValueEntry != null )
         {
-            int nMaxSize = entry.getFieldByCode( FIELD_TEXT_CONF ).getMaxSizeEnter( );
+        	int nMaxSize = Integer.valueOf( entry.getFieldByCode( FIELD_MAX_FILES ).getValue( ) );
 
             if ( getUseRichText( entry ) )
             {

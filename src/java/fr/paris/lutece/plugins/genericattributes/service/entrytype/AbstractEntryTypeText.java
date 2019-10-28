@@ -151,10 +151,9 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         entry.setErrorMessage( strErrorMessage );
         entry.setCode( strCode );
 
-        Field fieldConfig = createOrUpdateField( entry, FIELD_TEXT_CONF, null, strValue );
-        fieldConfig.setMaxSizeEnter( nMaxSizeEnter );
-        
+        createOrUpdateField( entry, FIELD_TEXT_CONF, null, strValue );
         createOrUpdateField( entry, FIELD_WIDTH, null, String.valueOf( nWidth ) );
+        createOrUpdateField( entry, FIELD_MAX_SIZE, null, String.valueOf( nMaxSizeEnter ) );
 
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );

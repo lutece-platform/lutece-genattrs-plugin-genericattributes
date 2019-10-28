@@ -52,7 +52,6 @@ public class Field implements Serializable
     private String _strTitle;
     private String _strValue;
     private String _strComment;
-    private int _nMaxSizeEnter;
     private int _nPosition;
     private boolean _bDefaultValue;
     private Date _tValueTypeDate;
@@ -240,26 +239,6 @@ public class Field implements Serializable
     public void setDefaultValue( boolean defaultValue )
     {
         _bDefaultValue = defaultValue;
-    }
-
-    /**
-     *
-     * @return the max size of enter user
-     */
-    public int getMaxSizeEnter( )
-    {
-        return _nMaxSizeEnter;
-    }
-
-    /**
-     * set the max size of enter user
-     * 
-     * @param maxSizeEnter
-     *            the max size of enter user
-     */
-    public void setMaxSizeEnter( int maxSizeEnter )
-    {
-        _nMaxSizeEnter = maxSizeEnter;
     }
 
     /**

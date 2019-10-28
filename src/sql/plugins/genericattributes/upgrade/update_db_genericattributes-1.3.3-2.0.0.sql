@@ -10,3 +10,5 @@
 --ALTER TABLE genatt_field DROP COLUMN width;
 
 -- ALTER TABLE genatt_field DROP COLUMN height;
+
+-- ALTER TABLE genatt_field DROP COLUMN max_size_enter;
