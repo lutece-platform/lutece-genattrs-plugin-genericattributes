@@ -110,6 +110,7 @@ public interface IEntryTypeService
     String FIELD_USED_COMPLETE_RESPONSE = PARAMETER_USED_COMPLETE_RESPONSE;
     String FIELD_ARRAY_ROW = "array_row";
     String FIELD_ARRAY_COLUMN = "array_column";
+    String FIELD_IMAGE_TYPE = "image_type";
 
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";

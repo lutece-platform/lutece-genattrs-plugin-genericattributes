@@ -62,7 +62,6 @@ public class Field implements Serializable
     private List<RegularExpression> _listRegularExpressionList;
     private boolean _bNoDisplayTitle;
     private String _strRoleKey;
-    private String _strImageType;
 
     /**
      *
@@ -383,28 +382,5 @@ public class Field implements Serializable
     public void setCode( String strCode )
     {
         this._strCode = strCode;
-    }
-
-    /**
-     * Gets the field ImageType
-     * 
-     * @return field ImageType as a String
-     *
-     */
-    public String getImageType( )
-    {
-        return _strImageType;
-    }
-
-    /**
-     * Sets the field's ImageType
-     * 
-     * @param ImageType
-     *            The Image Type
-     *
-     */
-    public void setImageType( String strImageType )
-    {
-        _strImageType = strImageType;
     }
 }
