@@ -69,7 +69,6 @@ public class Entry implements Serializable, Cloneable
     private GenericAttributeError _error;
     private String _strCSSClass;
     private String _strErrorMessage;
-    private boolean _bRoleAssociated;
     private boolean _bOnlyDisplayInBack;
     private boolean _bEditableBack;
     private boolean _bIndexed;
@@ -450,27 +449,6 @@ public class Entry implements Serializable, Cloneable
     public void setErrorMessage( String strErrorMessage )
     {
         this._strErrorMessage = strErrorMessage;
-    }
-
-    /**
-     * Check if this entry can has an associated roles
-     * 
-     * @return true if entry can has roles
-     */
-    public boolean isRoleAssociated( )
-    {
-        return _bRoleAssociated;
-    }
-
-    /**
-     * Set true if the entry accept roles
-     * 
-     * @param _bRoleAssociated
-     *            true if the entry accept roles
-     */
-    public void setRoleAssociated( boolean _bRoleAssociated )
-    {
-        this._bRoleAssociated = _bRoleAssociated;
     }
 
     /**

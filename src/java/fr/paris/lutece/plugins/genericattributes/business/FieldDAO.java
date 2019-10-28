@@ -47,17 +47,17 @@ import fr.paris.lutece.util.sql.DAOUtil;
 public final class FieldDAO implements IFieldDAO
 {
     // Constants
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_field,id_entry,code,title,value,default_value,pos,value_type_date,no_display_title,comment,role_key"
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_field,id_entry,code,title,value,default_value,pos,value_type_date,no_display_title,comment"
             + " FROM genatt_field  WHERE id_field = ? ORDER BY pos";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_field(id_entry,code,title,value,default_value,pos,value_type_date,no_display_title,comment,role_key)"
-            + " VALUES(?,?,?,?,?,?,?,?,?,?)";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_field(id_entry,code,title,value,default_value,pos,value_type_date,no_display_title,comment)"
+            + " VALUES(?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM genatt_field WHERE id_field = ? ";
     private static final String SQL_QUERY_INSERT_VERIF_BY = "INSERT INTO genatt_verify_by(id_field,id_expression) VALUES(?,?) ";
     private static final String SQL_QUERY_DELETE_VERIF_BY = "DELETE FROM genatt_verify_by WHERE id_field = ? and id_expression= ?";
     private static final String SQL_QUERY_UPDATE = "UPDATE  genatt_field SET "
-            + "id_field=?,id_entry=?,code=?,title=?,value=?,default_value=?,pos=?,value_type_date=?,no_display_title=?,comment=?, role_key=? WHERE id_field = ?";
+            + "id_field=?,id_entry=?,code=?,title=?,value=?,default_value=?,pos=?,value_type_date=?,no_display_title=?,comment=? WHERE id_field = ?";
     private static final String SQL_QUERY_SELECT_FIELD_BY_ID_ENTRY = "SELECT id_field,id_entry,code,title,value,default_value,"
-            + "pos,value_type_date,no_display_title,comment,role_key FROM genatt_field  WHERE id_entry = ? ORDER BY pos";
+            + "pos,value_type_date,no_display_title,comment FROM genatt_field  WHERE id_entry = ? ORDER BY pos";
     private static final String SQL_QUERY_NEW_POSITION = "SELECT MAX(pos)" + " FROM genatt_field ";
     private static final String SQL_QUERY_SELECT_REGULAR_EXPRESSION_BY_ID_FIELD = "SELECT id_expression " + " FROM genatt_verify_by where id_field=?";
     private static final String SQL_QUERY_COUNT_FIELD_BY_ID_REGULAR_EXPRESSION = "SELECT COUNT(id_field) " + " FROM genatt_verify_by where id_expression = ?";
@@ -108,7 +108,6 @@ public final class FieldDAO implements IFieldDAO
             daoUtil.setDate( nIndex++, ( field.getValueTypeDate( ) == null ) ? null : new Date( field.getValueTypeDate( ).getTime( ) ) );
             daoUtil.setBoolean( nIndex++, field.isNoDisplayTitle( ) );
             daoUtil.setString( nIndex++, field.getComment( ) );
-            daoUtil.setString( nIndex++, field.getRoleKey( ) );
             daoUtil.executeUpdate( );
         }
         return field.getIdField( );
@@ -143,7 +142,6 @@ public final class FieldDAO implements IFieldDAO
 	            field.setValueTypeDate( daoUtil.getDate( nIndex++ ) );
 	            field.setNoDisplayTitle( daoUtil.getBoolean( nIndex++ ) );
 	            field.setComment( daoUtil.getString( nIndex++ ) );
-	            field.setRoleKey( daoUtil.getString( nIndex++ ) );
 	        }
 
         }
@@ -182,7 +180,6 @@ public final class FieldDAO implements IFieldDAO
 	        daoUtil.setDate( nIndex++, ( field.getValueTypeDate( ) == null ) ? null : new Date( field.getValueTypeDate( ).getTime( ) ) );
 	        daoUtil.setBoolean( nIndex++, field.isNoDisplayTitle( ) );
 	        daoUtil.setString( nIndex++, field.getComment( ) );
-	        daoUtil.setString( nIndex++, field.getRoleKey( ) );
 	
 	        daoUtil.setInt( nIndex++, field.getIdField( ) );
 	        daoUtil.executeUpdate( );
@@ -219,7 +216,6 @@ public final class FieldDAO implements IFieldDAO
 	            field.setValueTypeDate( daoUtil.getDate( nIndex++ ) );
 	            field.setNoDisplayTitle( daoUtil.getBoolean( nIndex++ ) );
 	            field.setComment( daoUtil.getString( nIndex++ ) );
-	            field.setRoleKey( daoUtil.getString( nIndex++ ) );
 	
 	            fieldList.add( field );
 	        }

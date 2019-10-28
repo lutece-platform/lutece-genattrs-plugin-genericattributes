@@ -43,7 +43,6 @@ CREATE TABLE genatt_entry (
 	css_class varchar(255) default NULL,
 	pos_conditional int default 0,
 	error_message long varchar default NULL,
-    is_role_associated smallint DEFAULT '0',
     is_only_display_back smallint DEFAULT '0',
 	is_editable_back smallint DEFAULT '0',
 	is_indexed smallint DEFAULT '0',
@@ -72,7 +71,6 @@ CREATE TABLE genatt_field (
 	value_type_date date NULL,
 	no_display_title smallint default NULL,
 	comment long varchar default null,
-    role_key varchar(50) DEFAULT NULL,
     
 	PRIMARY KEY (id_field)
 );

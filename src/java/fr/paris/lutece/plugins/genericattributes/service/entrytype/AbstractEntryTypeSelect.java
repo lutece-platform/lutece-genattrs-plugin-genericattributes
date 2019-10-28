@@ -67,7 +67,6 @@ public abstract class AbstractEntryTypeSelect extends EntryTypeService
         String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
-        String strRoleAssociated = request.getParameter( PARAMETER_ROLE_ASSOCIATED );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strEditableBack = request.getParameter( PARAMETER_EDITABLE_BACK );
@@ -98,7 +97,6 @@ public abstract class AbstractEntryTypeSelect extends EntryTypeService
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
         entry.setEditableBack( strEditableBack != null );
-        entry.setRoleAssociated( strRoleAssociated != null );
         entry.setIndexed( strIndexed != null );
 
         return null;

@@ -58,7 +58,6 @@ public class Field implements Serializable
     private List<Entry> _listConditionalQuestions;
     private List<RegularExpression> _listRegularExpressionList;
     private boolean _bNoDisplayTitle;
-    private String _strRoleKey;
 
     /**
      *
@@ -279,29 +278,6 @@ public class Field implements Serializable
     public void setNoDisplayTitle( boolean bNoDisplayTitle )
     {
         _bNoDisplayTitle = bNoDisplayTitle;
-    }
-
-    /**
-     * Gets the field role
-     * 
-     * @return field role as a String
-     *
-     */
-    public String getRoleKey( )
-    {
-        return _strRoleKey;
-    }
-
-    /**
-     * Sets the field's role
-     * 
-     * @param strRole
-     *            The role
-     *
-     */
-    public void setRoleKey( String strRole )
-    {
-        _strRoleKey = strRole;
     }
 
     /**
