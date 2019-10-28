@@ -53,17 +53,17 @@ public final class EntryDAO implements IEntryDAO
     private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_entry ) FROM genatt_entry";
     private static final String SQL_QUERY_SELECT_LIST = "ent.id_type,typ.title,typ.is_group,typ.is_comment,typ.class_name,typ.is_mylutece_user,typ.icon_name,"
             + "ent.id_entry,ent.id_resource,ent.resource_type,ent.id_parent,ent.code,ent.title,ent.help_message, ent.comment,ent.mandatory,ent.fields_in_line,"
-            + "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique, ent.map_provider, ent.css_class, ent.pos_conditional, ent.error_message, "
+            + "ent.pos,ent.id_field_depend,ent.field_unique, ent.map_provider, ent.css_class, ent.pos_conditional, ent.error_message, "
             + "ent.is_role_associated,ent.is_only_display_back, ent.is_editable_back , ent.is_indexed ";
     private static final String SQL_QUERY_SELECT_ENTRY_ATTRIBUTES = "SELECT " + SQL_QUERY_SELECT_LIST
             + "FROM genatt_entry ent,genatt_entry_type typ WHERE ent.id_type=typ.id_type ";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_ENTRY_ATTRIBUTES
             + " AND ent.id_entry = ? ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_entry ( id_entry,id_resource,resource_type,id_type,id_parent,code,title,help_message, comment,mandatory,fields_in_line,"
-            + "pos,id_field_depend,confirm_field,confirm_field_title,field_unique,map_provider,css_class, pos_conditional, error_message, is_role_associated, is_only_display_back, is_editable_back, is_indexed ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            + "pos,id_field_depend,field_unique,map_provider,css_class, pos_conditional, error_message, is_role_associated, is_only_display_back, is_editable_back, is_indexed ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM genatt_entry WHERE id_entry = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE genatt_entry SET id_entry=?,id_resource=?,resource_type=?,id_type=?,id_parent=?,code=?,title=?,help_message=?,"
-            + "comment=?,mandatory=?, fields_in_line=?,pos=?,id_field_depend=?,confirm_field=?,confirm_field_title=?,field_unique=?,map_provider=?,css_class=?, pos_conditional=?, "
+            + "comment=?,mandatory=?, fields_in_line=?,pos=?,id_field_depend=?,field_unique=?,map_provider=?,css_class=?, pos_conditional=?, "
             + "error_message=?, is_role_associated = ?, is_only_display_back = ?, is_editable_back = ?, is_indexed = ? WHERE id_entry=?";
     private static final String SQL_QUERY_SELECT_ENTRY_BY_FILTER = SQL_QUERY_SELECT_ENTRY_ATTRIBUTES;
     private static final String SQL_QUERY_SELECT_NUMBER_ENTRY_BY_FILTER = "SELECT COUNT(ent.id_entry) "
@@ -144,8 +144,6 @@ public final class EntryDAO implements IEntryDAO
                 daoUtil.setIntNull( nIndex++ );
             }
 
-            daoUtil.setBoolean( nIndex++, entry.isConfirmField( ) );
-            daoUtil.setString( nIndex++, entry.getConfirmFieldTitle( ) );
             daoUtil.setBoolean( nIndex++, entry.isUnique( ) );
 
             String strMapProviderKey = ( entry.getMapProvider( ) == null ) ? StringUtils.EMPTY
@@ -276,8 +274,6 @@ public final class EntryDAO implements IEntryDAO
                 daoUtil.setIntNull( nIndex++ );
             }
 
-            daoUtil.setBoolean( nIndex++, entry.isConfirmField( ) );
-            daoUtil.setString( nIndex++, entry.getConfirmFieldTitle( ) );
             daoUtil.setBoolean( nIndex++, entry.isUnique( ) );
 
             String strMapProviderKey = ( entry.getMapProvider( ) == null ) ? StringUtils.EMPTY
@@ -794,8 +790,6 @@ public final class EntryDAO implements IEntryDAO
             entry.setFieldDepend( fieldDepend );
         }
 
-        entry.setConfirmField( daoUtil.getBoolean( nIndex++ ) );
-        entry.setConfirmFieldTitle( daoUtil.getString( nIndex++ ) );
         entry.setUnique( daoUtil.getBoolean( nIndex++ ) );
         entry.setMapProvider( MapProviderManager.getMapProvider( daoUtil.getString( nIndex++ ) ) );
         entry.setCSSClass( daoUtil.getString( nIndex++ ) );

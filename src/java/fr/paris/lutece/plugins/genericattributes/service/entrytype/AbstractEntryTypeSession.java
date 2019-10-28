@@ -98,8 +98,6 @@ public abstract class AbstractEntryTypeSession extends EntryTypeService
         entry.setHelpMessage( StringUtils.EMPTY );
         entry.setComment( StringUtils.EMPTY );
         entry.setMandatory( StringUtils.isNotEmpty( strMandatory ) );
-        entry.setConfirmField( false );
-        entry.setConfirmFieldTitle( null );
         entry.setUnique( false );
 
         Field attributeName = createOrUpdateField( entry, FIELD_ATTRIBUTE_NAME, strTitle, strAttibuteName );

@@ -158,17 +158,16 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
         entry.setEditableBack( strEditableBack != null );
+        
+        boolean confirm = false;
+        String fieldTitle = null;
         if ( strConfirmField != null )
         {
-            entry.setConfirmField( true );
-            entry.setConfirmFieldTitle( strConfirmFieldTitle );
+        	confirm = true;
+        	fieldTitle = strConfirmFieldTitle;
         }
-        else
-        {
-            entry.setConfirmField( false );
-            entry.setConfirmFieldTitle( null );
-        }
-
+        
+        createOrUpdateField( entry, FIELD_CONFIRM, fieldTitle, String.valueOf( confirm ) );
         entry.setUnique( strUnique != null );
         return null;
     }
@@ -206,7 +205,10 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
     public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
         String strValueEntry = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ).trim( );
-        boolean bConfirmField = entry.isConfirmField( );
+        Field confirmField = entry.getFieldByCode( FIELD_CONFIRM );
+        
+        boolean bConfirmField = confirmField != null && Boolean.valueOf( confirmField.getValue( ) );
+        
         String strValueEntryConfirmField = null;
 
         if ( bConfirmField )
@@ -284,7 +286,7 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
             {
                 GenericAttributeError error = new GenericAttributeError( );
                 error.setMandatoryError( false );
-                error.setTitleQuestion( entry.getConfirmFieldTitle( ) );
+                error.setTitleQuestion( confirmField.getTitle( ) );
                 error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_CONFIRM_FIELD, new String [ ] {
                     entry.getTitle( )
                 }, request.getLocale( ) ) );

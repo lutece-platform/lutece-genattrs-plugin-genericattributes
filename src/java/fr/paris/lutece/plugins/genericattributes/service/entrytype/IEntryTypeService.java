@@ -103,6 +103,7 @@ public interface IEntryTypeService
     String FIELD_ATTRIBUTE_NAME = "attribute_name";
     String FIELD_CAMERA_CONF = "camera_config";
     String FIELD_TEXT_CONF = "text_config";
+    String FIELD_CONFIRM = "confirm_field";
     String FIELD_MYLUTECE_ATTRIBUTE_NAME_CODE = "attribute_name";
     String FIELD_USER_CONF = "user_config";
     String FIELD_USED_CORRECT_RESPONSE = PARAMETER_USED_CORRECT_RESPONSE;

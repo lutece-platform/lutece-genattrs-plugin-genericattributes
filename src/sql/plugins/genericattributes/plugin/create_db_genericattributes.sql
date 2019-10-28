@@ -39,8 +39,6 @@ CREATE TABLE genatt_entry (
 	fields_in_line smallint default NULL,
 	pos int default NULL,
 	id_field_depend int default NULL,
-	confirm_field smallint default NULL,
-	confirm_field_title long varchar,
 	field_unique smallint default NULL,
 	map_provider varchar(45) default NULL,
 	css_class varchar(255) default NULL,

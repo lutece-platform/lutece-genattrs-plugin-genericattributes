@@ -69,8 +69,6 @@ public class Entry implements Serializable, Cloneable
     private int _nNumberConditionalQuestion;
     private boolean _nFirstInTheList;
     private boolean _nLastInTheList;
-    private boolean _bConfirmField;
-    private String _strConfirmFieldTitle;
     private boolean _bUnique;
     private GenericAttributeError _error;
     private String _strCSSClass;
@@ -435,48 +433,6 @@ public class Entry implements Serializable, Cloneable
     public void setFirstInTheList( boolean firstInTheList )
     {
         _nFirstInTheList = firstInTheList;
-    }
-
-    /**
-     * Set true if the question must be confirmed by a duplicated field
-     * 
-     * @param bConfirmField
-     *            mandatory true if the question must be confirmed by a duplicated field
-     */
-    public void setConfirmField( boolean bConfirmField )
-    {
-        this._bConfirmField = bConfirmField;
-    }
-
-    /**
-     * Check if this entry must be confirmed by a duplicated field
-     * 
-     * @return true if the entry must be confirmed by a duplicated field
-     */
-    public boolean isConfirmField( )
-    {
-        return _bConfirmField;
-    }
-
-    /**
-     * Set the title of the confirmation field
-     * 
-     * @param strConfirmFieldTitle
-     *            The title of the confirmation field
-     */
-    public void setConfirmFieldTitle( String strConfirmFieldTitle )
-    {
-        this._strConfirmFieldTitle = strConfirmFieldTitle;
-    }
-
-    /**
-     * Get the title of the confirmation field
-     * 
-     * @return The title of the confirmation field
-     */
-    public String getConfirmFieldTitle( )
-    {
-        return _strConfirmFieldTitle;
     }
 
     /**
