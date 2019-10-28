@@ -53,24 +53,22 @@ public final class EntryDAO implements IEntryDAO
     private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_entry ) FROM genatt_entry";
     private static final String SQL_QUERY_SELECT_LIST = "ent.id_type,typ.title,typ.is_group,typ.is_comment,typ.class_name,typ.is_mylutece_user,typ.icon_name,"
             + "ent.id_entry,ent.id_resource,ent.resource_type,ent.id_parent,ent.code,ent.title,ent.help_message, ent.comment,ent.mandatory,ent.fields_in_line,"
-            + "ent.pos,ent.id_field_depend,ent.confirm_field,ent.confirm_field_title,ent.field_unique, ent.map_provider, ent.css_class, ent.pos_conditional, ent.error_message, "
-            + "ent.num_row, ent.num_column, ent.is_role_associated,ent.is_only_display_back, ent.is_editable_back , ent.is_indexed ";
+            + "ent.pos,ent.id_field_depend,ent.field_unique, ent.css_class, ent.pos_conditional, ent.error_message, "
+            + "ent.is_only_display_back, ent.is_editable_back , ent.is_indexed ";
     private static final String SQL_QUERY_SELECT_ENTRY_ATTRIBUTES = "SELECT " + SQL_QUERY_SELECT_LIST
             + "FROM genatt_entry ent,genatt_entry_type typ WHERE ent.id_type=typ.id_type ";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_ENTRY_ATTRIBUTES + " AND ent.id_entry = ? ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_entry ( id_entry,id_resource,resource_type,id_type,id_parent,code,title,help_message, comment,mandatory,fields_in_line,"
-            + "pos,id_field_depend,confirm_field,confirm_field_title,field_unique,map_provider,css_class, pos_conditional, error_message, num_row, num_column, is_role_associated, is_only_display_back, is_editable_back, is_indexed ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            + "pos,id_field_depend,field_unique,css_class, pos_conditional, error_message, is_only_display_back, is_editable_back, is_indexed ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM genatt_entry WHERE id_entry = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE genatt_entry SET id_entry=?,id_resource=?,resource_type=?,id_type=?,id_parent=?,code=?,title=?,help_message=?,"
-            + "comment=?,mandatory=?, fields_in_line=?,pos=?,id_field_depend=?,confirm_field=?,confirm_field_title=?,field_unique=?,map_provider=?,css_class=?, pos_conditional=?, "
-            + "error_message=?, num_row = ?, num_column = ?, is_role_associated = ?, is_only_display_back = ?, is_editable_back = ?, is_indexed = ? WHERE id_entry=?";
+            + "comment=?,mandatory=?, fields_in_line=?,pos=?,id_field_depend=?,field_unique=?,css_class=?, pos_conditional=?, "
+            + "error_message=?, is_only_display_back = ?, is_editable_back = ?, is_indexed = ? WHERE id_entry=?";
     private static final String SQL_QUERY_SELECT_ENTRY_BY_FILTER = SQL_QUERY_SELECT_ENTRY_ATTRIBUTES;
     private static final String SQL_QUERY_SELECT_NUMBER_ENTRY_BY_FILTER = "SELECT COUNT(ent.id_entry) "
             + "FROM genatt_entry ent,genatt_entry_type typ WHERE ent.id_type=typ.id_type ";
     private static final String SQL_QUERY_NEW_POSITION = "SELECT MAX(pos) " + "FROM genatt_entry WHERE id_resource=? AND resource_type=?";
     private static final String SQL_QUERY_NEW_POSITION_CONDITIONAL_QUESTION = "SELECT MAX(pos_conditional) FROM genatt_entry WHERE id_field_depend=?";
-    private static final String SQL_QUERY_NUMBER_CONDITIONAL_QUESTION = "SELECT COUNT(e2.id_entry) "
-            + "FROM genatt_entry e1,genatt_field f1,genatt_entry e2 WHERE e1.id_entry=? AND e1.id_entry=f1.id_entry and e2.id_field_depend=f1.id_field ";
     private static final String SQL_FILTER_ID_RESOURCE = " AND ent.id_resource = ? ";
     private static final String SQL_FILTER_RESOURCE_TYPE = " AND ent.resource_type = ? ";
     private static final String SQL_FILTER_ID_PARENT = " AND ent.id_parent = ? ";
@@ -105,59 +103,52 @@ public final class EntryDAO implements IEntryDAO
     {
         entry.setIdEntry( newPrimaryKey( plugin ) );
 
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-
-        daoUtil.setInt( 1, entry.getIdEntry( ) );
-        daoUtil.setInt( 2, entry.getIdResource( ) );
-        daoUtil.setString( 3, entry.getResourceType( ) );
-        daoUtil.setInt( 4, entry.getEntryType( ).getIdType( ) );
-
-        if ( entry.getParent( ) != null )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
         {
-            daoUtil.setInt( 5, entry.getParent( ).getIdEntry( ) );
+            int nIndex = 1;
+            daoUtil.setInt( nIndex++, entry.getIdEntry( ) );
+            daoUtil.setInt( nIndex++, entry.getIdResource( ) );
+            daoUtil.setString( nIndex++, entry.getResourceType( ) );
+            daoUtil.setInt( nIndex++, entry.getEntryType( ).getIdType( ) );
+
+            if ( entry.getParent( ) != null )
+            {
+                daoUtil.setInt( nIndex++, entry.getParent( ).getIdEntry( ) );
+            }
+            else
+            {
+                daoUtil.setIntNull( nIndex++ );
+            }
+
+            daoUtil.setString( nIndex++, entry.getCode( ) );
+            daoUtil.setString( nIndex++, trimEntryTitle( entry ) );
+            daoUtil.setString( nIndex++, entry.getHelpMessage( ) );
+            daoUtil.setString( nIndex++, entry.getComment( ) );
+            daoUtil.setBoolean( nIndex++, entry.isMandatory( ) );
+            daoUtil.setBoolean( nIndex++, entry.isFieldInLine( ) );
+
+            daoUtil.setInt( nIndex++, newPosition( entry, plugin ) );
+
+            if ( entry.getFieldDepend( ) != null )
+            {
+                daoUtil.setInt( nIndex++, entry.getFieldDepend( ).getIdField( ) );
+            }
+            else
+            {
+                daoUtil.setIntNull( nIndex++ );
+            }
+
+            daoUtil.setBoolean( nIndex++, entry.isUnique( ) );
+
+            daoUtil.setString( nIndex++, ( entry.getCSSClass( ) == null ) ? StringUtils.EMPTY : entry.getCSSClass( ) );
+            daoUtil.setInt( nIndex++, newPositionConditional( entry, plugin ) );
+            daoUtil.setString( nIndex++, entry.getErrorMessage( ) );
+            daoUtil.setBoolean( nIndex++, entry.isOnlyDisplayInBack( ) );
+            daoUtil.setBoolean( nIndex++, entry.isEditableBack( ) );
+            daoUtil.setBoolean( nIndex++, entry.isIndexed( ) );
+
+            daoUtil.executeUpdate( );
         }
-        else
-        {
-            daoUtil.setIntNull( 5 );
-        }
-
-        daoUtil.setString( 6, entry.getCode( ) );
-        daoUtil.setString( 7, trimEntryTitle( entry ) );
-        daoUtil.setString( 8, entry.getHelpMessage( ) );
-        daoUtil.setString( 9, entry.getComment( ) );
-        daoUtil.setBoolean( 10, entry.isMandatory( ) );
-        daoUtil.setBoolean( 11, entry.isFieldInLine( ) );
-
-        daoUtil.setInt( 12, newPosition( entry, plugin ) );
-
-        if ( entry.getFieldDepend( ) != null )
-        {
-            daoUtil.setInt( 13, entry.getFieldDepend( ).getIdField( ) );
-        }
-        else
-        {
-            daoUtil.setIntNull( 13 );
-        }
-
-        daoUtil.setBoolean( 14, entry.isConfirmField( ) );
-        daoUtil.setString( 15, entry.getConfirmFieldTitle( ) );
-        daoUtil.setBoolean( 16, entry.isUnique( ) );
-
-        String strMapProviderKey = ( entry.getMapProvider( ) == null ) ? StringUtils.EMPTY : entry.getMapProvider( ).getKey( );
-
-        daoUtil.setString( 17, strMapProviderKey );
-        daoUtil.setString( 18, ( entry.getCSSClass( ) == null ) ? StringUtils.EMPTY : entry.getCSSClass( ) );
-        daoUtil.setInt( 19, newPositionConditional( entry, plugin ) );
-        daoUtil.setString( 20, entry.getErrorMessage( ) );
-        daoUtil.setInt( 21, entry.getNumberRow( ) );
-        daoUtil.setInt( 22, entry.getNumberColumn( ) );
-        daoUtil.setBoolean( 23, entry.isRoleAssociated( ) );
-        daoUtil.setBoolean( 24, entry.isOnlyDisplayInBack( ) );
-        daoUtil.setBoolean( 25, entry.isEditableBack( ) );
-        daoUtil.setBoolean( 26, entry.isIndexed( ) );
-
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
 
         return entry.getIdEntry( );
     }
@@ -180,12 +171,6 @@ public final class EntryDAO implements IEntryDAO
         }
 
         daoUtil.free( );
-
-        if ( entry != null )
-        {
-            entry.setNumberConditionalQuestion( numberConditionalQuestion( entry.getIdEntry( ), plugin ) );
-        }
-
         return entry;
     }
 
@@ -229,78 +214,69 @@ public final class EntryDAO implements IEntryDAO
     @Override
     public void store( Entry entry, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-
-        int nIndex = 1;
-        daoUtil.setInt( nIndex++, entry.getIdEntry( ) );
-        daoUtil.setInt( nIndex++, entry.getIdResource( ) );
-        daoUtil.setString( nIndex++, entry.getResourceType( ) );
-        daoUtil.setInt( nIndex++, entry.getEntryType( ).getIdType( ) );
-
-        if ( entry.getParent( ) != null )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
         {
-            daoUtil.setInt( nIndex++, entry.getParent( ).getIdEntry( ) );
+            int nIndex = 1;
+            daoUtil.setInt( nIndex++, entry.getIdEntry( ) );
+            daoUtil.setInt( nIndex++, entry.getIdResource( ) );
+            daoUtil.setString( nIndex++, entry.getResourceType( ) );
+            daoUtil.setInt( nIndex++, entry.getEntryType( ).getIdType( ) );
+
+            if ( entry.getParent( ) != null )
+            {
+                daoUtil.setInt( nIndex++, entry.getParent( ).getIdEntry( ) );
+            }
+            else
+            {
+                daoUtil.setIntNull( nIndex++ );
+            }
+
+            daoUtil.setString( nIndex++, entry.getCode( ) );
+            daoUtil.setString( nIndex++, trimEntryTitle( entry ) );
+            daoUtil.setString( nIndex++, entry.getHelpMessage( ) );
+            daoUtil.setString( nIndex++, entry.getComment( ) );
+            daoUtil.setBoolean( nIndex++, entry.isMandatory( ) );
+            daoUtil.setBoolean( nIndex++, entry.isFieldInLine( ) );
+
+            if ( entry.getFieldDepend( ) == null )
+            {
+                daoUtil.setInt( nIndex++, entry.getPosition( ) );
+            }
+            else
+            {
+                daoUtil.setInt( nIndex++, CONSTANT_ZERO );
+            }
+
+            if ( entry.getFieldDepend( ) != null )
+            {
+                daoUtil.setInt( nIndex++, entry.getFieldDepend( ).getIdField( ) );
+            }
+            else
+            {
+                daoUtil.setIntNull( nIndex++ );
+            }
+
+            daoUtil.setBoolean( nIndex++, entry.isUnique( ) );
+            daoUtil.setString( nIndex++, ( entry.getCSSClass( ) == null ) ? StringUtils.EMPTY : entry.getCSSClass( ) );
+
+            if ( entry.getFieldDepend( ) != null )
+            {
+                daoUtil.setInt( nIndex++, entry.getPosition( ) );
+            }
+            else
+            {
+                daoUtil.setInt( nIndex++, CONSTANT_ZERO );
+            }
+
+            daoUtil.setString( nIndex++, entry.getErrorMessage( ) );
+            daoUtil.setBoolean( nIndex++, entry.isOnlyDisplayInBack( ) );
+            daoUtil.setBoolean( nIndex++, entry.isEditableBack( ) );
+            daoUtil.setBoolean( nIndex++, entry.isIndexed( ) );
+
+            daoUtil.setInt( nIndex++, entry.getIdEntry( ) );
+
+            daoUtil.executeUpdate( );
         }
-        else
-        {
-            daoUtil.setIntNull( nIndex++ );
-        }
-
-        daoUtil.setString( nIndex++, entry.getCode( ) );
-        daoUtil.setString( nIndex++, trimEntryTitle( entry ) );
-        daoUtil.setString( nIndex++, entry.getHelpMessage( ) );
-        daoUtil.setString( nIndex++, entry.getComment( ) );
-        daoUtil.setBoolean( nIndex++, entry.isMandatory( ) );
-        daoUtil.setBoolean( nIndex++, entry.isFieldInLine( ) );
-
-        if ( entry.getFieldDepend( ) == null )
-        {
-            daoUtil.setInt( nIndex++, entry.getPosition( ) );
-        }
-        else
-        {
-            daoUtil.setInt( nIndex++, CONSTANT_ZERO );
-        }
-
-        if ( entry.getFieldDepend( ) != null )
-        {
-            daoUtil.setInt( nIndex++, entry.getFieldDepend( ).getIdField( ) );
-        }
-        else
-        {
-            daoUtil.setIntNull( nIndex++ );
-        }
-
-        daoUtil.setBoolean( nIndex++, entry.isConfirmField( ) );
-        daoUtil.setString( nIndex++, entry.getConfirmFieldTitle( ) );
-        daoUtil.setBoolean( nIndex++, entry.isUnique( ) );
-
-        String strMapProviderKey = ( entry.getMapProvider( ) == null ) ? StringUtils.EMPTY : entry.getMapProvider( ).getKey( );
-
-        daoUtil.setString( nIndex++, strMapProviderKey );
-        daoUtil.setString( nIndex++, ( entry.getCSSClass( ) == null ) ? StringUtils.EMPTY : entry.getCSSClass( ) );
-
-        if ( entry.getFieldDepend( ) != null )
-        {
-            daoUtil.setInt( nIndex++, entry.getPosition( ) );
-        }
-        else
-        {
-            daoUtil.setInt( nIndex++, CONSTANT_ZERO );
-        }
-
-        daoUtil.setString( nIndex++, entry.getErrorMessage( ) );
-        daoUtil.setInt( nIndex++, entry.getNumberRow( ) );
-        daoUtil.setInt( nIndex++, entry.getNumberColumn( ) );
-        daoUtil.setBoolean( nIndex++, entry.isRoleAssociated( ) );
-        daoUtil.setBoolean( nIndex++, entry.isOnlyDisplayInBack( ) );
-        daoUtil.setBoolean( nIndex++, entry.isEditableBack( ) );
-        daoUtil.setBoolean( nIndex++, entry.isIndexed( ) );
-
-        daoUtil.setInt( nIndex++, entry.getIdEntry( ) );
-
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
     }
 
     /**
@@ -413,12 +389,6 @@ public final class EntryDAO implements IEntryDAO
         }
 
         daoUtil.free( );
-
-        for ( Entry entryCreated : entryList )
-        {
-            entryCreated.setNumberConditionalQuestion( numberConditionalQuestion( entryCreated.getIdEntry( ), plugin ) );
-        }
-
         return entryList;
     }
 
@@ -553,12 +523,6 @@ public final class EntryDAO implements IEntryDAO
         }
 
         daoUtil.free( );
-
-        for ( Entry entryCreated : listResult )
-        {
-            entryCreated.setNumberConditionalQuestion( numberConditionalQuestion( entryCreated.getIdEntry( ), plugin ) );
-        }
-
         return listResult;
     }
 
@@ -582,12 +546,6 @@ public final class EntryDAO implements IEntryDAO
         }
 
         daoUtil.free( );
-
-        if ( entry != null )
-        {
-            entry.setNumberConditionalQuestion( numberConditionalQuestion( entry.getIdEntry( ), plugin ) );
-        }
-
         return entry;
     }
 
@@ -715,33 +673,6 @@ public final class EntryDAO implements IEntryDAO
     }
 
     /**
-     * Return the number of conditional question who are associate to the entry
-     * 
-     * @param nIdEntry
-     *            the id of the entry
-     * @param plugin
-     *            the plugin
-     * @return the number of conditional question
-     */
-    private int numberConditionalQuestion( int nIdEntry, Plugin plugin )
-    {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NUMBER_CONDITIONAL_QUESTION, plugin );
-        daoUtil.setInt( 1, nIdEntry );
-        daoUtil.executeQuery( );
-
-        int nNumberConditionalQuestion = 0;
-
-        if ( daoUtil.next( ) )
-        {
-            nNumberConditionalQuestion = daoUtil.getInt( 1 );
-        }
-
-        daoUtil.free( );
-
-        return nNumberConditionalQuestion;
-    }
-
-    /**
      * Get values of an entry from the current row of a daoUtil. The class to daoUtil.next( ) will NOT be made by this method.
      * 
      * @param daoUtil
@@ -792,10 +723,7 @@ public final class EntryDAO implements IEntryDAO
             entry.setFieldDepend( fieldDepend );
         }
 
-        entry.setConfirmField( daoUtil.getBoolean( nIndex++ ) );
-        entry.setConfirmFieldTitle( daoUtil.getString( nIndex++ ) );
         entry.setUnique( daoUtil.getBoolean( nIndex++ ) );
-        entry.setMapProvider( MapProviderManager.getMapProvider( daoUtil.getString( nIndex++ ) ) );
         entry.setCSSClass( daoUtil.getString( nIndex++ ) );
 
         if ( daoUtil.getInt( nIndex++ ) > 0 )
@@ -804,9 +732,6 @@ public final class EntryDAO implements IEntryDAO
         }
 
         entry.setErrorMessage( daoUtil.getString( nIndex++ ) );
-        entry.setNumberRow( daoUtil.getInt( nIndex++ ) );
-        entry.setNumberColumn( daoUtil.getInt( nIndex++ ) );
-        entry.setRoleAssociated( daoUtil.getBoolean( nIndex++ ) );
         entry.setOnlyDisplayInBack( daoUtil.getBoolean( nIndex++ ) );
         entry.setEditableBack( daoUtil.getBoolean( nIndex++ ) );
         entry.setIndexed( daoUtil.getBoolean( nIndex++ ) );

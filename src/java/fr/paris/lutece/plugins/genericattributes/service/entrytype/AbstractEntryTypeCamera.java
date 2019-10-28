@@ -170,11 +170,10 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
         entry.setErrorMessage( strErrorMessage );
         entry.setCode( strCode );
 
-        Field config = createOrUpdateField( entry, FIELD_CAMERA_CONF, null, null );
-        config.setMaxSizeEnter( nMaxImageSize );
-        config.setWidth( nWidth );
-        config.setHeight( nheight );
-        config.setImageType( strTypeImage );
+        createOrUpdateField( entry, FIELD_IMAGE_TYPE, null, strTypeImage );
+        createOrUpdateField( entry, FIELD_WIDTH, null, String.valueOf( nWidth ) );
+        createOrUpdateField( entry, FIELD_HEIGHT, null, String.valueOf( nheight ) );
+        createOrUpdateField( entry, FIELD_MAX_SIZE, null, String.valueOf( nMaxImageSize ) );
 
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
@@ -252,8 +251,9 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
         response.setEntry( entry );
         String fileName = null;
         SimpleDateFormat dt = new SimpleDateFormat( PROPERTY_IMAGE_TITLE_DATE_FORMAT );
-        Field config = entry.getFieldByCode( FIELD_CAMERA_CONF );
-        String imageType = StringUtils.isNotEmpty( config.getImageType( ) ) ? "." + config.getImageType( ) : "";
+
+        Field imageTypeField = entry.getFieldByCode( FIELD_IMAGE_TYPE );
+        String imageType = imageTypeField != null ? "." + imageTypeField.getValue( ) : "";
 
         Calendar c = Calendar.getInstance( );
         String [ ] imageTitle = PROPERTY_IMAGE_TITLE.trim( ).split( "," );
@@ -383,10 +383,10 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
      */
     public GenericAttributeError doCheckSize( BufferedImage image, Entry entry, Locale locale )
     {
-        Field config = entry.getFieldByCode( FIELD_CAMERA_CONF );
-        int nMaxSize = config.getMaxSizeEnter( );
+        int nMaxSize = Integer.valueOf( entry.getFieldByCode( FIELD_MAX_FILES ).getValue( ) );
 
-        String imageType = StringUtils.isNotEmpty( config.getImageType( ) ) ? config.getImageType( ) : "png";
+        Field imageTypeField = entry.getFieldByCode( FIELD_IMAGE_TYPE );
+        String imageType = imageTypeField != null ? imageTypeField.getValue( ) : "png";
 
         // If no max size defined in the db, then fetch the default max size from the properties file
         if ( nMaxSize == GenericAttributesUtils.CONSTANT_ID_NULL )

@@ -134,7 +134,6 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         else
         {
             Field newProvider = buildFieldMapProvider( entry, fieldValue );
-            field.setCode( newProvider.getCode( ) );
             field.setValue( newProvider.getValue( ) );
         }
     }
@@ -357,7 +356,6 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         {
             String strTrimedMapProvider = strMapProvider.trim( );
             fieldMapProvider.setValue( strTrimedMapProvider );
-            entry.setMapProvider( MapProviderManager.getMapProvider( strTrimedMapProvider ) );
         }
         else
         {

@@ -39,7 +39,6 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
-import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -93,10 +92,6 @@ public abstract class AbstractEntryTypeMyLuteceUser extends EntryTypeService
         entry.setIndexed( strIndexed != null );
 
         entry.setCode( strCode );
-        Field config = createOrUpdateField( entry, FIELD_USER_CONF, null, EMPTY_STRING );
-        config.setWidth( 50 );
-        config.setMaxSizeEnter( 0 );
-
         return null;
     }
 

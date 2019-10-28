@@ -57,7 +57,6 @@ public interface IEntryTypeService
     String PARAMETER_HELP_MESSAGE = "help_message";
     String PARAMETER_COMMENT = "comment";
     String PARAMETER_MANDATORY = "mandatory";
-    String PARAMETER_ROLE_ASSOCIATED = "role_associated";
     String PARAMETER_FIELD_IN_LINE = "field_in_line";
     String PARAMETER_HEIGHT = "height";
     String PARAMETER_WIDTH = "width";
@@ -93,7 +92,6 @@ public interface IEntryTypeService
     String FIELD_Y = "Y";
     String FIELD_GEOMETRY = "geometry";
     String FIELD_PREFIX = "prefix";
-    String FIELD_FILE_CONFIG = "file_config";
     String FIELD_FILE_MAX_SIZE = "file_max_size";
     String FIELD_MAX_FILES = "max_files";
     String FIELD_FILE_BINARY = "export_binary";
@@ -101,12 +99,17 @@ public interface IEntryTypeService
     String FIELD_ANSWER_CHOICE = "answer_choice";
     String FIELD_ARRAY_CELL = "array_cell";
     String FIELD_ATTRIBUTE_NAME = "attribute_name";
-    String FIELD_CAMERA_CONF = "camera_config";
-    String FIELD_TEXT_CONF = "text_config";
+    String FIELD_CONFIRM = "confirm_field";
     String FIELD_MYLUTECE_ATTRIBUTE_NAME_CODE = "attribute_name";
-    String FIELD_USER_CONF = "user_config";
     String FIELD_USED_CORRECT_RESPONSE = PARAMETER_USED_CORRECT_RESPONSE;
     String FIELD_USED_COMPLETE_RESPONSE = PARAMETER_USED_COMPLETE_RESPONSE;
+    String FIELD_ARRAY_ROW = "array_row";
+    String FIELD_ARRAY_COLUMN = "array_column";
+    String FIELD_IMAGE_TYPE = "image_type";
+    String FIELD_WIDTH = "width";
+    String FIELD_HEIGHT = "height";
+    String FIELD_MAX_SIZE = "max_size";
+    String FIELD_TEXT_CONF = "text_config";
 
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";

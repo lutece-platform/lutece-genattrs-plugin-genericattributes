@@ -120,9 +120,9 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
         entry.setHelpMessage( null );
         entry.setComment( strComment );
         entry.setCSSClass( null );
-        entry.setMapProvider( null );
-        entry.setNumberColumn( column );
-        entry.setNumberRow( row );
+
+        createOrUpdateField( entry, FIELD_ARRAY_ROW, null, String.valueOf( row ) );
+        createOrUpdateField( entry, FIELD_ARRAY_COLUMN, null, String.valueOf( column ) );
 
         List<Field> newFields = new ArrayList<>( );
 
@@ -183,9 +183,12 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
     @Override
     public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        for ( int i = 1; i <= ( entry.getNumberRow( ) + 1 ); i++ )
+        int row = Integer.valueOf( entry.getFieldByCode( FIELD_ARRAY_ROW ).getValue( ) );
+        int column = Integer.valueOf( entry.getFieldByCode( FIELD_ARRAY_COLUMN ).getValue( ) );
+
+        for ( int i = 1; i <= ( row + 1 ); i++ )
         {
-            for ( int j = 1; j <= ( entry.getNumberColumn( ) + 1 ); j++ )
+            for ( int j = 1; j <= ( column + 1 ); j++ )
             {
                 String strTitleRow = request.getParameter( "response_" + i + "_" + j );
 

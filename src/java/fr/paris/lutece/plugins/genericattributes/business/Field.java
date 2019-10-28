@@ -52,17 +52,12 @@ public class Field implements Serializable
     private String _strTitle;
     private String _strValue;
     private String _strComment;
-    private int _nHeight;
-    private int _nWidth;
-    private int _nMaxSizeEnter;
     private int _nPosition;
     private boolean _bDefaultValue;
     private Date _tValueTypeDate;
     private List<Entry> _listConditionalQuestions;
     private List<RegularExpression> _listRegularExpressionList;
     private boolean _bNoDisplayTitle;
-    private String _strRoleKey;
-    private String _strImageType;
 
     /**
      *
@@ -207,46 +202,6 @@ public class Field implements Serializable
 
     /**
      *
-     * @return the width of the field
-     */
-    public int getWidth( )
-    {
-        return _nWidth;
-    }
-
-    /**
-     * set the width of the field
-     * 
-     * @param width
-     *            the width of the field
-     */
-    public void setWidth( int width )
-    {
-        this._nWidth = width;
-    }
-
-    /**
-     *
-     * @return the height of the field
-     */
-    public int getHeight( )
-    {
-        return _nHeight;
-    }
-
-    /**
-     * set the height of the field
-     * 
-     * @param height
-     *            the height of the field
-     */
-    public void setHeight( int height )
-    {
-        _nHeight = height;
-    }
-
-    /**
-     *
      * @return a list of Entry which is associate to the field
      */
     public List<Entry> getConditionalQuestions( )
@@ -283,26 +238,6 @@ public class Field implements Serializable
     public void setDefaultValue( boolean defaultValue )
     {
         _bDefaultValue = defaultValue;
-    }
-
-    /**
-     *
-     * @return the max size of enter user
-     */
-    public int getMaxSizeEnter( )
-    {
-        return _nMaxSizeEnter;
-    }
-
-    /**
-     * set the max size of enter user
-     * 
-     * @param maxSizeEnter
-     *            the max size of enter user
-     */
-    public void setMaxSizeEnter( int maxSizeEnter )
-    {
-        _nMaxSizeEnter = maxSizeEnter;
     }
 
     /**
@@ -346,29 +281,6 @@ public class Field implements Serializable
     }
 
     /**
-     * Gets the field role
-     * 
-     * @return field role as a String
-     *
-     */
-    public String getRoleKey( )
-    {
-        return _strRoleKey;
-    }
-
-    /**
-     * Sets the field's role
-     * 
-     * @param strRole
-     *            The role
-     *
-     */
-    public void setRoleKey( String strRole )
-    {
-        _strRoleKey = strRole;
-    }
-
-    /**
      * @return the _strCode
      */
     public String getCode( )
@@ -383,28 +295,5 @@ public class Field implements Serializable
     public void setCode( String strCode )
     {
         this._strCode = strCode;
-    }
-
-    /**
-     * Gets the field ImageType
-     * 
-     * @return field ImageType as a String
-     *
-     */
-    public String getImageType( )
-    {
-        return _strImageType;
-    }
-
-    /**
-     * Sets the field's ImageType
-     * 
-     * @param ImageType
-     *            The Image Type
-     *
-     */
-    public void setImageType( String strImageType )
-    {
-        _strImageType = strImageType;
     }
 }
