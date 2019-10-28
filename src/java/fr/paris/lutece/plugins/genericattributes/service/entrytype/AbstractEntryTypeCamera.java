@@ -169,12 +169,12 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
         entry.setCSSClass( strCSSClass );
         entry.setErrorMessage( strErrorMessage );
         entry.setCode( strCode );
-        
+
         createOrUpdateField( entry, FIELD_IMAGE_TYPE, null, strTypeImage );
         createOrUpdateField( entry, FIELD_WIDTH, null, String.valueOf( nWidth ) );
         createOrUpdateField( entry, FIELD_HEIGHT, null, String.valueOf( nheight ) );
         createOrUpdateField( entry, FIELD_MAX_SIZE, null, String.valueOf( nMaxImageSize ) );
-        
+
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
         entry.setUnique( strUnique != null );
@@ -253,7 +253,7 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
         SimpleDateFormat dt = new SimpleDateFormat( PROPERTY_IMAGE_TITLE_DATE_FORMAT );
 
         Field imageTypeField = entry.getFieldByCode( FIELD_IMAGE_TYPE );
-        String imageType = imageTypeField != null  ? "." + imageTypeField.getValue( ) : "";
+        String imageType = imageTypeField != null ? "." + imageTypeField.getValue( ) : "";
 
         Calendar c = Calendar.getInstance( );
         String [ ] imageTitle = PROPERTY_IMAGE_TITLE.trim( ).split( "," );
@@ -384,9 +384,9 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
     public GenericAttributeError doCheckSize( BufferedImage image, Entry entry, Locale locale )
     {
         int nMaxSize = Integer.valueOf( entry.getFieldByCode( FIELD_MAX_FILES ).getValue( ) );
-        
+
         Field imageTypeField = entry.getFieldByCode( FIELD_IMAGE_TYPE );
-        String imageType = imageTypeField != null  ? imageTypeField.getValue( ) : "png";
+        String imageType = imageTypeField != null ? imageTypeField.getValue( ) : "png";
 
         // If no max size defined in the db, then fetch the default max size from the properties file
         if ( nMaxSize == GenericAttributesUtils.CONSTANT_ID_NULL )

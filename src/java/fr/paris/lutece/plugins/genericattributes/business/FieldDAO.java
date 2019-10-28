@@ -96,10 +96,10 @@ public final class FieldDAO implements IFieldDAO
     {
         field.setPosition( newPosition( plugin ) );
 
-        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin ) )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin ) )
         {
-        	int nIndex = 1;
-        	daoUtil.setInt( nIndex++, field.getParentEntry( ).getIdEntry( ) );
+            int nIndex = 1;
+            daoUtil.setInt( nIndex++, field.getParentEntry( ).getIdEntry( ) );
             daoUtil.setString( nIndex++, field.getCode( ) );
             daoUtil.setString( nIndex++, field.getTitle( ) );
             daoUtil.setString( nIndex++, field.getValue( ) );
@@ -119,30 +119,30 @@ public final class FieldDAO implements IFieldDAO
     @Override
     public Field load( int nId, Plugin plugin )
     {
-    	Field field = null;
-        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin )) 
+        Field field = null;
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
-	        daoUtil.setInt( 1, nId );
-	        daoUtil.executeQuery( );
+            daoUtil.setInt( 1, nId );
+            daoUtil.executeQuery( );
 
-	        if ( daoUtil.next( ) )
-	        {
-	        	int nIndex = 1;
-	            field = new Field( );
-	            field.setIdField( daoUtil.getInt( nIndex++ ) );
-	            // parent entry
-	            Entry entry = new Entry( );
-	            entry.setIdEntry( daoUtil.getInt( nIndex++ ) );
-	            field.setParentEntry( entry );
-	            field.setCode( daoUtil.getString( nIndex++ ) );
-	            field.setTitle( daoUtil.getString( nIndex++ ) );
-	            field.setValue( daoUtil.getString( nIndex++ ) );
-	            field.setDefaultValue( daoUtil.getBoolean( nIndex++ ) );
-	            field.setPosition( daoUtil.getInt( nIndex++ ) );
-	            field.setValueTypeDate( daoUtil.getDate( nIndex++ ) );
-	            field.setNoDisplayTitle( daoUtil.getBoolean( nIndex++ ) );
-	            field.setComment( daoUtil.getString( nIndex++ ) );
-	        }
+            if ( daoUtil.next( ) )
+            {
+                int nIndex = 1;
+                field = new Field( );
+                field.setIdField( daoUtil.getInt( nIndex++ ) );
+                // parent entry
+                Entry entry = new Entry( );
+                entry.setIdEntry( daoUtil.getInt( nIndex++ ) );
+                field.setParentEntry( entry );
+                field.setCode( daoUtil.getString( nIndex++ ) );
+                field.setTitle( daoUtil.getString( nIndex++ ) );
+                field.setValue( daoUtil.getString( nIndex++ ) );
+                field.setDefaultValue( daoUtil.getBoolean( nIndex++ ) );
+                field.setPosition( daoUtil.getInt( nIndex++ ) );
+                field.setValueTypeDate( daoUtil.getDate( nIndex++ ) );
+                field.setNoDisplayTitle( daoUtil.getBoolean( nIndex++ ) );
+                field.setComment( daoUtil.getString( nIndex++ ) );
+            }
 
         }
 
@@ -167,22 +167,22 @@ public final class FieldDAO implements IFieldDAO
     @Override
     public void store( Field field, Plugin plugin )
     {
-        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
         {
-        	int nIndex = 1;
-	        daoUtil.setInt( nIndex++, field.getIdField( ) );
-	        daoUtil.setInt( nIndex++, field.getParentEntry( ).getIdEntry( ) );
-	        daoUtil.setString( nIndex++, field.getCode( ) );
-	        daoUtil.setString( nIndex++, field.getTitle( ) );
-	        daoUtil.setString( nIndex++, field.getValue( ) );
-	        daoUtil.setBoolean( nIndex++, field.isDefaultValue( ) );
-	        daoUtil.setInt( nIndex++, field.getPosition( ) );
-	        daoUtil.setDate( nIndex++, ( field.getValueTypeDate( ) == null ) ? null : new Date( field.getValueTypeDate( ).getTime( ) ) );
-	        daoUtil.setBoolean( nIndex++, field.isNoDisplayTitle( ) );
-	        daoUtil.setString( nIndex++, field.getComment( ) );
-	
-	        daoUtil.setInt( nIndex++, field.getIdField( ) );
-	        daoUtil.executeUpdate( );
+            int nIndex = 1;
+            daoUtil.setInt( nIndex++, field.getIdField( ) );
+            daoUtil.setInt( nIndex++, field.getParentEntry( ).getIdEntry( ) );
+            daoUtil.setString( nIndex++, field.getCode( ) );
+            daoUtil.setString( nIndex++, field.getTitle( ) );
+            daoUtil.setString( nIndex++, field.getValue( ) );
+            daoUtil.setBoolean( nIndex++, field.isDefaultValue( ) );
+            daoUtil.setInt( nIndex++, field.getPosition( ) );
+            daoUtil.setDate( nIndex++, ( field.getValueTypeDate( ) == null ) ? null : new Date( field.getValueTypeDate( ).getTime( ) ) );
+            daoUtil.setBoolean( nIndex++, field.isNoDisplayTitle( ) );
+            daoUtil.setString( nIndex++, field.getComment( ) );
+
+            daoUtil.setInt( nIndex++, field.getIdField( ) );
+            daoUtil.executeUpdate( );
         }
     }
 
@@ -193,32 +193,32 @@ public final class FieldDAO implements IFieldDAO
     public List<Field> selectFieldListByIdEntry( int nIdEntry, Plugin plugin )
     {
         List<Field> fieldList = new ArrayList<>( );
-        
-        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_FIELD_BY_ID_ENTRY, plugin ) )
+
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_FIELD_BY_ID_ENTRY, plugin ) )
         {
-	        daoUtil.setInt( 1, nIdEntry );
-	        daoUtil.executeQuery( );
-	
-	        while ( daoUtil.next( ) )
-	        {
-	        	int nIndex = 1;
-	        	Field field = new Field( );
-	            field.setIdField( daoUtil.getInt( nIndex++ ) );
-	            // parent entry
-	            Entry entry = new Entry( );
-	            entry.setIdEntry( daoUtil.getInt( nIndex++ ) );
-	            field.setParentEntry( entry );
-	            field.setCode( daoUtil.getString( nIndex++ ) );
-	            field.setTitle( daoUtil.getString( nIndex++ ) );
-	            field.setValue( daoUtil.getString( nIndex++ ) );
-	            field.setDefaultValue( daoUtil.getBoolean( nIndex++ ) );
-	            field.setPosition( daoUtil.getInt( nIndex++ ) );
-	            field.setValueTypeDate( daoUtil.getDate( nIndex++ ) );
-	            field.setNoDisplayTitle( daoUtil.getBoolean( nIndex++ ) );
-	            field.setComment( daoUtil.getString( nIndex++ ) );
-	
-	            fieldList.add( field );
-	        }
+            daoUtil.setInt( 1, nIdEntry );
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                int nIndex = 1;
+                Field field = new Field( );
+                field.setIdField( daoUtil.getInt( nIndex++ ) );
+                // parent entry
+                Entry entry = new Entry( );
+                entry.setIdEntry( daoUtil.getInt( nIndex++ ) );
+                field.setParentEntry( entry );
+                field.setCode( daoUtil.getString( nIndex++ ) );
+                field.setTitle( daoUtil.getString( nIndex++ ) );
+                field.setValue( daoUtil.getString( nIndex++ ) );
+                field.setDefaultValue( daoUtil.getBoolean( nIndex++ ) );
+                field.setPosition( daoUtil.getInt( nIndex++ ) );
+                field.setValueTypeDate( daoUtil.getDate( nIndex++ ) );
+                field.setNoDisplayTitle( daoUtil.getBoolean( nIndex++ ) );
+                field.setComment( daoUtil.getString( nIndex++ ) );
+
+                fieldList.add( field );
+            }
         }
         return fieldList;
     }

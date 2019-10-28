@@ -158,15 +158,15 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
         entry.setEditableBack( strEditableBack != null );
-        
+
         boolean confirm = false;
         String fieldTitle = null;
         if ( strConfirmField != null )
         {
-        	confirm = true;
-        	fieldTitle = strConfirmFieldTitle;
+            confirm = true;
+            fieldTitle = strConfirmFieldTitle;
         }
-        
+
         createOrUpdateField( entry, FIELD_CONFIRM, fieldTitle, String.valueOf( confirm ) );
         entry.setUnique( strUnique != null );
         return null;
@@ -206,9 +206,9 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
     {
         String strValueEntry = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ).trim( );
         Field confirmField = entry.getFieldByCode( FIELD_CONFIRM );
-        
+
         boolean bConfirmField = confirmField != null && Boolean.valueOf( confirmField.getValue( ) );
-        
+
         String strValueEntryConfirmField = null;
 
         if ( bConfirmField )

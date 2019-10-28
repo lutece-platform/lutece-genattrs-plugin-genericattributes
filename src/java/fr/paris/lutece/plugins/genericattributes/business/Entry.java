@@ -544,7 +544,7 @@ public class Entry implements Serializable, Cloneable
         Field fieldUsedCompleteResponse = getFieldByCode( IEntryTypeService.FIELD_USED_COMPLETE_RESPONSE );
         return fieldUsedCompleteResponse != null && Boolean.valueOf( fieldUsedCompleteResponse.getValue( ) );
     }
-    
+
     /**
      * Get the selected map provider
      * 
@@ -553,11 +553,11 @@ public class Entry implements Serializable, Cloneable
      */
     public IMapProvider getMapProvider( )
     {
-    	Field fieldProvider = getFieldByCode( IEntryTypeService.FIELD_PROVIDER );
-    	if ( fieldProvider == null )
-    	{
-    		return null;
-    	}
+        Field fieldProvider = getFieldByCode( IEntryTypeService.FIELD_PROVIDER );
+        if ( fieldProvider == null )
+        {
+            return null;
+        }
         return MapProviderManager.getMapProvider( fieldProvider.getValue( ) );
     }
 

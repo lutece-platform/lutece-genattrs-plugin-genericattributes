@@ -180,7 +180,7 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
 
         if ( strValueEntry != null )
         {
-        	int nMaxSize = Integer.valueOf( entry.getFieldByCode( FIELD_MAX_FILES ).getValue( ) );
+            int nMaxSize = Integer.valueOf( entry.getFieldByCode( FIELD_MAX_FILES ).getValue( ) );
 
             if ( getUseRichText( entry ) )
             {
