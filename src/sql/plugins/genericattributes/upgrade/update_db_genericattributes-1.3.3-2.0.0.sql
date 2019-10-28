@@ -14,3 +14,5 @@
 -- ALTER TABLE genatt_field DROP COLUMN max_size_enter;
 
 -- ALTER TABLE genatt_entry DROP COLUMN map_provider;
+
+-- ALTER TABLE genatt_field DROP COLUMN image_type;

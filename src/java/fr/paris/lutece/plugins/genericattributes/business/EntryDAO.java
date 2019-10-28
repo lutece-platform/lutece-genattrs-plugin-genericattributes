@@ -71,8 +71,6 @@ public final class EntryDAO implements IEntryDAO
     private static final String SQL_QUERY_NEW_POSITION = "SELECT MAX(pos) "
             + "FROM genatt_entry WHERE id_resource=? AND resource_type=?";
     private static final String SQL_QUERY_NEW_POSITION_CONDITIONAL_QUESTION = "SELECT MAX(pos_conditional) FROM genatt_entry WHERE id_field_depend=?";
-    private static final String SQL_QUERY_NUMBER_CONDITIONAL_QUESTION = "SELECT COUNT(e2.id_entry) "
-            + "FROM genatt_entry e1,genatt_field f1,genatt_entry e2 WHERE e1.id_entry=? AND e1.id_entry=f1.id_entry and e2.id_field_depend=f1.id_field ";
     private static final String SQL_FILTER_ID_RESOURCE = " AND ent.id_resource = ? ";
     private static final String SQL_FILTER_RESOURCE_TYPE = " AND ent.resource_type = ? ";
     private static final String SQL_FILTER_ID_PARENT = " AND ent.id_parent = ? ";
@@ -178,12 +176,6 @@ public final class EntryDAO implements IEntryDAO
         }
 
         daoUtil.free( );
-
-        if ( entry != null )
-        {
-            entry.setNumberConditionalQuestion( numberConditionalQuestion( entry.getIdEntry( ), plugin ) );
-        }
-
         return entry;
     }
 
@@ -405,13 +397,6 @@ public final class EntryDAO implements IEntryDAO
         }
 
         daoUtil.free( );
-
-        for ( Entry entryCreated : entryList )
-        {
-            entryCreated
-                    .setNumberConditionalQuestion( numberConditionalQuestion( entryCreated.getIdEntry( ), plugin ) );
-        }
-
         return entryList;
     }
 
@@ -547,13 +532,6 @@ public final class EntryDAO implements IEntryDAO
         }
 
         daoUtil.free( );
-
-        for ( Entry entryCreated : listResult )
-        {
-            entryCreated
-                    .setNumberConditionalQuestion( numberConditionalQuestion( entryCreated.getIdEntry( ), plugin ) );
-        }
-
         return listResult;
     }
 
@@ -578,12 +556,6 @@ public final class EntryDAO implements IEntryDAO
         }
 
         daoUtil.free( );
-
-        if ( entry != null )
-        {
-            entry.setNumberConditionalQuestion( numberConditionalQuestion( entry.getIdEntry( ), plugin ) );
-        }
-
         return entry;
     }
 
@@ -703,31 +675,6 @@ public final class EntryDAO implements IEntryDAO
         }
 
         return nPos;
-    }
-
-    /**
-     * Return the number of conditional question who are associate to the entry
-     * 
-     * @param nIdEntry the id of the entry
-     * @param plugin   the plugin
-     * @return the number of conditional question
-     */
-    private int numberConditionalQuestion( int nIdEntry, Plugin plugin )
-    {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NUMBER_CONDITIONAL_QUESTION, plugin );
-        daoUtil.setInt( 1, nIdEntry );
-        daoUtil.executeQuery( );
-
-        int nNumberConditionalQuestion = 0;
-
-        if ( daoUtil.next( ) )
-        {
-            nNumberConditionalQuestion = daoUtil.getInt( 1 );
-        }
-
-        daoUtil.free( );
-
-        return nNumberConditionalQuestion;
     }
 
     /**

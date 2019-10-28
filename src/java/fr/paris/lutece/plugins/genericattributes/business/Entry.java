@@ -65,15 +65,11 @@ public class Entry implements Serializable, Cloneable
     private List<Entry> _listEntryChildren;
     private List<Field> _listFields;
     private Field _fieldDepend;
-    private int _nNumberConditionalQuestion;
-    private boolean _nFirstInTheList;
-    private boolean _nLastInTheList;
     private boolean _bUnique;
     private GenericAttributeError _error;
     private String _strCSSClass;
     private String _strErrorMessage;
     private boolean _bRoleAssociated;
-    private String _strEditMode;
     private boolean _bOnlyDisplayInBack;
     private boolean _bEditableBack;
     private boolean _bIndexed;
@@ -371,70 +367,6 @@ public class Entry implements Serializable, Cloneable
     }
 
     /**
-     * Get the number of conditional questions associated with the entry
-     * 
-     * @return the number of conditional questions associated with the entry
-     */
-    public int getNumberConditionalQuestion( )
-    {
-        return _nNumberConditionalQuestion;
-    }
-
-    /**
-     * Set the number of conditional questions who are associated with the entry
-     * 
-     * @param numberConditionalQuestion
-     *            the number of conditional questions which are associated with the entry
-     *
-     */
-    public void setNumberConditionalQuestion( int numberConditionalQuestion )
-    {
-        _nNumberConditionalQuestion = numberConditionalQuestion;
-    }
-
-    /**
-     * Check if the entry is the last entry of a group
-     * 
-     * @return true if the entry is the last entry of a group or the list of entry
-     */
-    public boolean isLastInTheList( )
-    {
-        return _nLastInTheList;
-    }
-
-    /**
-     * Set true if the entry is the last entry of a group or the list of entry
-     * 
-     * @param lastInTheList
-     *            true if the entry is the last entry of a group or the list of entry
-     */
-    public void setLastInTheList( boolean lastInTheList )
-    {
-        _nLastInTheList = lastInTheList;
-    }
-
-    /**
-     * Check if the entry is the first entry of a group
-     * 
-     * @return true if the entry is the first entry of a group or the list of entry
-     */
-    public boolean isFirstInTheList( )
-    {
-        return _nFirstInTheList;
-    }
-
-    /**
-     * Set true if the entry is the first entry of a group or the list of entry
-     * 
-     * @param firstInTheList
-     *            true if the entry is the last entry of a group or the list of entry
-     */
-    public void setFirstInTheList( boolean firstInTheList )
-    {
-        _nFirstInTheList = firstInTheList;
-    }
-
-    /**
      * Set to true if the value of the response to this question must be unique
      * 
      * @param bUnique
@@ -577,23 +509,6 @@ public class Entry implements Serializable, Cloneable
 
             return new Entry( );
         }
-    }
-
-    /**
-     * @return the _strEditMode
-     */
-    public String getEditMode( )
-    {
-        return _strEditMode;
-    }
-
-    /**
-     * @param _strEditMode
-     *            the _strEditMode to set
-     */
-    public void setEditMode( String strEditMode )
-    {
-        this._strEditMode = strEditMode;
     }
 
     public boolean isOnlyDisplayInBack( )

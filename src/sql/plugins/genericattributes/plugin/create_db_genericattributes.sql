@@ -73,7 +73,6 @@ CREATE TABLE genatt_field (
 	no_display_title smallint default NULL,
 	comment long varchar default null,
     role_key varchar(50) DEFAULT NULL,
-    image_type varchar(50) DEFAULT NULL,
     
 	PRIMARY KEY (id_field)
 );
