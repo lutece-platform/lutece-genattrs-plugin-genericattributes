@@ -107,6 +107,8 @@ public interface IEntryTypeService
     String FIELD_USER_CONF = "user_config";
     String FIELD_USED_CORRECT_RESPONSE = PARAMETER_USED_CORRECT_RESPONSE;
     String FIELD_USED_COMPLETE_RESPONSE = PARAMETER_USED_COMPLETE_RESPONSE;
+    String FIELD_ARRAY_ROW = "array_row";
+    String FIELD_ARRAY_COLUMN = "array_column";
 
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";

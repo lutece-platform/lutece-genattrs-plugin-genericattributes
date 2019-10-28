@@ -75,8 +75,6 @@ public class Entry implements Serializable, Cloneable
     private GenericAttributeError _error;
     private String _strCSSClass;
     private String _strErrorMessage;
-    private int _nNumberRow;
-    private int _nNumberColumn;
     private boolean _bRoleAssociated;
     private String _strEditMode;
     private boolean _bOnlyDisplayInBack;
@@ -587,40 +585,6 @@ public class Entry implements Serializable, Cloneable
     public void setErrorMessage( String strErrorMessage )
     {
         this._strErrorMessage = strErrorMessage;
-    }
-
-    /**
-     * @return the _nNumberRow
-     */
-    public int getNumberRow( )
-    {
-        return _nNumberRow;
-    }
-
-    /**
-     * @param nNumberRow
-     *            the _nNumberRow to set
-     */
-    public void setNumberRow( int nNumberRow )
-    {
-        this._nNumberRow = nNumberRow;
-    }
-
-    /**
-     * @return the _nNumberColumn
-     */
-    public int getNumberColumn( )
-    {
-        return _nNumberColumn;
-    }
-
-    /**
-     * @param nNumberColumn
-     *            the _nNumberColumn to set
-     */
-    public void setNumberColumn( int nNumberColumn )
-    {
-        this._nNumberColumn = nNumberColumn;
     }
 
     /**

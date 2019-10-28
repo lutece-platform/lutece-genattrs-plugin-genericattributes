@@ -46,8 +46,6 @@ CREATE TABLE genatt_entry (
 	css_class varchar(255) default NULL,
 	pos_conditional int default 0,
 	error_message long varchar default NULL,
-	num_row smallint default 0,
-	num_column smallint default 0,
     is_role_associated smallint DEFAULT '0',
     is_only_display_back smallint DEFAULT '0',
 	is_editable_back smallint DEFAULT '0',
