@@ -254,7 +254,7 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
             synchronized( this )
             {
                 // Ignore double check locking error : assignation and instanciation of objects are separated.
-                _mapAsynchronousUpload.computeIfAbsent( strSessionId,  s -> new ConcurrentHashMap<>( ) );
+                mapFileItemsSession = _mapAsynchronousUpload.computeIfAbsent( strSessionId, s -> new ConcurrentHashMap<>( ) );
             }
         }
         
