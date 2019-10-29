@@ -33,11 +33,9 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
-import fr.paris.lutece.util.ReferenceItem;
-
 import java.io.Serializable;
 
-import java.util.List;
+import fr.paris.lutece.util.ReferenceItem;
 
 /**
  *

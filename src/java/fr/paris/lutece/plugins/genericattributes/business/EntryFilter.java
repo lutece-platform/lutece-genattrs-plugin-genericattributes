@@ -345,11 +345,11 @@ public class EntryFilter
 
     /**
      *
-     * @param _nIsOnlyDisplayInBack
+     * @param isOnlyDisplayInBack
      */
-    public void setIsOnlyDisplayInBack( int _nIsOnlyDisplayInBack )
+    public void setIsOnlyDisplayInBack( int isOnlyDisplayInBack )
     {
-        this._nIsOnlyDisplayInBack = _nIsOnlyDisplayInBack;
+        this._nIsOnlyDisplayInBack = isOnlyDisplayInBack;
     }
 
     /**
@@ -372,11 +372,11 @@ public class EntryFilter
 
     /**
      *
-     * @param _nIsEditableBack
+     * @param isEditableBack
      */
-    public void setIsEditableBack( int _nIsEditableBack )
+    public void setIsEditableBack( int isEditableBack )
     {
-        this._nIsEditableBack = _nIsEditableBack;
+        this._nIsEditableBack = isEditableBack;
     }
 
     /**
