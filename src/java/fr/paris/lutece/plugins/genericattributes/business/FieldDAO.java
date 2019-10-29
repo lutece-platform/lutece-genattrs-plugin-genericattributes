@@ -59,31 +59,32 @@ public final class FieldDAO implements IFieldDAO
     private static final String SQL_QUERY_SELECT_FIELD_BY_ID_ENTRY = "SELECT id_field,id_entry,code,title,value,default_value,"
             + "pos,value_type_date,no_display_title,comment FROM genatt_field  WHERE id_entry = ? ORDER BY pos";
     private static final String SQL_QUERY_NEW_POSITION = "SELECT MAX(pos)" + " FROM genatt_field ";
-    private static final String SQL_QUERY_SELECT_REGULAR_EXPRESSION_BY_ID_FIELD = "SELECT id_expression " + " FROM genatt_verify_by where id_field=?";
-    private static final String SQL_QUERY_COUNT_FIELD_BY_ID_REGULAR_EXPRESSION = "SELECT COUNT(id_field) " + " FROM genatt_verify_by where id_expression = ?";
+    private static final String SQL_QUERY_SELECT_REGULAR_EXPRESSION_BY_ID_FIELD = "SELECT id_expression "
+            + " FROM genatt_verify_by where id_field=?";
+    private static final String SQL_QUERY_COUNT_FIELD_BY_ID_REGULAR_EXPRESSION = "SELECT COUNT(id_field) "
+            + " FROM genatt_verify_by where id_expression = ?";
 
     /**
      * Generates a new field position
      * 
-     * @param plugin
-     *            the plugin
+     * @param plugin the plugin
      * @return the new entry position
      */
     private int newPosition( Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_POSITION, plugin );
-        daoUtil.executeQuery( );
-
         int nPos;
-
-        if ( !daoUtil.next( ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_POSITION, plugin ) )
         {
-            // if the table is empty
-            nPos = 1;
-        }
+            daoUtil.executeQuery( );
 
-        nPos = daoUtil.getInt( 1 ) + 1;
-        daoUtil.free( );
+            if ( !daoUtil.next( ) )
+            {
+                // if the table is empty
+                nPos = 1;
+            }
+
+            nPos = daoUtil.getInt( 1 ) + 1;
+        }
 
         return nPos;
     }
@@ -96,7 +97,7 @@ public final class FieldDAO implements IFieldDAO
     {
         field.setPosition( newPosition( plugin ) );
 
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin ) )
         {
             int nIndex = 1;
             daoUtil.setInt( nIndex++, field.getParentEntry( ).getIdEntry( ) );
@@ -105,10 +106,15 @@ public final class FieldDAO implements IFieldDAO
             daoUtil.setString( nIndex++, field.getValue( ) );
             daoUtil.setBoolean( nIndex++, field.isDefaultValue( ) );
             daoUtil.setInt( nIndex++, field.getPosition( ) );
-            daoUtil.setDate( nIndex++, ( field.getValueTypeDate( ) == null ) ? null : new Date( field.getValueTypeDate( ).getTime( ) ) );
+            daoUtil.setDate( nIndex++,
+                    ( field.getValueTypeDate( ) == null ) ? null : new Date( field.getValueTypeDate( ).getTime( ) ) );
             daoUtil.setBoolean( nIndex++, field.isNoDisplayTitle( ) );
             daoUtil.setString( nIndex++, field.getComment( ) );
             daoUtil.executeUpdate( );
+            if ( daoUtil.nextGeneratedKey( ) )
+            {
+                field.setIdField( daoUtil.getGeneratedKeyInt( 1 ) );
+            }
         }
         return field.getIdField( );
     }
@@ -120,32 +126,17 @@ public final class FieldDAO implements IFieldDAO
     public Field load( int nId, Plugin plugin )
     {
         Field field = null;
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
             daoUtil.setInt( 1, nId );
             daoUtil.executeQuery( );
 
             if ( daoUtil.next( ) )
             {
-                int nIndex = 1;
-                field = new Field( );
-                field.setIdField( daoUtil.getInt( nIndex++ ) );
-                // parent entry
-                Entry entry = new Entry( );
-                entry.setIdEntry( daoUtil.getInt( nIndex++ ) );
-                field.setParentEntry( entry );
-                field.setCode( daoUtil.getString( nIndex++ ) );
-                field.setTitle( daoUtil.getString( nIndex++ ) );
-                field.setValue( daoUtil.getString( nIndex++ ) );
-                field.setDefaultValue( daoUtil.getBoolean( nIndex++ ) );
-                field.setPosition( daoUtil.getInt( nIndex++ ) );
-                field.setValueTypeDate( daoUtil.getDate( nIndex++ ) );
-                field.setNoDisplayTitle( daoUtil.getBoolean( nIndex++ ) );
-                field.setComment( daoUtil.getString( nIndex++ ) );
+                field = dataToObject( daoUtil );
             }
 
         }
-
         return field;
     }
 
@@ -155,10 +146,11 @@ public final class FieldDAO implements IFieldDAO
     @Override
     public void delete( int nIdField, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
-        daoUtil.setInt( 1, nIdField );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdField );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -167,7 +159,7 @@ public final class FieldDAO implements IFieldDAO
     @Override
     public void store( Field field, Plugin plugin )
     {
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
         {
             int nIndex = 1;
             daoUtil.setInt( nIndex++, field.getIdField( ) );
@@ -177,7 +169,8 @@ public final class FieldDAO implements IFieldDAO
             daoUtil.setString( nIndex++, field.getValue( ) );
             daoUtil.setBoolean( nIndex++, field.isDefaultValue( ) );
             daoUtil.setInt( nIndex++, field.getPosition( ) );
-            daoUtil.setDate( nIndex++, ( field.getValueTypeDate( ) == null ) ? null : new Date( field.getValueTypeDate( ).getTime( ) ) );
+            daoUtil.setDate( nIndex++,
+                    ( field.getValueTypeDate( ) == null ) ? null : new Date( field.getValueTypeDate( ).getTime( ) ) );
             daoUtil.setBoolean( nIndex++, field.isNoDisplayTitle( ) );
             daoUtil.setString( nIndex++, field.getComment( ) );
 
@@ -194,29 +187,14 @@ public final class FieldDAO implements IFieldDAO
     {
         List<Field> fieldList = new ArrayList<>( );
 
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_FIELD_BY_ID_ENTRY, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_FIELD_BY_ID_ENTRY, plugin ) )
         {
             daoUtil.setInt( 1, nIdEntry );
             daoUtil.executeQuery( );
 
             while ( daoUtil.next( ) )
             {
-                int nIndex = 1;
-                Field field = new Field( );
-                field.setIdField( daoUtil.getInt( nIndex++ ) );
-                // parent entry
-                Entry entry = new Entry( );
-                entry.setIdEntry( daoUtil.getInt( nIndex++ ) );
-                field.setParentEntry( entry );
-                field.setCode( daoUtil.getString( nIndex++ ) );
-                field.setTitle( daoUtil.getString( nIndex++ ) );
-                field.setValue( daoUtil.getString( nIndex++ ) );
-                field.setDefaultValue( daoUtil.getBoolean( nIndex++ ) );
-                field.setPosition( daoUtil.getInt( nIndex++ ) );
-                field.setValueTypeDate( daoUtil.getDate( nIndex++ ) );
-                field.setNoDisplayTitle( daoUtil.getBoolean( nIndex++ ) );
-                field.setComment( daoUtil.getString( nIndex++ ) );
-
+                Field field = dataToObject( daoUtil );
                 fieldList.add( field );
             }
         }
@@ -229,11 +207,12 @@ public final class FieldDAO implements IFieldDAO
     @Override
     public void deleteVerifyBy( int nIdField, int nIdExpression, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_VERIF_BY, plugin );
-        daoUtil.setInt( 1, nIdField );
-        daoUtil.setInt( 2, nIdExpression );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_VERIF_BY, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdField );
+            daoUtil.setInt( 2, nIdExpression );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -242,11 +221,12 @@ public final class FieldDAO implements IFieldDAO
     @Override
     public void insertVerifyBy( int nIdField, int nIdExpression, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_VERIF_BY, plugin );
-        daoUtil.setInt( 1, nIdField );
-        daoUtil.setInt( 2, nIdExpression );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_VERIF_BY, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdField );
+            daoUtil.setInt( 2, nIdExpression );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -255,17 +235,18 @@ public final class FieldDAO implements IFieldDAO
     @Override
     public List<Integer> selectListRegularExpressionKeyByIdField( int nIdField, Plugin plugin )
     {
-        List<Integer> regularExpressionList = new ArrayList<Integer>( );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_REGULAR_EXPRESSION_BY_ID_FIELD, plugin );
-        daoUtil.setInt( 1, nIdField );
-        daoUtil.executeQuery( );
-
-        while ( daoUtil.next( ) )
+        List<Integer> regularExpressionList = new ArrayList<>( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_REGULAR_EXPRESSION_BY_ID_FIELD, plugin ) )
         {
-            regularExpressionList.add( daoUtil.getInt( 1 ) );
-        }
+            daoUtil.setInt( 1, nIdField );
+            daoUtil.executeQuery( );
 
-        daoUtil.free( );
+            while ( daoUtil.next( ) )
+            {
+                regularExpressionList.add( daoUtil.getInt( 1 ) );
+            }
+
+        }
 
         return regularExpressionList;
     }
@@ -278,17 +259,39 @@ public final class FieldDAO implements IFieldDAO
     {
         int nNumberEntry = 0;
 
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_FIELD_BY_ID_REGULAR_EXPRESSION, plugin );
-        daoUtil.setInt( 1, nIdExpression );
-        daoUtil.executeQuery( );
-
-        if ( daoUtil.next( ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_FIELD_BY_ID_REGULAR_EXPRESSION, plugin ) )
         {
-            nNumberEntry = daoUtil.getInt( 1 );
+            daoUtil.setInt( 1, nIdExpression );
+            daoUtil.executeQuery( );
+
+            if ( daoUtil.next( ) )
+            {
+                nNumberEntry = daoUtil.getInt( 1 );
+            }
+
         }
 
-        daoUtil.free( );
-
         return nNumberEntry != 0;
+    }
+
+    private Field dataToObject( DAOUtil daoUtil )
+    {
+        int nIndex = 1;
+        Field field = new Field( );
+        field.setIdField( daoUtil.getInt( nIndex++ ) );
+        // parent entry
+        Entry entry = new Entry( );
+        entry.setIdEntry( daoUtil.getInt( nIndex++ ) );
+        field.setParentEntry( entry );
+        field.setCode( daoUtil.getString( nIndex++ ) );
+        field.setTitle( daoUtil.getString( nIndex++ ) );
+        field.setValue( daoUtil.getString( nIndex++ ) );
+        field.setDefaultValue( daoUtil.getBoolean( nIndex++ ) );
+        field.setPosition( daoUtil.getInt( nIndex++ ) );
+        field.setValueTypeDate( daoUtil.getDate( nIndex++ ) );
+        field.setNoDisplayTitle( daoUtil.getBoolean( nIndex++ ) );
+        field.setComment( daoUtil.getString( nIndex++ ) );
+
+        return field;
     }
 }
