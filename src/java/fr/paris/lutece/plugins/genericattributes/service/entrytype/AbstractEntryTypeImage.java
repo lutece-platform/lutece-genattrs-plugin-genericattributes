@@ -60,6 +60,7 @@ import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.url.UrlItem;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 
@@ -72,6 +73,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import javax.imageio.ImageIO;
 
@@ -153,11 +155,6 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
                 response.setIterationNumber( getResponseIterationValue( request ) );
 
                 listResponse.add( response );
-
-                /*
-                 * genAttError = new GenericAttributeError( ); genAttError.setErrorMessage( StringUtils.EMPTY ); genAttError.setMandatoryError( false );
-                 * genAttError.setIsDisplayableError( false );
-                 */
                 return genAttError;
             }
 
@@ -192,6 +189,91 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
     public GenericAttributeError canUploadFiles( Entry entry, List<FileItem> listUploadedFileItems, List<FileItem> listFileItemsToUpload, Locale locale )
     {
         /** 1) Check max files */
+        GenericAttributeError error = checkNumberFiles( entry, listUploadedFileItems, listFileItemsToUpload, locale );
+        if ( error != null )
+        {
+            return error;
+        }
+
+        /** 2) Check files size */
+        error  = checkFileSize( entry, listUploadedFileItems, listFileItemsToUpload, locale );
+        if ( error != null )
+        {
+            return error;
+        }
+
+        if ( listFileItemsToUpload != null )
+        {
+            for ( FileItem fileItem : listFileItemsToUpload )
+            {
+                if ( checkForImages( ) )
+                {
+                    error = doCheckforImages( fileItem, entry, locale );
+
+                    if ( error != null )
+                    {
+                        return error;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+    
+    private GenericAttributeError checkFileSize( Entry entry, List<FileItem> listUploadedFileItems, List<FileItem> listFileItemsToUpload, Locale locale )
+    {
+        GenericAttributeError error = null;
+        Field fieldFileMaxSize = entry.getFieldByCode( FIELD_FILE_MAX_SIZE );
+        int nMaxSize = GenericAttributesUtils.CONSTANT_ID_NULL;
+
+        if ( ( fieldFileMaxSize != null ) && StringUtils.isNotBlank( fieldFileMaxSize.getValue( ) ) && StringUtils.isNumeric( fieldFileMaxSize.getValue( ) ) )
+        {
+            nMaxSize = GenericAttributesUtils.convertStringToInt( fieldFileMaxSize.getValue( ) );
+        }
+
+        // If no max size defined in the db, then fetch the default max size from the properties file
+        if ( nMaxSize == GenericAttributesUtils.CONSTANT_ID_NULL )
+        {
+            nMaxSize = AppPropertiesService.getPropertyInt( PROPERTY_UPLOAD_FILE_DEFAULT_MAX_SIZE, 5242880 );
+        }
+
+        // If nMaxSize == -1, then no size limit
+        if ( ( nMaxSize != GenericAttributesUtils.CONSTANT_ID_NULL ) && ( listFileItemsToUpload != null ) && ( listUploadedFileItems != null ) )
+        {
+            boolean bHasFileMaxSizeError = false;
+            List<FileItem> listFileItems = new ArrayList<>( );
+            listFileItems.addAll( listUploadedFileItems );
+            listFileItems.addAll( listFileItemsToUpload );
+
+            for ( FileItem fileItem : listFileItems )
+            {
+                if ( fileItem.getSize( ) > nMaxSize )
+                {
+                    bHasFileMaxSizeError = true;
+
+                    break;
+                }
+            }
+
+            if ( bHasFileMaxSizeError )
+            {
+                Object [ ] params = {
+                    nMaxSize
+                };
+                String strMessage = I18nService.getLocalizedString( PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_FILE_MAX_SIZE, params, locale );
+                error = new GenericAttributeError( );
+                error.setMandatoryError( false );
+                error.setTitleQuestion( entry.getTitle( ) );
+                error.setErrorMessage( strMessage );
+            }
+        }
+        return error;
+    }
+    
+    private GenericAttributeError checkNumberFiles( Entry entry, List<FileItem> listUploadedFileItems, List<FileItem> listFileItemsToUpload, Locale locale )
+    {
+        GenericAttributeError error = null;
         Field fieldMaxFiles = entry.getFieldByCode( FIELD_MAX_FILES );
 
         // By default, max file is set at 1
@@ -212,7 +294,7 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
                     nMaxFiles
                 };
                 String strMessage = I18nService.getLocalizedString( PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_MAX_FILES, params, locale );
-                GenericAttributeError error = new GenericAttributeError( );
+                error = new GenericAttributeError( );
                 error.setMandatoryError( false );
                 error.setTitleQuestion( entry.getTitle( ) );
                 error.setErrorMessage( strMessage );
@@ -220,72 +302,8 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
                 return error;
             }
         }
-
-        /** 2) Check files size */
-        Field fieldFileMaxSize = entry.getFieldByCode( FIELD_FILE_MAX_SIZE );
-        int nMaxSize = GenericAttributesUtils.CONSTANT_ID_NULL;
-
-        if ( ( fieldFileMaxSize != null ) && StringUtils.isNotBlank( fieldFileMaxSize.getValue( ) ) && StringUtils.isNumeric( fieldFileMaxSize.getValue( ) ) )
-        {
-            nMaxSize = GenericAttributesUtils.convertStringToInt( fieldFileMaxSize.getValue( ) );
-        }
-
-        // If no max size defined in the db, then fetch the default max size from the properties file
-        if ( nMaxSize == GenericAttributesUtils.CONSTANT_ID_NULL )
-        {
-            nMaxSize = AppPropertiesService.getPropertyInt( PROPERTY_UPLOAD_FILE_DEFAULT_MAX_SIZE, 5242880 );
-        }
-
-        // If nMaxSize == -1, then no size limit
-        if ( ( nMaxSize != GenericAttributesUtils.CONSTANT_ID_NULL ) && ( listFileItemsToUpload != null ) && ( listUploadedFileItems != null ) )
-        {
-            boolean bHasFileMaxSizeError = false;
-            List<FileItem> listFileItems = new ArrayList<FileItem>( );
-            listFileItems.addAll( listUploadedFileItems );
-            listFileItems.addAll( listFileItemsToUpload );
-
-            for ( FileItem fileItem : listFileItems )
-            {
-                if ( fileItem.getSize( ) > nMaxSize )
-                {
-                    bHasFileMaxSizeError = true;
-
-                    break;
-                }
-            }
-
-            if ( bHasFileMaxSizeError )
-            {
-                Object [ ] params = {
-                    nMaxSize
-                };
-                String strMessage = I18nService.getLocalizedString( PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_FILE_MAX_SIZE, params, locale );
-                GenericAttributeError error = new GenericAttributeError( );
-                error.setMandatoryError( false );
-                error.setTitleQuestion( entry.getTitle( ) );
-                error.setErrorMessage( strMessage );
-
-                return error;
-            }
-        }
-
-        if ( listFileItemsToUpload != null )
-        {
-            for ( FileItem fileItem : listFileItemsToUpload )
-            {
-                if ( checkForImages( ) )
-                {
-                    GenericAttributeError error = doCheckforImages( fileItem, entry, locale );
-
-                    if ( error != null )
-                    {
-                        return error;
-                    }
-                }
-            }
-        }
-
-        return null;
+        
+        return error;
     }
 
     /**
@@ -302,7 +320,7 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
 
         Field field = entry.getFieldByCode( FIELD_FILE_BINARY );
 
-        if ( ( field != null ) && StringUtils.isNotBlank( field.getValue( ) ) && Boolean.valueOf( field.getValue( ) ) )
+        if ( ( field != null ) && StringUtils.isNotBlank( field.getValue( ) ) && Boolean.TRUE.equals( Boolean.valueOf( field.getValue( ) ) ) )
         {
             if ( response.getFile( ) != null )
             {
@@ -428,24 +446,10 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
             return error;
         }
 
-        // if ( error != null )
-        // {
-        // // The file has been uploaded to the asynchronous uploaded file map, so it should be deleted
-        // HttpSession session = request.getSession( false );
-        //
-        // if ( session != null )
-        // {
-        // getAsynchronousUploadHandler( )
-        // .removeFileItem( Integer.toString( entry.getIdEntry( ) ), session.getId( ),
-        // listFilesSource.size( ) - 1 );
-        // }
-        //
-        // return error;
-        // }
         for ( FileItem fileSource : listFilesSource )
         {
             // Check mandatory attribute
-            String strFilename = ( fileSource != null ) ? FileUploadService.getFileNameOnly( fileSource ) : StringUtils.EMPTY;
+            String strFilename = Optional.ofNullable( fileSource ).map( FileUploadService::getFileNameOnly ).orElse( StringUtils.EMPTY );
 
             if ( entry.isMandatory( ) && StringUtils.isBlank( strFilename ) )
             {
@@ -457,7 +461,7 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
             // Check mime type with regular expressions
             List<RegularExpression> listRegularExpression = entry.getFields( ).get( 0 ).getRegularExpressionList( );
 
-            if ( StringUtils.isNotBlank( strFilename ) && ( listRegularExpression != null ) && !listRegularExpression.isEmpty( )
+            if ( StringUtils.isNotBlank( strFilename ) && CollectionUtils.isNotEmpty( listRegularExpression )
                     && RegularExpressionService.getInstance( ).isAvailable( ) )
             {
                 for ( RegularExpression regularExpression : listRegularExpression )
@@ -477,29 +481,6 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
 
         return null;
     }
-
-    // FINDERS
-
-    /**
-     * Get the file source from the session
-     * 
-     * @param entry
-     *            The entry
-     * @param request
-     *            the HttpServletRequest
-     * @return the file item
-     */
-
-    /*
-     * protected List<FileItem> getImageSources( Entry entry, HttpServletRequest request ) { if ( request != null ) { String sourceBase = request.getParameter((
-     * IEntryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry( ) ));
-     * 
-     * FileItem
-     * 
-     * }
-     * 
-     * return null; }
-     */
 
     // SET
 
@@ -691,7 +672,6 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
 
         file.setTitle( "crop_" + entry.getTitle( ) );
 
-        // file.setSize( 1222 );
         if ( bCreatePhysicalFile )
         {
             file.setMimeType( FileSystemUtil.getMIMEType( file.getTitle( ) ) );

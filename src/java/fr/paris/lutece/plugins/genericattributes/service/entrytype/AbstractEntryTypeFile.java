@@ -46,6 +46,7 @@ import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 
@@ -55,7 +56,8 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Abstract entries of type files. This abstract entry type extends the abstract entry type upload.
+ * Abstract entries of type files. This abstract entry type extends the abstract
+ * entry type upload.
  */
 public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
 {
@@ -69,127 +71,122 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
+            Locale locale )
     {
-        List<FileItem> listFilesSource = null;
-
-        if ( request instanceof MultipartHttpServletRequest )
+        if ( !( request instanceof MultipartHttpServletRequest ) )
         {
-            String strAttributeName = getAttributeName( entry, request );
+            return entry.isMandatory( ) ? new MandatoryError( entry, locale ) : null;
+        }
 
-            if ( getAsynchronousUploadHandler( ).hasAddFileFlag( request, strAttributeName ) )
+        String strAttributeName = getAttributeName( entry, request );
+
+        if ( getAsynchronousUploadHandler( ).hasAddFileFlag( request, strAttributeName ) )
+        {
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+            List<FileItem> listFileItemsToUpload = multipartRequest.getFileList( strAttributeName );
+            List<FileItem> listUploadedFileItems = getAsynchronousUploadHandler( )
+                    .getListUploadedFiles( strAttributeName, request.getSession( ) );
+            GenericAttributeError error = null;
+
+            // remove when multipartRequest.getFileList( ) will be fixed.
+            if ( listFileItemsToUpload.size( ) == 1 && listFileItemsToUpload.get( 0 ).getName( ).isEmpty( ) )
             {
-                MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-                List<FileItem> listFileItemsToUpload = multipartRequest.getFileList( strAttributeName );
-                List<FileItem> listUploadedFileItems = getAsynchronousUploadHandler( ).getListUploadedFiles( strAttributeName, request.getSession( ) );
-                GenericAttributeError error = null;
-
-                // remove when multipartRequest.getFileList( ) will be fixed.
-                if ( listFileItemsToUpload.size( ) == 1 && listFileItemsToUpload.get( 0 ).getName( ).isEmpty( ) )
-                {
-                    listFileItemsToUpload = null;
-                }
-
-                if ( listFileItemsToUpload != null )
-                {
-                    error = this.canUploadFiles( entry, listUploadedFileItems, listFileItemsToUpload, locale );
-                }
-
-                if ( error != null )
-                {
-                    for ( FileItem fileItem : listUploadedFileItems )
-                    {
-                        Response response = getResponseFromFile( fileItem, entry, false );
-                        response.setIterationNumber( getResponseIterationValue( request ) );
-
-                        listResponse.add( response );
-                    }
-                    return error;
-                }
+                listFileItemsToUpload = null;
             }
 
-            List<FileItem> asynchronousFileItem = getFileSources( request, strAttributeName );
-
-            if ( asynchronousFileItem != null )
+            if ( listFileItemsToUpload != null )
             {
-                listFilesSource = asynchronousFileItem;
+                error = this.canUploadFiles( entry, listUploadedFileItems, listFileItemsToUpload, locale );
             }
 
-            GenericAttributeError genAttError = null;
-
-            if ( getAsynchronousUploadHandler( ).hasRemoveFlag( request, strAttributeName )
-                    || getAsynchronousUploadHandler( ).hasAddFileFlag( request, strAttributeName ) )
+            if ( error != null )
             {
-                if ( ( listFilesSource != null ) && !listFilesSource.isEmpty( ) )
+                for ( FileItem fileItem : listUploadedFileItems )
                 {
-                    for ( FileItem fileItem : listFilesSource )
-                    {
-                        listResponse.add( getResponseFromFile( fileItem, entry, false ) );
-                    }
-                }
-
-                genAttError = new GenericAttributeError( );
-                genAttError.setErrorMessage( StringUtils.EMPTY );
-                genAttError.setMandatoryError( false );
-                genAttError.setIsDisplayableError( false );
-
-                return genAttError;
-            }
-
-            if ( ( listFilesSource != null ) && !listFilesSource.isEmpty( ) )
-            {
-                genAttError = checkResponseData( entry, listFilesSource, locale, request );
-
-                for ( FileItem fileItem : listFilesSource )
-                {
-                    Response response = getResponseFromFile( fileItem, entry, genAttError == null );
+                    Response response = getResponseFromFile( fileItem, entry, false );
                     response.setIterationNumber( getResponseIterationValue( request ) );
 
                     listResponse.add( response );
                 }
+                return error;
+            }
+        }
 
-                if ( genAttError != null )
-                {
-                    return genAttError;
-                }
+        List<FileItem> listFilesSource = getFileSources( request, strAttributeName );
 
+        GenericAttributeError genAttError = null;
+
+        if ( getAsynchronousUploadHandler( ).hasRemoveFlag( request, strAttributeName )
+                || getAsynchronousUploadHandler( ).hasAddFileFlag( request, strAttributeName ) )
+        {
+            if ( CollectionUtils.isNotEmpty( listFilesSource ) )
+            {
                 for ( FileItem fileItem : listFilesSource )
                 {
-                    if ( checkForImages( ) )
-                    {
-                        genAttError = doCheckforImages( fileItem, entry, request.getLocale( ) );
-                    }
+                    listResponse.add( getResponseFromFile( fileItem, entry, false ) );
                 }
+            }
 
+            genAttError = new GenericAttributeError( );
+            genAttError.setErrorMessage( StringUtils.EMPTY );
+            genAttError.setMandatoryError( false );
+            genAttError.setIsDisplayableError( false );
+
+            return genAttError;
+        }
+
+        if ( CollectionUtils.isNotEmpty( listFilesSource ) )
+        {
+            genAttError = checkResponseData( entry, listFilesSource, locale, request );
+
+            for ( FileItem fileItem : listFilesSource )
+            {
+                Response response = getResponseFromFile( fileItem, entry, genAttError == null );
+                response.setIterationNumber( getResponseIterationValue( request ) );
+
+                listResponse.add( response );
+            }
+
+            if ( genAttError != null )
+            {
                 return genAttError;
             }
 
-            if ( entry.isMandatory( ) )
+            for ( FileItem fileItem : listFilesSource )
             {
-                genAttError = new MandatoryError( entry, locale );
-
-                Response response = new Response( );
-                response.setEntry( entry );
-                response.setIterationNumber( getResponseIterationValue( request ) );
-                listResponse.add( response );
+                if ( checkForImages( ) )
+                {
+                    genAttError = doCheckforImages( fileItem, entry, request.getLocale( ) );
+                }
             }
 
             return genAttError;
         }
 
-        return entry.isMandatory( ) ? new MandatoryError( entry, locale ) : null;
+        if ( entry.isMandatory( ) )
+        {
+            genAttError = new MandatoryError( entry, locale );
+
+            Response response = new Response( );
+            response.setEntry( entry );
+            response.setIterationNumber( getResponseIterationValue( request ) );
+            listResponse.add( response );
+        }
+
+        return genAttError;
     }
 
     /**
      * Get a generic attributes response from a file item
      * 
-     * @param fileItem
-     *            The file item
-     * @param entry
-     *            The entry
-     * @param bCreatePhysicalFile
-     *            True to create the physical file associated with the file of the response, false otherwise. Note that the physical file will never be saved in
-     *            the database by this method, like any other created object.
+     * @param fileItem            The file item
+     * @param entry               The entry
+     * @param bCreatePhysicalFile True to create the physical file associated with
+     *                            the file of the response, false otherwise. Note
+     *                            that the physical file will never be saved in the
+     *                            database by this method, like any other created
+     *                            object.
      * @return The created response
      */
     private Response getResponseFromFile( FileItem fileItem, Entry entry, boolean bCreatePhysicalFile )

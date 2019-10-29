@@ -68,7 +68,9 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
         initCommonRequestData( entry, request );
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
-        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
+        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
+                ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( )
+                : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strValue = request.getParameter( PARAMETER_VALUE );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
@@ -86,11 +88,11 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, locale )
-            };
+            Object[] tabRequiredFields =
+            { I18nService.getLocalizedString( strFieldError, locale ) };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
+                    AdminMessage.TYPE_STOP );
         }
 
         Date dDateValue = null;
@@ -126,77 +128,76 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
+            Locale locale )
     {
         String strValueEntry = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ).trim( );
         Response response = new Response( );
         response.setEntry( entry );
 
-        if ( strValueEntry != null )
+        if ( strValueEntry == null )
         {
-            Date tDateValue = DateUtil.formatDate( strValueEntry, locale );
+            return null;
+        }
 
-            if ( tDateValue != null )
-            {
-                response.setResponseValue( DateUtil.getDateString( tDateValue, locale ) );
-            }
-            else
-            {
-                response.setResponseValue( strValueEntry );
-            }
+        Date tDateValue = DateUtil.formatDate( strValueEntry, locale );
 
-            if ( StringUtils.isNotBlank( response.getResponseValue( ) ) )
-            {
-                Date date = DateUtil.formatDate( response.getResponseValue( ), request.getLocale( ) );
+        if ( tDateValue != null )
+        {
+            response.setResponseValue( DateUtil.getDateString( tDateValue, locale ) );
+        }
+        else
+        {
+            response.setResponseValue( strValueEntry );
+        }
 
-                if ( date != null )
-                {
-                    response.setToStringValueResponse( getResponseValueForRecap( entry, request, response, locale ) );
-                }
-                else
-                {
-                    response.setToStringValueResponse( StringUtils.EMPTY );
-                }
+        if ( StringUtils.isNotBlank( response.getResponseValue( ) ) )
+        {
+            Date date = DateUtil.formatDate( response.getResponseValue( ), request.getLocale( ) );
+
+            if ( date != null )
+            {
+                response.setToStringValueResponse( getResponseValueForRecap( entry, request, response, locale ) );
             }
             else
             {
                 response.setToStringValueResponse( StringUtils.EMPTY );
             }
-
-            response.setIterationNumber( getResponseIterationValue( request ) );
-            listResponse.add( response );
-
-            // Checks if the entry value contains XSS characters
-            if ( StringUtil.containsXssCharacters( strValueEntry ) )
-            {
-                GenericAttributeError error = new GenericAttributeError( );
-                error.setMandatoryError( false );
-                error.setTitleQuestion( entry.getTitle( ) );
-                error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_XSS_FIELD, request.getLocale( ) ) );
-
-                return error;
-            }
-
-            if ( entry.isMandatory( ) )
-            {
-                if ( StringUtils.isBlank( strValueEntry ) )
-                {
-                    return new MandatoryError( entry, locale );
-                }
-            }
-
-            if ( StringUtils.isNotBlank( strValueEntry ) && ( tDateValue == null ) )
-            {
-                String strError = I18nService.getLocalizedString( MESSAGE_ILLOGICAL_DATE, locale );
-                GenericAttributeError error = new GenericAttributeError( );
-                error.setTitleQuestion( entry.getTitle( ) );
-                error.setMandatoryError( false );
-                error.setErrorMessage( strError );
-
-                return error;
-            }
+        }
+        else
+        {
+            response.setToStringValueResponse( StringUtils.EMPTY );
         }
 
+        response.setIterationNumber( getResponseIterationValue( request ) );
+        listResponse.add( response );
+
+        // Checks if the entry value contains XSS characters
+        if ( StringUtil.containsXssCharacters( strValueEntry ) )
+        {
+            GenericAttributeError error = new GenericAttributeError( );
+            error.setMandatoryError( false );
+            error.setTitleQuestion( entry.getTitle( ) );
+            error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_XSS_FIELD, request.getLocale( ) ) );
+
+            return error;
+        }
+
+        if ( entry.isMandatory( ) && StringUtils.isBlank( strValueEntry ) )
+        {
+            return new MandatoryError( entry, locale );
+        }
+
+        if ( StringUtils.isNotBlank( strValueEntry ) && ( tDateValue == null ) )
+        {
+            String strError = I18nService.getLocalizedString( MESSAGE_ILLOGICAL_DATE, locale );
+            GenericAttributeError error = new GenericAttributeError( );
+            error.setTitleQuestion( entry.getTitle( ) );
+            error.setMandatoryError( false );
+            error.setErrorMessage( strError );
+
+            return error;
+        }
         return null;
     }
 
