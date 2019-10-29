@@ -106,15 +106,18 @@ public final class EntryHome
                 FieldHome.copy( field );
             }
 
-            if ( entryCopy.getEntryType( ).getGroup( ) )
+            if ( Boolean.TRUE.equals( entryCopy.getEntryType( ).getGroup( ) ) )
             {
                 for ( Entry entryChild : entry.getChildren( ) )
                 {
                     entryChild = EntryHome.findByPrimaryKey( entryChild.getIdEntry( ) );
-                    entryChild.setParent( entryCopy );
-                    entryChild.setIdResource( entryCopy.getIdResource( ) );
-                    entryChild.setResourceType( entryCopy.getResourceType( ) );
-                    copy( entryChild );
+                    if ( entryChild != null )
+                    {
+                        entryChild.setParent( entryCopy );
+                        entryChild.setIdResource( entryCopy.getIdResource( ) );
+                        entryChild.setResourceType( entryCopy.getResourceType( ) );
+                        copy( entryChild );
+                    }
                 }
             }
             ResourceEvent event = new ResourceEvent( );

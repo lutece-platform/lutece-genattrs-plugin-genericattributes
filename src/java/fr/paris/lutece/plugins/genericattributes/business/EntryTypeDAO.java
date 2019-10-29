@@ -57,11 +57,13 @@ public class EntryTypeDAO implements IEntryTypeDAO
     @Override
     public EntryType load( int idKey, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
+        EntryType entryType = null;
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
+        {
         daoUtil.setInt( 1, idKey );
         daoUtil.executeQuery( );
 
-        EntryType entryType = null;
+        
 
         if ( daoUtil.next( ) )
         {
@@ -76,7 +78,7 @@ public class EntryTypeDAO implements IEntryTypeDAO
             entryType.setPlugin( daoUtil.getString( 8 ) );
         }
 
-        daoUtil.free( );
+        }
 
         return entryType;
     }
@@ -87,16 +89,15 @@ public class EntryTypeDAO implements IEntryTypeDAO
     @Override
     public List<EntryType> select( String strPlugin, Plugin plugin )
     {
-        List<EntryType> listEntryType = new ArrayList<EntryType>( );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
+        List<EntryType> listEntryType = new ArrayList<>( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
+        {
         daoUtil.setString( 1, strPlugin );
         daoUtil.executeQuery( );
 
-        EntryType entryType = null;
-
         while ( daoUtil.next( ) )
         {
-            entryType = new EntryType( );
+            EntryType entryType = new EntryType( );
             entryType.setIdType( daoUtil.getInt( 1 ) );
             entryType.setTitle( daoUtil.getString( 2 ) );
             entryType.setGroup( daoUtil.getBoolean( 3 ) );
@@ -108,7 +109,7 @@ public class EntryTypeDAO implements IEntryTypeDAO
             listEntryType.add( entryType );
         }
 
-        daoUtil.free( );
+        }
 
         return listEntryType;
     }
