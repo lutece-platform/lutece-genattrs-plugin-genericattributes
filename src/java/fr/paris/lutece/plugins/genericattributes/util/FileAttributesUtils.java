@@ -66,30 +66,35 @@ public final class FileAttributesUtils
     private static final String PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_MAX_FILES = "genericattributes.message.error.uploading_file.max_files";
     public static final String PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_FILE_MAX_SIZE = "genericattributes.message.error.uploading_file.file_max_size";
     public static final String PROPERTY_UPLOAD_FILE_DEFAULT_MAX_SIZE = "genericattributes.upload.file.default_max_size";
+
     private FileAttributesUtils( )
     {
         // Empty Contructor
     }
-    
-    public static GenericAttributeError checkFileSize( Entry entry, List<FileItem> listUploadedFileItems, List<FileItem> listFileItemsToUpload, Locale locale )
+
+    public static GenericAttributeError checkFileSize( Entry entry, List<FileItem> listUploadedFileItems,
+            List<FileItem> listFileItemsToUpload, Locale locale )
     {
         GenericAttributeError error = null;
         Field fieldFileMaxSize = entry.getFieldByCode( IEntryTypeService.FIELD_FILE_MAX_SIZE );
         int nMaxSize = GenericAttributesUtils.CONSTANT_ID_NULL;
 
-        if ( ( fieldFileMaxSize != null ) && StringUtils.isNotBlank( fieldFileMaxSize.getValue( ) ) && StringUtils.isNumeric( fieldFileMaxSize.getValue( ) ) )
+        if ( ( fieldFileMaxSize != null ) && StringUtils.isNotBlank( fieldFileMaxSize.getValue( ) )
+                && StringUtils.isNumeric( fieldFileMaxSize.getValue( ) ) )
         {
             nMaxSize = GenericAttributesUtils.convertStringToInt( fieldFileMaxSize.getValue( ) );
         }
 
-        // If no max size defined in the db, then fetch the default max size from the properties file
+        // If no max size defined in the db, then fetch the default max size from the
+        // properties file
         if ( nMaxSize == GenericAttributesUtils.CONSTANT_ID_NULL )
         {
             nMaxSize = AppPropertiesService.getPropertyInt( PROPERTY_UPLOAD_FILE_DEFAULT_MAX_SIZE, 5242880 );
         }
 
         // If nMaxSize == -1, then no size limit
-        if ( ( nMaxSize != GenericAttributesUtils.CONSTANT_ID_NULL ) && ( listFileItemsToUpload != null ) && ( listUploadedFileItems != null ) )
+        if ( ( nMaxSize != GenericAttributesUtils.CONSTANT_ID_NULL ) && ( listFileItemsToUpload != null )
+                && ( listUploadedFileItems != null ) )
         {
             boolean bHasFileMaxSizeError = false;
             List<FileItem> listFileItems = new ArrayList<>( );
@@ -108,10 +113,10 @@ public final class FileAttributesUtils
 
             if ( bHasFileMaxSizeError )
             {
-                Object [ ] params = {
-                    nMaxSize
-                };
-                String strMessage = I18nService.getLocalizedString( PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_FILE_MAX_SIZE, params, locale );
+                Object[] params =
+                { nMaxSize };
+                String strMessage = I18nService.getLocalizedString( PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_FILE_MAX_SIZE,
+                        params, locale );
                 error = new GenericAttributeError( );
                 error.setMandatoryError( false );
                 error.setTitleQuestion( entry.getTitle( ) );
@@ -120,8 +125,9 @@ public final class FileAttributesUtils
         }
         return error;
     }
-    
-    public static GenericAttributeError checkNumberFiles( Entry entry, List<FileItem> listUploadedFileItems, List<FileItem> listFileItemsToUpload, Locale locale )
+
+    public static GenericAttributeError checkNumberFiles( Entry entry, List<FileItem> listUploadedFileItems,
+            List<FileItem> listFileItemsToUpload, Locale locale )
     {
         GenericAttributeError error = null;
         Field fieldMaxFiles = entry.getFieldByCode( IEntryTypeService.FIELD_MAX_FILES );
@@ -129,7 +135,8 @@ public final class FileAttributesUtils
         // By default, max file is set at 1
         int nMaxFiles = 1;
 
-        if ( ( fieldMaxFiles != null ) && StringUtils.isNotBlank( fieldMaxFiles.getValue( ) ) && StringUtils.isNumeric( fieldMaxFiles.getValue( ) ) )
+        if ( ( fieldMaxFiles != null ) && StringUtils.isNotBlank( fieldMaxFiles.getValue( ) )
+                && StringUtils.isNumeric( fieldMaxFiles.getValue( ) ) )
         {
             nMaxFiles = GenericAttributesUtils.convertStringToInt( fieldMaxFiles.getValue( ) );
         }
@@ -140,10 +147,10 @@ public final class FileAttributesUtils
 
             if ( nNbFiles > nMaxFiles )
             {
-                Object [ ] params = {
-                    nMaxFiles
-                };
-                String strMessage = I18nService.getLocalizedString( PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_MAX_FILES, params, locale );
+                Object[] params =
+                { nMaxFiles };
+                String strMessage = I18nService.getLocalizedString( PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_MAX_FILES,
+                        params, locale );
                 error = new GenericAttributeError( );
                 error.setMandatoryError( false );
                 error.setTitleQuestion( entry.getTitle( ) );
@@ -152,17 +159,15 @@ public final class FileAttributesUtils
                 return error;
             }
         }
-        
+
         return error;
     }
-    
+
     /**
      * Check the entry data
      * 
-     * @param request
-     *            the HTTP request
-     * @param locale
-     *            the locale
+     * @param request the HTTP request
+     * @param locale  the locale
      * @return the error message url if there is an error, an empty string otherwise
      */
     public static String checkEntryData( HttpServletRequest request, Locale locale )
@@ -170,74 +175,57 @@ public final class FileAttributesUtils
         String strTitle = request.getParameter( IEntryTypeService.PARAMETER_TITLE );
         String strMaxFiles = request.getParameter( IEntryTypeService.PARAMETER_MAX_FILES );
         String strFileMaxSize = request.getParameter( IEntryTypeService.PARAMETER_FILE_MAX_SIZE );
-        String strWidth = request.getParameter( IEntryTypeService.PARAMETER_WIDTH );
         String strFieldError = StringUtils.EMPTY;
 
         if ( StringUtils.isBlank( strTitle ) )
         {
             strFieldError = IEntryTypeService.ERROR_FIELD_TITLE;
         }
-        else
-            if ( StringUtils.isBlank( strMaxFiles ) )
-            {
-                strFieldError = IEntryTypeService.ERROR_FIELD_MAX_FILES;
-            }
-            else
-                if ( StringUtils.isBlank( strFileMaxSize ) )
-                {
-                    strFieldError = IEntryTypeService.ERROR_FIELD_FILE_MAX_SIZE;
-                }
-                else
-                    if ( StringUtils.isBlank( strWidth ) )
-                    {
-                        strFieldError = IEntryTypeService.ERROR_FIELD_WIDTH;
-                    }
+        else if ( StringUtils.isBlank( strMaxFiles ) )
+        {
+            strFieldError = IEntryTypeService.ERROR_FIELD_MAX_FILES;
+        }
+        else if ( StringUtils.isBlank( strFileMaxSize ) )
+        {
+            strFieldError = IEntryTypeService.ERROR_FIELD_FILE_MAX_SIZE;
+        }
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, locale )
-            };
+            Object[] tabRequiredFields =
+            { I18nService.getLocalizedString( strFieldError, locale ) };
 
-            return AdminMessageService.getMessageUrl( request, IEntryTypeService.MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, IEntryTypeService.MESSAGE_MANDATORY_FIELD,
+                    tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         if ( !StringUtils.isNumeric( strMaxFiles ) )
         {
             strFieldError = IEntryTypeService.ERROR_FIELD_MAX_FILES;
         }
-        else
-            if ( !StringUtils.isNumeric( strFileMaxSize ) )
-            {
-                strFieldError = IEntryTypeService.ERROR_FIELD_FILE_MAX_SIZE;
-            }
-
-        if ( !StringUtils.isNumeric( strWidth ) )
+        else if ( !StringUtils.isNumeric( strFileMaxSize ) )
         {
-            strFieldError = IEntryTypeService.ERROR_FIELD_WIDTH;
+            strFieldError = IEntryTypeService.ERROR_FIELD_FILE_MAX_SIZE;
         }
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, locale )
-            };
+            Object[] tabRequiredFields =
+            { I18nService.getLocalizedString( strFieldError, locale ) };
 
-            return AdminMessageService.getMessageUrl( request, IEntryTypeService.MESSAGE_NUMERIC_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, IEntryTypeService.MESSAGE_NUMERIC_FIELD,
+                    tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         return StringUtils.EMPTY;
     }
-    
+
     /**
      * Check the record field data
      * 
-     * @param entry
-     *            The entry
-     * @param listFilesSource
-     *            the list of source files to upload
-     * @param locale
-     *            the locale
+     * @param entry           The entry
+     * @param listFilesSource the list of source files to upload
+     * @param locale          the locale
      * @return The error if there is any
      */
     public static GenericAttributeError checkResponseData( Entry entry, List<FileItem> listFilesSource, Locale locale )
@@ -245,7 +233,8 @@ public final class FileAttributesUtils
         for ( FileItem fileSource : listFilesSource )
         {
             // Check mandatory attribute
-            String strFilename = Optional.ofNullable( fileSource ).map( FileUploadService::getFileNameOnly ).orElse( StringUtils.EMPTY );
+            String strFilename = Optional.ofNullable( fileSource ).map( FileUploadService::getFileNameOnly )
+                    .orElse( StringUtils.EMPTY );
 
             if ( entry.isMandatory( ) && StringUtils.isBlank( strFilename ) )
             {
@@ -277,14 +266,12 @@ public final class FileAttributesUtils
 
         return null;
     }
-    
+
     /**
      * Set the list of fields
      * 
-     * @param entry
-     *            The entry
-     * @param request
-     *            the HTTP request
+     * @param entry   The entry
+     * @param request the HTTP request
      */
     public static void createOrUpdateFileFields( Entry entry, HttpServletRequest request )
     {
@@ -296,8 +283,11 @@ public final class FileAttributesUtils
 
         String strExportBinary = request.getParameter( IEntryTypeService.PARAMETER_EXPORT_BINARY );
 
-        GenericAttributesUtils.createOrUpdateField( entry, IEntryTypeService.FIELD_FILE_MAX_SIZE, null, String.valueOf( nFileMaxSize ) );
-        GenericAttributesUtils.createOrUpdateField( entry, IEntryTypeService.FIELD_MAX_FILES, null, String.valueOf( nMaxFiles ) );
-        GenericAttributesUtils.createOrUpdateField( entry, IEntryTypeService.FIELD_FILE_BINARY, null, Boolean.toString( StringUtils.isNotBlank( strExportBinary ) ) );
+        GenericAttributesUtils.createOrUpdateField( entry, IEntryTypeService.FIELD_FILE_MAX_SIZE, null,
+                String.valueOf( nFileMaxSize ) );
+        GenericAttributesUtils.createOrUpdateField( entry, IEntryTypeService.FIELD_MAX_FILES, null,
+                String.valueOf( nMaxFiles ) );
+        GenericAttributesUtils.createOrUpdateField( entry, IEntryTypeService.FIELD_FILE_BINARY, null,
+                Boolean.toString( StringUtils.isNotBlank( strExportBinary ) ) );
     }
 }
