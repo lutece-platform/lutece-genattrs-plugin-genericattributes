@@ -33,22 +33,22 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
-import fr.paris.lutece.plugins.genericattributes.business.Entry;
-import fr.paris.lutece.plugins.genericattributes.business.Field;
-import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
-import fr.paris.lutece.plugins.genericattributes.business.Response;
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.util.ReferenceList;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
+
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
+import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.util.ReferenceList;
 
 /**
  * Abstract implementation of IEntryTypeService
@@ -160,24 +160,9 @@ public abstract class EntryTypeService implements IEntryTypeService
             entry.setFields( new ArrayList<>( ) );
         }
         String strUsedCorrectResponse = request.getParameter( PARAMETER_USED_CORRECT_RESPONSE );
-        createOrUpdateField( entry, FIELD_USED_CORRECT_RESPONSE, null, String.valueOf( strUsedCorrectResponse != null ) );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_USED_CORRECT_RESPONSE, null, String.valueOf( strUsedCorrectResponse != null ) );
 
         String strUsedCompleteResponse = request.getParameter( PARAMETER_USED_COMPLETE_RESPONSE );
-        createOrUpdateField( entry, FIELD_USED_COMPLETE_RESPONSE, null, String.valueOf( strUsedCompleteResponse != null ) );
-    }
-
-    protected Field createOrUpdateField( Entry entry, String strCode, String strTitle, String strValue )
-    {
-        Field field = entry.getFieldByCode( strCode );
-        if ( field == null )
-        {
-            field = new Field( );
-            field.setCode( strCode );
-            field.setParentEntry( entry );
-            entry.getFields( ).add( field );
-        }
-        field.setTitle( strTitle );
-        field.setValue( strValue );
-        return field;
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_USED_COMPLETE_RESPONSE, null, String.valueOf( strUsedCompleteResponse != null ) );
     }
 }

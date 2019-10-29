@@ -45,6 +45,7 @@ import org.apache.commons.lang.StringUtils;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -102,7 +103,7 @@ public abstract class AbstractEntryTypeSession extends EntryTypeService
         entry.setMandatory( StringUtils.isNotEmpty( strMandatory ) );
         entry.setUnique( false );
 
-        createOrUpdateField( entry, FIELD_ATTRIBUTE_NAME, strTitle, strAttibuteName );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_ATTRIBUTE_NAME, strTitle, strAttibuteName );
         return null;
     }
 

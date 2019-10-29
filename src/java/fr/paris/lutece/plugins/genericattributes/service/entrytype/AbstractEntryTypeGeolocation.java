@@ -140,14 +140,14 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
          * for label geographical object and 1 for thematic geographical object
          **/
         createOrUpdateProviderField( entry, strMapProvider );
-        createOrUpdateField( entry, FIELD_EDIT_MODE, null, strEditMode );
-        createOrUpdateField( entry, FIELD_VIEW_NUMBER, null, strViewNumber );
-        createOrUpdateField( entry, FIELD_ID_ADDRESS, null, FIELD_ID_ADDRESS );
-        createOrUpdateField( entry, FIELD_ADDRESS, null, FIELD_ADDRESS );
-        createOrUpdateField( entry, FIELD_ADDITIONAL_ADDRESS, null, FIELD_ADDITIONAL_ADDRESS );
-        createOrUpdateField( entry, FIELD_X, null, FIELD_X );
-        createOrUpdateField( entry, FIELD_Y, null, FIELD_Y );
-        createOrUpdateField( entry, FIELD_GEOMETRY, null, FIELD_GEOMETRY );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_EDIT_MODE, null, strEditMode );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_VIEW_NUMBER, null, strViewNumber );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_ID_ADDRESS, null, FIELD_ID_ADDRESS );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_ADDRESS, null, FIELD_ADDRESS );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_ADDITIONAL_ADDRESS, null, FIELD_ADDITIONAL_ADDRESS );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_X, null, FIELD_X );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_Y, null, FIELD_Y );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_GEOMETRY, null, FIELD_GEOMETRY );
 
         entry.setTitle( strTitle );
         entry.setHelpMessage( strHelpMessage );
@@ -202,7 +202,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
          */
         if ( fieldIdAddress == null )
         {
-            fieldIdAddress = createOrUpdateField( entry, FIELD_ID_ADDRESS, null, FIELD_ID_ADDRESS );
+            fieldIdAddress = GenericAttributesUtils.createOrUpdateField( entry, FIELD_ID_ADDRESS, null, FIELD_ID_ADDRESS );
             FieldHome.create( fieldIdAddress );
         }
 

@@ -44,6 +44,7 @@ import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.editor.EditorBbcodeService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
@@ -156,10 +157,10 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         entry.setCSSClass( strCSSClass );
         setUseRichText( entry, Boolean.parseBoolean( strUseRichText ) );
 
-        createOrUpdateField( entry, FIELD_TEXT_CONF, null, strValue );
-        createOrUpdateField( entry, FIELD_MAX_SIZE, null, String.valueOf( nMaxSizeEnter ) );
-        createOrUpdateField( entry, FIELD_WIDTH, null, String.valueOf( nWidth ) );
-        createOrUpdateField( entry, FIELD_HEIGHT, null, String.valueOf( nHeight ) );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_TEXT_CONF, null, strValue );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_MAX_SIZE, null, String.valueOf( nMaxSizeEnter ) );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_WIDTH, null, String.valueOf( nWidth ) );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_HEIGHT, null, String.valueOf( nHeight ) );
 
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );

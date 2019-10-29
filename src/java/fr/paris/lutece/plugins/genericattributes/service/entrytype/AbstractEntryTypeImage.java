@@ -40,13 +40,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 
@@ -59,14 +57,11 @@ import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.file.FileService;
 import fr.paris.lutece.plugins.genericattributes.util.FileAttributesUtils;
-import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
 import fr.paris.lutece.portal.service.fileupload.FileUploadService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.message.AdminMessage;
-import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -81,8 +76,6 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
 {
     // PARAMETERS
     protected static final String PARAMETER_ID_RESPONSE = "id_response";
-    protected static final String PARAMETER_MAX_FILES = "max_files";
-    protected static final String PARAMETER_FILE_MAX_SIZE = "file_max_size";
     protected static final String PARAMETER_EXPORT_BINARY = "export_binary";
 
     // CONSTANTS
@@ -256,79 +249,6 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
     // CHECKS
 
     /**
-     * Check the entry data
-     * 
-     * @param request
-     *            the HTTP request
-     * @param locale
-     *            the locale
-     * @return the error message url if there is an error, an empty string otherwise
-     */
-    protected String checkEntryData( HttpServletRequest request, Locale locale )
-    {
-        String strTitle = request.getParameter( PARAMETER_TITLE );
-        String strMaxFiles = request.getParameter( PARAMETER_MAX_FILES );
-        String strFileMaxSize = request.getParameter( PARAMETER_FILE_MAX_SIZE );
-        String strWidth = request.getParameter( PARAMETER_WIDTH );
-        String strFieldError = StringUtils.EMPTY;
-
-        if ( StringUtils.isBlank( strTitle ) )
-        {
-            strFieldError = ERROR_FIELD_TITLE;
-        }
-        else
-            if ( StringUtils.isBlank( strMaxFiles ) )
-            {
-                strFieldError = ERROR_FIELD_MAX_FILES;
-            }
-            else
-                if ( StringUtils.isBlank( strFileMaxSize ) )
-                {
-                    strFieldError = ERROR_FIELD_FILE_MAX_SIZE;
-                }
-                else
-                    if ( StringUtils.isBlank( strWidth ) )
-                    {
-                        strFieldError = ERROR_FIELD_WIDTH;
-                    }
-
-        if ( StringUtils.isNotBlank( strFieldError ) )
-        {
-            Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, locale )
-            };
-
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
-        }
-
-        if ( !StringUtils.isNumeric( strMaxFiles ) )
-        {
-            strFieldError = ERROR_FIELD_MAX_FILES;
-        }
-        else
-            if ( !StringUtils.isNumeric( strFileMaxSize ) )
-            {
-                strFieldError = ERROR_FIELD_FILE_MAX_SIZE;
-            }
-
-        if ( !StringUtils.isNumeric( strWidth ) )
-        {
-            strFieldError = ERROR_FIELD_WIDTH;
-        }
-
-        if ( StringUtils.isNotBlank( strFieldError ) )
-        {
-            Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, locale )
-            };
-
-            return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
-        }
-
-        return StringUtils.EMPTY;
-    }
-
-    /**
      * Check the record field data
      * 
      * @param entry
@@ -351,66 +271,7 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
         {
             return error;
         }
-
-        for ( FileItem fileSource : listFilesSource )
-        {
-            // Check mandatory attribute
-            String strFilename = Optional.ofNullable( fileSource ).map( FileUploadService::getFileNameOnly ).orElse( StringUtils.EMPTY );
-
-            if ( entry.isMandatory( ) && StringUtils.isBlank( strFilename ) )
-            {
-                return new MandatoryError( entry, locale );
-            }
-
-            String strMimeType = FileSystemUtil.getMIMEType( strFilename );
-
-            // Check mime type with regular expressions
-            List<RegularExpression> listRegularExpression = entry.getFields( ).get( 0 ).getRegularExpressionList( );
-
-            if ( StringUtils.isNotBlank( strFilename ) && CollectionUtils.isNotEmpty( listRegularExpression )
-                    && RegularExpressionService.getInstance( ).isAvailable( ) )
-            {
-                for ( RegularExpression regularExpression : listRegularExpression )
-                {
-                    if ( !RegularExpressionService.getInstance( ).isMatches( strMimeType, regularExpression ) )
-                    {
-                        error = new GenericAttributeError( );
-                        error.setMandatoryError( false );
-                        error.setTitleQuestion( entry.getTitle( ) );
-                        error.setErrorMessage( regularExpression.getErrorMessage( ) );
-
-                        return error;
-                    }
-                }
-            }
-        }
-
-        return null;
-    }
-
-    // SET
-
-    /**
-     * Set the list of fields
-     * 
-     * @param entry
-     *            The entry
-     * @param request
-     *            the HTTP request
-     */
-    protected void createOrUpdateFileFields( Entry entry, HttpServletRequest request )
-    {
-        String strFileMaxSize = request.getParameter( PARAMETER_FILE_MAX_SIZE );
-        int nFileMaxSize = GenericAttributesUtils.convertStringToInt( strFileMaxSize );
-
-        String strMaxFiles = request.getParameter( PARAMETER_MAX_FILES );
-        int nMaxFiles = GenericAttributesUtils.convertStringToInt( strMaxFiles );
-
-        String strExportBinary = request.getParameter( PARAMETER_EXPORT_BINARY );
-
-        createOrUpdateField( entry, FIELD_FILE_MAX_SIZE, null, String.valueOf( nFileMaxSize ) );
-        createOrUpdateField( entry, FIELD_MAX_FILES, null, String.valueOf( nMaxFiles ) );
-        createOrUpdateField( entry, FIELD_FILE_BINARY, null, Boolean.toString( StringUtils.isNotBlank( strExportBinary ) ) );
+        return FileAttributesUtils.checkResponseData( entry, listFilesSource, locale );
     }
 
     // PRIVATE METHODS
@@ -432,7 +293,7 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
 
-        String strError = this.checkEntryData( request, locale );
+        String strError = FileAttributesUtils.checkEntryData( request, locale );
 
         if ( StringUtils.isNotBlank( strError ) )
         {
@@ -446,7 +307,7 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
         entry.setCode( strCode );
         entry.setIndexed( strIndexed != null );
 
-        createOrUpdateFileFields( entry, request );
+        FileAttributesUtils.createOrUpdateFileFields( entry, request );
 
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );

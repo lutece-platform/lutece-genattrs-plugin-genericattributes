@@ -33,23 +33,24 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
-import fr.paris.lutece.plugins.genericattributes.business.Entry;
-import fr.paris.lutece.plugins.genericattributes.business.Field;
-import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
-import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
-import fr.paris.lutece.plugins.genericattributes.business.Response;
-import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.message.AdminMessage;
-import fr.paris.lutece.portal.service.message.AdminMessageService;
-
-import org.apache.commons.lang.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.Field;
+import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
+import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
+import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.message.AdminMessage;
+import fr.paris.lutece.portal.service.message.AdminMessageService;
 
 /**
  * Abstract entry type for check boxes
@@ -121,8 +122,8 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
         entry.setComment( strComment );
         entry.setCSSClass( null );
 
-        createOrUpdateField( entry, FIELD_ARRAY_ROW, null, String.valueOf( row ) );
-        createOrUpdateField( entry, FIELD_ARRAY_COLUMN, null, String.valueOf( column ) );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_ARRAY_ROW, null, String.valueOf( row ) );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_ARRAY_COLUMN, null, String.valueOf( column ) );
 
         List<Field> newFields = new ArrayList<>( );
 

@@ -46,6 +46,7 @@ import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
@@ -153,9 +154,9 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         entry.setErrorMessage( strErrorMessage );
         entry.setCode( strCode );
 
-        createOrUpdateField( entry, FIELD_TEXT_CONF, null, strValue );
-        createOrUpdateField( entry, FIELD_WIDTH, null, String.valueOf( nWidth ) );
-        createOrUpdateField( entry, FIELD_MAX_SIZE, null, String.valueOf( nMaxSizeEnter ) );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_TEXT_CONF, null, strValue );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_WIDTH, null, String.valueOf( nWidth ) );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_MAX_SIZE, null, String.valueOf( nMaxSizeEnter ) );
 
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
@@ -169,7 +170,7 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
             fieldTitle = strConfirmFieldTitle;
         }
 
-        createOrUpdateField( entry, FIELD_CONFIRM, fieldTitle, String.valueOf( confirm ) );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_CONFIRM, fieldTitle, String.valueOf( confirm ) );
         entry.setUnique( strUnique != null );
         return null;
     }

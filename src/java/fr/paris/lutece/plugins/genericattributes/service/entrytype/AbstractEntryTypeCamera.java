@@ -175,10 +175,10 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
         entry.setErrorMessage( strErrorMessage );
         entry.setCode( strCode );
 
-        createOrUpdateField( entry, FIELD_IMAGE_TYPE, null, strTypeImage );
-        createOrUpdateField( entry, FIELD_WIDTH, null, String.valueOf( nWidth ) );
-        createOrUpdateField( entry, FIELD_HEIGHT, null, String.valueOf( nheight ) );
-        createOrUpdateField( entry, FIELD_MAX_SIZE, null, String.valueOf( nMaxImageSize ) );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_IMAGE_TYPE, null, strTypeImage );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_WIDTH, null, String.valueOf( nWidth ) );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_HEIGHT, null, String.valueOf( nheight ) );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_MAX_SIZE, null, String.valueOf( nMaxImageSize ) );
 
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );

@@ -46,6 +46,7 @@ import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -113,7 +114,7 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
         entry.setComment( strComment );
         entry.setCSSClass( strCSSClass );
 
-        Field field = createOrUpdateField( entry, FIELD_DATE_VALUE, null, null );
+        Field field = GenericAttributesUtils.createOrUpdateField( entry, FIELD_DATE_VALUE, null, null );
         field.setValueTypeDate( dDateValue );
 
         entry.setMandatory( strMandatory != null );

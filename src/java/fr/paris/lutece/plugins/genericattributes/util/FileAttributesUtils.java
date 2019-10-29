@@ -36,16 +36,27 @@ package fr.paris.lutece.plugins.genericattributes.util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
+import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
+import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
+import fr.paris.lutece.portal.service.fileupload.FileUploadService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.message.AdminMessage;
+import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import fr.paris.lutece.util.filesystem.FileSystemUtil;
 
 /**
  * Utility class of plugin generic attributes
@@ -143,5 +154,150 @@ public final class FileAttributesUtils
         }
         
         return error;
+    }
+    
+    /**
+     * Check the entry data
+     * 
+     * @param request
+     *            the HTTP request
+     * @param locale
+     *            the locale
+     * @return the error message url if there is an error, an empty string otherwise
+     */
+    public static String checkEntryData( HttpServletRequest request, Locale locale )
+    {
+        String strTitle = request.getParameter( IEntryTypeService.PARAMETER_TITLE );
+        String strMaxFiles = request.getParameter( IEntryTypeService.PARAMETER_MAX_FILES );
+        String strFileMaxSize = request.getParameter( IEntryTypeService.PARAMETER_FILE_MAX_SIZE );
+        String strWidth = request.getParameter( IEntryTypeService.PARAMETER_WIDTH );
+        String strFieldError = StringUtils.EMPTY;
+
+        if ( StringUtils.isBlank( strTitle ) )
+        {
+            strFieldError = IEntryTypeService.ERROR_FIELD_TITLE;
+        }
+        else
+            if ( StringUtils.isBlank( strMaxFiles ) )
+            {
+                strFieldError = IEntryTypeService.ERROR_FIELD_MAX_FILES;
+            }
+            else
+                if ( StringUtils.isBlank( strFileMaxSize ) )
+                {
+                    strFieldError = IEntryTypeService.ERROR_FIELD_FILE_MAX_SIZE;
+                }
+                else
+                    if ( StringUtils.isBlank( strWidth ) )
+                    {
+                        strFieldError = IEntryTypeService.ERROR_FIELD_WIDTH;
+                    }
+
+        if ( StringUtils.isNotBlank( strFieldError ) )
+        {
+            Object [ ] tabRequiredFields = {
+                I18nService.getLocalizedString( strFieldError, locale )
+            };
+
+            return AdminMessageService.getMessageUrl( request, IEntryTypeService.MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
+        }
+
+        if ( !StringUtils.isNumeric( strMaxFiles ) )
+        {
+            strFieldError = IEntryTypeService.ERROR_FIELD_MAX_FILES;
+        }
+        else
+            if ( !StringUtils.isNumeric( strFileMaxSize ) )
+            {
+                strFieldError = IEntryTypeService.ERROR_FIELD_FILE_MAX_SIZE;
+            }
+
+        if ( !StringUtils.isNumeric( strWidth ) )
+        {
+            strFieldError = IEntryTypeService.ERROR_FIELD_WIDTH;
+        }
+
+        if ( StringUtils.isNotBlank( strFieldError ) )
+        {
+            Object [ ] tabRequiredFields = {
+                I18nService.getLocalizedString( strFieldError, locale )
+            };
+
+            return AdminMessageService.getMessageUrl( request, IEntryTypeService.MESSAGE_NUMERIC_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
+        }
+
+        return StringUtils.EMPTY;
+    }
+    
+    /**
+     * Check the record field data
+     * 
+     * @param entry
+     *            The entry
+     * @param listFilesSource
+     *            the list of source files to upload
+     * @param locale
+     *            the locale
+     * @return The error if there is any
+     */
+    public static GenericAttributeError checkResponseData( Entry entry, List<FileItem> listFilesSource, Locale locale )
+    {
+        for ( FileItem fileSource : listFilesSource )
+        {
+            // Check mandatory attribute
+            String strFilename = Optional.ofNullable( fileSource ).map( FileUploadService::getFileNameOnly ).orElse( StringUtils.EMPTY );
+
+            if ( entry.isMandatory( ) && StringUtils.isBlank( strFilename ) )
+            {
+                return new MandatoryError( entry, locale );
+            }
+
+            String strMimeType = FileSystemUtil.getMIMEType( strFilename );
+
+            // Check mime type with regular expressions
+            List<RegularExpression> listRegularExpression = entry.getFields( ).get( 0 ).getRegularExpressionList( );
+
+            if ( StringUtils.isNotBlank( strFilename ) && CollectionUtils.isNotEmpty( listRegularExpression )
+                    && RegularExpressionService.getInstance( ).isAvailable( ) )
+            {
+                for ( RegularExpression regularExpression : listRegularExpression )
+                {
+                    if ( !RegularExpressionService.getInstance( ).isMatches( strMimeType, regularExpression ) )
+                    {
+                        GenericAttributeError error = new GenericAttributeError( );
+                        error.setMandatoryError( false );
+                        error.setTitleQuestion( entry.getTitle( ) );
+                        error.setErrorMessage( regularExpression.getErrorMessage( ) );
+
+                        return error;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+    
+    /**
+     * Set the list of fields
+     * 
+     * @param entry
+     *            The entry
+     * @param request
+     *            the HTTP request
+     */
+    public static void createOrUpdateFileFields( Entry entry, HttpServletRequest request )
+    {
+        String strFileMaxSize = request.getParameter( IEntryTypeService.PARAMETER_FILE_MAX_SIZE );
+        int nFileMaxSize = GenericAttributesUtils.convertStringToInt( strFileMaxSize );
+
+        String strMaxFiles = request.getParameter( IEntryTypeService.PARAMETER_MAX_FILES );
+        int nMaxFiles = GenericAttributesUtils.convertStringToInt( strMaxFiles );
+
+        String strExportBinary = request.getParameter( IEntryTypeService.PARAMETER_EXPORT_BINARY );
+
+        GenericAttributesUtils.createOrUpdateField( entry, IEntryTypeService.FIELD_FILE_MAX_SIZE, null, String.valueOf( nFileMaxSize ) );
+        GenericAttributesUtils.createOrUpdateField( entry, IEntryTypeService.FIELD_MAX_FILES, null, String.valueOf( nMaxFiles ) );
+        GenericAttributesUtils.createOrUpdateField( entry, IEntryTypeService.FIELD_FILE_BINARY, null, Boolean.toString( StringUtils.isNotBlank( strExportBinary ) ) );
     }
 }
