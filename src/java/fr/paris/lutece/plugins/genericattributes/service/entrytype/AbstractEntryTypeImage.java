@@ -33,6 +33,23 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.DatatypeConverter;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.asynchronousupload.service.IAsyncUploadHandler;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
@@ -41,6 +58,7 @@ import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.file.FileService;
+import fr.paris.lutece.plugins.genericattributes.util.FileAttributesUtils;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
@@ -54,32 +72,10 @@ import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 import fr.paris.lutece.util.url.UrlItem;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.lang.StringUtils;
-
-import java.awt.image.BufferedImage;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-
-import javax.imageio.ImageIO;
-
-import javax.servlet.http.HttpServletRequest;
-
-import javax.xml.bind.DatatypeConverter;
 
 public abstract class AbstractEntryTypeImage extends EntryTypeService
 {
@@ -97,11 +93,6 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
     private static final String PARAMETER_RESOURCE_TYPE = "resource_type";
     private static final String PARAMETER_ID = "id";
     private static final String URL_IMAGE_SERVLET = "image";
-
-    // PROPERTIES
-    private static final String PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_MAX_FILES = "genericattributes.message.error.uploading_file.max_files";
-    protected static final String PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_FILE_MAX_SIZE = "genericattributes.message.error.uploading_file.file_max_size";
-    protected static final String PROPERTY_UPLOAD_FILE_DEFAULT_MAX_SIZE = "genericattributes.upload.file.default_max_size";
 
     // MESSAGES
     protected static final String MESSAGE_ERROR_NOT_AN_IMAGE = "genericattributes.message.notAnImage";
@@ -189,14 +180,14 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
     public GenericAttributeError canUploadFiles( Entry entry, List<FileItem> listUploadedFileItems, List<FileItem> listFileItemsToUpload, Locale locale )
     {
         /** 1) Check max files */
-        GenericAttributeError error = checkNumberFiles( entry, listUploadedFileItems, listFileItemsToUpload, locale );
+        GenericAttributeError error = FileAttributesUtils.checkNumberFiles( entry, listUploadedFileItems, listFileItemsToUpload, locale );
         if ( error != null )
         {
             return error;
         }
 
         /** 2) Check files size */
-        error  = checkFileSize( entry, listUploadedFileItems, listFileItemsToUpload, locale );
+        error  = FileAttributesUtils.checkFileSize( entry, listUploadedFileItems, listFileItemsToUpload, locale );
         if ( error != null )
         {
             return error;
@@ -219,91 +210,6 @@ public abstract class AbstractEntryTypeImage extends EntryTypeService
         }
 
         return null;
-    }
-    
-    private GenericAttributeError checkFileSize( Entry entry, List<FileItem> listUploadedFileItems, List<FileItem> listFileItemsToUpload, Locale locale )
-    {
-        GenericAttributeError error = null;
-        Field fieldFileMaxSize = entry.getFieldByCode( FIELD_FILE_MAX_SIZE );
-        int nMaxSize = GenericAttributesUtils.CONSTANT_ID_NULL;
-
-        if ( ( fieldFileMaxSize != null ) && StringUtils.isNotBlank( fieldFileMaxSize.getValue( ) ) && StringUtils.isNumeric( fieldFileMaxSize.getValue( ) ) )
-        {
-            nMaxSize = GenericAttributesUtils.convertStringToInt( fieldFileMaxSize.getValue( ) );
-        }
-
-        // If no max size defined in the db, then fetch the default max size from the properties file
-        if ( nMaxSize == GenericAttributesUtils.CONSTANT_ID_NULL )
-        {
-            nMaxSize = AppPropertiesService.getPropertyInt( PROPERTY_UPLOAD_FILE_DEFAULT_MAX_SIZE, 5242880 );
-        }
-
-        // If nMaxSize == -1, then no size limit
-        if ( ( nMaxSize != GenericAttributesUtils.CONSTANT_ID_NULL ) && ( listFileItemsToUpload != null ) && ( listUploadedFileItems != null ) )
-        {
-            boolean bHasFileMaxSizeError = false;
-            List<FileItem> listFileItems = new ArrayList<>( );
-            listFileItems.addAll( listUploadedFileItems );
-            listFileItems.addAll( listFileItemsToUpload );
-
-            for ( FileItem fileItem : listFileItems )
-            {
-                if ( fileItem.getSize( ) > nMaxSize )
-                {
-                    bHasFileMaxSizeError = true;
-
-                    break;
-                }
-            }
-
-            if ( bHasFileMaxSizeError )
-            {
-                Object [ ] params = {
-                    nMaxSize
-                };
-                String strMessage = I18nService.getLocalizedString( PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_FILE_MAX_SIZE, params, locale );
-                error = new GenericAttributeError( );
-                error.setMandatoryError( false );
-                error.setTitleQuestion( entry.getTitle( ) );
-                error.setErrorMessage( strMessage );
-            }
-        }
-        return error;
-    }
-    
-    private GenericAttributeError checkNumberFiles( Entry entry, List<FileItem> listUploadedFileItems, List<FileItem> listFileItemsToUpload, Locale locale )
-    {
-        GenericAttributeError error = null;
-        Field fieldMaxFiles = entry.getFieldByCode( FIELD_MAX_FILES );
-
-        // By default, max file is set at 1
-        int nMaxFiles = 1;
-
-        if ( ( fieldMaxFiles != null ) && StringUtils.isNotBlank( fieldMaxFiles.getValue( ) ) && StringUtils.isNumeric( fieldMaxFiles.getValue( ) ) )
-        {
-            nMaxFiles = GenericAttributesUtils.convertStringToInt( fieldMaxFiles.getValue( ) );
-        }
-
-        if ( ( listUploadedFileItems != null ) && ( listFileItemsToUpload != null ) )
-        {
-            int nNbFiles = listUploadedFileItems.size( ) + listFileItemsToUpload.size( );
-
-            if ( nNbFiles > nMaxFiles )
-            {
-                Object [ ] params = {
-                    nMaxFiles
-                };
-                String strMessage = I18nService.getLocalizedString( PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_MAX_FILES, params, locale );
-                error = new GenericAttributeError( );
-                error.setMandatoryError( false );
-                error.setTitleQuestion( entry.getTitle( ) );
-                error.setErrorMessage( strMessage );
-
-                return error;
-            }
-        }
-        
-        return error;
     }
 
     /**

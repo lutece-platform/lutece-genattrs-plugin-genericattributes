@@ -53,6 +53,7 @@ import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.util.FileAttributesUtils;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
@@ -386,7 +387,7 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
         // properties file
         if ( nMaxSize == GenericAttributesUtils.CONSTANT_ID_NULL )
         {
-            nMaxSize = AppPropertiesService.getPropertyInt( PROPERTY_UPLOAD_FILE_DEFAULT_MAX_SIZE, 5242880 );
+            nMaxSize = AppPropertiesService.getPropertyInt( FileAttributesUtils.PROPERTY_UPLOAD_FILE_DEFAULT_MAX_SIZE, 5242880 );
         }
 
         // If nMaxSize == -1, then no size limit
@@ -424,7 +425,7 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
             {
                 Object[] params =
                 { nMaxSize };
-                String strMessage = I18nService.getLocalizedString( PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_FILE_MAX_SIZE,
+                String strMessage = I18nService.getLocalizedString( FileAttributesUtils.PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_FILE_MAX_SIZE,
                         params, locale );
                 GenericAttributeError error = new GenericAttributeError( );
                 error.setMandatoryError( false );
