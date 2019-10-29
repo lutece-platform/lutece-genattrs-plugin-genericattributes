@@ -318,11 +318,10 @@ public final class ResponseDAO implements IResponseDAO
     @Override
     public int getMaxNumber( int nIdEntry, Plugin plugin )
     {
-        int nIndex = 1;
         int nKey = 1;
         try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_MAX_NUMBER, plugin ) )
         {
-            daoUtil.setInt( nIndex++, nIdEntry );
+            daoUtil.setInt( 1, nIdEntry );
             daoUtil.executeQuery( );
 
             if ( daoUtil.next( ) )

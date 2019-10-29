@@ -45,11 +45,14 @@ import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -67,7 +70,9 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
         initCommonRequestData( entry, request );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         String strTitle = request.getParameter( PARAMETER_TITLE );
-        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
+        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
+                ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( )
+                : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
         String strErrorMessage = request.getParameter( PARAMETER_ERROR_MESSAGE );
@@ -87,11 +92,11 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, locale )
-            };
+            Object[] tabRequiredFields =
+            { I18nService.getLocalizedString( strFieldError, locale ) };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
+                    AdminMessage.TYPE_STOP );
         }
 
         entry.setCode( strCode );
@@ -109,7 +114,7 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
         {
             nFieldInLine = Integer.parseInt( strFieldInLine );
         }
-        catch( NumberFormatException ne )
+        catch ( NumberFormatException ne )
         {
             AppLogService.error( ne );
         }
@@ -123,13 +128,12 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
+            Locale locale )
     {
-        String [ ] strTabIdField = request.getParameterValues( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
-        List<Field> listFieldInResponse = new ArrayList<Field>( );
-        int nIdField = -1;
-        Field field = null;
-        Response response;
+        String[] strTabIdField = request.getParameterValues( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
+        List<Integer> listFieldIdInResponse = new ArrayList<>( );
+        List<Field> listFieldInResponse = new ArrayList<>( );
 
         if ( strTabIdField != null )
         {
@@ -137,27 +141,29 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
             {
                 try
                 {
-                    nIdField = Integer.parseInt( strTabIdField [cpt] );
+                    int nIdField = Integer.parseInt( strTabIdField[cpt] );
+                    listFieldIdInResponse.add( nIdField );
                 }
-                catch( NumberFormatException ne )
+                catch ( NumberFormatException ne )
                 {
                     AppLogService.error( ne.getMessage( ), ne );
                 }
 
-                field = GenericAttributesUtils.findFieldByIdInTheList( nIdField, entry.getFields( ) );
-
-                if ( field != null )
-                {
-                    listFieldInResponse.add( field );
-                }
             }
+            
+            listFieldInResponse = listFieldIdInResponse
+                    .stream( )
+                    .map( id -> GenericAttributesUtils.findFieldByIdInTheList( id, entry.getFields( ) ) )
+                    .filter( Objects::nonNull )
+                    .collect( Collectors.toList( ) );
+            
         }
 
-        if ( listFieldInResponse.size( ) != 0 )
+        if ( CollectionUtils.isNotEmpty( listFieldInResponse ) )
         {
             for ( Field fieldInResponse : listFieldInResponse )
             {
-                response = new Response( );
+                Response response = new Response( );
                 response.setEntry( entry );
                 response.setResponseValue( fieldInResponse.getValue( ) );
                 response.setField( fieldInResponse );
@@ -167,37 +173,31 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
         }
         else
         {
-            response = new Response( );
+            Response response = new Response( );
             response.setEntry( entry );
             response.setIterationNumber( getResponseIterationValue( request ) );
             listResponse.add( response );
         }
 
-        if ( entry.isMandatory( ) )
+        if ( !entry.isMandatory( ) )
         {
-            boolean bAllFieldEmpty = true;
+            return null;
+        }
 
-            for ( Field fieldInResponse : listFieldInResponse )
+        boolean bAllFieldEmpty = listFieldInResponse.stream( ).map( Field::getValue ).allMatch( StringUtils::isEmpty );
+        
+        if ( bAllFieldEmpty )
+        {
+            if ( StringUtils.isNotBlank( entry.getErrorMessage( ) ) )
             {
-                if ( !fieldInResponse.getValue( ).equals( StringUtils.EMPTY ) )
-                {
-                    bAllFieldEmpty = false;
-                }
+                GenericAttributeError error = new GenericAttributeError( );
+                error.setMandatoryError( true );
+                error.setErrorMessage( entry.getErrorMessage( ) );
+
+                return error;
             }
 
-            if ( bAllFieldEmpty )
-            {
-                if ( StringUtils.isNotBlank( entry.getErrorMessage( ) ) )
-                {
-                    GenericAttributeError error = new GenericAttributeError( );
-                    error.setMandatoryError( true );
-                    error.setErrorMessage( entry.getErrorMessage( ) );
-
-                    return error;
-                }
-
-                return new MandatoryError( entry, locale );
-            }
+            return new MandatoryError( entry, locale );
         }
 
         return null;

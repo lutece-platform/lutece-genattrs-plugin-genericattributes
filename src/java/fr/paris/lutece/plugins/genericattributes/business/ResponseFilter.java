@@ -368,12 +368,12 @@ public class ResponseFilter
     }
 
     /**
-     * @param _strCodeEntry
+     * @param strCodeEntry
      *            the _strCodeEntry to set
      */
-    public void setCodeEntry( String _strCodeEntry )
+    public void setCodeEntry( String strCodeEntry )
     {
-        this._strCodeEntry = _strCodeEntry;
+        this._strCodeEntry = strCodeEntry;
     }
 
     /**

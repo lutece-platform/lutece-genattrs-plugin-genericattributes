@@ -113,8 +113,8 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
                 }
 
         // for don't update fields listFields=null
-        int row = Integer.valueOf( strNumberRows );
-        int column = Integer.valueOf( strNumberColumns );
+        int row = Integer.parseInt( strNumberRows );
+        int column = Integer.parseInt( strNumberColumns );
         entry.setCode( strCode );
         entry.setTitle( strTitle );
         entry.setHelpMessage( null );
@@ -139,23 +139,15 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
     private List<Field> buildArrayCells( Entry entry, int row, int column, HttpServletRequest request )
     {
         List<Field> existingFields = entry.getFields( );
-        List<Field> listFields = new ArrayList<Field>( );
+        List<Field> listFields = new ArrayList<>( );
         for ( int i = 1; i <= ( row + 1 ); i++ )
         {
             for ( int j = 1; j <= ( column + 1 ); j++ )
             {
-                Field existingField = null;
+                String key =  i + "_" + j;
+                Field existingField = existingFields.stream( ).filter( f -> f.getValue( ).equals( key ) ).findFirst( ).orElse( null );
 
-                for ( Field f : existingFields )
-                {
-                    if ( f.getValue( ).equals( i + "_" + j ) )
-                    {
-                        existingField = f;
-                        break;
-                    }
-                }
-
-                String strTitleRow = request.getParameter( "field_" + i + "_" + j );
+                String strTitleRow = request.getParameter( "field_" + key );
 
                 Field field = new Field( );
                 if ( existingField != null )
@@ -164,7 +156,7 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
                 }
                 field.setParentEntry( entry );
                 field.setCode( FIELD_ARRAY_CELL );
-                field.setValue( i + "_" + j );
+                field.setValue( key );
 
                 if ( i == 1 && j != 1 || i != 1 && j == 1 )
                 {
@@ -183,8 +175,8 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
     @Override
     public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        int row = Integer.valueOf( entry.getFieldByCode( FIELD_ARRAY_ROW ).getValue( ) );
-        int column = Integer.valueOf( entry.getFieldByCode( FIELD_ARRAY_COLUMN ).getValue( ) );
+        int row = Integer.parseInt( entry.getFieldByCode( FIELD_ARRAY_ROW ).getValue( ) );
+        int column = Integer.parseInt( entry.getFieldByCode( FIELD_ARRAY_COLUMN ).getValue( ) );
 
         for ( int i = 1; i <= ( row + 1 ); i++ )
         {
@@ -259,16 +251,6 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
      */
     private boolean isValid( String strValue )
     {
-        if ( !StringUtils.isNumeric( strValue ) )
-        {
-            return false;
-        }
-        else
-            if ( Integer.valueOf( strValue ) <= 0 )
-            {
-                return false;
-            }
-
-        return true;
+        return StringUtils.isNumeric( strValue ) && Integer.valueOf( strValue ) > 0;
     }
 }
