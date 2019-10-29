@@ -33,13 +33,14 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
-import fr.paris.lutece.portal.business.file.File;
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.util.sql.DAOUtil;
-
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import fr.paris.lutece.portal.business.file.File;
+import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.util.sql.DAOUtil;
 
 /**
  * This class provides Data Access methods for Response objects
@@ -49,9 +50,11 @@ public final class ResponseDAO implements IResponseDAO
     // Constants
     private static final String SQL_QUERY_SELECT_RESPONSE = "SELECT resp.id_response, resp.response_value, type.class_name, ent.id_type, ent.id_entry, ent.title, ent.code, "
             + " resp.iteration_number, resp.id_field, resp.id_file, resp.status FROM genatt_response resp";
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_RESPONSE + ", genatt_entry ent, genatt_entry_type type "
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_RESPONSE
+            + ", genatt_entry ent, genatt_entry_type type "
             + " WHERE resp.id_response = ? and resp.id_entry = ent.id_entry and ent.id_type = type.id_type ";
-    private static final String SQL_QUERY_SELECT_RESPONSE_BY_FILTER = SQL_QUERY_SELECT_RESPONSE + ", genatt_entry ent, genatt_entry_type type "
+    private static final String SQL_QUERY_SELECT_RESPONSE_BY_FILTER = SQL_QUERY_SELECT_RESPONSE
+            + ", genatt_entry ent, genatt_entry_type type "
             + " WHERE resp.id_entry = ent.id_entry and ent.id_type = type.id_type ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_response ( "
             + " response_value, id_entry, iteration_number, id_field, id_file, status ) VALUES ( ?,?,?,?,?,?)";
@@ -61,7 +64,8 @@ public final class ResponseDAO implements IResponseDAO
             + " FROM genatt_entry e LEFT JOIN genatt_field field ON ( e.id_entry = field.id_entry ) LEFT JOIN genatt_response resp on ( resp.id_field = field.id_field ) "
             + " WHERE e.id_entry = ? GROUP BY field.id_field ORDER BY field.pos ";
 
-    // Special query in order to sort numerically and not alphabetically (thus avoiding list like 1, 10, 11, 2, ... instead of 1, 2, ..., 10, 11)
+    // Special query in order to sort numerically and not alphabetically (thus
+    // avoiding list like 1, 10, 11, 2, ... instead of 1, 2, ..., 10, 11)
     private static final String SQL_QUERY_SELECT_MAX_NUMBER = " SELECT fr.response_value FROM genatt_response fr "
             + " WHERE fr.id_entry = ? ORDER BY CAST(fr.response_value AS DECIMAL) DESC LIMIT 1 ";
     private static final String SQL_FILTER_ID_RESOURCE = " AND ent.id_resource = ? ";
@@ -83,40 +87,40 @@ public final class ResponseDAO implements IResponseDAO
     {
         int nIndex = 1;
 
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin );
-        // daoUtil.setInt( nIndex++, response.getIdResponse( ) );
-        daoUtil.setString( nIndex++, removeInvalidChars( response.getResponseValue( ) ) );
-        daoUtil.setInt( nIndex++, response.getEntry( ).getIdEntry( ) );
-        daoUtil.setInt( nIndex++, response.getIterationNumber( ) );
-
-        if ( response.getField( ) != null )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin ) )
         {
-            daoUtil.setInt( nIndex++, response.getField( ).getIdField( ) );
-        }
-        else
-        {
-            daoUtil.setIntNull( nIndex++ );
-        }
+            daoUtil.setString( nIndex++, removeInvalidChars( response.getResponseValue( ) ) );
+            daoUtil.setInt( nIndex++, response.getEntry( ).getIdEntry( ) );
+            daoUtil.setInt( nIndex++, response.getIterationNumber( ) );
 
-        if ( response.getFile( ) != null )
-        {
-            daoUtil.setInt( nIndex++, response.getFile( ).getIdFile( ) );
+            if ( response.getField( ) != null )
+            {
+                daoUtil.setInt( nIndex++, response.getField( ).getIdField( ) );
+            }
+            else
+            {
+                daoUtil.setIntNull( nIndex++ );
+            }
+
+            if ( response.getFile( ) != null )
+            {
+                daoUtil.setInt( nIndex++, response.getFile( ).getIdFile( ) );
+            }
+            else
+            {
+                daoUtil.setIntNull( nIndex++ );
+            }
+
+            daoUtil.setInt( nIndex, Response.CONSTANT_STATUS_ACTIVE );
+
+            daoUtil.executeUpdate( );
+
+            if ( daoUtil.nextGeneratedKey( ) )
+            {
+                response.setIdResponse( daoUtil.getGeneratedKeyInt( 1 ) );
+            }
+
         }
-        else
-        {
-            daoUtil.setIntNull( nIndex++ );
-        }
-
-        daoUtil.setInt( nIndex, Response.CONSTANT_STATUS_ACTIVE );
-
-        daoUtil.executeUpdate( );
-
-        if ( daoUtil.nextGeneratedKey( ) )
-        {
-            response.setIdResponse( daoUtil.getGeneratedKeyInt( 1 ) );
-        }
-
-        daoUtil.free( );
     }
 
     /**
@@ -127,16 +131,17 @@ public final class ResponseDAO implements IResponseDAO
     {
         Response response = null;
 
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
-        daoUtil.setInt( 1, nIdResponse );
-        daoUtil.executeQuery( );
-
-        if ( daoUtil.next( ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
-            response = getResponseFromDAOUtil( daoUtil );
-        }
+            daoUtil.setInt( 1, nIdResponse );
+            daoUtil.executeQuery( );
 
-        daoUtil.free( );
+            if ( daoUtil.next( ) )
+            {
+                response = getResponseFromDAOUtil( daoUtil );
+            }
+
+        }
 
         return response;
     }
@@ -147,10 +152,11 @@ public final class ResponseDAO implements IResponseDAO
     @Override
     public void delete( int nIdResponse, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
-        daoUtil.setInt( 1, nIdResponse );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdResponse );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -160,35 +166,35 @@ public final class ResponseDAO implements IResponseDAO
     public void store( Response response, Plugin plugin )
     {
         int nIndex = 1;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-
-        daoUtil.setString( nIndex++, response.getResponseValue( ) );
-        daoUtil.setInt( nIndex++, response.getEntry( ).getIdEntry( ) );
-        daoUtil.setInt( nIndex++, response.getIterationNumber( ) );
-
-        if ( response.getField( ) != null )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
         {
-            daoUtil.setInt( nIndex++, response.getField( ).getIdField( ) );
-        }
-        else
-        {
-            daoUtil.setIntNull( nIndex++ );
-        }
+            daoUtil.setString( nIndex++, response.getResponseValue( ) );
+            daoUtil.setInt( nIndex++, response.getEntry( ).getIdEntry( ) );
+            daoUtil.setInt( nIndex++, response.getIterationNumber( ) );
 
-        if ( response.getFile( ) != null )
-        {
-            daoUtil.setInt( nIndex++, response.getFile( ).getIdFile( ) );
-        }
-        else
-        {
-            daoUtil.setIntNull( nIndex++ );
-        }
+            if ( response.getField( ) != null )
+            {
+                daoUtil.setInt( nIndex++, response.getField( ).getIdField( ) );
+            }
+            else
+            {
+                daoUtil.setIntNull( nIndex++ );
+            }
 
-        daoUtil.setInt( nIndex++, response.getStatus( ) );
+            if ( response.getFile( ) != null )
+            {
+                daoUtil.setInt( nIndex++, response.getFile( ).getIdFile( ) );
+            }
+            else
+            {
+                daoUtil.setIntNull( nIndex++ );
+            }
 
-        daoUtil.setInt( nIndex, response.getIdResponse( ) );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+            daoUtil.setInt( nIndex++, response.getStatus( ) );
+
+            daoUtil.setInt( nIndex, response.getIdResponse( ) );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -197,7 +203,7 @@ public final class ResponseDAO implements IResponseDAO
     @Override
     public List<Response> selectListByFilter( ResponseFilter filter, Plugin plugin )
     {
-        List<Response> responseList = new ArrayList<Response>( );
+        List<Response> responseList = new ArrayList<>( );
 
         StringBuilder sbSQL = new StringBuilder( SQL_QUERY_SELECT_RESPONSE_BY_FILTER );
 
@@ -229,23 +235,8 @@ public final class ResponseDAO implements IResponseDAO
         if ( filter.containsListIdResource( ) )
         {
             StringBuilder sb = new StringBuilder( SQL_FILTER_MULTI_ID_RESPONSE + " (" );
-            int count = 1;
-
-            for ( Integer i : filter.getListId( ) )
-            {
-                if ( count != filter.getListId( ).size( ) )
-                {
-                    sb = sb.append( i + "," );
-                }
-                else
-                {
-                    sb = sb.append( i );
-                }
-
-                count++;
-            }
-
-            sb = sb.append( ")" );
+            sb.append( filter.getListId( ).stream( ).map( String::valueOf ).collect( Collectors.joining( "," ) ) );
+               sb.append( ")" );
             sbSQL.append( sb.toString( ) );
         }
 
@@ -253,42 +244,43 @@ public final class ResponseDAO implements IResponseDAO
         sbSQL.append( ( filter.containsOrderBy( ) ) ? filter.getOrderBy( ) : SQL_FILTER_ID_RESPONSE );
         sbSQL.append( ( filter.isOrderByAsc( ) ) ? SQL_ASC : SQL_DESC );
 
-        DAOUtil daoUtil = new DAOUtil( sbSQL.toString( ), plugin );
-        int nIndex = 1;
-
-        if ( filter.containsIdResource( ) )
+        try ( DAOUtil daoUtil = new DAOUtil( sbSQL.toString( ), plugin ) )
         {
-            daoUtil.setInt( nIndex++, filter.getIdResource( ) );
+            int nIndex = 1;
+
+            if ( filter.containsIdResource( ) )
+            {
+                daoUtil.setInt( nIndex++, filter.getIdResource( ) );
+            }
+
+            if ( filter.containsIdEntry( ) )
+            {
+                daoUtil.setInt( nIndex++, filter.getIdEntry( ) );
+            }
+
+            if ( filter.containsIdField( ) )
+            {
+                daoUtil.setInt( nIndex++, filter.getIdField( ) );
+            }
+
+            if ( filter.containsCodeEntry( ) )
+            {
+                daoUtil.setString( nIndex++, filter.getCodeEntry( ) );
+            }
+
+            if ( filter.containsResponseValue( ) )
+            {
+                daoUtil.setString( nIndex++, filter.getResponseValue( ) );
+            }
+
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                responseList.add( getResponseFromDAOUtil( daoUtil ) );
+            }
+
         }
-
-        if ( filter.containsIdEntry( ) )
-        {
-            daoUtil.setInt( nIndex++, filter.getIdEntry( ) );
-        }
-
-        if ( filter.containsIdField( ) )
-        {
-            daoUtil.setInt( nIndex++, filter.getIdField( ) );
-        }
-
-        if ( filter.containsCodeEntry( ) )
-        {
-            daoUtil.setString( nIndex++, filter.getCodeEntry( ) );
-        }
-
-        if ( filter.containsResponseValue( ) )
-        {
-            daoUtil.setString( nIndex++, filter.getResponseValue( ) );
-        }
-
-        daoUtil.executeQuery( );
-
-        while ( daoUtil.next( ) )
-        {
-            responseList.add( getResponseFromDAOUtil( daoUtil ) );
-        }
-
-        daoUtil.free( );
 
         return responseList;
     }
@@ -299,21 +291,23 @@ public final class ResponseDAO implements IResponseDAO
     @Override
     public List<StatisticEntrySubmit> getStatisticByIdEntry( int nIdEntry, Plugin plugin )
     {
-        List<StatisticEntrySubmit> listStatisticEntrySubmit = new ArrayList<StatisticEntrySubmit>( );
+        List<StatisticEntrySubmit> listStatisticEntrySubmit = new ArrayList<>( );
         StatisticEntrySubmit statisticEntrySubmit;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_COUNT_RESPONSE_BY_ID_ENTRY, plugin );
-        daoUtil.setInt( 1, nIdEntry );
-        daoUtil.executeQuery( );
 
-        while ( daoUtil.next( ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_COUNT_RESPONSE_BY_ID_ENTRY, plugin ) )
         {
-            statisticEntrySubmit = new StatisticEntrySubmit( );
-            statisticEntrySubmit.setFieldLibelle( daoUtil.getString( 1 ) );
-            statisticEntrySubmit.setNumberResponse( daoUtil.getInt( 2 ) );
-            listStatisticEntrySubmit.add( statisticEntrySubmit );
-        }
+            daoUtil.setInt( 1, nIdEntry );
+            daoUtil.executeQuery( );
 
-        daoUtil.free( );
+            while ( daoUtil.next( ) )
+            {
+                statisticEntrySubmit = new StatisticEntrySubmit( );
+                statisticEntrySubmit.setFieldLibelle( daoUtil.getString( 1 ) );
+                statisticEntrySubmit.setNumberResponse( daoUtil.getInt( 2 ) );
+                listStatisticEntrySubmit.add( statisticEntrySubmit );
+            }
+
+        }
 
         return listStatisticEntrySubmit;
     }
@@ -326,7 +320,7 @@ public final class ResponseDAO implements IResponseDAO
     {
         int nIndex = 1;
         int nKey = 1;
-        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_MAX_NUMBER, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_MAX_NUMBER, plugin ) )
         {
             daoUtil.setInt( nIndex++, nIdEntry );
             daoUtil.executeQuery( );
@@ -343,8 +337,8 @@ public final class ResponseDAO implements IResponseDAO
     /**
      * Get a response from a DAOUtil.
      * 
-     * @param daoUtil
-     *            The daoUtil to get data from. Note that the DAOUtil will NOT be free by this method
+     * @param daoUtil The daoUtil to get data from. Note that the DAOUtil will NOT
+     *                be free by this method
      * @return The response
      */
     private Response getResponseFromDAOUtil( DAOUtil daoUtil )
@@ -397,8 +391,7 @@ public final class ResponseDAO implements IResponseDAO
     /**
      * Keep only valid caracters
      * 
-     * @param s
-     *            the string to control
+     * @param s the string to control
      * @return the string with only valid caracters
      */
     private String removeInvalidChars( String s )
