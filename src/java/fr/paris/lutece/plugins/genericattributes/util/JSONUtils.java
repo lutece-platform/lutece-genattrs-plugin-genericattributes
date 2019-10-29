@@ -109,11 +109,9 @@ public final class JSONUtils
      *            the json
      * @param locale
      *            the locale
-     * @param session
-     *            the session
      * @return response the response
      */
-    private static Response buildResponse( JSONObject json, Locale locale, HttpSession session )
+    private static Response buildResponse( JSONObject json, Locale locale )
     {
         Response response = new Response( );
         response.setIdResponse( json.getInt( JSON_KEY_ID_RESPONSE ) );
@@ -193,19 +191,19 @@ public final class JSONUtils
             if ( ( jsonResponses != null ) && !jsonResponses.isEmpty( ) )
             {
                 // there is at least one result
-                mapResponses = new HashMap<Integer, List<Response>>( );
+                mapResponses = new HashMap<>( );
 
                 if ( jsonResponses.isArray( ) )
                 {
                     // array
                     for ( JSONObject jsonResponse : ( (Collection<JSONObject>) ( (JSONArray) jsonResponses ) ) )
                     {
-                        Response response = buildResponse( jsonResponse, locale, session );
+                        Response response = buildResponse( jsonResponse, locale );
                         List<Response> listResponses = mapResponses.get( response.getEntry( ).getIdEntry( ) );
 
                         if ( listResponses == null )
                         {
-                            listResponses = new ArrayList<Response>( );
+                            listResponses = new ArrayList<>( );
                             mapResponses.put( response.getEntry( ).getIdEntry( ), listResponses );
                         }
 
@@ -217,9 +215,9 @@ public final class JSONUtils
                     // only one response ?
                     JSONObject jsonResponse = (JSONObject) jsonResponses;
 
-                    Response response = buildResponse( jsonResponse, locale, session );
+                    Response response = buildResponse( jsonResponse, locale );
 
-                    List<Response> listResponses = new ArrayList<Response>( );
+                    List<Response> listResponses = new ArrayList<>( );
                     listResponses.add( response );
                     mapResponses.put( response.getEntry( ).getIdEntry( ), listResponses );
                 }
