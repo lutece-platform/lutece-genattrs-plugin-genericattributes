@@ -38,6 +38,7 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
@@ -68,7 +69,9 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         initCommonRequestData( entry, request );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         String strTitle = request.getParameter( PARAMETER_TITLE );
-        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
+        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
+                ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( )
+                : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strValue = request.getParameter( PARAMETER_VALUE );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
@@ -93,11 +96,10 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
             strFieldError = ERROR_FIELD_TITLE;
         }
 
-        else
-            if ( StringUtils.isBlank( strWidth ) )
-            {
-                strFieldError = ERROR_FIELD_WIDTH;
-            }
+        else if ( StringUtils.isBlank( strWidth ) )
+        {
+            strFieldError = ERROR_FIELD_WIDTH;
+        }
 
         if ( ( strConfirmField != null ) && StringUtils.isBlank( strConfirmFieldTitle ) )
         {
@@ -106,18 +108,18 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, locale )
-            };
+            Object[] tabRequiredFields =
+            { I18nService.getLocalizedString( strFieldError, locale ) };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
+                    AdminMessage.TYPE_STOP );
         }
 
         try
         {
             nWidth = Integer.parseInt( strWidth );
         }
-        catch( NumberFormatException ne )
+        catch ( NumberFormatException ne )
         {
             strFieldError = ERROR_FIELD_WIDTH;
         }
@@ -129,18 +131,18 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
                 nMaxSizeEnter = Integer.parseInt( strMaxSizeEnter );
             }
         }
-        catch( NumberFormatException ne )
+        catch ( NumberFormatException ne )
         {
             strFieldError = FIELD_MAX_SIZE_ENTER;
         }
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, locale )
-            };
+            Object[] tabRequiredFields =
+            { I18nService.getLocalizedString( strFieldError, locale ) };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields,
+                    AdminMessage.TYPE_STOP );
         }
 
         entry.setTitle( strTitle );
@@ -184,13 +186,16 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         {
             refListRegularExpression = new ReferenceList( );
 
-            List<RegularExpression> listRegularExpression = RegularExpressionService.getInstance( ).getAllRegularExpression( );
+            List<RegularExpression> listRegularExpression = RegularExpressionService.getInstance( )
+                    .getAllRegularExpression( );
 
             for ( RegularExpression regularExpression : listRegularExpression )
             {
-                if ( !entry.getFieldByCode( FIELD_TEXT_CONF ).getRegularExpressionList( ).contains( regularExpression ) )
+                if ( !entry.getFieldByCode( FIELD_TEXT_CONF ).getRegularExpressionList( )
+                        .contains( regularExpression ) )
                 {
-                    refListRegularExpression.addItem( regularExpression.getIdExpression( ), regularExpression.getTitle( ) );
+                    refListRegularExpression.addItem( regularExpression.getIdExpression( ),
+                            regularExpression.getTitle( ) );
                 }
             }
         }
@@ -202,7 +207,8 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
+            Locale locale )
     {
         String strValueEntry = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ).trim( );
         Field confirmField = entry.getFieldByCode( FIELD_CONFIRM );
@@ -213,88 +219,93 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
 
         if ( bConfirmField )
         {
-            strValueEntryConfirmField = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) + SUFFIX_CONFIRM_FIELD ).trim( );
+            strValueEntryConfirmField = request
+                    .getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) + SUFFIX_CONFIRM_FIELD ).trim( );
         }
 
-        List<RegularExpression> listRegularExpression = entry.getFieldByCode( FIELD_TEXT_CONF ).getRegularExpressionList( );
+        List<RegularExpression> listRegularExpression = entry.getFieldByCode( FIELD_TEXT_CONF )
+                .getRegularExpressionList( );
         Response response = new Response( );
         response.setEntry( entry );
 
-        if ( strValueEntry != null )
+        if ( strValueEntry == null )
         {
-            response.setResponseValue( strValueEntry );
+            return null;
+        }
 
-            if ( StringUtils.isNotBlank( response.getResponseValue( ) ) )
-            {
-                response.setToStringValueResponse( getResponseValueForRecap( entry, request, response, locale ) );
-            }
-            else
-            {
-                response.setToStringValueResponse( StringUtils.EMPTY );
-            }
+        response.setResponseValue( strValueEntry );
 
-            response.setIterationNumber( getResponseIterationValue( request ) );
+        if ( StringUtils.isNotBlank( response.getResponseValue( ) ) )
+        {
+            response.setToStringValueResponse( getResponseValueForRecap( entry, request, response, locale ) );
+        }
+        else
+        {
+            response.setToStringValueResponse( StringUtils.EMPTY );
+        }
 
-            listResponse.add( response );
+        response.setIterationNumber( getResponseIterationValue( request ) );
 
-            // Checks if the entry value contains XSS characters
-            if ( StringUtil.containsXssCharacters( strValueEntry ) )
+        listResponse.add( response );
+        
+        return checkErrors( entry, confirmField, strValueEntry, strValueEntryConfirmField, listRegularExpression, bConfirmField, locale );
+    }
+    
+    private GenericAttributeError checkErrors( Entry entry, Field confirmField, String strValueEntry, String strValueEntryConfirmField, List<RegularExpression> listRegularExpression, boolean bConfirmField, Locale locale )
+    {
+        // Checks if the entry value contains XSS characters
+        if ( StringUtil.containsXssCharacters( strValueEntry ) )
+        {
+            GenericAttributeError error = new GenericAttributeError( );
+            error.setMandatoryError( false );
+            error.setTitleQuestion( entry.getTitle( ) );
+            error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_XSS_FIELD, locale ) );
+
+            return error;
+        }
+
+        if ( entry.isMandatory( ) && StringUtils.isBlank( strValueEntry ) )
+        {
+            if ( StringUtils.isNotEmpty( entry.getErrorMessage( ) ) )
             {
                 GenericAttributeError error = new GenericAttributeError( );
-                error.setMandatoryError( false );
-                error.setTitleQuestion( entry.getTitle( ) );
-                error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_XSS_FIELD, request.getLocale( ) ) );
+                error.setMandatoryError( true );
+                error.setErrorMessage( entry.getErrorMessage( ) );
 
                 return error;
             }
 
-            if ( entry.isMandatory( ) )
+            return new MandatoryError( entry, locale );
+        }
+
+        if ( ( !strValueEntry.equals( StringUtils.EMPTY ) ) && CollectionUtils.isNotEmpty( listRegularExpression )
+                && RegularExpressionService.getInstance( ).isAvailable( ) )
+        {
+            for ( RegularExpression regularExpression : listRegularExpression )
             {
-                if ( StringUtils.isBlank( strValueEntry ) )
+                if ( !RegularExpressionService.getInstance( ).isMatches( strValueEntry, regularExpression ) )
                 {
-                    if ( StringUtils.isNotEmpty( entry.getErrorMessage( ) ) )
-                    {
-                        GenericAttributeError error = new GenericAttributeError( );
-                        error.setMandatoryError( true );
-                        error.setErrorMessage( entry.getErrorMessage( ) );
+                    GenericAttributeError error = new GenericAttributeError( );
+                    error.setMandatoryError( false );
+                    error.setTitleQuestion( entry.getTitle( ) );
+                    error.setErrorMessage( regularExpression.getErrorMessage( ) );
 
-                        return error;
-                    }
-
-                    return new MandatoryError( entry, locale );
+                    return error;
                 }
-            }
-
-            if ( ( !strValueEntry.equals( StringUtils.EMPTY ) ) && ( listRegularExpression != null ) && ( listRegularExpression.size( ) != 0 )
-                    && RegularExpressionService.getInstance( ).isAvailable( ) )
-            {
-                for ( RegularExpression regularExpression : listRegularExpression )
-                {
-                    if ( !RegularExpressionService.getInstance( ).isMatches( strValueEntry, regularExpression ) )
-                    {
-                        GenericAttributeError error = new GenericAttributeError( );
-                        error.setMandatoryError( false );
-                        error.setTitleQuestion( entry.getTitle( ) );
-                        error.setErrorMessage( regularExpression.getErrorMessage( ) );
-
-                        return error;
-                    }
-                }
-            }
-
-            if ( bConfirmField && ( ( strValueEntryConfirmField == null ) || !strValueEntry.equals( strValueEntryConfirmField ) ) )
-            {
-                GenericAttributeError error = new GenericAttributeError( );
-                error.setMandatoryError( false );
-                error.setTitleQuestion( confirmField.getTitle( ) );
-                error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_CONFIRM_FIELD, new String [ ] {
-                    entry.getTitle( )
-                }, request.getLocale( ) ) );
-
-                return error;
             }
         }
 
+        if ( bConfirmField
+                && ( ( strValueEntryConfirmField == null ) || !strValueEntry.equals( strValueEntryConfirmField ) ) )
+        {
+            GenericAttributeError error = new GenericAttributeError( );
+            error.setMandatoryError( false );
+            error.setTitleQuestion( confirmField.getTitle( ) );
+            error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_CONFIRM_FIELD, new String[]
+            { entry.getTitle( ) }, locale ) );
+
+            return error;
+        }
         return null;
     }
 

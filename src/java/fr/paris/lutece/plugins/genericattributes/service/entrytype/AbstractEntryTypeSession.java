@@ -39,10 +39,10 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
-import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -51,9 +51,12 @@ import fr.paris.lutece.portal.service.message.AdminMessageService;
 
 /**
  *
- * Abstract entry type for sessions attributes This entry is used to fetch the value of a session's attribute. One example is when coupling form with crm, the
- * module-crm-form will put in session the ID demand and the user GUID. This entry will be able to fetch the ID demand and user GUID when validating the form.
- * Then, it is easier to export the value to directory with the module-form-exportdirectory.
+ * Abstract entry type for sessions attributes This entry is used to fetch the
+ * value of a session's attribute. One example is when coupling form with crm,
+ * the module-crm-form will put in session the ID demand and the user GUID. This
+ * entry will be able to fetch the ID demand and user GUID when validating the
+ * form. Then, it is easier to export the value to directory with the
+ * module-form-exportdirectory.
  *
  */
 public abstract class AbstractEntryTypeSession extends EntryTypeService
@@ -78,19 +81,18 @@ public abstract class AbstractEntryTypeSession extends EntryTypeService
         {
             strFieldError = ERROR_FIELD_TITLE;
         }
-        else
-            if ( StringUtils.isBlank( strAttibuteName ) )
-            {
-                strFieldError = ERROR_FIELD_ATTRIBUTE_NAME;
-            }
+        else if ( StringUtils.isBlank( strAttibuteName ) )
+        {
+            strFieldError = ERROR_FIELD_ATTRIBUTE_NAME;
+        }
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, locale )
-            };
+            Object[] tabRequiredFields =
+            { I18nService.getLocalizedString( strFieldError, locale ) };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
+                    AdminMessage.TYPE_STOP );
         }
 
         entry.setCode( strCode );
@@ -100,7 +102,7 @@ public abstract class AbstractEntryTypeSession extends EntryTypeService
         entry.setMandatory( StringUtils.isNotEmpty( strMandatory ) );
         entry.setUnique( false );
 
-        Field attributeName = createOrUpdateField( entry, FIELD_ATTRIBUTE_NAME, strTitle, strAttibuteName );
+        createOrUpdateField( entry, FIELD_ATTRIBUTE_NAME, strTitle, strAttibuteName );
         return null;
     }
 
@@ -108,18 +110,17 @@ public abstract class AbstractEntryTypeSession extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
+            Locale locale )
     {
         String strValueEntry = StringUtils.EMPTY;
         HttpSession session = request.getSession( false );
 
-        if ( session != null )
+        if ( session != null && CollectionUtils.isNotEmpty( entry.getFields( ) )
+                && entry.getFields( ).get( 0 ) != null )
         {
-            if ( ( entry.getFields( ) != null ) && !entry.getFields( ).isEmpty( ) && ( entry.getFields( ).get( 0 ) != null ) )
-            {
-                String strAttributeName = entry.getFieldByCode( FIELD_ATTRIBUTE_NAME ).getValue( );
-                strValueEntry = (String) session.getAttribute( strAttributeName );
-            }
+            String strAttributeName = entry.getFieldByCode( FIELD_ATTRIBUTE_NAME ).getValue( );
+            strValueEntry = (String) session.getAttribute( strAttributeName );
         }
 
         if ( StringUtils.isNotBlank( strValueEntry ) )

@@ -64,7 +64,9 @@ public abstract class AbstractEntryTypeSelect extends EntryTypeService
         initCommonRequestData( entry, request );
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
-        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
+        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
+                ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( )
+                : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
@@ -81,11 +83,11 @@ public abstract class AbstractEntryTypeSelect extends EntryTypeService
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, locale )
-            };
+            Object[] tabRequiredFields =
+            { I18nService.getLocalizedString( strFieldError, locale ) };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
+                    AdminMessage.TYPE_STOP );
         }
 
         entry.setCode( strCode );
@@ -106,7 +108,8 @@ public abstract class AbstractEntryTypeSelect extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
+            Locale locale )
     {
         String strIdField = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
         int nIdField = -1;
@@ -134,12 +137,9 @@ public abstract class AbstractEntryTypeSelect extends EntryTypeService
 
         listResponse.add( response );
 
-        if ( entry.isMandatory( ) )
+        if ( entry.isMandatory( ) && ( ( field == null ) || StringUtils.isBlank( field.getValue( ) ) ) )
         {
-            if ( ( field == null ) || StringUtils.isBlank( field.getValue( ) ) )
-            {
-                return new MandatoryError( entry, locale );
-            }
+            return new MandatoryError( entry, locale );
         }
 
         return null;
