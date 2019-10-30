@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2019, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,35 +33,6 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
-import fr.paris.lutece.plugins.asynchronousupload.service.IAsyncUploadHandler;
-import fr.paris.lutece.plugins.genericattributes.business.Entry;
-import fr.paris.lutece.plugins.genericattributes.business.Field;
-import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
-import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
-import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
-import fr.paris.lutece.plugins.genericattributes.business.Response;
-import fr.paris.lutece.plugins.genericattributes.service.file.FileService;
-import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
-import fr.paris.lutece.portal.business.file.File;
-import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
-import fr.paris.lutece.portal.service.fileupload.FileUploadService;
-import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.message.AdminMessage;
-import fr.paris.lutece.portal.service.message.AdminMessageService;
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
-import fr.paris.lutece.portal.service.util.AppLogService;
-import fr.paris.lutece.portal.service.util.AppPathService;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
-import fr.paris.lutece.util.ReferenceList;
-import fr.paris.lutece.util.filesystem.FileSystemUtil;
-import fr.paris.lutece.util.url.UrlItem;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
-
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -72,6 +43,31 @@ import java.util.Locale;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
+
+import fr.paris.lutece.plugins.asynchronousupload.service.IAsyncUploadHandler;
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.Field;
+import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
+import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.service.file.FileService;
+import fr.paris.lutece.plugins.genericattributes.util.FileAttributesUtils;
+import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
+import fr.paris.lutece.portal.business.file.File;
+import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
+import fr.paris.lutece.portal.service.fileupload.FileUploadService;
+import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPathService;
+import fr.paris.lutece.util.ReferenceList;
+import fr.paris.lutece.util.url.UrlItem;
 
 /**
  * Abstract entry type for uploads
@@ -93,13 +89,6 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
     private static final String PARAMETER_RESOURCE_TYPE = "resource_type";
     private static final String PARAMETER_ID = "id";
     private static final String URL_IMAGE_SERVLET = "image";
-
-    // PROPERTIES
-    private static final String PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_MAX_FILES = "genericattributes.message.error.uploading_file.max_files";
-    private static final String PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_FILE_MAX_SIZE = "genericattributes.message.error.uploading_file.file_max_size";
-    private static final String PROPERTY_UPLOAD_FILE_DEFAULT_MAX_SIZE = "genericattributes.upload.file.default_max_size";
-
-    // FIELDS
 
     // MESSAGES
     private static final String MESSAGE_ERROR_NOT_AN_IMAGE = "genericattributes.message.notAnImage";
@@ -154,81 +143,17 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
     public GenericAttributeError canUploadFiles( Entry entry, List<FileItem> listUploadedFileItems, List<FileItem> listFileItemsToUpload, Locale locale )
     {
         /** 1) Check max files */
-        Field fieldMaxFiles = entry.getFieldByCode( FIELD_MAX_FILES );
-
-        // By default, max file is set at 1
-        int nMaxFiles = 1;
-
-        if ( ( fieldMaxFiles != null ) && StringUtils.isNotBlank( fieldMaxFiles.getValue( ) ) && StringUtils.isNumeric( fieldMaxFiles.getValue( ) ) )
+        GenericAttributeError error = FileAttributesUtils.checkNumberFiles( entry, listUploadedFileItems, listFileItemsToUpload, locale );
+        if ( error != null )
         {
-            nMaxFiles = GenericAttributesUtils.convertStringToInt( fieldMaxFiles.getValue( ) );
-        }
-
-        if ( ( listUploadedFileItems != null ) && ( listFileItemsToUpload != null ) )
-        {
-            int nNbFiles = listUploadedFileItems.size( ) + listFileItemsToUpload.size( );
-
-            if ( nNbFiles > nMaxFiles )
-            {
-                Object [ ] params = {
-                    nMaxFiles
-                };
-                String strMessage = I18nService.getLocalizedString( PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_MAX_FILES, params, locale );
-                GenericAttributeError error = new GenericAttributeError( );
-                error.setMandatoryError( false );
-                error.setTitleQuestion( entry.getTitle( ) );
-                error.setErrorMessage( strMessage );
-
-                return error;
-            }
+            return error;
         }
 
         /** 2) Check files size */
-        Field fieldFileMaxSize = entry.getFieldByCode( FIELD_FILE_MAX_SIZE );
-        int nMaxSize = GenericAttributesUtils.CONSTANT_ID_NULL;
-
-        if ( ( fieldFileMaxSize != null ) && StringUtils.isNotBlank( fieldFileMaxSize.getValue( ) ) && StringUtils.isNumeric( fieldFileMaxSize.getValue( ) ) )
+        error  = FileAttributesUtils.checkFileSize( entry, listUploadedFileItems, listFileItemsToUpload, locale );
+        if ( error != null )
         {
-            nMaxSize = GenericAttributesUtils.convertStringToInt( fieldFileMaxSize.getValue( ) );
-        }
-
-        // If no max size defined in the db, then fetch the default max size from the properties file
-        if ( nMaxSize == GenericAttributesUtils.CONSTANT_ID_NULL )
-        {
-            nMaxSize = AppPropertiesService.getPropertyInt( PROPERTY_UPLOAD_FILE_DEFAULT_MAX_SIZE, 5242880 );
-        }
-
-        // If nMaxSize == -1, then no size limit
-        if ( ( nMaxSize != GenericAttributesUtils.CONSTANT_ID_NULL ) && ( listFileItemsToUpload != null ) && ( listUploadedFileItems != null ) )
-        {
-            boolean bHasFileMaxSizeError = false;
-            List<FileItem> listFileItems = new ArrayList<FileItem>( );
-            listFileItems.addAll( listUploadedFileItems );
-            listFileItems.addAll( listFileItemsToUpload );
-
-            for ( FileItem fileItem : listFileItems )
-            {
-                if ( fileItem.getSize( ) > nMaxSize )
-                {
-                    bHasFileMaxSizeError = true;
-
-                    break;
-                }
-            }
-
-            if ( bHasFileMaxSizeError )
-            {
-                Object [ ] params = {
-                    nMaxSize
-                };
-                String strMessage = I18nService.getLocalizedString( PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_FILE_MAX_SIZE, params, locale );
-                GenericAttributeError error = new GenericAttributeError( );
-                error.setMandatoryError( false );
-                error.setTitleQuestion( entry.getTitle( ) );
-                error.setErrorMessage( strMessage );
-
-                return error;
-            }
+            return error;
         }
 
         if ( listFileItemsToUpload != null )
@@ -237,7 +162,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
             {
                 if ( checkForImages( ) )
                 {
-                    GenericAttributeError error = doCheckforImages( fileItem, entry, locale );
+                    error = doCheckforImages( fileItem, entry, locale );
 
                     if ( error != null )
                     {
@@ -264,7 +189,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
 
         Field field = entry.getFieldByCode( FIELD_FILE_BINARY );
 
-        if ( ( field != null ) && StringUtils.isNotBlank( field.getValue( ) ) && Boolean.valueOf( field.getValue( ) ) )
+        if ( ( field != null ) && StringUtils.isNotBlank( field.getValue( ) ) && Boolean.TRUE.equals( Boolean.valueOf( field.getValue( ) ) ) )
         {
             if ( response.getFile( ) != null )
             {
@@ -294,79 +219,6 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
     // CHECKS
 
     /**
-     * Check the entry data
-     * 
-     * @param request
-     *            the HTTP request
-     * @param locale
-     *            the locale
-     * @return the error message url if there is an error, an empty string otherwise
-     */
-    protected String checkEntryData( HttpServletRequest request, Locale locale )
-    {
-        String strTitle = request.getParameter( PARAMETER_TITLE );
-        String strMaxFiles = request.getParameter( PARAMETER_MAX_FILES );
-        String strFileMaxSize = request.getParameter( PARAMETER_FILE_MAX_SIZE );
-        String strWidth = request.getParameter( PARAMETER_WIDTH );
-        String strFieldError = StringUtils.EMPTY;
-
-        if ( StringUtils.isBlank( strTitle ) )
-        {
-            strFieldError = ERROR_FIELD_TITLE;
-        }
-        else
-            if ( StringUtils.isBlank( strMaxFiles ) )
-            {
-                strFieldError = ERROR_FIELD_MAX_FILES;
-            }
-            else
-                if ( StringUtils.isBlank( strFileMaxSize ) )
-                {
-                    strFieldError = ERROR_FIELD_FILE_MAX_SIZE;
-                }
-                else
-                    if ( StringUtils.isBlank( strWidth ) )
-                    {
-                        strFieldError = ERROR_FIELD_WIDTH;
-                    }
-
-        if ( StringUtils.isNotBlank( strFieldError ) )
-        {
-            Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, locale )
-            };
-
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
-        }
-
-        if ( !StringUtils.isNumeric( strMaxFiles ) )
-        {
-            strFieldError = ERROR_FIELD_MAX_FILES;
-        }
-        else
-            if ( !StringUtils.isNumeric( strFileMaxSize ) )
-            {
-                strFieldError = ERROR_FIELD_FILE_MAX_SIZE;
-            }
-
-        if ( !StringUtils.isNumeric( strWidth ) )
-        {
-            strFieldError = ERROR_FIELD_WIDTH;
-        }
-
-        if ( StringUtils.isNotBlank( strFieldError ) )
-        {
-            Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, locale )
-            };
-
-            return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
-        }
-
-        return StringUtils.EMPTY;
-    }
-
-    /**
      * Check the record field data
      * 
      * @param entry
@@ -389,55 +241,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
         {
             return error;
         }
-
-        // if ( error != null )
-        // {
-        // // The file has been uploaded to the asynchronous uploaded file map, so it should be deleted
-        // HttpSession session = request.getSession( false );
-        //
-        // if ( session != null )
-        // {
-        // getAsynchronousUploadHandler( )
-        // .removeFileItem( Integer.toString( entry.getIdEntry( ) ), session.getId( ),
-        // listFilesSource.size( ) - 1 );
-        // }
-        //
-        // return error;
-        // }
-        for ( FileItem fileSource : listFilesSource )
-        {
-            // Check mandatory attribute
-            String strFilename = ( fileSource != null ) ? FileUploadService.getFileNameOnly( fileSource ) : StringUtils.EMPTY;
-
-            if ( entry.isMandatory( ) && StringUtils.isBlank( strFilename ) )
-            {
-                return new MandatoryError( entry, locale );
-            }
-
-            String strMimeType = FileSystemUtil.getMIMEType( strFilename );
-
-            // Check mime type with regular expressions
-            List<RegularExpression> listRegularExpression = entry.getFields( ).get( 0 ).getRegularExpressionList( );
-
-            if ( StringUtils.isNotBlank( strFilename ) && ( listRegularExpression != null ) && !listRegularExpression.isEmpty( )
-                    && RegularExpressionService.getInstance( ).isAvailable( ) )
-            {
-                for ( RegularExpression regularExpression : listRegularExpression )
-                {
-                    if ( !RegularExpressionService.getInstance( ).isMatches( strMimeType, regularExpression ) )
-                    {
-                        error = new GenericAttributeError( );
-                        error.setMandatoryError( false );
-                        error.setTitleQuestion( entry.getTitle( ) );
-                        error.setErrorMessage( regularExpression.getErrorMessage( ) );
-
-                        return error;
-                    }
-                }
-            }
-        }
-
-        return null;
+        return FileAttributesUtils.checkResponseData( entry, listFilesSource, locale );
     }
 
     // FINDERS
@@ -464,7 +268,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
             return getAsynchronousUploadHandler( ).getListUploadedFiles( strAttributeName, request.getSession( ) );
         }
 
-        return null;
+        return new ArrayList<>( );
     }
 
     /**
@@ -489,31 +293,6 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
         return strAttributePrefix;
     }
 
-    // SET
-
-    /**
-     * Set the list of fields
-     * 
-     * @param entry
-     *            The entry
-     * @param request
-     *            the HTTP request
-     */
-    protected void createOrUpdateFileFields( Entry entry, HttpServletRequest request )
-    {
-        String strFileMaxSize = request.getParameter( PARAMETER_FILE_MAX_SIZE );
-        int nFileMaxSize = GenericAttributesUtils.convertStringToInt( strFileMaxSize );
-
-        String strMaxFiles = request.getParameter( PARAMETER_MAX_FILES );
-        int nMaxFiles = GenericAttributesUtils.convertStringToInt( strMaxFiles );
-
-        String strExportBinary = request.getParameter( PARAMETER_EXPORT_BINARY );
-
-        createOrUpdateField( entry, FIELD_FILE_MAX_SIZE, null, String.valueOf( nFileMaxSize ) );
-        createOrUpdateField( entry, FIELD_MAX_FILES, null, String.valueOf( nMaxFiles ) );
-        createOrUpdateField( entry, FIELD_FILE_BINARY, null, Boolean.toString( StringUtils.isNotBlank( strExportBinary ) ) );
-    }
-
     // PRIVATE METHODS
 
     /**
@@ -532,7 +311,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strEditableBack = request.getParameter( PARAMETER_EDITABLE_BACK );
 
-        String strError = this.checkEntryData( request, locale );
+        String strError = FileAttributesUtils.checkEntryData( request, locale );
 
         if ( StringUtils.isNotBlank( strError ) )
         {
@@ -545,7 +324,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
         entry.setComment( strComment );
         entry.setCSSClass( strCSSClass );
 
-        createOrUpdateFileFields( entry, request );
+        FileAttributesUtils.createOrUpdateFileFields( entry, request );
 
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );

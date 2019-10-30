@@ -1,3 +1,36 @@
+/*
+ * Copyright (c) 2002-2019, Mairie de Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
 /**
  *
  */
@@ -62,7 +95,6 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
     /** The Constant PARAMETER_SUFFIX_GEOMETRY. */
     public static final String PARAMETER_SUFFIX_GEOMETRY = "_geometry";
 
-    // private static final String MESSAGE_SPECIFY_GEO = "genericattributes.message.specifyGeo";
     private static final String MESSAGE_SPECIFY_BOTH_X_AND_Y = "genericattributes.message.specifyBothXAndY";
     public static final String PARAMETER_EDIT_MODE_LIST = "gismap.edit.mode.list";
 
@@ -74,7 +106,9 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
     {
         initCommonRequestData( entry, request );
         String strTitle = request.getParameter( PARAMETER_TITLE );
-        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
+        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
+                ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( )
+                : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
         String strMapProvider = request.getParameter( PARAMETER_MAP_PROVIDER );
@@ -92,26 +126,28 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, locale )
-            };
+            Object[] tabRequiredFields =
+            { I18nService.getLocalizedString( strFieldError, locale ) };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
+                    AdminMessage.TYPE_STOP );
         }
 
         /**
-         * we need 10 fields : 1 for map provider, 1 for id address, 1 for label address, 1 for x address, 1 for y address, 1 for id geographical object, 1 for
-         * description geographical object, 1 for centroid geographical object, 1 for label geographical object and 1 for thematic geographical object
+         * we need 10 fields : 1 for map provider, 1 for id address, 1 for label
+         * address, 1 for x address, 1 for y address, 1 for id geographical object, 1
+         * for description geographical object, 1 for centroid geographical object, 1
+         * for label geographical object and 1 for thematic geographical object
          **/
         createOrUpdateProviderField( entry, strMapProvider );
-        createOrUpdateField( entry, FIELD_EDIT_MODE, null, strEditMode );
-        createOrUpdateField( entry, FIELD_VIEW_NUMBER, null, strViewNumber );
-        createOrUpdateField( entry, FIELD_ID_ADDRESS, null, FIELD_ID_ADDRESS );
-        createOrUpdateField( entry, FIELD_ADDRESS, null, FIELD_ADDRESS );
-        createOrUpdateField( entry, FIELD_ADDITIONAL_ADDRESS, null, FIELD_ADDITIONAL_ADDRESS );
-        createOrUpdateField( entry, FIELD_X, null, FIELD_X );
-        createOrUpdateField( entry, FIELD_Y, null, FIELD_Y );
-        createOrUpdateField( entry, FIELD_GEOMETRY, null, FIELD_GEOMETRY );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_EDIT_MODE, null, strEditMode );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_VIEW_NUMBER, null, strViewNumber );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_ID_ADDRESS, null, FIELD_ID_ADDRESS );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_ADDRESS, null, FIELD_ADDRESS );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_ADDITIONAL_ADDRESS, null, FIELD_ADDITIONAL_ADDRESS );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_X, null, FIELD_X );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_Y, null, FIELD_Y );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_GEOMETRY, null, FIELD_GEOMETRY );
 
         entry.setTitle( strTitle );
         entry.setHelpMessage( strHelpMessage );
@@ -142,11 +178,13 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
+            Locale locale )
     {
         String strIdAddressValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_ID_ADDRESS );
         String strAddressValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_ADDRESS );
-        String strAdditionalAddressValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_ADDITIONAL_ADDRESS );
+        String strAdditionalAddressValue = request
+                .getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_ADDITIONAL_ADDRESS );
         String strXValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_X );
         String strYValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_Y );
         String strGeometryValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_GEOMETRY );
@@ -159,11 +197,12 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         Field fieldGeometry = entry.getFieldByCode( FIELD_GEOMETRY );
 
         /**
-         * Create the field "idAddress" in case the field does not exist in the database.
+         * Create the field "idAddress" in case the field does not exist in the
+         * database.
          */
         if ( fieldIdAddress == null )
         {
-            fieldIdAddress = createOrUpdateField( entry, FIELD_ID_ADDRESS, null, FIELD_ID_ADDRESS );
+            fieldIdAddress = GenericAttributesUtils.createOrUpdateField( entry, FIELD_ID_ADDRESS, null, FIELD_ID_ADDRESS );
             FieldHome.create( fieldIdAddress );
         }
 
@@ -221,27 +260,22 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         responseIdAddress.setIterationNumber( getResponseIterationValue( request ) );
         listResponse.add( responseGeomerty );
 
-        if ( entry.isMandatory( ) )
+        if ( entry.isMandatory( ) && StringUtils.isBlank( strAddressValue ) )
         {
-            if ( StringUtils.isBlank( strAddressValue ) )
-            {
-                return new MandatoryError( entry, locale );
-            }
+            return new MandatoryError( entry, locale );
         }
 
-        if ( ( StringUtils.isBlank( strXValue ) && StringUtils.isNotBlank( strYValue ) )
+        if ( ( ( StringUtils.isBlank( strXValue ) && StringUtils.isNotBlank( strYValue ) )
                 || ( StringUtils.isNotBlank( strXValue ) && StringUtils.isBlank( strYValue ) ) )
+                && StringUtils.isBlank( strAddressValue ) )
         {
-            if ( StringUtils.isBlank( strAddressValue ) )
-            {
-                GenericAttributeError error = new GenericAttributeError( );
+            GenericAttributeError error = new GenericAttributeError( );
 
-                error.setMandatoryError( entry.isMandatory( ) );
-                error.setTitleQuestion( entry.getTitle( ) );
-                error.setErrorMessage( MESSAGE_SPECIFY_BOTH_X_AND_Y );
+            error.setMandatoryError( entry.isMandatory( ) );
+            error.setTitleQuestion( entry.getTitle( ) );
+            error.setErrorMessage( MESSAGE_SPECIFY_BOTH_X_AND_Y );
 
-                return error;
-            }
+            return error;
         }
 
         return super.getResponseData( entry, request, listResponse, locale );
@@ -308,11 +342,11 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
 
         if ( strEditModeListProperty != null )
         {
-            String [ ] strEditModeListPropertyArray = strEditModeListProperty.split( "," );
+            String[] strEditModeListPropertyArray = strEditModeListProperty.split( "," );
 
             for ( int i = 0; i < strEditModeListPropertyArray.length; i++ )
             {
-                refList.addItem( strEditModeListPropertyArray [i], strEditModeListPropertyArray [i] );
+                refList.addItem( strEditModeListPropertyArray[i], strEditModeListPropertyArray[i] );
             }
         }
 
@@ -341,10 +375,8 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
     /**
      * Builds the field map provider.
      * 
-     * @param entry
-     *            The entry
-     * @param strMapProvider
-     *            the map provider
+     * @param entry          The entry
+     * @param strMapProvider the map provider
      * @return the field
      */
     private Field buildFieldMapProvider( Entry entry, String strMapProvider )

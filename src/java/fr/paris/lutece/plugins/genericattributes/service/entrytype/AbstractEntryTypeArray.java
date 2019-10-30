@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2013, Mairie de Paris
+ * Copyright (c) 2002-2019, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,23 +33,24 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
-import fr.paris.lutece.plugins.genericattributes.business.Entry;
-import fr.paris.lutece.plugins.genericattributes.business.Field;
-import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
-import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
-import fr.paris.lutece.plugins.genericattributes.business.Response;
-import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.message.AdminMessage;
-import fr.paris.lutece.portal.service.message.AdminMessageService;
-
-import org.apache.commons.lang.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.Field;
+import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
+import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
+import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.message.AdminMessage;
+import fr.paris.lutece.portal.service.message.AdminMessageService;
 
 /**
  * Abstract entry type for check boxes
@@ -113,16 +114,16 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
                 }
 
         // for don't update fields listFields=null
-        int row = Integer.valueOf( strNumberRows );
-        int column = Integer.valueOf( strNumberColumns );
+        int row = Integer.parseInt( strNumberRows );
+        int column = Integer.parseInt( strNumberColumns );
         entry.setCode( strCode );
         entry.setTitle( strTitle );
         entry.setHelpMessage( null );
         entry.setComment( strComment );
         entry.setCSSClass( null );
 
-        createOrUpdateField( entry, FIELD_ARRAY_ROW, null, String.valueOf( row ) );
-        createOrUpdateField( entry, FIELD_ARRAY_COLUMN, null, String.valueOf( column ) );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_ARRAY_ROW, null, String.valueOf( row ) );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_ARRAY_COLUMN, null, String.valueOf( column ) );
 
         List<Field> newFields = new ArrayList<>( );
 
@@ -139,23 +140,15 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
     private List<Field> buildArrayCells( Entry entry, int row, int column, HttpServletRequest request )
     {
         List<Field> existingFields = entry.getFields( );
-        List<Field> listFields = new ArrayList<Field>( );
+        List<Field> listFields = new ArrayList<>( );
         for ( int i = 1; i <= ( row + 1 ); i++ )
         {
             for ( int j = 1; j <= ( column + 1 ); j++ )
             {
-                Field existingField = null;
+                String key =  i + "_" + j;
+                Field existingField = existingFields.stream( ).filter( f -> f.getValue( ).equals( key ) ).findFirst( ).orElse( null );
 
-                for ( Field f : existingFields )
-                {
-                    if ( f.getValue( ).equals( i + "_" + j ) )
-                    {
-                        existingField = f;
-                        break;
-                    }
-                }
-
-                String strTitleRow = request.getParameter( "field_" + i + "_" + j );
+                String strTitleRow = request.getParameter( "field_" + key );
 
                 Field field = new Field( );
                 if ( existingField != null )
@@ -164,7 +157,7 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
                 }
                 field.setParentEntry( entry );
                 field.setCode( FIELD_ARRAY_CELL );
-                field.setValue( i + "_" + j );
+                field.setValue( key );
 
                 if ( i == 1 && j != 1 || i != 1 && j == 1 )
                 {
@@ -183,8 +176,8 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
     @Override
     public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        int row = Integer.valueOf( entry.getFieldByCode( FIELD_ARRAY_ROW ).getValue( ) );
-        int column = Integer.valueOf( entry.getFieldByCode( FIELD_ARRAY_COLUMN ).getValue( ) );
+        int row = Integer.parseInt( entry.getFieldByCode( FIELD_ARRAY_ROW ).getValue( ) );
+        int column = Integer.parseInt( entry.getFieldByCode( FIELD_ARRAY_COLUMN ).getValue( ) );
 
         for ( int i = 1; i <= ( row + 1 ); i++ )
         {
@@ -259,16 +252,6 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
      */
     private boolean isValid( String strValue )
     {
-        if ( !StringUtils.isNumeric( strValue ) )
-        {
-            return false;
-        }
-        else
-            if ( Integer.valueOf( strValue ) <= 0 )
-            {
-                return false;
-            }
-
-        return true;
+        return StringUtils.isNumeric( strValue ) && Integer.valueOf( strValue ) > 0;
     }
 }

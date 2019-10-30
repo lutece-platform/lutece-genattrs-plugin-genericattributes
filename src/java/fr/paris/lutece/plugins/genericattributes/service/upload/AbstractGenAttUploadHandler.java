@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2019, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -71,7 +71,7 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
 
     /** <sessionId,<fieldName,fileItems>> */
     /** contains uploaded file items */
-    private static Map<String, Map<String, List<FileItem>>> _mapAsynchronousUpload = new ConcurrentHashMap<String, Map<String, List<FileItem>>>( );
+    private static Map<String, Map<String, List<FileItem>>> _mapAsynchronousUpload = new ConcurrentHashMap<>( );
 
     /**
      * {@inheritDoc}
@@ -254,22 +254,10 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
             synchronized( this )
             {
                 // Ignore double check locking error : assignation and instanciation of objects are separated.
-                mapFileItemsSession = _mapAsynchronousUpload.get( strSessionId );
-
-                if ( mapFileItemsSession == null )
-                {
-                    mapFileItemsSession = new ConcurrentHashMap<String, List<FileItem>>( );
-                    _mapAsynchronousUpload.put( strSessionId, mapFileItemsSession );
-                }
+                mapFileItemsSession = _mapAsynchronousUpload.computeIfAbsent( strSessionId, s -> new ConcurrentHashMap<>( ) );
             }
         }
-
-        List<FileItem> listFileItems = mapFileItemsSession.get( strFieldName );
-
-        if ( listFileItems == null )
-        {
-            listFileItems = new ArrayList<FileItem>( );
-            mapFileItemsSession.put( strFieldName, listFileItems );
-        }
+        
+        mapFileItemsSession.computeIfAbsent( strFieldName, s -> new ArrayList<>( ) );
     }
 }

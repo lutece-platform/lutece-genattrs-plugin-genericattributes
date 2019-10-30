@@ -31,42 +31,50 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.genericattributes.service.file;
+package fr.paris.lutece.plugins.genericattributes.business;
 
-import fr.paris.lutece.portal.business.file.File;
-import fr.paris.lutece.portal.business.file.FileHome;
-import fr.paris.lutece.portal.business.physicalfile.PhysicalFileHome;
+import static org.junit.Assert.assertNotEquals;
 
-/**
- *
- * FileService
- *
- */
-public class FileService
+public class FieldHomeTest extends AbstractEntryTest
 {
-    /**
-     * The name of the bean of this service
-     */
-    public static final String BEAN_SERVICE = "genericattributes.fileService";
-
-    /**
-     * Returns an instance of a file whose identifier is specified in parameter
-     * 
-     * @param nKey
-     *            The file primary key
-     * @param bGetFileData
-     *            True to get the physical file of the file, false otherwise
-     * @return an instance of file
-     */
-    public File findByPrimaryKey( int nKey, boolean bGetFileData )
+    private static int _nIdEntry;
+    private static int _nIdEntryGroup;
+    
+    public void testSaveLoadDelete( )
     {
-        File file = FileHome.findByPrimaryKey( nKey );
+        Entry entry = new Entry( );
+        entry.setIdEntry( _nIdEntry );
+        
+        Field field = new Field( );
+        field.setCode( "code" );
+        field.setParentEntry( entry );
+        field.setTitle( "title" );
+        field.setValue( "value" );
+        
+        FieldHome.create( field );
+        assertNotEquals( 0, field.getIdField( ) );
+        
+        Field loaded = FieldHome.findByPrimaryKey( field.getIdField( ) );
+        assertEquals( "title", loaded.getTitle( ) );
+        
+        FieldHome.remove( field.getIdField( ) );
+        loaded = FieldHome.findByPrimaryKey( field.getIdField( ) );
+        assertNull( loaded );
+    }
+    
+    @Override
+    public void setUp( ) throws Exception
+    {
+        super.setUp( );
+        
+     // Create an entry of type group
+        Entry entryGroup = createEntryGroup( );
+        _nIdEntryGroup = entryGroup.getIdEntry( );
 
-        if ( bGetFileData && ( file != null ) && ( file.getPhysicalFile( ) != null ) )
-        {
-            file.setPhysicalFile( PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile( ).getIdPhysicalFile( ) ) );
-        }
+        // Create entries
+        Entry entryOne = manageCreateEntry( entryGroup, 0, 0 );
+        _nIdEntry = entryOne.getIdEntry( );
 
-        return file;
+        Entry entryTwo = manageCreateEntry( entryGroup, 0, 0 );
     }
 }

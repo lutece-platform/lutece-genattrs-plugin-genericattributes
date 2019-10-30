@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2019, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,6 +52,9 @@ import javax.servlet.http.HttpServletRequest;
 public interface IEntryTypeService
 {
     // parameters Entry
+    String PARAMETER_MAX_FILES = "max_files";
+    String PARAMETER_FILE_MAX_SIZE = "file_max_size";
+    String PARAMETER_EXPORT_BINARY = "export_binary";
     String PARAMETER_ENTRY_CODE = "entry_code";
     String PARAMETER_TITLE = "title";
     String PARAMETER_HELP_MESSAGE = "help_message";

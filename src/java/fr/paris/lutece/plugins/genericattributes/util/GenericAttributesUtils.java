@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2019, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.genericattributes.util;
 
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.service.GenericAttributesPlugin;
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -163,5 +164,28 @@ public final class GenericAttributesUtils
         }
 
         return nIdParameter;
+    }
+    
+    /**
+     * Create or update the entry field identified by its code.
+     * @param entry
+     * @param strCode
+     * @param strTitle
+     * @param strValue
+     * @return
+     */
+    public static Field createOrUpdateField( Entry entry, String strCode, String strTitle, String strValue )
+    {
+        Field field = entry.getFieldByCode( strCode );
+        if ( field == null )
+        {
+            field = new Field( );
+            field.setCode( strCode );
+            field.setParentEntry( entry );
+            entry.getFields( ).add( field );
+        }
+        field.setTitle( strTitle );
+        field.setValue( strValue );
+        return field;
     }
 }

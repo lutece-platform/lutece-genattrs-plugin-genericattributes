@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2019, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -368,12 +368,12 @@ public class ResponseFilter
     }
 
     /**
-     * @param _strCodeEntry
+     * @param strCodeEntry
      *            the _strCodeEntry to set
      */
-    public void setCodeEntry( String _strCodeEntry )
+    public void setCodeEntry( String strCodeEntry )
     {
-        this._strCodeEntry = _strCodeEntry;
+        this._strCodeEntry = strCodeEntry;
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2019, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,6 +46,7 @@ import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.util.EntryTypeNumberingUtil;
+import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -89,7 +90,7 @@ public abstract class AbstractEntryTypeNumbering extends EntryTypeService
         entry.setCode( strCode );
         entry.setTitle( strTitle );
 
-        createOrUpdateField( entry, FIELD_PREFIX, null, StringUtils.isNotEmpty( strPrefix ) ? strPrefix : StringUtils.EMPTY );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_PREFIX, null, StringUtils.isNotEmpty( strPrefix ) ? strPrefix : StringUtils.EMPTY );
         entry.setIndexed( strIndexed != null );
         return null;
     }

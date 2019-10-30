@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2019, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -184,23 +184,6 @@ public final class ResponseHome
     public static List<StatisticEntrySubmit> getStatisticByIdEntry( int nIdEntry )
     {
         return _dao.getStatisticByIdEntry( nIdEntry, getPlugin( ) );
-    }
-
-    /**
-     * Get the max number from a given id resource
-     * 
-     * @param nIdEntry
-     *            the id of the entry
-     * @param nIdResource
-     *            the id resource
-     * @param strResourceType
-     *            The resource type
-     * @return the max number
-     */
-    @Deprecated
-    public static int findMaxNumber( int nIdEntry, int nIdResource, String strResourceType )
-    {
-        return findMaxNumber( nIdEntry );
     }
 
     /**
