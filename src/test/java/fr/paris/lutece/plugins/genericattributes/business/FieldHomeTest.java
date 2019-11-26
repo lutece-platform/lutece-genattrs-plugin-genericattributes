@@ -37,6 +37,9 @@ import static org.junit.Assert.assertNotEquals;
 
 public class FieldHomeTest extends AbstractEntryTest
 {
+    
+    private static final String TITLE_1 = "Title 1";
+    private static final String TITLE_2 = "Title 2";
     private static int _nIdEntry;
     private static int _nIdEntryGroup;
     
@@ -72,9 +75,9 @@ public class FieldHomeTest extends AbstractEntryTest
         _nIdEntryGroup = entryGroup.getIdEntry( );
 
         // Create entries
-        Entry entryOne = manageCreateEntry( entryGroup, 0, 0 );
+        Entry entryOne = manageCreateEntry( entryGroup, TITLE_1, 0, 0 );
         _nIdEntry = entryOne.getIdEntry( );
 
-        Entry entryTwo = manageCreateEntry( entryGroup, 0, 0 );
+        Entry entryTwo = manageCreateEntry( entryGroup, TITLE_2, 0, 0 );
     }
 }

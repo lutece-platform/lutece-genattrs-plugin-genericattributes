@@ -141,11 +141,11 @@ public abstract class AbstractEntryTest extends LuteceTestCase
      *            The number of Response of the Entry
      * @return the new created Entry
      */
-    protected Entry manageCreateEntry( Entry entryParent, int nNumberOfFields, int nNumberOfResponses )
+    protected Entry manageCreateEntry( Entry entryParent, String title, int nNumberOfFields, int nNumberOfResponses )
     {
         // Create an entry
         EntryType entryType = EntryTypeHome.findByPrimaryKey( _nEntryTypeTextPrimaryKey );
-        Entry entry = createEntry( entryParent, entryType );
+        Entry entry = createEntry( entryParent, title, entryType );
 
         // Create fields for the entry
         for ( int i = 0; i < nNumberOfFields; i++ )
@@ -171,11 +171,12 @@ public abstract class AbstractEntryTest extends LuteceTestCase
      *            The entry type of the entry to create
      * @return the created entry
      */
-    protected Entry createEntry( Entry entryParent, EntryType entryType )
+    protected Entry createEntry( Entry entryParent, String title, EntryType entryType )
     {
         Entry entry = new Entry( );
         entry.setEntryType( entryType );
         entry.setResourceType( StringUtils.EMPTY );
+        entry.setTitle( title );
 
         if ( entryParent != null )
         {

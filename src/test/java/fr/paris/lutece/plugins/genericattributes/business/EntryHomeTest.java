@@ -50,9 +50,13 @@ public class EntryHomeTest extends AbstractEntryTest
     private static final int NUMBER_RESPONSE_ENTRY_ONE = 3;
     private static final int NUMBER_FIELDS_ENTRY_TWO = 5;
     private static final int NUMBER_RESPONSE_ENTRY_TWO = 0;
+    
+    private static final String TITLE_1 = "Title 1";
+    private static final String TITLE_2 = "Title 2";
 
     // Variables
     private static int _nIdEntry;
+    private static int _nIdEntry2;
     private static int _nIdEntryGroup;
     private static List<Entry> listEntry = new ArrayList<>( );
     private final Plugin _plugin = PluginService.getPlugin( GenericAttributesPlugin.PLUGIN_NAME );
@@ -70,11 +74,12 @@ public class EntryHomeTest extends AbstractEntryTest
         _nIdEntryGroup = entryGroup.getIdEntry( );
 
         // Create entries
-        Entry entryOne = manageCreateEntry( entryGroup, NUMBER_FIELDS_ENTRY_ONE, NUMBER_RESPONSE_ENTRY_ONE );
+        Entry entryOne = manageCreateEntry( entryGroup, TITLE_1, NUMBER_FIELDS_ENTRY_ONE, NUMBER_RESPONSE_ENTRY_ONE );
         _nIdEntry = entryOne.getIdEntry( );
 
-        Entry entryTwo = manageCreateEntry( entryGroup, NUMBER_FIELDS_ENTRY_TWO, NUMBER_RESPONSE_ENTRY_TWO );
-
+        Entry entryTwo = manageCreateEntry( entryGroup, TITLE_2, NUMBER_FIELDS_ENTRY_TWO, NUMBER_RESPONSE_ENTRY_TWO );
+        _nIdEntry2 = entryTwo.getIdEntry( );
+        
         listEntry.add( entryOne );
         listEntry.add( entryTwo );
         listEntry.add( entryGroup );
@@ -164,6 +169,14 @@ public class EntryHomeTest extends AbstractEntryTest
         checkEntryRemoving( _nIdEntry );
     }
 
+    public void testGetNumberEntryByFilter( )
+    {
+        EntryFilter entryFilter = new EntryFilter( );
+        entryFilter.setIdEntryParent( _nIdEntryGroup );
+        int res = EntryHome.getNumberEntryByFilter( entryFilter );
+        assertEquals( 1, res );
+    }
+    
     /**
      * Test the remove method of the EntryHome for an entry which is inside a Entry of type group
      */
@@ -182,6 +195,29 @@ public class EntryHomeTest extends AbstractEntryTest
         {
             checkEntryRemoving( entry.getIdEntry( ) );
         }
+    }
+    
+    public void testFindByPrimaryKeyList( )
+    {
+        List<Integer> idList = new ArrayList<>( );
+        idList.add( _nIdEntry );
+        idList.add( _nIdEntry2 );
+        
+        List<Entry> list = EntryHome.findByPrimaryKeyList( idList );
+        assertEquals( 2, list.size( ) );
+    }
+    
+    public void testUpdate()
+    {
+        Entry entry = EntryHome.findByPrimaryKey( _nIdEntry );
+        
+        assertEquals( TITLE_1, entry.getTitle( ) );
+        
+        entry.setTitle( TITLE_2 );
+        EntryHome.update( entry );
+        
+        entry = EntryHome.findByPrimaryKey( _nIdEntry );
+        assertEquals( TITLE_2, entry.getTitle( ) );
     }
 
     /**
