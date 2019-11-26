@@ -250,6 +250,17 @@ public final class FieldHome
     {
         return _dao.isRegularExpressionIsUse( nIdExpression, getPlugin( ) );
     }
+    
+    /**
+     * Load the data of all the field of the list of entry entry and returns them in a list
+     * 
+     * @param idList the ids of the entries
+     * @return the list of field
+     */
+    public static List<Field> getFieldListByListIdEntry( List<Integer> idList )
+    {
+        return _dao.loadMultipleByEntryIdList( idList, getPlugin( ) );
+    }
 
     /**
      * Get the generic attributes plugin
