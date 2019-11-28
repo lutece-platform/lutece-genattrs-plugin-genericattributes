@@ -37,6 +37,7 @@ import java.sql.Date;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
@@ -47,8 +48,9 @@ import fr.paris.lutece.util.sql.DAOUtil;
 public final class FieldDAO implements IFieldDAO
 {
     // Constants
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_field,id_entry,code,title,value,default_value,pos,value_type_date,no_display_title,comment"
-            + " FROM genatt_field  WHERE id_field = ? ORDER BY pos";
+    private static final String SQL_QUERY_SELECT_ALL = "SELECT id_field,id_entry,code,title,value,default_value,pos,value_type_date,no_display_title,comment"
+            + " FROM genatt_field ";
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_ALL + " WHERE id_field = ? ORDER BY pos";
     private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_field(id_entry,code,title,value,default_value,pos,value_type_date,no_display_title,comment)"
             + " VALUES(?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM genatt_field WHERE id_field = ? ";
@@ -56,13 +58,14 @@ public final class FieldDAO implements IFieldDAO
     private static final String SQL_QUERY_DELETE_VERIF_BY = "DELETE FROM genatt_verify_by WHERE id_field = ? and id_expression= ?";
     private static final String SQL_QUERY_UPDATE = "UPDATE  genatt_field SET "
             + "id_field=?,id_entry=?,code=?,title=?,value=?,default_value=?,pos=?,value_type_date=?,no_display_title=?,comment=? WHERE id_field = ?";
-    private static final String SQL_QUERY_SELECT_FIELD_BY_ID_ENTRY = "SELECT id_field,id_entry,code,title,value,default_value,"
-            + "pos,value_type_date,no_display_title,comment FROM genatt_field  WHERE id_entry = ? ORDER BY pos";
+    private static final String SQL_QUERY_SELECT_FIELD_BY_ID_ENTRY = SQL_QUERY_SELECT_ALL + " WHERE id_entry = ? ORDER BY pos";
     private static final String SQL_QUERY_NEW_POSITION = "SELECT MAX(pos)" + " FROM genatt_field ";
     private static final String SQL_QUERY_SELECT_REGULAR_EXPRESSION_BY_ID_FIELD = "SELECT id_expression "
             + " FROM genatt_verify_by where id_field=?";
     private static final String SQL_QUERY_COUNT_FIELD_BY_ID_REGULAR_EXPRESSION = "SELECT COUNT(id_field) "
             + " FROM genatt_verify_by where id_expression = ?";
+    private static final String SQL_QUERY_SELECT_FIELD_BY_LIST_ID_ENTRY = SQL_QUERY_SELECT_ALL + " WHERE id_entry IN ";
+    
 
     /**
      * Generates a new field position
@@ -273,6 +276,29 @@ public final class FieldDAO implements IFieldDAO
 
         return nNumberEntry != 0;
     }
+    
+    @Override
+    public List<Field> loadMultipleByEntryIdList( List<Integer> idList, Plugin plugin )
+    {
+        List<Field> list = new ArrayList<>( );
+        String query = SQL_QUERY_SELECT_FIELD_BY_LIST_ID_ENTRY + " ( "
+                + idList.stream( ).distinct( ).map( i -> "?" ).collect( Collectors.joining( "," ) ) + " )";
+        
+        try ( DAOUtil daoUtil = new DAOUtil( query, plugin ) )
+        {
+            for ( int i = 0; i < idList.size( ); i++ )
+            {
+                daoUtil.setInt( i + 1, idList.get( i ) );
+            }
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                list.add( dataToObject( daoUtil ) );
+            }
+        }
+        return list;
+    }
 
     private Field dataToObject( DAOUtil daoUtil )
     {
@@ -290,7 +316,7 @@ public final class FieldDAO implements IFieldDAO
         field.setPosition( daoUtil.getInt( nIndex++ ) );
         field.setValueTypeDate( daoUtil.getDate( nIndex++ ) );
         field.setNoDisplayTitle( daoUtil.getBoolean( nIndex++ ) );
-        field.setComment( daoUtil.getString( nIndex++ ) );
+        field.setComment( daoUtil.getString( nIndex ) );
 
         return field;
     }

@@ -143,4 +143,12 @@ public interface IFieldDAO
      * @return true if the regular expression is use
      */
     boolean isRegularExpressionIsUse( int nIdExpression, Plugin plugin );
+    
+    /**
+     * Load all the fields by list of id_enrty.
+     * @param idList
+     * @param plugin
+     * @return
+     */
+    List<Field> loadMultipleByEntryIdList( List<Integer> idList, Plugin plugin );
 }
