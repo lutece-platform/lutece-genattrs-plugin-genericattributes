@@ -145,11 +145,7 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
 
         if ( tDateValue != null )
         {
-            response.setResponseValue( DateUtil.getDateString( tDateValue, locale ) );
-        }
-        else
-        {
-            response.setResponseValue( strValueEntry );
+            response.setResponseValue( String.valueOf( tDateValue.getTime( ) ) );
         }
 
         if ( StringUtils.isNotBlank( response.getResponseValue( ) ) )
@@ -208,7 +204,7 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
     @Override
     public String getResponseValueForExport( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getResponseValue( );
+       return getResponseValueForRecap( entry, request, response, locale );
     }
 
     /**
@@ -217,7 +213,13 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getResponseValue( );
+        String strValueEntry = response.getResponseValue( );
+        if ( StringUtils.isEmpty( strValueEntry ) )
+        {
+            return StringUtils.EMPTY;
+        }
+        Date date = new Date( Long.valueOf( strValueEntry ) );
+        return DateUtil.getDateString( date, locale );
     }
 
     /**
@@ -226,9 +228,14 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
     @Override
     public void setResponseToStringValue( Entry entry, Response response, Locale locale )
     {
-        if ( StringUtils.isNotBlank( response.getResponseValue( ) ) )
+        String strValueEntry = response.getResponseValue( );
+        if ( StringUtils.isNotEmpty( strValueEntry ) )
         {
-            response.setToStringValueResponse( response.getResponseValue( ) );
+            Date tDateValue = DateUtil.formatDate( response.getResponseValue( ), locale );
+            if ( tDateValue != null )
+            {
+                response.setResponseValue( String.valueOf( tDateValue.getTime( ) ) );
+            }
         }
     }
 }
