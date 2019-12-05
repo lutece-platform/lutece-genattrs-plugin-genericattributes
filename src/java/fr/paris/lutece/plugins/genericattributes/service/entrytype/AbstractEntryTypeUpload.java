@@ -85,12 +85,12 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
     protected static final String COMMA = ",";
 
     // Private parameters
-    private static final String PARAMETER_RESOURCE_TYPE = "resource_type";
-    private static final String PARAMETER_ID = "id";
-    private static final String URL_IMAGE_SERVLET = "image";
+    protected static final String PARAMETER_RESOURCE_TYPE = "resource_type";
+    protected static final String PARAMETER_ID = "id";
+    protected static final String URL_IMAGE_SERVLET = "image";
 
     // MESSAGES
-    private static final String MESSAGE_ERROR_NOT_AN_IMAGE = "genericattributes.message.notAnImage";
+    protected static final String MESSAGE_ERROR_NOT_AN_IMAGE = "genericattributes.message.notAnImage";
 
     /**
      * Get the asynchronous upload handler to use for entries of this type
@@ -309,6 +309,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strEditableBack = request.getParameter( PARAMETER_EDITABLE_BACK );
+        String strIndexed = request.getParameter( PARAMETER_INDEXED );
 
         String strError = FileAttributesUtils.checkEntryData( request, locale );
 
@@ -322,6 +323,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
         entry.setHelpMessage( strHelpMessage );
         entry.setComment( strComment );
         entry.setCSSClass( strCSSClass );
+        entry.setIndexed( strIndexed != null );
 
         FileAttributesUtils.createOrUpdateFileFields( entry, request );
 
