@@ -544,6 +544,15 @@ public class Entry implements Serializable, Cloneable
         Field fieldUsedCompleteResponse = getFieldByCode( IEntryTypeService.FIELD_USED_COMPLETE_RESPONSE );
         return fieldUsedCompleteResponse != null && Boolean.valueOf( fieldUsedCompleteResponse.getValue( ) );
     }
+    
+    /**
+     * @return true if the field exportable is present and set to true
+     */
+    public boolean isExportable( )
+    {
+        Field fieldExportable = getFieldByCode( IEntryTypeService.FIELD_EXPORTABLE );
+        return fieldExportable != null && Boolean.valueOf( fieldExportable.getValue( ) );
+    }
 
     /**
      * Get the selected map provider
