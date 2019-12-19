@@ -159,7 +159,7 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
                 field.setCode( FIELD_ARRAY_CELL );
                 field.setValue( key );
 
-                if ( i == 1 && j != 1 || i != 1 && j == 1 )
+                if ( ( i == 1 && j != 1 ) || ( i != 1 && j == 1 ) )
                 {
                     field.setTitle( StringUtils.defaultString( strTitleRow ) );
                 }
