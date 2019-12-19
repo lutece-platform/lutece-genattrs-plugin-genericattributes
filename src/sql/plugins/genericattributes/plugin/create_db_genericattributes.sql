@@ -26,7 +26,7 @@ CREATE INDEX index_genatt_entry_type_plugin ON genatt_entry_type (plugin);
 -- Table structure for table genatt_entry
 --
 CREATE TABLE genatt_entry (
-	id_entry int default 0 NOT NULL,
+	id_entry int AUTO_INCREMENT NOT NULL,
 	id_resource int default 0 NOT NULL,
 	resource_type VARCHAR(255) NOT NULL,
 	id_type int default 0 NOT NULL,

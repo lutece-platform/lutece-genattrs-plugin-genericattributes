@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +51,6 @@ import fr.paris.lutece.util.sql.DAOUtil;
 public final class EntryDAO implements IEntryDAO
 {
     // Constants
-    private static final String SQL_QUERY_NEW_PK = "SELECT MAX( id_entry ) FROM genatt_entry";
     private static final String SQL_QUERY_SELECT_LIST = "ent.id_type,typ.title,typ.is_group,typ.is_comment,typ.class_name,typ.is_mylutece_user,typ.icon_name,"
             + "ent.id_entry,ent.id_resource,ent.resource_type,ent.id_parent,ent.code,ent.title,ent.help_message, ent.comment,ent.mandatory,ent.fields_in_line,"
             + "ent.pos,ent.id_field_depend,ent.field_unique, ent.css_class, ent.pos_conditional, ent.error_message, "
@@ -59,8 +59,8 @@ public final class EntryDAO implements IEntryDAO
             + "FROM genatt_entry ent,genatt_entry_type typ WHERE ent.id_type=typ.id_type ";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_ENTRY_ATTRIBUTES
             + " AND ent.id_entry = ? ";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_entry ( id_entry,id_resource,resource_type,id_type,id_parent,code,title,help_message, comment,mandatory,fields_in_line,"
-            + "pos,id_field_depend,field_unique,css_class, pos_conditional, error_message, is_only_display_back, is_editable_back, is_indexed ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_entry ( id_resource,resource_type,id_type,id_parent,code,title,help_message, comment,mandatory,fields_in_line,"
+            + "pos,id_field_depend,field_unique,css_class, pos_conditional, error_message, is_only_display_back, is_editable_back, is_indexed ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM genatt_entry WHERE id_entry = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE genatt_entry SET id_entry=?,id_resource=?,resource_type=?,id_type=?,id_parent=?,code=?,title=?,help_message=?,"
             + "comment=?,mandatory=?, fields_in_line=?,pos=?,id_field_depend=?,field_unique=?,css_class=?, pos_conditional=?, "
@@ -103,14 +103,11 @@ public final class EntryDAO implements IEntryDAO
      * {@inheritDoc}
      */
     @Override
-    public synchronized int insert( Entry entry, Plugin plugin )
+    public int insert( Entry entry, Plugin plugin )
     {
-        entry.setIdEntry( newPrimaryKey( plugin ) );
-
-        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin ) )
         {
             int nIndex = 1;
-            daoUtil.setInt( nIndex++, entry.getIdEntry( ) );
             daoUtil.setInt( nIndex++, entry.getIdResource( ) );
             daoUtil.setString( nIndex++, entry.getResourceType( ) );
             daoUtil.setInt( nIndex++, entry.getEntryType( ).getIdType( ) );
@@ -152,6 +149,11 @@ public final class EntryDAO implements IEntryDAO
             daoUtil.setBoolean( nIndex++, entry.isIndexed( ) );
 
             daoUtil.executeUpdate( );
+            
+            if ( daoUtil.nextGeneratedKey( ) )
+            {
+                entry.setIdEntry( daoUtil.getGeneratedKeyInt( 1 ) );
+            }
         }
 
         return entry.getIdEntry( );
@@ -513,32 +515,6 @@ public final class EntryDAO implements IEntryDAO
             daoUtil.setString( 4, strResourceType );
             daoUtil.executeUpdate( );
         }
-    }
-
-    /**
-     * Generates a new primary key
-     *
-     * @param plugin the plugin
-     * @return The new primary key
-     */
-    private int newPrimaryKey( Plugin plugin )
-    {
-        int nKey;
-        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin ) )
-        {
-
-            daoUtil.executeQuery( );
-
-            if ( !daoUtil.next( ) )
-            {
-                // if the table is empty
-                nKey = 1;
-            }
-
-            nKey = daoUtil.getInt( 1 ) + 1;
-        }
-
-        return nKey;
     }
 
     /**
