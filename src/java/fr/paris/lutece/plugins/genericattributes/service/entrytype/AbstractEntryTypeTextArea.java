@@ -45,7 +45,6 @@ import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
-import fr.paris.lutece.portal.service.editor.EditorBbcodeService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -56,8 +55,6 @@ import fr.paris.lutece.util.string.StringUtil;
  */
 public abstract class AbstractEntryTypeTextArea extends EntryTypeService
 {
-    private static final String PARAMETER_USE_RICH_TEXT = "useRichText";
-
     /**
      * {@inheritDoc}
      */
@@ -77,7 +74,6 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         String strHeight = request.getParameter( PARAMETER_HEIGHT );
         String strMaxSizeEnter = request.getParameter( PARAMETER_MAX_SIZE_ENTER );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
-        String strUseRichText = request.getParameter( PARAMETER_USE_RICH_TEXT );
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strEditableBack = request.getParameter( PARAMETER_EDITABLE_BACK );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
@@ -155,7 +151,6 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         entry.setHelpMessage( strHelpMessage );
         entry.setComment( strComment );
         entry.setCSSClass( strCSSClass );
-        setUseRichText( entry, Boolean.parseBoolean( strUseRichText ) );
 
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_TEXT_CONF, null, strValue );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_MAX_SIZE, null, String.valueOf( nMaxSizeEnter ) );
@@ -186,27 +181,11 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         }
 
         int nMaxSize = Integer.parseInt( entry.getFieldByCode( FIELD_MAX_FILES ).getValue( ) );
-
-        if ( getUseRichText( entry ) )
-        {
-            response.setResponseValue( EditorBbcodeService.getInstance( ).parse( strValueEntry ) );
-        }
-        else
-        {
-            response.setResponseValue( strValueEntry );
-        }
+        response.setResponseValue( strValueEntry );
 
         if ( StringUtils.isNotBlank( response.getResponseValue( ) ) )
         {
-            // if we use a rich text, we set the toStringValueResponse to the BBCode string
-            if ( getUseRichText( entry ) )
-            {
-                response.setToStringValueResponse( strValueEntry );
-            }
-            else
-            {
-                response.setToStringValueResponse( getResponseValueForRecap( entry, request, response, locale ) );
-            }
+            response.setToStringValueResponse( getResponseValueForRecap( entry, request, response, locale ) );
         }
         else
         {
@@ -267,32 +246,5 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
         return response.getResponseValue( );
-    }
-
-    /**
-     * Check if the text area should be a rich text
-     * 
-     * @param entry The entry
-     * @return True if the text area should be a rich text, false otherwise
-     */
-    protected boolean getUseRichText( Entry entry )
-    {
-        // We use the fieldInLine attribute to avoid creating a specific attribute for
-        // entries of type text area
-        return entry.isFieldInLine( );
-    }
-
-    /**
-     * Set if the text area should be a rich text
-     * 
-     * @param entry        The entry
-     * @param bUseRichText True if the text area should be a rich text, false
-     *                     otherwise
-     */
-    protected void setUseRichText( Entry entry, boolean bUseRichText )
-    {
-        // We use the fieldInLine attribute to avoid creating a specific attribute for
-        // entries of type text area
-        entry.setFieldInLine( bUseRichText );
     }
 }
