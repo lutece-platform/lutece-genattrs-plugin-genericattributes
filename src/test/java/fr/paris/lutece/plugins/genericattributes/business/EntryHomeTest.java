@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,7 +50,7 @@ public class EntryHomeTest extends AbstractEntryTest
     private static final int NUMBER_RESPONSE_ENTRY_ONE = 3;
     private static final int NUMBER_FIELDS_ENTRY_TWO = 5;
     private static final int NUMBER_RESPONSE_ENTRY_TWO = 0;
-    
+
     private static final String TITLE_1 = "Title 1";
     private static final String TITLE_2 = "Title 2";
 
@@ -79,7 +79,7 @@ public class EntryHomeTest extends AbstractEntryTest
 
         Entry entryTwo = manageCreateEntry( entryGroup, TITLE_2, NUMBER_FIELDS_ENTRY_TWO, NUMBER_RESPONSE_ENTRY_TWO );
         _nIdEntry2 = entryTwo.getIdEntry( );
-        
+
         listEntry.add( entryOne );
         listEntry.add( entryTwo );
         listEntry.add( entryGroup );
@@ -176,7 +176,7 @@ public class EntryHomeTest extends AbstractEntryTest
         int res = EntryHome.getNumberEntryByFilter( entryFilter );
         assertEquals( 1, res );
     }
-    
+
     /**
      * Test the remove method of the EntryHome for an entry which is inside a Entry of type group
      */
@@ -196,26 +196,26 @@ public class EntryHomeTest extends AbstractEntryTest
             checkEntryRemoving( entry.getIdEntry( ) );
         }
     }
-    
+
     public void testFindByPrimaryKeyList( )
     {
         List<Integer> idList = new ArrayList<>( );
         idList.add( _nIdEntry );
         idList.add( _nIdEntry2 );
-        
+
         List<Entry> list = EntryHome.findByPrimaryKeyList( idList );
         assertEquals( 2, list.size( ) );
     }
-    
-    public void testUpdate()
+
+    public void testUpdate( )
     {
         Entry entry = EntryHome.findByPrimaryKey( _nIdEntry );
-        
+
         assertEquals( TITLE_1, entry.getTitle( ) );
-        
+
         entry.setTitle( TITLE_2 );
         EntryHome.update( entry );
-        
+
         entry = EntryHome.findByPrimaryKey( _nIdEntry );
         assertEquals( TITLE_2, entry.getTitle( ) );
     }
@@ -232,7 +232,8 @@ public class EntryHomeTest extends AbstractEntryTest
         assertEquals( "The has not been removed !", Boolean.TRUE.booleanValue( ), entry == null );
 
         List<Field> listFields = FieldHome.getFieldListByIdEntry( nIdEntry );
-        assertEquals( "There are Fields which are linked to the removed entry which are not been removed !", Boolean.TRUE.booleanValue( ), listFields.isEmpty( ) );
+        assertEquals( "There are Fields which are linked to the removed entry which are not been removed !", Boolean.TRUE.booleanValue( ),
+                listFields.isEmpty( ) );
 
         ResponseFilter responseFilter = new ResponseFilter( );
         responseFilter.setIdEntry( nIdEntry );

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -60,17 +60,15 @@ public final class FieldDAO implements IFieldDAO
             + "id_field=?,id_entry=?,code=?,title=?,value=?,default_value=?,pos=?,value_type_date=?,no_display_title=?,comment=? WHERE id_field = ?";
     private static final String SQL_QUERY_SELECT_FIELD_BY_ID_ENTRY = SQL_QUERY_SELECT_ALL + " WHERE id_entry = ? ORDER BY pos";
     private static final String SQL_QUERY_NEW_POSITION = "SELECT MAX(pos)" + " FROM genatt_field ";
-    private static final String SQL_QUERY_SELECT_REGULAR_EXPRESSION_BY_ID_FIELD = "SELECT id_expression "
-            + " FROM genatt_verify_by where id_field=?";
-    private static final String SQL_QUERY_COUNT_FIELD_BY_ID_REGULAR_EXPRESSION = "SELECT COUNT(id_field) "
-            + " FROM genatt_verify_by where id_expression = ?";
+    private static final String SQL_QUERY_SELECT_REGULAR_EXPRESSION_BY_ID_FIELD = "SELECT id_expression " + " FROM genatt_verify_by where id_field=?";
+    private static final String SQL_QUERY_COUNT_FIELD_BY_ID_REGULAR_EXPRESSION = "SELECT COUNT(id_field) " + " FROM genatt_verify_by where id_expression = ?";
     private static final String SQL_QUERY_SELECT_FIELD_BY_LIST_ID_ENTRY = SQL_QUERY_SELECT_ALL + " WHERE id_entry IN ";
-    
 
     /**
      * Generates a new field position
      * 
-     * @param plugin the plugin
+     * @param plugin
+     *            the plugin
      * @return the new entry position
      */
     private int newPosition( Plugin plugin )
@@ -109,8 +107,7 @@ public final class FieldDAO implements IFieldDAO
             daoUtil.setString( nIndex++, field.getValue( ) );
             daoUtil.setBoolean( nIndex++, field.isDefaultValue( ) );
             daoUtil.setInt( nIndex++, field.getPosition( ) );
-            daoUtil.setDate( nIndex++,
-                    ( field.getValueTypeDate( ) == null ) ? null : new Date( field.getValueTypeDate( ).getTime( ) ) );
+            daoUtil.setDate( nIndex++, ( field.getValueTypeDate( ) == null ) ? null : new Date( field.getValueTypeDate( ).getTime( ) ) );
             daoUtil.setBoolean( nIndex++, field.isNoDisplayTitle( ) );
             daoUtil.setString( nIndex++, field.getComment( ) );
             daoUtil.executeUpdate( );
@@ -172,8 +169,7 @@ public final class FieldDAO implements IFieldDAO
             daoUtil.setString( nIndex++, field.getValue( ) );
             daoUtil.setBoolean( nIndex++, field.isDefaultValue( ) );
             daoUtil.setInt( nIndex++, field.getPosition( ) );
-            daoUtil.setDate( nIndex++,
-                    ( field.getValueTypeDate( ) == null ) ? null : new Date( field.getValueTypeDate( ).getTime( ) ) );
+            daoUtil.setDate( nIndex++, ( field.getValueTypeDate( ) == null ) ? null : new Date( field.getValueTypeDate( ).getTime( ) ) );
             daoUtil.setBoolean( nIndex++, field.isNoDisplayTitle( ) );
             daoUtil.setString( nIndex++, field.getComment( ) );
 
@@ -276,14 +272,14 @@ public final class FieldDAO implements IFieldDAO
 
         return nNumberEntry != 0;
     }
-    
+
     @Override
     public List<Field> loadMultipleByEntryIdList( List<Integer> idList, Plugin plugin )
     {
         List<Field> list = new ArrayList<>( );
-        String query = SQL_QUERY_SELECT_FIELD_BY_LIST_ID_ENTRY + " ( "
-                + idList.stream( ).distinct( ).map( i -> "?" ).collect( Collectors.joining( "," ) ) + " )";
-        
+        String query = SQL_QUERY_SELECT_FIELD_BY_LIST_ID_ENTRY + " ( " + idList.stream( ).distinct( ).map( i -> "?" ).collect( Collectors.joining( "," ) )
+                + " )";
+
         try ( DAOUtil daoUtil = new DAOUtil( query, plugin ) )
         {
             for ( int i = 0; i < idList.size( ); i++ )

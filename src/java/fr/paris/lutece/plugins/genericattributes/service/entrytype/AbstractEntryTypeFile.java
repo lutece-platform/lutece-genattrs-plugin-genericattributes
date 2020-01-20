@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -56,8 +56,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Abstract entries of type files. This abstract entry type extends the abstract
- * entry type upload.
+ * Abstract entries of type files. This abstract entry type extends the abstract entry type upload.
  */
 public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
 {
@@ -71,8 +70,7 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-            Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
         if ( !( request instanceof MultipartHttpServletRequest ) )
         {
@@ -85,8 +83,7 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
         {
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
             List<FileItem> listFileItemsToUpload = multipartRequest.getFileList( strAttributeName );
-            List<FileItem> listUploadedFileItems = getAsynchronousUploadHandler( )
-                    .getListUploadedFiles( strAttributeName, request.getSession( ) );
+            List<FileItem> listUploadedFileItems = getAsynchronousUploadHandler( ).getListUploadedFiles( strAttributeName, request.getSession( ) );
             GenericAttributeError error = null;
 
             // remove when multipartRequest.getFileList( ) will be fixed.
@@ -180,13 +177,13 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
     /**
      * Get a generic attributes response from a file item
      * 
-     * @param fileItem            The file item
-     * @param entry               The entry
-     * @param bCreatePhysicalFile True to create the physical file associated with
-     *                            the file of the response, false otherwise. Note
-     *                            that the physical file will never be saved in the
-     *                            database by this method, like any other created
-     *                            object.
+     * @param fileItem
+     *            The file item
+     * @param entry
+     *            The entry
+     * @param bCreatePhysicalFile
+     *            True to create the physical file associated with the file of the response, false otherwise. Note that the physical file will never be saved in
+     *            the database by this method, like any other created object.
      * @return The created response
      */
     private Response getResponseFromFile( FileItem fileItem, Entry entry, boolean bCreatePhysicalFile )

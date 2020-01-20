@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -149,7 +149,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
         }
 
         /** 2) Check files size */
-        error  = FileAttributesUtils.checkFileSize( entry, listUploadedFileItems, listFileItemsToUpload, locale );
+        error = FileAttributesUtils.checkFileSize( entry, listUploadedFileItems, listFileItemsToUpload, locale );
         if ( error != null )
         {
             return error;
@@ -424,7 +424,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
             genAttError.setMandatoryError( false );
 
             Object [ ] args = {
-                fileItem.getName( )
+                    fileItem.getName( )
             };
             genAttError.setErrorMessage( I18nService.getLocalizedString( MESSAGE_ERROR_NOT_AN_IMAGE, args, locale ) );
             genAttError.setTitleQuestion( entry.getTitle( ) );

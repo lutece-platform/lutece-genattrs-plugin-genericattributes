@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,8 +47,7 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 
 /**
- * This class provides instances management methods (create, find, ...) for
- * Field objects
+ * This class provides instances management methods (create, find, ...) for Field objects
  */
 public final class FieldHome
 {
@@ -66,8 +65,8 @@ public final class FieldHome
     /**
      * Creation of an instance of field
      * 
-     * @param field The instance of the Field which contains the informations to
-     *              store
+     * @param field
+     *            The instance of the Field which contains the informations to store
      * @return The primary key of the new Field.
      */
     public static int create( Field field )
@@ -78,7 +77,8 @@ public final class FieldHome
     /**
      * Copy of an instance of field
      * 
-     * @param field The instance of the Field who must copy
+     * @param field
+     *            The instance of the Field who must copy
      */
     public static void copy( Field field )
     {
@@ -103,7 +103,7 @@ public final class FieldHome
 
             TransactionManager.commitTransaction( getPlugin( ) );
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
             TransactionManager.rollBack( getPlugin( ) );
             throw new AppException( e.getMessage( ), e );
@@ -113,8 +113,8 @@ public final class FieldHome
     /**
      * Update of the field which is specified in parameter
      * 
-     * @param field The instance of the Field which contains the informations to
-     *              update
+     * @param field
+     *            The instance of the Field which contains the informations to update
      */
     public static void update( Field field )
     {
@@ -124,7 +124,8 @@ public final class FieldHome
     /**
      * Remove the field whose identifier is specified in parameter
      * 
-     * @param nIdField The field Id
+     * @param nIdField
+     *            The field Id
      */
     public static void remove( int nIdField )
     {
@@ -152,7 +153,8 @@ public final class FieldHome
     /**
      * Returns an instance of a Field whose identifier is specified in parameter
      * 
-     * @param nKey The field primary key
+     * @param nKey
+     *            The field primary key
      * @return an instance of Field
      */
     public static Field findByPrimaryKey( int nKey )
@@ -179,8 +181,7 @@ public final class FieldHome
 
                 for ( Integer regularExpressionKey : listRegularExpressionKeyEntry )
                 {
-                    regularExpression = RegularExpressionService.getInstance( )
-                            .getRegularExpressionByKey( regularExpressionKey );
+                    regularExpression = RegularExpressionService.getInstance( ).getRegularExpressionByKey( regularExpressionKey );
 
                     if ( regularExpression != null )
                     {
@@ -198,7 +199,8 @@ public final class FieldHome
     /**
      * Load the data of all the field of the entry and returns them in a list
      * 
-     * @param nIdEntry the id of the entry
+     * @param nIdEntry
+     *            the id of the entry
      * @return the list of field
      */
     public static List<Field> getFieldListByIdEntry( int nIdEntry )
@@ -209,8 +211,10 @@ public final class FieldHome
     /**
      * Delete an association between field and a regular expression
      * 
-     * @param nIdField      The identifier of the field
-     * @param nIdExpression The identifier of the regular expression
+     * @param nIdField
+     *            The identifier of the field
+     * @param nIdExpression
+     *            The identifier of the regular expression
      */
     public static void removeVerifyBy( int nIdField, int nIdExpression )
     {
@@ -220,8 +224,10 @@ public final class FieldHome
     /**
      * Insert an association between field and a regular expression
      * 
-     * @param nIdField      The identifier of the field
-     * @param nIdExpression The identifier of the regular expression
+     * @param nIdField
+     *            The identifier of the field
+     * @param nIdExpression
+     *            The identifier of the regular expression
      */
     public static void createVerifyBy( int nIdField, int nIdExpression )
     {
@@ -229,10 +235,10 @@ public final class FieldHome
     }
 
     /**
-     * Load the key of all the regularExpression associate to the field and returns
-     * them in a list
+     * Load the key of all the regularExpression associate to the field and returns them in a list
      * 
-     * @param nIdField the id of the field
+     * @param nIdField
+     *            the id of the field
      * @return the list of regular expression key
      */
     public static List<Integer> getListRegularExpressionKeyByIdField( int nIdField )
@@ -243,18 +249,20 @@ public final class FieldHome
     /**
      * Verify if the regular expression is use
      * 
-     * @param nIdExpression The identifier of the regular expression
+     * @param nIdExpression
+     *            The identifier of the regular expression
      * @return true if the regular expression is use
      */
     public static boolean isRegularExpressionIsUse( int nIdExpression )
     {
         return _dao.isRegularExpressionIsUse( nIdExpression, getPlugin( ) );
     }
-    
+
     /**
      * Load the data of all the field of the list of entry entry and returns them in a list
      * 
-     * @param idList the ids of the entries
+     * @param idList
+     *            the ids of the entries
      * @return the list of field
      */
     public static List<Field> getFieldListByListIdEntry( List<Integer> idList )

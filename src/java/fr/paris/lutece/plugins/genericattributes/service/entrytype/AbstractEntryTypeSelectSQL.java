@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -67,9 +67,7 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
         initCommonRequestData( entry, request );
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
-        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
-                ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( )
-                : null;
+        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
@@ -83,11 +81,11 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object[] tabRequiredFields =
-            { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                    I18nService.getLocalizedString( strFieldError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                    AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         // for don't update fields listFields=null
@@ -103,7 +101,7 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
         {
             getSqlQueryFields( entry );
         }
-        catch ( AppException ae )
+        catch( AppException ae )
         {
             String strErrorMsg = ae.getMessage( );
 
@@ -112,11 +110,11 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
                 strErrorMsg = strErrorMsg.substring( 0, strErrorMsg.indexOf( System.getProperty( "line.separator" ) ) );
             }
 
-            Object[] tabErrorSQLMsg =
-            { strErrorMsg };
+            Object [ ] tabErrorSQLMsg = {
+                    strErrorMsg
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_INVALID_SQL_QUERY, tabErrorSQLMsg,
-                    AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_INVALID_SQL_QUERY, tabErrorSQLMsg, AdminMessage.TYPE_STOP );
         }
 
         return null;
@@ -126,8 +124,7 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-            Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
         String strIdField = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
         int nIdField = -1;
@@ -184,7 +181,8 @@ public abstract class AbstractEntryTypeSelectSQL extends EntryTypeService
     /**
      * Return fields from a SQL query
      * 
-     * @param entry The entry
+     * @param entry
+     *            The entry
      * @return A list of fields
      */
     protected List<Field> getSqlQueryFields( Entry entry )
