@@ -179,7 +179,7 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
             return null;
         }
 
-        int nMaxSize = Integer.parseInt( entry.getFieldByCode( FIELD_MAX_FILES ).getValue( ) );
+        int nMaxSize = Integer.parseInt( entry.getFieldByCode( FIELD_MAX_SIZE ).getValue( ) );
         response.setResponseValue( strValueEntry );
 
         if ( StringUtils.isNotBlank( response.getResponseValue( ) ) )
