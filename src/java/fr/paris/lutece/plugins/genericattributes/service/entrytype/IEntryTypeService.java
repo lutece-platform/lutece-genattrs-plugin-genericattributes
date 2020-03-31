@@ -115,6 +115,7 @@ public interface IEntryTypeService
     String FIELD_MAX_SIZE = "max_size";
     String FIELD_TEXT_CONF = "text_config";
     String FIELD_EXPORTABLE = "exportable";
+    String FIELD_RICHTEXT = "richtext";
 
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";

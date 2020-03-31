@@ -41,6 +41,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
@@ -155,13 +156,13 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         entry.setHelpMessage( strHelpMessage );
         entry.setComment( strComment );
         entry.setCSSClass( strCSSClass );
-        setUseRichText( entry, Boolean.parseBoolean( strUseRichText ) );
 
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_TEXT_CONF, null, strValue );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_MAX_SIZE, null, String.valueOf( nMaxSizeEnter ) );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_WIDTH, null, String.valueOf( nWidth ) );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_HEIGHT, null, String.valueOf( nHeight ) );
-
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_RICHTEXT, null, String.valueOf( strUseRichText != null ) );
+        
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
         entry.setEditableBack( strEditableBack != null );
@@ -186,8 +187,11 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         }
 
         int nMaxSize = Integer.parseInt( entry.getFieldByCode( FIELD_MAX_SIZE ).getValue( ) );
+        
+        Field fieldRichText = entry.getFieldByCode( IEntryTypeService.FIELD_RICHTEXT );
+        boolean useRichtext = fieldRichText != null && Boolean.valueOf( fieldRichText.getValue( ) );
 
-        if ( getUseRichText( entry ) )
+        if ( useRichtext )
         {
             response.setResponseValue( EditorBbcodeService.getInstance( ).parse( strValueEntry ) );
         }
@@ -199,7 +203,7 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         if ( StringUtils.isNotBlank( response.getResponseValue( ) ) )
         {
             // if we use a rich text, we set the toStringValueResponse to the BBCode string
-            if ( getUseRichText( entry ) )
+            if ( useRichtext )
             {
                 response.setToStringValueResponse( strValueEntry );
             }
@@ -267,32 +271,5 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
         return response.getResponseValue( );
-    }
-
-    /**
-     * Check if the text area should be a rich text
-     * 
-     * @param entry The entry
-     * @return True if the text area should be a rich text, false otherwise
-     */
-    protected boolean getUseRichText( Entry entry )
-    {
-        // We use the fieldInLine attribute to avoid creating a specific attribute for
-        // entries of type text area
-        return entry.isFieldInLine( );
-    }
-
-    /**
-     * Set if the text area should be a rich text
-     * 
-     * @param entry        The entry
-     * @param bUseRichText True if the text area should be a rich text, false
-     *                     otherwise
-     */
-    protected void setUseRichText( Entry entry, boolean bUseRichText )
-    {
-        // We use the fieldInLine attribute to avoid creating a specific attribute for
-        // entries of type text area
-        entry.setFieldInLine( bUseRichText );
     }
 }
