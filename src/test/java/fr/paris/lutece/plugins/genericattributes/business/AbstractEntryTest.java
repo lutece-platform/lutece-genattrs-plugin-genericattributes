@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,7 +53,7 @@ public abstract class AbstractEntryTest extends LuteceTestCase
     private static final String SQL_QUERY_INSERT_ENTRY_TYPE = "INSERT INTO genatt_entry_type ( id_type, title, is_group, is_comment, is_mylutece_user, class_name, icon_name, plugin ) "
             + " VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )";
     private static final String SQL_QUERY_DELETE_ENTRY_TYPE = "DELETE FROM genatt_entry_type WHERE id_type = ? ";
-    
+
     protected static int _nEntryTypeTextPrimaryKey;
     protected static int _nEntryTypeGroupPrimaryKey;
     protected final Plugin _plugin = PluginService.getPlugin( GenericAttributesPlugin.PLUGIN_NAME );
@@ -62,9 +62,12 @@ public abstract class AbstractEntryTest extends LuteceTestCase
     /**
      * Create an EntryType
      * 
-     * @param title        The title of the EntryType
-     * @param nIsGroup     1 if it's a group 0 otherwise
-     * @param strClassName The name of the class of the group
+     * @param title
+     *            The title of the EntryType
+     * @param nIsGroup
+     *            1 if it's a group 0 otherwise
+     * @param strClassName
+     *            The name of the class of the group
      * @return the identifier of the created entryType
      */
     protected int createEntryType( String title, int nIsGroup, String strClassName, String strIconName )
@@ -92,7 +95,8 @@ public abstract class AbstractEntryTest extends LuteceTestCase
     /**
      * Remove an EntryType
      * 
-     * @param nIdEntryType The identifier of the EntryType to remove
+     * @param nIdEntryType
+     *            The identifier of the EntryType to remove
      */
     protected void removeEntryType( int nIdEntryType )
     {
@@ -108,7 +112,8 @@ public abstract class AbstractEntryTest extends LuteceTestCase
     /**
      * Generates a new primary key
      *
-     * @param plugin the plugin
+     * @param plugin
+     *            the plugin
      * @return The new primary key
      */
     private int newPrimaryKey( Plugin plugin )
@@ -129,7 +134,7 @@ public abstract class AbstractEntryTest extends LuteceTestCase
 
         return nKey;
     }
-    
+
     /**
      * Manage the creation of an entry. Create an entry and its Fields and Responses objects
      * 
@@ -161,7 +166,7 @@ public abstract class AbstractEntryTest extends LuteceTestCase
 
         return entry;
     }
-    
+
     /**
      * Create an entry
      * 
@@ -188,7 +193,7 @@ public abstract class AbstractEntryTest extends LuteceTestCase
 
         return entry;
     }
-    
+
     /**
      * Create an entry of Type group
      * 
@@ -239,7 +244,7 @@ public abstract class AbstractEntryTest extends LuteceTestCase
 
         ResponseHome.create( response );
     }
-    
+
     @Override
     public void setUp( ) throws Exception
     {

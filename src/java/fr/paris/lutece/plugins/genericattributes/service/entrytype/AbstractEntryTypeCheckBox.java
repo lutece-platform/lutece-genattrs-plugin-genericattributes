@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -70,9 +70,7 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
         initCommonRequestData( entry, request );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         String strTitle = request.getParameter( PARAMETER_TITLE );
-        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
-                ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( )
-                : null;
+        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
         String strErrorMessage = request.getParameter( PARAMETER_ERROR_MESSAGE );
@@ -92,11 +90,11 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object[] tabRequiredFields =
-            { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                    I18nService.getLocalizedString( strFieldError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                    AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         entry.setCode( strCode );
@@ -114,7 +112,7 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
         {
             nFieldInLine = Integer.parseInt( strFieldInLine );
         }
-        catch ( NumberFormatException ne )
+        catch( NumberFormatException ne )
         {
             AppLogService.error( ne );
         }
@@ -128,10 +126,9 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-            Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String[] strTabIdField = request.getParameterValues( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
+        String [ ] strTabIdField = request.getParameterValues( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
         List<Integer> listFieldIdInResponse = new ArrayList<>( );
         List<Field> listFieldInResponse = new ArrayList<>( );
 
@@ -141,22 +138,19 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
             {
                 try
                 {
-                    int nIdField = Integer.parseInt( strTabIdField[cpt] );
+                    int nIdField = Integer.parseInt( strTabIdField [cpt] );
                     listFieldIdInResponse.add( nIdField );
                 }
-                catch ( NumberFormatException ne )
+                catch( NumberFormatException ne )
                 {
                     AppLogService.error( ne.getMessage( ), ne );
                 }
 
             }
-            
-            listFieldInResponse = listFieldIdInResponse
-                    .stream( )
-                    .map( id -> GenericAttributesUtils.findFieldByIdInTheList( id, entry.getFields( ) ) )
-                    .filter( Objects::nonNull )
-                    .collect( Collectors.toList( ) );
-            
+
+            listFieldInResponse = listFieldIdInResponse.stream( ).map( id -> GenericAttributesUtils.findFieldByIdInTheList( id, entry.getFields( ) ) )
+                    .filter( Objects::nonNull ).collect( Collectors.toList( ) );
+
         }
 
         if ( CollectionUtils.isNotEmpty( listFieldInResponse ) )
@@ -185,7 +179,7 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
         }
 
         boolean bAllFieldEmpty = listFieldInResponse.stream( ).map( Field::getValue ).allMatch( StringUtils::isEmpty );
-        
+
         if ( bAllFieldEmpty )
         {
             if ( StringUtils.isNotBlank( entry.getErrorMessage( ) ) )

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,40 +37,40 @@ import static org.junit.Assert.assertNotEquals;
 
 public class FieldHomeTest extends AbstractEntryTest
 {
-    
+
     private static final String TITLE_1 = "Title 1";
     private static final String TITLE_2 = "Title 2";
     private static int _nIdEntry;
     private static int _nIdEntryGroup;
-    
+
     public void testSaveLoadDelete( )
     {
         Entry entry = new Entry( );
         entry.setIdEntry( _nIdEntry );
-        
+
         Field field = new Field( );
         field.setCode( "code" );
         field.setParentEntry( entry );
         field.setTitle( "title" );
         field.setValue( "value" );
-        
+
         FieldHome.create( field );
         assertNotEquals( 0, field.getIdField( ) );
-        
+
         Field loaded = FieldHome.findByPrimaryKey( field.getIdField( ) );
         assertEquals( "title", loaded.getTitle( ) );
-        
+
         FieldHome.remove( field.getIdField( ) );
         loaded = FieldHome.findByPrimaryKey( field.getIdField( ) );
         assertNull( loaded );
     }
-    
+
     @Override
     public void setUp( ) throws Exception
     {
         super.setUp( );
-        
-     // Create an entry of type group
+
+        // Create an entry of type group
         Entry entryGroup = createEntryGroup( );
         _nIdEntryGroup = entryGroup.getIdEntry( );
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,11 +50,9 @@ public final class ResponseDAO implements IResponseDAO
     // Constants
     private static final String SQL_QUERY_SELECT_RESPONSE = "SELECT resp.id_response, resp.response_value, type.class_name, ent.id_type, ent.id_entry, ent.title, ent.code, "
             + " resp.iteration_number, resp.id_field, resp.id_file, resp.status FROM genatt_response resp";
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_RESPONSE
-            + ", genatt_entry ent, genatt_entry_type type "
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_RESPONSE + ", genatt_entry ent, genatt_entry_type type "
             + " WHERE resp.id_response = ? and resp.id_entry = ent.id_entry and ent.id_type = type.id_type ";
-    private static final String SQL_QUERY_SELECT_RESPONSE_BY_FILTER = SQL_QUERY_SELECT_RESPONSE
-            + ", genatt_entry ent, genatt_entry_type type "
+    private static final String SQL_QUERY_SELECT_RESPONSE_BY_FILTER = SQL_QUERY_SELECT_RESPONSE + ", genatt_entry ent, genatt_entry_type type "
             + " WHERE resp.id_entry = ent.id_entry and ent.id_type = type.id_type ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_response ( "
             + " response_value, id_entry, iteration_number, id_field, id_file, status ) VALUES ( ?,?,?,?,?,?)";
@@ -236,7 +234,7 @@ public final class ResponseDAO implements IResponseDAO
         {
             StringBuilder sb = new StringBuilder( SQL_FILTER_MULTI_ID_RESPONSE + " (" );
             sb.append( filter.getListId( ).stream( ).map( String::valueOf ).collect( Collectors.joining( "," ) ) );
-               sb.append( ")" );
+            sb.append( ")" );
             sbSQL.append( sb.toString( ) );
         }
 
@@ -336,8 +334,8 @@ public final class ResponseDAO implements IResponseDAO
     /**
      * Get a response from a DAOUtil.
      * 
-     * @param daoUtil The daoUtil to get data from. Note that the DAOUtil will NOT
-     *                be free by this method
+     * @param daoUtil
+     *            The daoUtil to get data from. Note that the DAOUtil will NOT be free by this method
      * @return The response
      */
     private Response getResponseFromDAOUtil( DAOUtil daoUtil )
@@ -390,7 +388,8 @@ public final class ResponseDAO implements IResponseDAO
     /**
      * Keep only valid caracters
      * 
-     * @param s the string to control
+     * @param s
+     *            the string to control
      * @return the string with only valid caracters
      */
     private String removeInvalidChars( String s )

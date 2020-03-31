@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -115,6 +115,7 @@ public interface IEntryTypeService
     String FIELD_MAX_SIZE = "max_size";
     String FIELD_TEXT_CONF = "text_config";
     String FIELD_EXPORTABLE = "exportable";
+    String FIELD_RICHTEXT = "richtext";
 
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -108,19 +108,17 @@ public abstract class AbstractEntryTypeMyLuteceUser extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-            Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
         LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
 
-        if ( SecurityService.isAuthenticationEnable( ) && SecurityService.getInstance( ).isExternalAuthentication( )
-                && user == null )
+        if ( SecurityService.isAuthenticationEnable( ) && SecurityService.getInstance( ).isExternalAuthentication( ) && user == null )
         {
             try
             {
                 user = SecurityService.getInstance( ).getRemoteUser( request );
             }
-            catch ( UserNotSignedException e )
+            catch( UserNotSignedException e )
             {
                 AppLogService.error( e.getMessage( ), e );
             }
@@ -131,8 +129,7 @@ public abstract class AbstractEntryTypeMyLuteceUser extends EntryTypeService
             GenericAttributeError error = new GenericAttributeError( );
             error.setMandatoryError( false );
             error.setTitleQuestion( entry.getTitle( ) );
-            error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_MYLUTECE_AUTHENTIFICATION_REQUIRED,
-                    request.getLocale( ) ) );
+            error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_MYLUTECE_AUTHENTIFICATION_REQUIRED, request.getLocale( ) ) );
 
             return error;
         }
