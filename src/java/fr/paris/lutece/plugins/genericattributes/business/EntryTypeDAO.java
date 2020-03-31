@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -60,23 +60,21 @@ public class EntryTypeDAO implements IEntryTypeDAO
         EntryType entryType = null;
         try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
         {
-        daoUtil.setInt( 1, idKey );
-        daoUtil.executeQuery( );
+            daoUtil.setInt( 1, idKey );
+            daoUtil.executeQuery( );
 
-        
-
-        if ( daoUtil.next( ) )
-        {
-            entryType = new EntryType( );
-            entryType.setIdType( daoUtil.getInt( 1 ) );
-            entryType.setTitle( daoUtil.getString( 2 ) );
-            entryType.setGroup( daoUtil.getBoolean( 3 ) );
-            entryType.setComment( daoUtil.getBoolean( 4 ) );
-            entryType.setBeanName( daoUtil.getString( 5 ) );
-            entryType.setIconName( daoUtil.getString( 6 ) );
-            entryType.setMyLuteceUser( daoUtil.getBoolean( 7 ) );
-            entryType.setPlugin( daoUtil.getString( 8 ) );
-        }
+            if ( daoUtil.next( ) )
+            {
+                entryType = new EntryType( );
+                entryType.setIdType( daoUtil.getInt( 1 ) );
+                entryType.setTitle( daoUtil.getString( 2 ) );
+                entryType.setGroup( daoUtil.getBoolean( 3 ) );
+                entryType.setComment( daoUtil.getBoolean( 4 ) );
+                entryType.setBeanName( daoUtil.getString( 5 ) );
+                entryType.setIconName( daoUtil.getString( 6 ) );
+                entryType.setMyLuteceUser( daoUtil.getBoolean( 7 ) );
+                entryType.setPlugin( daoUtil.getString( 8 ) );
+            }
 
         }
 
@@ -92,22 +90,22 @@ public class EntryTypeDAO implements IEntryTypeDAO
         List<EntryType> listEntryType = new ArrayList<>( );
         try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
         {
-        daoUtil.setString( 1, strPlugin );
-        daoUtil.executeQuery( );
+            daoUtil.setString( 1, strPlugin );
+            daoUtil.executeQuery( );
 
-        while ( daoUtil.next( ) )
-        {
-            EntryType entryType = new EntryType( );
-            entryType.setIdType( daoUtil.getInt( 1 ) );
-            entryType.setTitle( daoUtil.getString( 2 ) );
-            entryType.setGroup( daoUtil.getBoolean( 3 ) );
-            entryType.setComment( daoUtil.getBoolean( 4 ) );
-            entryType.setBeanName( daoUtil.getString( 5 ) );
-            entryType.setIconName( daoUtil.getString( 6 ) );
-            entryType.setMyLuteceUser( daoUtil.getBoolean( 7 ) );
-            entryType.setPlugin( daoUtil.getString( 8 ) );
-            listEntryType.add( entryType );
-        }
+            while ( daoUtil.next( ) )
+            {
+                EntryType entryType = new EntryType( );
+                entryType.setIdType( daoUtil.getInt( 1 ) );
+                entryType.setTitle( daoUtil.getString( 2 ) );
+                entryType.setGroup( daoUtil.getBoolean( 3 ) );
+                entryType.setComment( daoUtil.getBoolean( 4 ) );
+                entryType.setBeanName( daoUtil.getString( 5 ) );
+                entryType.setIconName( daoUtil.getString( 6 ) );
+                entryType.setMyLuteceUser( daoUtil.getBoolean( 7 ) );
+                entryType.setPlugin( daoUtil.getString( 8 ) );
+                listEntryType.add( entryType );
+            }
 
         }
 

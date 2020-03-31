@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -89,7 +89,7 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
             Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, locale )
+                    I18nService.getLocalizedString( strFieldError, locale )
             };
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
@@ -98,7 +98,7 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
             if ( !isValid( strNumberRows ) )
             {
                 Object [ ] tabRequiredFields = {
-                    I18nService.getLocalizedString( FIELD_NUMBER_ROWS, locale )
+                        I18nService.getLocalizedString( FIELD_NUMBER_ROWS, locale )
                 };
 
                 return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
@@ -107,7 +107,7 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
                 if ( !isValid( strNumberColumns ) )
                 {
                     Object [ ] tabRequiredFields = {
-                        I18nService.getLocalizedString( FIELD_NUMBER_COLUMNS, locale )
+                            I18nService.getLocalizedString( FIELD_NUMBER_COLUMNS, locale )
                     };
 
                     return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
@@ -145,7 +145,7 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
         {
             for ( int j = 1; j <= ( column + 1 ); j++ )
             {
-                String key =  i + "_" + j;
+                String key = i + "_" + j;
                 Field existingField = existingFields.stream( ).filter( f -> f.getValue( ).equals( key ) ).findFirst( ).orElse( null );
 
                 String strTitleRow = request.getParameter( "field_" + key );

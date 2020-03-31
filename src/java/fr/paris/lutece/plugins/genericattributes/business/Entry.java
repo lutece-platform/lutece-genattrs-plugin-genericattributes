@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -544,7 +544,7 @@ public class Entry implements Serializable, Cloneable
         Field fieldUsedCompleteResponse = getFieldByCode( IEntryTypeService.FIELD_USED_COMPLETE_RESPONSE );
         return fieldUsedCompleteResponse != null && Boolean.valueOf( fieldUsedCompleteResponse.getValue( ) );
     }
-    
+
     /**
      * @return true if the field exportable is present and set to true
      */

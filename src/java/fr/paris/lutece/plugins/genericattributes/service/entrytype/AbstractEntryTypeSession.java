@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,12 +52,9 @@ import fr.paris.lutece.portal.service.message.AdminMessageService;
 
 /**
  *
- * Abstract entry type for sessions attributes This entry is used to fetch the
- * value of a session's attribute. One example is when coupling form with crm,
- * the module-crm-form will put in session the ID demand and the user GUID. This
- * entry will be able to fetch the ID demand and user GUID when validating the
- * form. Then, it is easier to export the value to directory with the
- * module-form-exportdirectory.
+ * Abstract entry type for sessions attributes This entry is used to fetch the value of a session's attribute. One example is when coupling form with crm, the
+ * module-crm-form will put in session the ID demand and the user GUID. This entry will be able to fetch the ID demand and user GUID when validating the form.
+ * Then, it is easier to export the value to directory with the module-form-exportdirectory.
  *
  */
 public abstract class AbstractEntryTypeSession extends EntryTypeService
@@ -82,18 +79,19 @@ public abstract class AbstractEntryTypeSession extends EntryTypeService
         {
             strFieldError = ERROR_FIELD_TITLE;
         }
-        else if ( StringUtils.isBlank( strAttibuteName ) )
-        {
-            strFieldError = ERROR_FIELD_ATTRIBUTE_NAME;
-        }
+        else
+            if ( StringUtils.isBlank( strAttibuteName ) )
+            {
+                strFieldError = ERROR_FIELD_ATTRIBUTE_NAME;
+            }
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object[] tabRequiredFields =
-            { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                    I18nService.getLocalizedString( strFieldError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                    AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         entry.setCode( strCode );
@@ -111,14 +109,12 @@ public abstract class AbstractEntryTypeSession extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-            Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
         String strValueEntry = StringUtils.EMPTY;
         HttpSession session = request.getSession( false );
 
-        if ( session != null && CollectionUtils.isNotEmpty( entry.getFields( ) )
-                && entry.getFields( ).get( 0 ) != null )
+        if ( session != null && CollectionUtils.isNotEmpty( entry.getFields( ) ) && entry.getFields( ).get( 0 ) != null )
         {
             String strAttributeName = entry.getFieldByCode( FIELD_ATTRIBUTE_NAME ).getValue( );
             strValueEntry = (String) session.getAttribute( strAttributeName );

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -164,7 +164,7 @@ public abstract class EntryTypeService implements IEntryTypeService
 
         String strUsedCompleteResponse = request.getParameter( PARAMETER_USED_COMPLETE_RESPONSE );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_USED_COMPLETE_RESPONSE, null, String.valueOf( strUsedCompleteResponse != null ) );
-        
+
         String strExportable = request.getParameter( PARAMETER_EXPORTABLE );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_EXPORTABLE, null, String.valueOf( strExportable != null ) );
     }

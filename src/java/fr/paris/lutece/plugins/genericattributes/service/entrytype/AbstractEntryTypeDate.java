@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2019, Mairie de Paris
+ * Copyright (c) 2002-2020, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -69,9 +69,7 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
         initCommonRequestData( entry, request );
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
-        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
-                ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( )
-                : null;
+        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strValue = request.getParameter( PARAMETER_VALUE );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
@@ -89,11 +87,11 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object[] tabRequiredFields =
-            { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                    I18nService.getLocalizedString( strFieldError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                    AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         Date dDateValue = null;
@@ -129,8 +127,7 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-            Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
         String strValueEntry = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ).trim( );
         Response response = new Response( );
@@ -204,7 +201,7 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
     @Override
     public String getResponseValueForExport( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-       return getResponseValueForRecap( entry, request, response, locale );
+        return getResponseValueForRecap( entry, request, response, locale );
     }
 
     /**
