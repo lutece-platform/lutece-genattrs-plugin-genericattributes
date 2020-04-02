@@ -147,16 +147,7 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
 
         if ( StringUtils.isNotBlank( response.getResponseValue( ) ) )
         {
-            Date date = DateUtil.formatDate( response.getResponseValue( ), request.getLocale( ) );
-
-            if ( date != null )
-            {
-                response.setToStringValueResponse( getResponseValueForRecap( entry, request, response, locale ) );
-            }
-            else
-            {
-                response.setToStringValueResponse( StringUtils.EMPTY );
-            }
+            response.setToStringValueResponse( getResponseValueForRecap( entry, request, response, locale ) );
         }
         else
         {
