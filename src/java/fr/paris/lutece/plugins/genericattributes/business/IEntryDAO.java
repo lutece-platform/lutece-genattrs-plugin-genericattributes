@@ -130,7 +130,7 @@ public interface IEntryDAO
      *            the id of the resource
      * @param strResourceType
      *            the resource type
-     * @return List<IEntry> the list of all the entries without parent
+     * @return the list of all the entries without parent
      */
     List<Entry> findEntriesWithoutParent( Plugin plugin, int nIdResource, String strResourceType );
 
@@ -147,7 +147,7 @@ public interface IEntryDAO
      *            the id of the resource
      * @param strResourceType
      *            The resource type of the entry to get
-     * @return List<IEntry> the list of all the entries without parent
+     * @return the list of all the entries without parent
      */
     Entry findByOrderAndIdFieldAndIdResource( Plugin plugin, int nOrder, int nIdField, int nIdResource, String strResourceType );
 

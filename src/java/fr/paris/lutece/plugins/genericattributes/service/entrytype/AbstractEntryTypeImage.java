@@ -50,15 +50,6 @@ import fr.paris.lutece.util.filesystem.FileSystemUtil;
 
 public abstract class AbstractEntryTypeImage extends AbstractEntryTypeUpload
 {
-    /**
-     * Get the URL to download a file of a response throw the image servlet.
-     * 
-     * @param nResponseId
-     *            The id of the response
-     * @param strBaseUrl
-     *            The base URL
-     * @return The URL of to download the image
-     */
     @Override
     public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
@@ -97,7 +88,7 @@ public abstract class AbstractEntryTypeImage extends AbstractEntryTypeUpload
     /**
      * Get a generic attributes response from a file item
      * 
-     * @param fileItem
+     * @param imageSource
      *            The file item
      * @param entry
      *            The entry

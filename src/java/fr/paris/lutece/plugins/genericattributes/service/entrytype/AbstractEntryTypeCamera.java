@@ -67,7 +67,7 @@ import fr.paris.lutece.util.filesystem.FileSystemUtil;
 
 /**
  *
- * @class AbstractEntryTypeCamera
+ * AbstractEntryTypeCamera
  *
  */
 public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage

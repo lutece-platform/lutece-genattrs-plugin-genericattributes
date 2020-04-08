@@ -385,7 +385,7 @@ public class ResponseFilter
     }
 
     /**
-     * @param _strResponseValue
+     * @param strResponseValue
      *            the _strResponseValue to set
      */
     public void setResponseValue( String strResponseValue )

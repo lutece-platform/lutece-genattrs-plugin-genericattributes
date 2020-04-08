@@ -285,7 +285,7 @@ public final class EntryHome
      *            the id of the resource
      * @param strResourceType
      *            The resource type
-     * @return List<IEntry> the list of all the entries without parent
+     * @return the list of all the entries without parent
      */
     public static List<Entry> findEntriesWithoutParent( int nIdResource, String strResourceType )
     {
@@ -315,7 +315,7 @@ public final class EntryHome
      *            the id of the resource
      * @param strResourceType
      *            The resource type of the entry to get
-     * @return List<IEntry> the list of all the entries without parent
+     * @return the list of all the entries without parent
      */
     public static Entry findByOrderAndIdFieldAndIdResource( int nOrder, int nIdField, int nIdResource, String strResourceType )
     {

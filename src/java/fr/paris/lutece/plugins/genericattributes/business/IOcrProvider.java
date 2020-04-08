@@ -43,7 +43,7 @@ import fr.paris.lutece.util.ReferenceList;
 
 /**
  *
- * IOcrProvider : type document provider for automatic reading of documents<br/>
+ * IOcrProvider : type document provider for automatic reading of documents<br>
  * <ul>
  * <li><code>getKey(  )</code> must return the unique key.</li>
  * <li><code>getDisplayedName(  )</code> will be displayed in reference lists.</li>
@@ -79,7 +79,7 @@ public interface IOcrProvider extends Serializable
     /**
      * Gets the html template configuration
      * 
-     * @param lisEntry
+     * @param listEntry
      *            The entry list to mapping for prefill
      * @param nIdTargetEntry
      *            The File reading entry id
@@ -90,7 +90,7 @@ public interface IOcrProvider extends Serializable
     String getConfigHtmlCode( ReferenceList listEntry, int nIdTargetEntry, String strResourceType );
 
     /**
-     * Builds a new {@link ReferenceItem} for the type document provider.<br />
+     * Builds a new {@link ReferenceItem} for the type document provider.<br>
      * <code>key == getKey(  )</code>, <code>value == getDisplayedName(  )</code>
      *
      * @return the item created.

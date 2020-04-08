@@ -39,7 +39,7 @@ import fr.paris.lutece.util.ReferenceItem;
 
 /**
  *
- * IMapProvider : map provider for Geolocation <br/>
+ * IMapProvider : map provider for Geolocation <br >
  * <ul>
  * <li><code>getKey(  )</code> must return the unique key.</li>
  * <li><code>getDisplayedName(  )</code> will be displayed in reference lists.</li>
@@ -69,7 +69,7 @@ public interface IMapProvider extends Serializable
     String getHtmlCode( );
 
     /**
-     * Builds a new {@link ReferenceItem} for the map provider.<br />
+     * Builds a new {@link ReferenceItem} for the map provider.<br >
      * <code>key == getKey(  )</code>, <code>value == getDisplayedName(  )</code>
      * 
      * @return the item created.

@@ -305,7 +305,7 @@ public class Response implements Serializable
     /**
      * Set the isImage of this response
      * 
-     * @param bisImage
+     * @param bIsImage
      *            of this response
      */
     public void setIsImage( boolean bIsImage )

@@ -37,9 +37,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeNumbering;
 
 /**
- * Contains the map of values for {@link EntryTypeNumbering}
+ * Contains the map of values for {@link AbstractEntryTypeNumbering}
  */
 public final class EntryTypeNumberingUtil
 {
