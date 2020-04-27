@@ -33,13 +33,14 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.util.sql.DAOUtil;
-
 import java.sql.Date;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.util.sql.DAOUtil;
 
 /**
  * This class provides Data Access methods for ReportingFiche objects
@@ -61,7 +62,9 @@ public final class FieldDAO implements IFieldDAO
     private static final String SQL_QUERY_NEW_POSITION = "SELECT MAX(pos)" + " FROM genatt_field ";
     private static final String SQL_QUERY_SELECT_REGULAR_EXPRESSION_BY_ID_FIELD = "SELECT id_expression " + " FROM genatt_verify_by where id_field=?";
     private static final String SQL_QUERY_COUNT_FIELD_BY_ID_REGULAR_EXPRESSION = "SELECT COUNT(id_field) " + " FROM genatt_verify_by where id_expression = ?";
-
+    private static final String SQL_QUERY_SELECT_FIELD_BY_LIST_ID_ENTRY = "SELECT id_field,id_entry,code,title,value,default_value,pos,value_type_date,no_display_title,comment"
+            + " FROM genatt_field WHERE id_entry IN ";
+    
     /**
      * Generates a new field position
      * 
@@ -310,5 +313,43 @@ public final class FieldDAO implements IFieldDAO
         daoUtil.free( );
 
         return nNumberEntry != 0;
+    }
+    
+    @Override
+    public List<Field> loadMultipleByEntryIdList( List<Integer> idList, Plugin plugin )
+    {
+        List<Field> list = new ArrayList<>( );
+        String query = SQL_QUERY_SELECT_FIELD_BY_LIST_ID_ENTRY + " ( "
+                + idList.stream( ).distinct( ).map( i -> "?" ).collect( Collectors.joining( "," ) ) + " )";
+        
+        try ( DAOUtil daoUtil = new DAOUtil( query, plugin ) )
+        {
+            for ( int i = 0; i < idList.size( ); i++ )
+            {
+                daoUtil.setInt( i + 1, idList.get( i ) );
+            }
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                int nIndex = 1;
+                Field field = new Field( );
+                field.setIdField( daoUtil.getInt( nIndex++ ) );
+                // parent entry
+                Entry entry = new Entry( );
+                entry.setIdEntry( daoUtil.getInt( nIndex++ ) );
+                field.setParentEntry( entry );
+                field.setCode( daoUtil.getString( nIndex++ ) );
+                field.setTitle( daoUtil.getString( nIndex++ ) );
+                field.setValue( daoUtil.getString( nIndex++ ) );
+                field.setDefaultValue( daoUtil.getBoolean( nIndex++ ) );
+                field.setPosition( daoUtil.getInt( nIndex++ ) );
+                field.setValueTypeDate( daoUtil.getDate( nIndex++ ) );
+                field.setNoDisplayTitle( daoUtil.getBoolean( nIndex++ ) );
+                field.setComment( daoUtil.getString( nIndex++ ) );
+                list.add( field );
+            }
+        }
+        return list;
     }
 }
