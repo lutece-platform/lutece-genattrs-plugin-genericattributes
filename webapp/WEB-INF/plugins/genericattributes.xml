@@ -3,7 +3,7 @@
     <!-- Plugin Informations -->
     <name>genericattributes</name>
     <class>fr.paris.lutece.plugins.genericattributes.service.GenericAttributesPlugin</class>
-    <version>1.3.3</version>
+    <version>1.3.4-SNAPSHOT</version>
     <documentation/>
     <installation/>
     <changes/>
