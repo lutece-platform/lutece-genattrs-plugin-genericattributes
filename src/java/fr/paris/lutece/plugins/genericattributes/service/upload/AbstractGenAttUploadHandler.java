@@ -38,6 +38,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -65,6 +66,7 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
 {
     private static final String PREFIX_ENTRY_ID = IEntryTypeService.PREFIX_ATTRIBUTE;
     private static final Pattern PATTERN_PREFIX_ENTRY_ID = Pattern.compile( "[^0-9]+([0-9]+)$" );
+    private static final String PARAM_CUSTOM_SESSION_ID = "CUSTOM_SESSION";
 
     // Error messages
     private static final String ERROR_MESSAGE_UNKNOWN_ERROR = "genericattributes.message.unknownError";
@@ -81,7 +83,8 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
     {
         if ( StringUtils.isNotBlank( strFieldName ) && ( strFieldName.length( ) > PREFIX_ENTRY_ID.length( ) ) )
         {
-            initMap( request.getSession( ).getId( ), strFieldName );
+            String sessionId = getCustomSessionId( request.getSession( ) );
+            initMap( sessionId, strFieldName );
 
             String strIdEntry = getEntryIdFromFieldName( strFieldName );
 
@@ -122,13 +125,26 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
         {
             throw new AppException( "id field name is not provided for the current file upload" );
         }
+        
+        String sessionId = getCustomSessionId( session );
 
-        initMap( session.getId( ), strFieldName );
+        initMap( sessionId, strFieldName );
 
         // find session-related files in the map
-        Map<String, List<FileItem>> mapFileItemsSession = _mapAsynchronousUpload.get( session.getId( ) );
+        Map<String, List<FileItem>> mapFileItemsSession = _mapAsynchronousUpload.get( sessionId );
 
         return mapFileItemsSession.get( strFieldName );
+    }
+    
+    private String getCustomSessionId( HttpSession session )
+    {
+        String sessionId = (String) session.getAttribute( PARAM_CUSTOM_SESSION_ID );
+        if ( sessionId == null )
+        {
+            sessionId = UUID.randomUUID().toString();
+            session.setAttribute( PARAM_CUSTOM_SESSION_ID, sessionId );
+        }
+        return sessionId;
     }
 
     /**
@@ -141,7 +157,8 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
         // the original name, but clean it to make it cross-platform.
         String strFileName = UploadUtil.cleanFileName( fileItem.getName( ).trim( ) );
 
-        initMap( request.getSession( ).getId( ), strFieldName );
+        String sessionId = getCustomSessionId( request.getSession( ) );
+        initMap( sessionId, strFieldName );
 
         // Check if this file has not already been uploaded
         List<FileItem> uploadedFiles = getListUploadedFiles( strFieldName, request.getSession( ) );
@@ -195,9 +212,14 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
      * @param strSessionId
      *            the session id
      */
-    public void removeSessionFiles( String strSessionId )
+    public void removeSessionFiles( HttpSession session )
     {
-        _mapAsynchronousUpload.remove( strSessionId );
+        String sessionId = (String) session.getAttribute( PARAM_CUSTOM_SESSION_ID );
+        if ( sessionId != null) 
+        {
+            _mapAsynchronousUpload.remove( sessionId );
+        }
+       
     }
 
     /**
