@@ -159,6 +159,15 @@ public abstract class AbstractEntryTypeSelect extends EntryTypeService
     {
         if ( response.getField( ) != null )
         {
+            if ( response.getField( ).getTitle( ) == null )
+            {
+                Field field = FieldHome.findByPrimaryKey( response.getField( ).getIdField( ) );
+
+                if ( field != null )
+                {
+                    response.setField( field );
+                }
+            }
             return response.getField( ).getTitle( );
         }
 
