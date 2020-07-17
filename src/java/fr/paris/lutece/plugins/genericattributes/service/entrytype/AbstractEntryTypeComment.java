@@ -82,7 +82,7 @@ public abstract class AbstractEntryTypeComment extends EntryTypeService
         entry.setComment( strComment );
         entry.setCSSClass( strCSSClass );
         entry.setIndexed( strIndexed != null );
-        
+
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_DISPLAY_BO, null, String.valueOf( strDisplayBo != null ) );
         return null;
     }
