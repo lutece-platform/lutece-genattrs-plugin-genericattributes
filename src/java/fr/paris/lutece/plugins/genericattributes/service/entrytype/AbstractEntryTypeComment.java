@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -60,6 +61,7 @@ public abstract class AbstractEntryTypeComment extends EntryTypeService
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
+        String strDisplayBo = request.getParameter( PARAMETER_DISPLAY_BO );
         String strFieldError = StringUtils.EMPTY;
 
         if ( StringUtils.isBlank( strComment ) )
@@ -80,7 +82,8 @@ public abstract class AbstractEntryTypeComment extends EntryTypeService
         entry.setComment( strComment );
         entry.setCSSClass( strCSSClass );
         entry.setIndexed( strIndexed != null );
-
+        
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_DISPLAY_BO, null, String.valueOf( strDisplayBo != null ) );
         return null;
     }
 }
