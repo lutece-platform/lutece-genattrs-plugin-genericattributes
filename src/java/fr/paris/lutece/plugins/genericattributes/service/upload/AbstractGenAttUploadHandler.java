@@ -125,7 +125,7 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
         {
             throw new AppException( "id field name is not provided for the current file upload" );
         }
-        
+
         String sessionId = getCustomSessionId( session );
 
         initMap( sessionId, strFieldName );
@@ -135,13 +135,13 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
 
         return mapFileItemsSession.get( strFieldName );
     }
-    
+
     private String getCustomSessionId( HttpSession session )
     {
         String sessionId = (String) session.getAttribute( PARAM_CUSTOM_SESSION_ID );
         if ( sessionId == null )
         {
-            sessionId = UUID.randomUUID().toString();
+            sessionId = UUID.randomUUID( ).toString( );
             session.setAttribute( PARAM_CUSTOM_SESSION_ID, sessionId );
         }
         return sessionId;
@@ -215,11 +215,11 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
     public void removeSessionFiles( HttpSession session )
     {
         String sessionId = (String) session.getAttribute( PARAM_CUSTOM_SESSION_ID );
-        if ( sessionId != null) 
+        if ( sessionId != null )
         {
             _mapAsynchronousUpload.remove( sessionId );
         }
-       
+
     }
 
     /**
