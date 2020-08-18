@@ -65,6 +65,7 @@ public class Entry implements Serializable, Cloneable
     private List<Entry> _listEntryChildren;
     private List<Field> _listFields;
     private Field _fieldDepend;
+    private int _nNumberConditionalQuestion;
     private boolean _bUnique;
     private GenericAttributeError _error;
     private String _strCSSClass;
@@ -363,6 +364,28 @@ public class Entry implements Serializable, Cloneable
     public void setFieldDepend( Field depend )
     {
         _fieldDepend = depend;
+    }
+
+    /**
+     * Get the number of conditional questions associated with the entry
+     * 
+     * @return the number of conditional questions associated with the entry
+     */
+    public int getNumberConditionalQuestion( )
+    {
+        return _nNumberConditionalQuestion;
+    }
+
+    /**
+     * Set the number of conditional questions who are associated with the entry
+     * 
+     * @param numberConditionalQuestion
+     *            the number of conditional questions which are associated with the entry
+     *
+     */
+    public void setNumberConditionalQuestion( int numberConditionalQuestion )
+    {
+        _nNumberConditionalQuestion = numberConditionalQuestion;
     }
 
     /**
