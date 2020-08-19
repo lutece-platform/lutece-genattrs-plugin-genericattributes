@@ -65,13 +65,11 @@ CREATE TABLE genatt_field (
 	title varchar(255),
 	code varchar(100) default NULL,
 	value long varchar,
-	height int default NULL,
 	default_value smallint default NULL,
 	pos int default NULL,
 	value_type_date date NULL,
 	no_display_title smallint default NULL,
 	comment long varchar default null,
-    
 	PRIMARY KEY (id_field)
 );
 
