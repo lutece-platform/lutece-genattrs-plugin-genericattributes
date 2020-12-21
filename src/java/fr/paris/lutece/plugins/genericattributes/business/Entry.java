@@ -576,6 +576,15 @@ public class Entry implements Serializable, Cloneable
         Field fieldExportable = getFieldByCode( IEntryTypeService.FIELD_EXPORTABLE );
         return fieldExportable != null && Boolean.valueOf( fieldExportable.getValue( ) );
     }
+    
+    /**
+     * @return true if the field exportable_pdf is present and set to true
+     */
+    public boolean isExportablePdf( )
+    {
+        Field fieldExportablePdf = getFieldByCode( IEntryTypeService.FIELD_EXPORTABLE_PDF );
+        return fieldExportablePdf != null && Boolean.valueOf( fieldExportablePdf.getValue( ) );
+    }
 
     /**
      * Get the selected map provider

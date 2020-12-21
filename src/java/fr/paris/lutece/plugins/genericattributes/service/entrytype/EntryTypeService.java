@@ -167,5 +167,8 @@ public abstract class EntryTypeService implements IEntryTypeService
 
         String strExportable = request.getParameter( PARAMETER_EXPORTABLE );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_EXPORTABLE, null, String.valueOf( strExportable != null ) );
+        
+        String strExportablePDF = request.getParameter( PARAMETER_EXPORTABLE_PDF );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_EXPORTABLE_PDF, null, String.valueOf( strExportablePDF != null ) );
     }
 }
