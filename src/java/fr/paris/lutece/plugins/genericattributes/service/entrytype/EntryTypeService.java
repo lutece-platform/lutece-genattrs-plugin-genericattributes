@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -167,7 +167,7 @@ public abstract class EntryTypeService implements IEntryTypeService
 
         String strExportable = request.getParameter( PARAMETER_EXPORTABLE );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_EXPORTABLE, null, String.valueOf( strExportable != null ) );
-        
+
         String strExportablePDF = request.getParameter( PARAMETER_EXPORTABLE_PDF );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_EXPORTABLE_PDF, null, String.valueOf( strExportablePDF != null ) );
     }

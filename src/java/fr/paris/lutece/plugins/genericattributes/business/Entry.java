@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2020, City of Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -576,7 +576,7 @@ public class Entry implements Serializable, Cloneable
         Field fieldExportable = getFieldByCode( IEntryTypeService.FIELD_EXPORTABLE );
         return fieldExportable != null && Boolean.valueOf( fieldExportable.getValue( ) );
     }
-    
+
     /**
      * @return true if the field exportable_pdf is present and set to true
      */
