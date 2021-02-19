@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -186,6 +187,10 @@ public final class EntryDAO implements IEntryDAO
     public List<Entry> loadMultiple( List<Integer> idList, Plugin plugin )
     {
         List<Entry> list = new ArrayList<>( );
+        if ( CollectionUtils.isEmpty( idList ) )
+        {
+            return list;
+        }
         String query = SQL_QUERY_FIND_BY_PRIMARY_KEY_LIST + idList.stream( ).distinct( ).map( i -> "?" ).collect( Collectors.joining( "," ) ) + " )";
 
         try ( DAOUtil daoUtil = new DAOUtil( query, plugin ) )

@@ -39,6 +39,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
@@ -277,6 +279,10 @@ public final class FieldDAO implements IFieldDAO
     public List<Field> loadMultipleByEntryIdList( List<Integer> idList, Plugin plugin )
     {
         List<Field> list = new ArrayList<>( );
+        if ( CollectionUtils.isEmpty( idList ) )
+        {
+            return list;
+        }
         String query = SQL_QUERY_SELECT_FIELD_BY_LIST_ID_ENTRY + " ( " + idList.stream( ).distinct( ).map( i -> "?" ).collect( Collectors.joining( "," ) )
                 + " )";
 
