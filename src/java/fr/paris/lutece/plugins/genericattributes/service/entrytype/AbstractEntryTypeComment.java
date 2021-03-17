@@ -33,17 +33,24 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
-import fr.paris.lutece.plugins.genericattributes.business.Entry;
-import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
-import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.message.AdminMessage;
-import fr.paris.lutece.portal.service.message.AdminMessageService;
-
-import org.apache.commons.lang.StringUtils;
-
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
+
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.Field;
+import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
+import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
+import fr.paris.lutece.portal.business.file.File;
+import fr.paris.lutece.portal.business.file.FileHome;
+import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
+import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.message.AdminMessage;
+import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 
 /**
  * Abstract entry type for comments
@@ -84,6 +91,40 @@ public abstract class AbstractEntryTypeComment extends EntryTypeService
         entry.setIndexed( strIndexed != null );
 
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_DISPLAY_BO, null, String.valueOf( strDisplayBo != null ) );
+        
+        if ( request instanceof MultipartHttpServletRequest )
+        {
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+            FileItem fileItem = multipartRequest.getFile( PARAMETER_FILE );
+            
+            if ( fileItem.get( ) != null )
+            {
+                removeOldFiles( entry );
+                
+                PhysicalFile physicalFile = new PhysicalFile( );
+                physicalFile.setValue( fileItem.get( ) );
+                
+                File file = new File( );
+                file.setTitle( fileItem.getName( ) );
+                file.setMimeType( fileItem.getContentType( ) );
+                file.setSize( physicalFile.getValue( ).length );
+                file.setPhysicalFile( physicalFile );
+                
+                FileHome.create( file );
+                
+                GenericAttributesUtils.createOrUpdateField( entry, FIELD_DOWNLOADABLE_FILE, file.getTitle( ), String.valueOf( file.getIdFile( ) ) );
+            }
+        }
         return null;
+    }
+    
+    private void removeOldFiles( Entry entry )
+    {
+        Field oldFile = entry.getFieldByCode( FIELD_DOWNLOADABLE_FILE );
+        if ( oldFile != null )
+        {
+            FileHome.remove( Integer.valueOf( oldFile.getValue( ) ) );
+            FieldHome.remove( oldFile.getIdField( ) );
+        }
     }
 }

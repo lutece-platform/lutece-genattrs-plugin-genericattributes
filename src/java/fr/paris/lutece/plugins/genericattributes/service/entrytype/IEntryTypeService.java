@@ -85,6 +85,7 @@ public interface IEntryTypeService
     String PARAMETER_EXPORTABLE = "exportable";
     String PARAMETER_EXPORTABLE_PDF = "exportable_pdf";
     String PARAMETER_DISPLAY_BO = "display_in_bo";
+    String PARAMETER_FILE = "file";
 
     // Fields codes
     String FIELD_DATE_VALUE = "default_date_value";
@@ -120,6 +121,7 @@ public interface IEntryTypeService
     String FIELD_EXPORTABLE_PDF = "exportable_pdf";
     String FIELD_RICHTEXT = "richtext";
     String FIELD_DISPLAY_BO = PARAMETER_DISPLAY_BO;
+    String FIELD_DOWNLOADABLE_FILE = "downloadable_file";
 
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";
