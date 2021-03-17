@@ -91,33 +91,33 @@ public abstract class AbstractEntryTypeComment extends EntryTypeService
         entry.setIndexed( strIndexed != null );
 
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_DISPLAY_BO, null, String.valueOf( strDisplayBo != null ) );
-        
+
         if ( request instanceof MultipartHttpServletRequest )
         {
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
             FileItem fileItem = multipartRequest.getFile( PARAMETER_FILE );
-            
+
             if ( fileItem.get( ) != null )
             {
                 removeOldFiles( entry );
-                
+
                 PhysicalFile physicalFile = new PhysicalFile( );
                 physicalFile.setValue( fileItem.get( ) );
-                
+
                 File file = new File( );
                 file.setTitle( fileItem.getName( ) );
                 file.setMimeType( fileItem.getContentType( ) );
                 file.setSize( physicalFile.getValue( ).length );
                 file.setPhysicalFile( physicalFile );
-                
+
                 FileHome.create( file );
-                
+
                 GenericAttributesUtils.createOrUpdateField( entry, FIELD_DOWNLOADABLE_FILE, file.getTitle( ), String.valueOf( file.getIdFile( ) ) );
             }
         }
         return null;
     }
-    
+
     private void removeOldFiles( Entry entry )
     {
         Field oldFile = entry.getFieldByCode( FIELD_DOWNLOADABLE_FILE );
