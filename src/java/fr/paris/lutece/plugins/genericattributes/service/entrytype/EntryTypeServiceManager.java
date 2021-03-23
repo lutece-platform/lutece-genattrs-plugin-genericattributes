@@ -33,6 +33,9 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryType;
 import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
@@ -45,6 +48,7 @@ public final class EntryTypeServiceManager extends AbstractCacheableService
 {
     private static final String CACHE_SERVICE_NAME = "Entry Type Service Manager Cache";
     private static EntryTypeServiceManager _instance = new EntryTypeServiceManager( );
+    private static ConcurrentMap<String, Object> _lockBeanName = new ConcurrentHashMap<>( );
 
     /**
      * Default constructor
@@ -78,7 +82,7 @@ public final class EntryTypeServiceManager extends AbstractCacheableService
 
                 entryTypeService = SpringContextService.getBean( entryType.getBeanName( ) );
 
-                synchronized( entryType.getBeanName( ) )
+                synchronized( getLockOnBean( entryType.getBeanName( ) ) )
                 {
                     _instance.putInCache( entryType.getBeanName( ), entryTypeService );
                 }
@@ -97,5 +101,11 @@ public final class EntryTypeServiceManager extends AbstractCacheableService
     public String getName( )
     {
         return CACHE_SERVICE_NAME;
+    }
+    
+    private static synchronized Object getLockOnBean( String bean )
+    {
+        _lockBeanName.putIfAbsent( bean, new Object( ) );
+        return _lockBeanName.get( bean );
     }
 }
