@@ -2,10 +2,10 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
-	<bean id="genericattributes.entryTypeDAO"  class="fr.paris.lutece.plugins.genericattributes.business.EntryTypeDAO" />
-	<bean id="genericattributes.entryDAO"  class="fr.paris.lutece.plugins.genericattributes.business.EntryDAO" />
-	<bean id="genericattributes.responseDAO"  class="fr.paris.lutece.plugins.genericattributes.business.ResponseDAO" />
-	<bean id="genericattributes.fieldDAO"  class="fr.paris.lutece.plugins.genericattributes.business.FieldDAO" />
-	
-	<bean id="genericattributes.fileService" class="fr.paris.lutece.plugins.genericattributes.service.file.FileService" />
+    <bean id="genericattributes.entryTypeDAO" class="fr.paris.lutece.plugins.genericattributes.business.EntryTypeDAO" />
+    <bean id="genericattributes.entryDAO" class="fr.paris.lutece.plugins.genericattributes.business.EntryDAO" />
+    <bean id="genericattributes.responseDAO" class="fr.paris.lutece.plugins.genericattributes.business.ResponseDAO" />
+    <bean id="genericattributes.fieldDAO" class="fr.paris.lutece.plugins.genericattributes.business.FieldDAO" />
+
+    <bean id="genericattributes.fileService" class="fr.paris.lutece.plugins.genericattributes.service.file.FileService" />
 </beans>

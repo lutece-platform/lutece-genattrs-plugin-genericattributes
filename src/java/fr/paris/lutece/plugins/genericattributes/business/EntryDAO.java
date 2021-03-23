@@ -696,7 +696,7 @@ public final class EntryDAO implements IEntryDAO
 
         entry.setErrorMessage( daoUtil.getString( nIndex++ ) );
         entry.setOnlyDisplayInBack( daoUtil.getBoolean( nIndex++ ) );
-        entry.setIndexed( daoUtil.getBoolean( nIndex++ ) );
+        entry.setIndexed( daoUtil.getBoolean( nIndex ) );
 
         return entry;
     }
