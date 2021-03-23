@@ -114,7 +114,6 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         String strViewNumber = request.getParameter( PARAMETER_VIEW_NUMBER );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
-        String strEditableBack = request.getParameter( PARAMETER_EDITABLE_BACK );
         String strFieldError = StringUtils.EMPTY;
 
         if ( StringUtils.isBlank( strTitle ) )
@@ -151,8 +150,6 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         entry.setCSSClass( strCSSClass );
         entry.setIndexed( strIndexed != null );
         entry.setMandatory( strMandatory != null );
-        entry.setEditableBack( strEditableBack != null );
-
         return null;
     }
 

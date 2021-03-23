@@ -71,7 +71,6 @@ public class Entry implements Serializable, Cloneable
     private String _strCSSClass;
     private String _strErrorMessage;
     private boolean _bOnlyDisplayInBack;
-    private boolean _bEditableBack;
     private boolean _bIndexed;
 
     /**
@@ -520,24 +519,6 @@ public class Entry implements Serializable, Cloneable
     public void setOnlyDisplayInBack( boolean onlyDisplayInBack )
     {
         this._bOnlyDisplayInBack = onlyDisplayInBack;
-    }
-
-    /**
-     * 
-     * @return the editableBack, true if editable in BO
-     */
-    public boolean isEditableBack( )
-    {
-        return _bEditableBack;
-    }
-
-    /**
-     * @param editableBack
-     *            the editableBack to set, true if editable in BO
-     */
-    public void setEditableBack( boolean editableBack )
-    {
-        this._bEditableBack = editableBack;
     }
 
     public boolean isIndexed( )
