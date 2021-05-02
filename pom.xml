@@ -45,6 +45,11 @@
             <version>[1.0.7,)</version>
             <type>lutece-plugin</type>
         </dependency>
+        <dependency>
+            <groupId>com.googlecode.libphonenumber</groupId>
+            <artifactId>libphonenumber</artifactId>
+            <version>8.12.22</version>
+        </dependency>
     </dependencies>
 
     <properties>
