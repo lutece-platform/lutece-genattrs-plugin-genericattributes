@@ -45,8 +45,10 @@ import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.file.File;
-import fr.paris.lutece.portal.business.file.FileHome;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
+import fr.paris.lutece.portal.service.file.FileService;
+import fr.paris.lutece.portal.service.file.IFileStoreServiceProvider;
+import fr.paris.lutece.portal.service.file.implementation.LocalDatabaseFileService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -110,8 +112,7 @@ public abstract class AbstractEntryTypeComment extends EntryTypeService
                 file.setSize( physicalFile.getValue( ).length );
                 file.setPhysicalFile( physicalFile );
 
-                FileHome.create( file );
-
+                getFileStoreServiceProvider( ).storeFile( file );
                 GenericAttributesUtils.createOrUpdateField( entry, FIELD_DOWNLOADABLE_FILE, file.getTitle( ), String.valueOf( file.getIdFile( ) ) );
             }
         }
@@ -123,8 +124,13 @@ public abstract class AbstractEntryTypeComment extends EntryTypeService
         Field oldFile = entry.getFieldByCode( FIELD_DOWNLOADABLE_FILE );
         if ( oldFile != null )
         {
-            FileHome.remove( Integer.valueOf( oldFile.getValue( ) ) );
+            getFileStoreServiceProvider( ).delete( oldFile.getValue( ) );
             FieldHome.remove( oldFile.getIdField( ) );
         }
+    }
+    
+    protected IFileStoreServiceProvider getFileStoreServiceProvider( )
+    {
+        return FileService.getInstance( ).getFileStoreServiceProvider( LocalDatabaseFileService.FILE_STORE_PROVIDER_NAME );
     }
 }
