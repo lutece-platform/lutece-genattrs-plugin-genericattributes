@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -101,7 +102,11 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
 
             if ( dDateValue == null )
             {
-                return AdminMessageService.getMessageUrl( request, MESSAGE_ILLOGICAL_DATE, AdminMessage.TYPE_STOP );
+                SimpleDateFormat sdf = (SimpleDateFormat) DateUtil.getDateFormat( locale );
+                Object[ ] messageArgs = new Object[] {
+                        sdf.toPattern( )  
+                };
+                return AdminMessageService.getMessageUrl( request, MESSAGE_ILLOGICAL_DATE, messageArgs, AdminMessage.TYPE_STOP );
             }
         }
 
@@ -173,7 +178,12 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
 
         if ( StringUtils.isNotBlank( strValueEntry ) && ( tDateValue == null ) )
         {
-            String strError = I18nService.getLocalizedString( MESSAGE_ILLOGICAL_DATE, locale );
+            SimpleDateFormat sdf = (SimpleDateFormat) DateUtil.getDateFormat( locale );
+            Object[ ] messageArgs = new Object[] {
+                    sdf.toPattern( )  
+            };
+            
+            String strError = I18nService.getLocalizedString( MESSAGE_ILLOGICAL_DATE, messageArgs,  locale );
             GenericAttributeError error = new GenericAttributeError( );
             error.setTitleQuestion( entry.getTitle( ) );
             error.setMandatoryError( false );
