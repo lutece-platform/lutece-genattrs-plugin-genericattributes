@@ -112,8 +112,8 @@ public abstract class AbstractEntryTypeComment extends EntryTypeService
                 file.setSize( physicalFile.getValue( ).length );
                 file.setPhysicalFile( physicalFile );
 
-                getFileStoreServiceProvider( ).storeFile( file );
-                GenericAttributesUtils.createOrUpdateField( entry, FIELD_DOWNLOADABLE_FILE, file.getTitle( ), String.valueOf( file.getIdFile( ) ) );
+                String idFile = getFileStoreServiceProvider( ).storeFile( file );
+                GenericAttributesUtils.createOrUpdateField( entry, FIELD_DOWNLOADABLE_FILE, file.getTitle( ), idFile );
             }
         }
         return null;
