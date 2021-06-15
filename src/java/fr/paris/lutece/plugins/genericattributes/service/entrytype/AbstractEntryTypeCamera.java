@@ -292,8 +292,9 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
                 byte [ ] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary( base64Image );
                 physicalFile.setValue( imageBytes );
                 file.setPhysicalFile( physicalFile );
+                file.setSize( imageBytes.length );
             }
-
+            
             response.setFile( file );
             response.setIsImage( true );
             response.setToStringValueResponse( imageSource );
@@ -378,7 +379,7 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
      */
     public GenericAttributeError doCheckSize( BufferedImage image, Entry entry, Locale locale )
     {
-        int nMaxSize = Integer.parseInt( entry.getFieldByCode( FIELD_MAX_FILES ).getValue( ) );
+        int nMaxSize = Integer.parseInt( entry.getFieldByCode( FIELD_MAX_SIZE ).getValue( ) );
 
         Field imageTypeField = entry.getFieldByCode( FIELD_IMAGE_TYPE );
         String imageType = imageTypeField != null ? imageTypeField.getValue( ) : "png";
