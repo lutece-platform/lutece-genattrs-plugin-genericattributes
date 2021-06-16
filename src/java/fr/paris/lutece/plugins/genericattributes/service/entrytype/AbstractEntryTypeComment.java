@@ -128,7 +128,7 @@ public abstract class AbstractEntryTypeComment extends EntryTypeService
             FieldHome.remove( oldFile.getIdField( ) );
         }
     }
-    
+
     protected IFileStoreServiceProvider getFileStoreServiceProvider( )
     {
         return FileService.getInstance( ).getFileStoreServiceProvider( LocalDatabaseFileService.FILE_STORE_PROVIDER_NAME );

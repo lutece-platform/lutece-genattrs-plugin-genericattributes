@@ -102,7 +102,7 @@ public final class EntryTypeServiceManager extends AbstractCacheableService
     {
         return CACHE_SERVICE_NAME;
     }
-    
+
     private static synchronized Object getLockOnBean( String bean )
     {
         _lockBeanName.putIfAbsent( bean, new Object( ) );

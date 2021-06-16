@@ -294,7 +294,7 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
                 file.setPhysicalFile( physicalFile );
                 file.setSize( imageBytes.length );
             }
-            
+
             response.setFile( file );
             response.setIsImage( true );
             response.setToStringValueResponse( imageSource );
