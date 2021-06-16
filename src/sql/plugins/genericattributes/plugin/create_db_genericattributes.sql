@@ -16,6 +16,8 @@ CREATE TABLE genatt_entry_type (
 	class_name varchar(255),
 	icon_name varchar(255),
 	plugin varchar(255) NOT NULL,
+	display_order int default 0,
+	inactive int default 0,
 	PRIMARY KEY (id_type)
 );
 

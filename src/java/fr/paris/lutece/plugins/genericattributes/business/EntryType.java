@@ -51,6 +51,9 @@ public class EntryType implements Serializable
     private Boolean _bComment;
     private Boolean _bMyLuteceUser;
     private String _strPlugin;
+    
+    private int _nOrder;
+    private boolean _bInactive;
 
     /**
      *
@@ -211,5 +214,37 @@ public class EntryType implements Serializable
     public void setPlugin( String strPlugin )
     {
         this._strPlugin = strPlugin;
+    }
+
+    /**
+     * @return the nOrder
+     */
+    public int getOrder( )
+    {
+        return _nOrder;
+    }
+
+    /**
+     * @param nOrder the nOrder to set
+     */
+    public void setOrder( int nOrder )
+    {
+        _nOrder = nOrder;
+    }
+
+    /**
+     * @return the bInactive
+     */
+    public boolean isInactive( )
+    {
+        return _bInactive;
+    }
+
+    /**
+     * @param bInactive the bInactive to set
+     */
+    public void setInactive( boolean bInactive )
+    {
+        _bInactive = bInactive;
     }
 }

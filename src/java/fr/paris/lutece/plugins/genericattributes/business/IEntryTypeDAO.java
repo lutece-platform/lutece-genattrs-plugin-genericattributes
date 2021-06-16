@@ -63,4 +63,21 @@ public interface IEntryTypeDAO
      * @return the list of entry type associated with the plugin
      */
     List<EntryType> select( String strPlugin, Plugin plugin );
+    
+    /** Load the data of all entry type and returns them in a list
+    * 
+    * @param strPlugin
+    *            The name of plugin to get entry types of
+    * @param plugin
+    *            the plugin
+    * @return the list of entry type associated with the plugin
+    */
+   List<EntryType> selectAll( Plugin plugin );
+    
+    /**
+     * Updates the EntryType
+     * @param entryType
+     * @param plugin
+     */
+    void store( EntryType entryType, Plugin plugin  );
 }

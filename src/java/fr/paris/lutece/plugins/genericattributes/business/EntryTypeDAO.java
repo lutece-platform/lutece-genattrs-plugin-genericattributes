@@ -46,10 +46,13 @@ import java.util.List;
  */
 public class EntryTypeDAO implements IEntryTypeDAO
 {
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_type,title,is_group,is_comment,class_name,icon_name,is_mylutece_user,plugin"
-            + " FROM genatt_entry_type WHERE id_type=?";
-    private static final String SQL_QUERY_SELECT = "SELECT id_type,title,is_group,is_comment,class_name,icon_name,is_mylutece_user,plugin"
-            + " FROM genatt_entry_type WHERE plugin = ?  order by id_type";
+    private static final String SQL_QUERY_ORDER_BY = " order by display_order ASC ";
+    private static final String SQL_QUERY_SELECT_ALL = "SELECT id_type,title,is_group,is_comment,class_name,icon_name,is_mylutece_user,plugin,display_order,inactive"
+            +  " FROM genatt_entry_type ";
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_ALL +" WHERE id_type=?";
+    private static final String SQL_QUERY_SELECT = SQL_QUERY_SELECT_ALL + " WHERE plugin = ? " + SQL_QUERY_ORDER_BY;
+    private static final String SQL_QUERY_UPDATE = "UPDATE genatt_entry_type SET title = ?,is_group = ?,is_comment = ?,class_name = ?,icon_name = ?,is_mylutece_user = ?,plugin = ?,display_order = ?,inactive = ? WHERE id_type = ? ";
+    
 
     /**
      * {@inheritDoc}
@@ -65,20 +68,27 @@ public class EntryTypeDAO implements IEntryTypeDAO
 
             if ( daoUtil.next( ) )
             {
-                entryType = new EntryType( );
-                entryType.setIdType( daoUtil.getInt( 1 ) );
-                entryType.setTitle( daoUtil.getString( 2 ) );
-                entryType.setGroup( daoUtil.getBoolean( 3 ) );
-                entryType.setComment( daoUtil.getBoolean( 4 ) );
-                entryType.setBeanName( daoUtil.getString( 5 ) );
-                entryType.setIconName( daoUtil.getString( 6 ) );
-                entryType.setMyLuteceUser( daoUtil.getBoolean( 7 ) );
-                entryType.setPlugin( daoUtil.getString( 8 ) );
+                entryType = dataToObject( daoUtil );
             }
-
         }
-
         return entryType;
+    }
+    
+    @Override
+    public List<EntryType> selectAll( Plugin plugin )
+    {
+        List<EntryType> listEntryType = new ArrayList<>( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ALL + SQL_QUERY_ORDER_BY, plugin ) )
+        {
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                EntryType entryType = dataToObject( daoUtil );
+                listEntryType.add( entryType );
+            }
+        }
+        return listEntryType;
     }
 
     /**
@@ -95,20 +105,53 @@ public class EntryTypeDAO implements IEntryTypeDAO
 
             while ( daoUtil.next( ) )
             {
-                EntryType entryType = new EntryType( );
-                entryType.setIdType( daoUtil.getInt( 1 ) );
-                entryType.setTitle( daoUtil.getString( 2 ) );
-                entryType.setGroup( daoUtil.getBoolean( 3 ) );
-                entryType.setComment( daoUtil.getBoolean( 4 ) );
-                entryType.setBeanName( daoUtil.getString( 5 ) );
-                entryType.setIconName( daoUtil.getString( 6 ) );
-                entryType.setMyLuteceUser( daoUtil.getBoolean( 7 ) );
-                entryType.setPlugin( daoUtil.getString( 8 ) );
+                EntryType entryType = dataToObject( daoUtil );
                 listEntryType.add( entryType );
             }
 
         }
 
         return listEntryType;
+    }
+    
+    private EntryType dataToObject( DAOUtil daoUtil )
+    {
+        int index = 0;
+        EntryType entryType = new EntryType( );
+        entryType.setIdType( daoUtil.getInt( ++index ) );
+        entryType.setTitle( daoUtil.getString( ++index ) );
+        entryType.setGroup( daoUtil.getBoolean( ++index ) );
+        entryType.setComment( daoUtil.getBoolean( ++index ) );
+        entryType.setBeanName( daoUtil.getString( ++index ) );
+        entryType.setIconName( daoUtil.getString( ++index ) );
+        entryType.setMyLuteceUser( daoUtil.getBoolean( ++index ) );
+        entryType.setPlugin( daoUtil.getString( ++index ) );
+        entryType.setOrder( daoUtil.getInt( ++index ) );
+        entryType.setInactive( daoUtil.getBoolean( ++index ) );
+        
+        return entryType;
+    }
+    
+    @Override
+    public void store( EntryType entryType, Plugin plugin )
+    {
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        {
+            int index = 0;
+            daoUtil.setString( ++index, entryType.getTitle( ) );
+            daoUtil.setBoolean( ++index, entryType.getGroup( ) );
+            daoUtil.setBoolean( ++index, entryType.getComment( ) );
+            daoUtil.setString( ++index, entryType.getBeanName( ) );
+            daoUtil.setString( ++index, entryType.getIconName( ) );
+            daoUtil.setBoolean( ++index, entryType.getMyLuteceUser( ) );
+            daoUtil.setString( ++index, entryType.getPlugin( ) );
+            daoUtil.setInt( ++index, entryType.getOrder( ) );
+            daoUtil.setBoolean( ++index, entryType.isInactive( ) );
+            
+            daoUtil.setInt( ++index, entryType.getIdType( ) );
+            
+            daoUtil.executeUpdate( );
+        }
+        
     }
 }

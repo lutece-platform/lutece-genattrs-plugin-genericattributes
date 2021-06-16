@@ -95,4 +95,25 @@ public final class EntryTypeHome
     {
         return _dao.select( strPluginName, getPlugin( ) );
     }
+    
+    /**
+     * Load entry types and returns them in a list
+     * 
+     * @param strPluginName
+     *            The name of plugin to get entry types of
+     * @return the list of entry type associated with the plugin
+     */
+    public static List<EntryType> getCompleteList( )
+    {
+        return _dao.selectAll(  getPlugin( ) );
+    }
+    
+    /**
+     * Updates the entry type.
+     * @param entryType
+     */
+    public static void update( EntryType entryType )
+    {
+        _dao.store( entryType, getPlugin( ) );
+    }
 }
