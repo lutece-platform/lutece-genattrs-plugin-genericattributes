@@ -95,7 +95,7 @@ public final class EntryTypeHome
     {
         return _dao.select( strPluginName, getPlugin( ) );
     }
-    
+
     /**
      * Load entry types and returns them in a list
      * 
@@ -105,11 +105,12 @@ public final class EntryTypeHome
      */
     public static List<EntryType> getCompleteList( )
     {
-        return _dao.selectAll(  getPlugin( ) );
+        return _dao.selectAll( getPlugin( ) );
     }
-    
+
     /**
      * Updates the entry type.
+     * 
      * @param entryType
      */
     public static void update( EntryType entryType )

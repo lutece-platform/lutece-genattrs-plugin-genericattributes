@@ -48,11 +48,10 @@ public class EntryTypeDAO implements IEntryTypeDAO
 {
     private static final String SQL_QUERY_ORDER_BY = " order by display_order ASC ";
     private static final String SQL_QUERY_SELECT_ALL = "SELECT id_type,title,is_group,is_comment,class_name,icon_name,is_mylutece_user,plugin,display_order,inactive"
-            +  " FROM genatt_entry_type ";
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_ALL +" WHERE id_type=?";
+            + " FROM genatt_entry_type ";
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_ALL + " WHERE id_type=?";
     private static final String SQL_QUERY_SELECT = SQL_QUERY_SELECT_ALL + " WHERE plugin = ? " + SQL_QUERY_ORDER_BY;
     private static final String SQL_QUERY_UPDATE = "UPDATE genatt_entry_type SET title = ?,is_group = ?,is_comment = ?,class_name = ?,icon_name = ?,is_mylutece_user = ?,plugin = ?,display_order = ?,inactive = ? WHERE id_type = ? ";
-    
 
     /**
      * {@inheritDoc}
@@ -73,7 +72,7 @@ public class EntryTypeDAO implements IEntryTypeDAO
         }
         return entryType;
     }
-    
+
     @Override
     public List<EntryType> selectAll( Plugin plugin )
     {
@@ -113,7 +112,7 @@ public class EntryTypeDAO implements IEntryTypeDAO
 
         return listEntryType;
     }
-    
+
     private EntryType dataToObject( DAOUtil daoUtil )
     {
         int index = 0;
@@ -128,10 +127,10 @@ public class EntryTypeDAO implements IEntryTypeDAO
         entryType.setPlugin( daoUtil.getString( ++index ) );
         entryType.setOrder( daoUtil.getInt( ++index ) );
         entryType.setInactive( daoUtil.getBoolean( ++index ) );
-        
+
         return entryType;
     }
-    
+
     @Override
     public void store( EntryType entryType, Plugin plugin )
     {
@@ -147,11 +146,11 @@ public class EntryTypeDAO implements IEntryTypeDAO
             daoUtil.setString( ++index, entryType.getPlugin( ) );
             daoUtil.setInt( ++index, entryType.getOrder( ) );
             daoUtil.setBoolean( ++index, entryType.isInactive( ) );
-            
+
             daoUtil.setInt( ++index, entryType.getIdType( ) );
-            
+
             daoUtil.executeUpdate( );
         }
-        
+
     }
 }

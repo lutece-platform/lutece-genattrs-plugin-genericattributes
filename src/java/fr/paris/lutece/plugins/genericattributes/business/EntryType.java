@@ -51,7 +51,7 @@ public class EntryType implements Serializable
     private Boolean _bComment;
     private Boolean _bMyLuteceUser;
     private String _strPlugin;
-    
+
     private int _nOrder;
     private boolean _bInactive;
 
@@ -225,7 +225,8 @@ public class EntryType implements Serializable
     }
 
     /**
-     * @param nOrder the nOrder to set
+     * @param nOrder
+     *            the nOrder to set
      */
     public void setOrder( int nOrder )
     {
@@ -241,7 +242,8 @@ public class EntryType implements Serializable
     }
 
     /**
-     * @param bInactive the bInactive to set
+     * @param bInactive
+     *            the bInactive to set
      */
     public void setInactive( boolean bInactive )
     {
