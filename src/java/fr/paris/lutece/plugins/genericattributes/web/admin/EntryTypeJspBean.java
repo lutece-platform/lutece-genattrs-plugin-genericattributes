@@ -55,20 +55,26 @@ public class EntryTypeJspBean extends MVCAdminJspBean
 
     // Parameters
     private static final String PARAMETER_ID = "id_type";
+    private static final String PARAMETER_TITLE = "title";
+    private static final String PARAMETER_ICON = "iconName";
 
     // Views
     private static final String VIEW_MANAGE_ENTRY_TYPE = "manageEntryType";
+    private static final String VIEW_EDIT_ENTRY_TYPE = "editEntryType";
 
     // Templates
     private static final String TEMPLATE_MANAGE_ENTRY_TYPE = "/admin/plugins/genericattributes/manage_entry_type.html";
+    private static final String TEMPLATE_EDIT_ENTRY_TYPE = "/admin/plugins/genericattributes/modify_entry_type.html";
 
     // Marks
     private static final String MARK_ENTRY_TYPE_LIST = "entryTypeList";
+    private static final String MARK_ENTRY_TYPE = "entryType";
 
     // Actions
     private static final String ACTION_CHANGE_ACTIVE = "doChangeActive";
     private static final String ACTION_MOVE_UP = "doMoveUp";
     private static final String ACTION_MOVE_DOWN = "doMoveDown";
+    private static final String ACTION_DO_EDIT = "modifyEntryType";
 
     /**
      * Build the Manage View
@@ -168,5 +174,37 @@ public class EntryTypeJspBean extends MVCAdminJspBean
                 EntryTypeHome.update( entryToMove );
             }
         }
+    }
+    
+    @View( value = VIEW_EDIT_ENTRY_TYPE )
+    public String getEditEntryType( HttpServletRequest request )
+    {
+        int idType = NumberUtils.toInt( request.getParameter( PARAMETER_ID ), -1 );
+        
+        if ( idType == -1 )
+        {
+            return redirectView( request, VIEW_MANAGE_ENTRY_TYPE );
+        }
+        Map<String, Object> model = getModel( );
+        model.put( MARK_ENTRY_TYPE, EntryTypeHome.findByPrimaryKey( idType ) );
+        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_EDIT_ENTRY_TYPE, getLocale( ), model );
+
+        return getAdminPage( templateList.getHtml( ) );
+    }
+    
+    @Action( ACTION_DO_EDIT )
+    public String doEdit( HttpServletRequest request )
+    {
+        int idType = NumberUtils.toInt( request.getParameter( PARAMETER_ID ), -1 );
+
+        if ( idType != -1 )
+        {
+           EntryType entryType = EntryTypeHome.findByPrimaryKey( idType );
+           entryType.setTitle( request.getParameter( PARAMETER_TITLE ) );
+           entryType.setIconName( request.getParameter( PARAMETER_ICON ) );
+           EntryTypeHome.update( entryType );
+        }
+        
+        return redirectView( request, VIEW_MANAGE_ENTRY_TYPE );
     }
 }

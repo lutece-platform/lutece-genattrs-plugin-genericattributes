@@ -19,6 +19,7 @@
 								<@td>${entry_type.order}</@td>
 								<@td>${entry_type.inactive?string('#i18n{portal.util.labelNo}','#i18n{portal.util.labelYes}')}</@td>
 								<@td>
+									<@aButton href='jsp/admin/plugins/genericattributes/ManageEntryType.jsp?view=editEntryType&id_type=${entry_type.idType}' hideTitle=['all'] buttonIcon='edit' title='#i18n{genericattributes.manageEntryType.action.edit}' size='sm' />
 									<#if entry_type.inactive>
 										<@aButton href='jsp/admin/plugins/genericattributes/ManageEntryType.jsp?action=doChangeActive&id_type=${entry_type.idType}' hideTitle=['all'] buttonIcon='play' color='success' title='#i18n{genericattributes.manageEntryType.action.enable}' size='sm' />
 									<#else>
