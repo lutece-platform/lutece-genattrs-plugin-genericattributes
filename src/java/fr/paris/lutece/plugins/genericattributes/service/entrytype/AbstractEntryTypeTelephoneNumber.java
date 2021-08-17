@@ -145,16 +145,7 @@ public abstract class AbstractEntryTypeTelephoneNumber extends EntryTypeService
     public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
             Locale locale )
     {
-        String strValueEntry = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
-        if ( strValueEntry == null )
-        {
-            strValueEntry = "";
-        }
-        else
-        {
-            strValueEntry = strValueEntry.trim( );
-        }
-
+        String strValueEntry = StringUtils.defaultString( request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ) ).trim( );
         Response response = new Response( );
         response.setEntry( entry );
         response.setIterationNumber( getResponseIterationValue( request ) );
@@ -224,21 +215,18 @@ public abstract class AbstractEntryTypeTelephoneNumber extends EntryTypeService
             return error;
         }
 
-        if ( entry.isMandatory( ) )
+        if ( entry.isMandatory( ) && StringUtils.isBlank( strValueEntry ) )
         {
-            if ( StringUtils.isBlank( strValueEntry ) )
+            if ( StringUtils.isNotEmpty( entry.getErrorMessage( ) ) )
             {
-                if ( StringUtils.isNotEmpty( entry.getErrorMessage( ) ) )
-                {
-                    GenericAttributeError error = new GenericAttributeError( );
-                    error.setMandatoryError( true );
-                    error.setErrorMessage( entry.getErrorMessage( ) );
+                GenericAttributeError error = new GenericAttributeError( );
+                error.setMandatoryError( true );
+                error.setErrorMessage( entry.getErrorMessage( ) );
 
-                    return error;
-                }
-
-                return new MandatoryError( entry, locale );
+                return error;
             }
+
+            return new MandatoryError( entry, locale );
         }
 
         return null;
