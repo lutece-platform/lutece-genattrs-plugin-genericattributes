@@ -99,7 +99,7 @@ public abstract class AbstractEntryTypeComment extends EntryTypeService
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
             FileItem fileItem = multipartRequest.getFile( PARAMETER_FILE );
 
-            if ( fileItem!= null && fileItem.get( ) != null )
+            if ( fileItem != null && fileItem.get( ) != null )
             {
                 removeOldFiles( entry );
 

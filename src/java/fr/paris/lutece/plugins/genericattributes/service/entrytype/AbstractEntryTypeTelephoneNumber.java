@@ -78,9 +78,7 @@ public abstract class AbstractEntryTypeTelephoneNumber extends EntryTypeService
         initCommonRequestData( entry, request );
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
-        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null )
-                ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( )
-                : null;
+        String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
         String strErrorMessage = request.getParameter( PARAMETER_ERROR_MESSAGE );
@@ -99,10 +97,11 @@ public abstract class AbstractEntryTypeTelephoneNumber extends EntryTypeService
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object[ ] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                    I18nService.getLocalizedString( strFieldError, locale )
+            };
 
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                    AdminMessage.TYPE_STOP );
+            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         entry.setCode( strCode );
@@ -116,14 +115,14 @@ public abstract class AbstractEntryTypeTelephoneNumber extends EntryTypeService
         {
             fieldAutocomplete.setValue( strAutocomplete.trim( ) );
         }
-        Field fieldDefaultRegion = GenericAttributesUtils.createOrUpdateField( entry, FIELD_DEFAULT_REGION, null,
-                null );
+        Field fieldDefaultRegion = GenericAttributesUtils.createOrUpdateField( entry, FIELD_DEFAULT_REGION, null, null );
         if ( StringUtils.isNotBlank( strDefaultRegion ) )
         {
             if ( !PhoneNumberUtil.getInstance( ).getSupportedRegions( ).contains( strDefaultRegion ) )
             {
-                return AdminMessageService.getMessageUrl( request, MESSAGE_UNKNOWN_DEFAULT_REGION,
-                        new Object[ ] { strDefaultRegion }, AdminMessage.TYPE_STOP );
+                return AdminMessageService.getMessageUrl( request, MESSAGE_UNKNOWN_DEFAULT_REGION, new Object [ ] {
+                        strDefaultRegion
+                }, AdminMessage.TYPE_STOP );
             }
             fieldDefaultRegion.setValue( strDefaultRegion );
         }
@@ -142,8 +141,7 @@ public abstract class AbstractEntryTypeTelephoneNumber extends EntryTypeService
     }
 
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse,
-            Locale locale )
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
         String strValueEntry = StringUtils.defaultString( request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ) ).trim( );
         Response response = new Response( );
@@ -161,21 +159,21 @@ public abstract class AbstractEntryTypeTelephoneNumber extends EntryTypeService
             {
                 number = phoneUtil.parse( strValueEntry, entry.getFieldByCode( FIELD_DEFAULT_REGION ).getValue( ) );
             }
-            catch ( NumberParseException e )
+            catch( NumberParseException e )
             {
                 String strKeyErrorMessage;
-                switch ( e.getErrorType( ) )
+                switch( e.getErrorType( ) )
                 {
-                case INVALID_COUNTRY_CODE:
-                case NOT_A_NUMBER:
-                case TOO_LONG:
-                case TOO_SHORT_AFTER_IDD:
-                case TOO_SHORT_NSN:
-                    strKeyErrorMessage = MESSAGE_ERROR_PHONENUMBER + "." + e.getErrorType( ).name( );
-                    break;
-                default:
-                    strKeyErrorMessage = MESSAGE_ERROR_PHONENUMBER;
-                    break;
+                    case INVALID_COUNTRY_CODE:
+                    case NOT_A_NUMBER:
+                    case TOO_LONG:
+                    case TOO_SHORT_AFTER_IDD:
+                    case TOO_SHORT_NSN:
+                        strKeyErrorMessage = MESSAGE_ERROR_PHONENUMBER + "." + e.getErrorType( ).name( );
+                        break;
+                    default:
+                        strKeyErrorMessage = MESSAGE_ERROR_PHONENUMBER;
+                        break;
                 }
                 GenericAttributeError error = new GenericAttributeError( );
                 error.setMandatoryError( false );
@@ -189,8 +187,7 @@ public abstract class AbstractEntryTypeTelephoneNumber extends EntryTypeService
                 GenericAttributeError error = new GenericAttributeError( );
                 error.setMandatoryError( false );
                 error.setTitleQuestion( entry.getTitle( ) );
-                error.setErrorMessage(
-                        I18nService.getLocalizedString( MESSAGE_ERROR_PHONENUMBER, request.getLocale( ) ) );
+                error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_ERROR_PHONENUMBER, request.getLocale( ) ) );
 
                 return error;
             }
@@ -250,8 +247,7 @@ public abstract class AbstractEntryTypeTelephoneNumber extends EntryTypeService
      * {@inheritDoc}
      * 
      * <p>
-     * If the phone number is in the default region, display in this region
-     * format. If not, display in international format.
+     * If the phone number is in the default region, display in this region format. If not, display in international format.
      */
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
@@ -260,15 +256,14 @@ public abstract class AbstractEntryTypeTelephoneNumber extends EntryTypeService
         PhoneNumber number;
         try
         {
-            number = phoneUtil.parse( response.getResponseValue( ),
-                    entry.getFieldByCode( FIELD_DEFAULT_REGION ).getValue( ) );
+            number = phoneUtil.parse( response.getResponseValue( ), entry.getFieldByCode( FIELD_DEFAULT_REGION ).getValue( ) );
             if ( "FR".equals( phoneUtil.getRegionCodeForNumber( number ) ) )
             {
                 return phoneUtil.format( number, PhoneNumberFormat.NATIONAL );
             }
             return phoneUtil.format( number, PhoneNumberFormat.INTERNATIONAL );
         }
-        catch ( NumberParseException e )
+        catch( NumberParseException e )
         {
             return null;
         }
@@ -281,8 +276,7 @@ public abstract class AbstractEntryTypeTelephoneNumber extends EntryTypeService
      */
     public List<String> getSupportedRegionCodes( )
     {
-        return PhoneNumberUtil.getInstance( ).getSupportedRegions( ).stream( ).sorted( )
-                .collect( Collectors.toList( ) );
+        return PhoneNumberUtil.getInstance( ).getSupportedRegions( ).stream( ).sorted( ).collect( Collectors.toList( ) );
     }
 
     /**

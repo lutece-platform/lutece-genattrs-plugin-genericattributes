@@ -175,12 +175,12 @@ public class EntryTypeJspBean extends MVCAdminJspBean
             }
         }
     }
-    
+
     @View( value = VIEW_EDIT_ENTRY_TYPE )
     public String getEditEntryType( HttpServletRequest request )
     {
         int idType = NumberUtils.toInt( request.getParameter( PARAMETER_ID ), -1 );
-        
+
         if ( idType == -1 )
         {
             return redirectView( request, VIEW_MANAGE_ENTRY_TYPE );
@@ -191,7 +191,7 @@ public class EntryTypeJspBean extends MVCAdminJspBean
 
         return getAdminPage( templateList.getHtml( ) );
     }
-    
+
     @Action( ACTION_DO_EDIT )
     public String doEdit( HttpServletRequest request )
     {
@@ -199,12 +199,12 @@ public class EntryTypeJspBean extends MVCAdminJspBean
 
         if ( idType != -1 )
         {
-           EntryType entryType = EntryTypeHome.findByPrimaryKey( idType );
-           entryType.setTitle( request.getParameter( PARAMETER_TITLE ) );
-           entryType.setIconName( request.getParameter( PARAMETER_ICON ) );
-           EntryTypeHome.update( entryType );
+            EntryType entryType = EntryTypeHome.findByPrimaryKey( idType );
+            entryType.setTitle( request.getParameter( PARAMETER_TITLE ) );
+            entryType.setIconName( request.getParameter( PARAMETER_ICON ) );
+            EntryTypeHome.update( entryType );
         }
-        
+
         return redirectView( request, VIEW_MANAGE_ENTRY_TYPE );
     }
 }
