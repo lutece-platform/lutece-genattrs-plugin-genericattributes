@@ -85,6 +85,8 @@ public interface IEntryTypeService
     String PARAMETER_EXPORTABLE_PDF = "exportable_pdf";
     String PARAMETER_DISPLAY_BO = "display_in_bo";
     String PARAMETER_FILE = "file";
+    String PARAMETER_MIN = "min";
+    String PARAMETER_MAX = "max";
 
     // Fields codes
     String FIELD_DATE_VALUE = "default_date_value";
@@ -114,6 +116,8 @@ public interface IEntryTypeService
     String FIELD_IMAGE_TYPE = "image_type";
     String FIELD_WIDTH = "width";
     String FIELD_HEIGHT = "height";
+    String FIELD_MAX = "max";
+    String FIELD_MIN = "min";
     String FIELD_MAX_SIZE = "max_size";
     String FIELD_TEXT_CONF = "text_config";
     String FIELD_EXPORTABLE = "exportable";
