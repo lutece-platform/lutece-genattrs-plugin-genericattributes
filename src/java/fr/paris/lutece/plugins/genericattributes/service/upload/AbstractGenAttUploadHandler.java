@@ -38,7 +38,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -66,7 +65,6 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
 {
     private static final String PREFIX_ENTRY_ID = IEntryTypeService.PREFIX_ATTRIBUTE;
     private static final Pattern PATTERN_PREFIX_ENTRY_ID = Pattern.compile( "[^0-9]+([0-9]+)$" );
-    private static final String PARAM_CUSTOM_SESSION_ID = "CUSTOM_SESSION";
 
     // Error messages
     private static final String ERROR_MESSAGE_UNKNOWN_ERROR = "genericattributes.message.unknownError";
@@ -136,17 +134,6 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
         return mapFileItemsSession.get( strFieldName );
     }
 
-    private String getCustomSessionId( HttpSession session )
-    {
-        String sessionId = (String) session.getAttribute( PARAM_CUSTOM_SESSION_ID );
-        if ( sessionId == null )
-        {
-            sessionId = UUID.randomUUID( ).toString( );
-            session.setAttribute( PARAM_CUSTOM_SESSION_ID, sessionId );
-        }
-        return sessionId;
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -189,29 +176,7 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void removeFileItem( String strFieldName, HttpSession session, int nIndex )
-    {
-        // Remove the file (this will also delete the file physically)
-        List<FileItem> uploadedFiles = getListUploadedFiles( strFieldName, session );
-
-        if ( ( uploadedFiles != null ) && !uploadedFiles.isEmpty( ) && ( uploadedFiles.size( ) > nIndex ) )
-        {
-            // Remove the object from the Hashmap
-            FileItem fileItem = uploadedFiles.remove( nIndex );
-            fileItem.delete( );
-        }
-    }
-
-    /**
-     * Removes all files associated to the session
-     * 
-     * @param strSessionId
-     *            the session id
-     */
     public void removeSessionFiles( HttpSession session )
     {
         String sessionId = (String) session.getAttribute( PARAM_CUSTOM_SESSION_ID );
