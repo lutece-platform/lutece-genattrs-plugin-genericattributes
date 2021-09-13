@@ -71,7 +71,12 @@ public final class FieldHome
      */
     public static int create( Field field )
     {
-        return _dao.insert( field, getPlugin( ) );
+        int id =  _dao.insert( field, getPlugin( ) );
+        if ( field.getLinkedItem( ) != null )
+        {
+            ReferenceItemFieldHome.create( field.getIdField( ), field.getLinkedItem( ).getId( ) );
+        }
+        return id;
     }
 
     /**

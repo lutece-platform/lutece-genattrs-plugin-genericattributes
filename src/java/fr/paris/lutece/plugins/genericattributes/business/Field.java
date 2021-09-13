@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
+import fr.paris.lutece.plugins.referencelist.business.ReferenceItem;
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
 
 import java.io.Serializable;
@@ -58,6 +59,8 @@ public class Field implements Serializable
     private List<Entry> _listConditionalQuestions;
     private List<RegularExpression> _listRegularExpressionList;
     private boolean _bNoDisplayTitle;
+    
+    private ReferenceItem _linkedItem;
 
     /**
      *
@@ -296,4 +299,21 @@ public class Field implements Serializable
     {
         this._strCode = strCode;
     }
+
+    /**
+     * @return the linkedItem
+     */
+    public ReferenceItem getLinkedItem( )
+    {
+        return _linkedItem;
+    }
+
+    /**
+     * @param linkedItem the linkedItem to set
+     */
+    public void setLinkedItem( ReferenceItem linkedItem )
+    {
+        _linkedItem = linkedItem;
+    }
+    
 }

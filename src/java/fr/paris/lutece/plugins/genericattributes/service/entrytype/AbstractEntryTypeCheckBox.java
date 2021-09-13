@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
-import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
@@ -59,7 +58,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Abstract entry type for check boxes
  */
-public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
+public abstract class AbstractEntryTypeCheckBox extends AbstractEntryTypeChoice
 {
     /**
      * {@inheritDoc}
@@ -77,8 +76,6 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
         String strFieldInLine = request.getParameter( PARAMETER_FIELD_IN_LINE );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
-        String strUseRefList = request.getParameter( PARAMETER_USE_REF_LIST );
-        String strRefListSelect = request.getParameter( PARAMETER_REF_LIST_SELECT );
 
         int nFieldInLine = -1;
 
@@ -98,6 +95,12 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
+        strFieldError = createFieldsUseRefList( entry, request );
+        if ( StringUtils.isNotBlank( strFieldError ) )
+        {
+            return AdminMessageService.getMessageUrl( request, strFieldError, ERROR_FIELD_REF_LIST, AdminMessage.TYPE_STOP );
+        }
+        
         entry.setCode( strCode );
         entry.setTitle( strTitle );
         entry.setHelpMessage( strHelpMessage );
@@ -118,22 +121,6 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
         }
 
         entry.setFieldInLine( nFieldInLine == 1 );
-        
-        boolean useRefList = false;
-        Integer idRefList = -1;
-        
-        if ( StringUtils.isNotEmpty( strUseRefList ) )
-        {
-            if ( StringUtils.isEmpty( strRefListSelect ) )
-            {
-                return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, ERROR_FIELD_REF_LIST, AdminMessage.TYPE_STOP );            
-            }
-            useRefList = true;
-            idRefList = Integer.parseInt( strRefListSelect );
-        }
-        
-        GenericAttributesUtils.createOrUpdateField( entry, FIELD_USE_REF_LIST, String.valueOf( idRefList ), String.valueOf( useRefList ) );
-
         return null;
     }
 
@@ -205,39 +192,6 @@ public abstract class AbstractEntryTypeCheckBox extends EntryTypeService
             }
 
             return new MandatoryError( entry, locale );
-        }
-
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getResponseValueForExport( Entry entry, HttpServletRequest request, Response response, Locale locale )
-    {
-        return response.getResponseValue( );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
-    {
-        if ( response.getField( ) != null )
-        {
-            if ( response.getField( ).getTitle( ) == null )
-            {
-                Field field = FieldHome.findByPrimaryKey( response.getField( ).getIdField( ) );
-
-                if ( field != null )
-                {
-                    response.setField( field );
-                }
-            }
-
-            return response.getField( ).getTitle( );
         }
 
         return null;

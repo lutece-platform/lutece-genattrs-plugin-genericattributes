@@ -31,7 +31,6 @@ public class GenattReferenceItemListener implements IReferenceItemListener
         {
             Field field = GenericAttributesUtils.createFieldFromReferenceItem( entry, item );
             FieldHome.create( field );
-            ReferenceItemFieldHome.create( field.getIdField( ), item.getId( ) );
         }
     }
     

@@ -206,6 +206,7 @@ public final class GenericAttributesUtils
         field.setTitle( item.getName( ) );
         field.setDefaultValue( false );
         field.setParentEntry( entry );
+        field.setLinkedItem( item );
         
         return field;
     }
