@@ -53,6 +53,7 @@ public final class FieldDAO implements IFieldDAO
     private static final String SQL_QUERY_SELECT_ALL = "SELECT id_field,id_entry,code,title,value,default_value,pos,value_type_date,no_display_title,comment"
             + " FROM genatt_field ";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_ALL + " WHERE id_field = ? ORDER BY pos";
+    private static final String SQL_QUERY_FIND_BY_CODE = SQL_QUERY_SELECT_ALL + " WHERE code = ? ORDER BY pos";
     private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_field(id_entry,code,title,value,default_value,pos,value_type_date,no_display_title,comment)"
             + " VALUES(?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM genatt_field WHERE id_field = ? ";
@@ -321,5 +322,23 @@ public final class FieldDAO implements IFieldDAO
         field.setComment( daoUtil.getString( nIndex ) );
 
         return field;
+    }
+    
+    @Override
+    public List<Field> loadByCode( String code, Plugin plugin )
+    {
+        List<Field> result = new ArrayList<>( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_CODE, plugin ) )
+        {
+            daoUtil.setString( 1, code );
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                result.add( dataToObject( daoUtil ) );
+            }
+
+        }
+        return result;
     }
 }

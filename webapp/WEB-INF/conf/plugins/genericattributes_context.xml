@@ -9,4 +9,6 @@
     <bean id="genericattributes.referenceItemFieldDao" class="fr.paris.lutece.plugins.genericattributes.business.ReferenceItemFieldDao" />
 
     <bean id="genericattributes.fileService" class="fr.paris.lutece.plugins.genericattributes.service.file.FileService" />
+    
+    <bean id="genericattributes.genattReferenceItemListener" class="fr.paris.lutece.plugins.genericattributes.service.GenattReferenceItemListener" />
 </beans>

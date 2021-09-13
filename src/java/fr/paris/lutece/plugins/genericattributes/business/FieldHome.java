@@ -259,6 +259,17 @@ public final class FieldHome
     }
 
     /**
+     * Load the data of all the field by code
+     * 
+     * @param code
+     * @return the list of field
+     */
+    public static List<Field> getFieldListByCode( String code )
+    {
+        return _dao.loadByCode( code, getPlugin() );
+    }
+    
+    /**
      * Load the data of all the field of the list of entry entry and returns them in a list
      * 
      * @param idList

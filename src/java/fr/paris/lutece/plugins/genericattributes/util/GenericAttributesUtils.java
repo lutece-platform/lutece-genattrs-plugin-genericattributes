@@ -36,6 +36,8 @@ package fr.paris.lutece.plugins.genericattributes.util;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.service.GenericAttributesPlugin;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
+import fr.paris.lutece.plugins.referencelist.business.ReferenceItem;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.util.AppLogService;
@@ -187,6 +189,24 @@ public final class GenericAttributesUtils
         }
         field.setTitle( strTitle );
         field.setValue( strValue );
+        return field;
+    }
+    
+    /**
+     * Create a Field from a {@link ReferenceItem}
+     * @param entry
+     * @param item
+     * @return
+     */
+    public static Field createFieldFromReferenceItem( Entry entry, ReferenceItem item )
+    {
+        Field field = new Field( );
+        field.setCode( IEntryTypeService.FIELD_ANSWER_CHOICE );
+        field.setValue( item.getCode( ) );
+        field.setTitle( item.getName( ) );
+        field.setDefaultValue( false );
+        field.setParentEntry( entry );
+        
         return field;
     }
 }

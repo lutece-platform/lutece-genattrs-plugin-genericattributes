@@ -152,4 +152,12 @@ public interface IFieldDAO
      * @return
      */
     List<Field> loadMultipleByEntryIdList( List<Integer> idList, Plugin plugin );
+    
+    /**
+     * Load all Fields by code
+     * @param code
+     * @param plugin
+     * @return
+     */
+    List<Field> loadByCode( String code, Plugin plugin );
 }
