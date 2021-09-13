@@ -72,7 +72,9 @@ public abstract class AbstractEntryTypeRadioButton extends EntryTypeService
         String strFieldInLine = request.getParameter( PARAMETER_FIELD_IN_LINE );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
-
+        String strUseRefList = request.getParameter( PARAMETER_USE_REF_LIST );
+        String strRefListSelect = request.getParameter( PARAMETER_REF_LIST_SELECT );
+        
         int nFieldInLine = -1;
 
         String strFieldError = StringUtils.EMPTY;
@@ -111,6 +113,21 @@ public abstract class AbstractEntryTypeRadioButton extends EntryTypeService
 
         entry.setFieldInLine( nFieldInLine == 1 );
 
+        boolean useRefList = false;
+        Integer idRefList = -1;
+        if ( StringUtils.isNotEmpty( strUseRefList ) )
+        {
+            if ( StringUtils.isEmpty( strRefListSelect ) )
+            {
+                return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, ERROR_FIELD_REF_LIST, AdminMessage.TYPE_STOP );            
+            }
+            useRefList = true;
+            idRefList = Integer.parseInt( strRefListSelect );
+        }
+        
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_USE_REF_LIST, String.valueOf( idRefList ), String.valueOf( useRefList ) );
+
+        
         return null;
     }
 

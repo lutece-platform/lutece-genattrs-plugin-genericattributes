@@ -71,7 +71,9 @@ public abstract class AbstractEntryTypeSelect extends EntryTypeService
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
-
+        String strUseRefList = request.getParameter( PARAMETER_USE_REF_LIST );
+        String strRefListSelect = request.getParameter( PARAMETER_REF_LIST_SELECT );
+        
         String strFieldError = StringUtils.EMPTY;
 
         if ( StringUtils.isBlank( strTitle ) )
@@ -97,6 +99,21 @@ public abstract class AbstractEntryTypeSelect extends EntryTypeService
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
         entry.setIndexed( strIndexed != null );
+        
+        boolean useRefList = false;
+        Integer idRefList = -1;
+        
+        if ( StringUtils.isNotEmpty( strUseRefList ) )
+        {
+            if ( StringUtils.isEmpty( strRefListSelect ) )
+            {
+                return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, ERROR_FIELD_REF_LIST, AdminMessage.TYPE_STOP );            
+            }
+            useRefList = true;
+            idRefList = Integer.parseInt( strRefListSelect );
+        }
+        
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_USE_REF_LIST, String.valueOf( idRefList ), String.valueOf( useRefList ) );
 
         return null;
     }

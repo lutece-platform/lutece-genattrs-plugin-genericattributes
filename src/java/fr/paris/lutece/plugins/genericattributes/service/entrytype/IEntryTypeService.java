@@ -87,6 +87,8 @@ public interface IEntryTypeService
     String PARAMETER_FILE = "file";
     String PARAMETER_MIN = "min";
     String PARAMETER_MAX = "max";
+    String PARAMETER_USE_REF_LIST = "use_ref_list";
+    String PARAMETER_REF_LIST_SELECT = "select_ref_list";
 
     // Fields codes
     String FIELD_DATE_VALUE = "default_date_value";
@@ -125,6 +127,7 @@ public interface IEntryTypeService
     String FIELD_RICHTEXT = "richtext";
     String FIELD_DISPLAY_BO = PARAMETER_DISPLAY_BO;
     String FIELD_DOWNLOADABLE_FILE = "downloadable_file";
+    String FIELD_USE_REF_LIST = "use_ref_list";
 
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";
@@ -150,6 +153,7 @@ public interface IEntryTypeService
     String FIELD_NUMBER_COLUMNS = "genericattributes.createEntry.labelNumberColumns";
     String FIELD_CONFIRM_FIELD_TITLE = "genericattributes.createEntry.labelConfirmFieldTitle";
     String ERROR_FIELD_FILE_TYPE = "genericattributes.createEntry.fileType";
+    String ERROR_FIELD_REF_LIST = "genericattributes.createEntry.labelUseRefListSelect";
 
     /**
      * Get the template to display the creation or modification form of an entry of this entry type
