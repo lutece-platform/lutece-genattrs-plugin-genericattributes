@@ -6,6 +6,7 @@
     <bean id="genericattributes.entryDAO" class="fr.paris.lutece.plugins.genericattributes.business.EntryDAO" />
     <bean id="genericattributes.responseDAO" class="fr.paris.lutece.plugins.genericattributes.business.ResponseDAO" />
     <bean id="genericattributes.fieldDAO" class="fr.paris.lutece.plugins.genericattributes.business.FieldDAO" />
+    <bean id="genericattributes.referenceItemFieldDao" class="fr.paris.lutece.plugins.genericattributes.business.ReferenceItemFieldDao" />
 
     <bean id="genericattributes.fileService" class="fr.paris.lutece.plugins.genericattributes.service.file.FileService" />
 </beans>

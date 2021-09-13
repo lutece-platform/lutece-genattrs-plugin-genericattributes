@@ -175,6 +175,10 @@ public final class EntryHome
                     {
                         FileHome.remove( Integer.valueOf( field.getValue( ) ) );
                     }
+                    if ( IEntryTypeService.FIELD_ANSWER_CHOICE.equals( field.getCode( ) ) )
+                    {
+                        ReferenceItemFieldHome.removeByField( field.getIdField( ) );
+                    }
                     FieldHome.remove( field.getIdField( ) );
                 }
 

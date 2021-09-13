@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS genatt_field;
 DROP TABLE IF EXISTS genatt_response;
 DROP TABLE IF EXISTS genatt_entry;
 DROP TABLE IF EXISTS genatt_entry_type;
+DROP TABLE IF EXISTS genatt_referenceitem_field;
 
 --
 -- Table structure for table genatt_entry_type
@@ -111,3 +112,8 @@ CREATE INDEX index_genatt_verify_by_field ON genatt_verify_by (id_field);
 ALTER TABLE genatt_verify_by ADD CONSTRAINT fk_genatt_verify_by_field FOREIGN KEY (id_field)
 	REFERENCES genatt_field (id_field);
 	
+CREATE TABLE genatt_referenceitem_field (
+	id_field int default 0 NOT NULL,
+	id_item int default 0 NOT NULL,
+	PRIMARY KEY( id_field )
+);
