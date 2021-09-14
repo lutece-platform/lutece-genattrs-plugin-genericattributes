@@ -88,6 +88,7 @@ public final class FieldHome
     public static void copy( Field field )
     {
         Field fieldCopy = field;
+        int oldFieldId = field.getIdField( );
 
         TransactionManager.beginTransaction( getPlugin( ) );
 
@@ -105,7 +106,12 @@ public final class FieldHome
             {
                 createVerifyBy( fieldCopy.getIdField( ), regularExpression.getIdExpression( ) );
             }
-
+            
+            Integer idItem = ReferenceItemFieldHome.findIdItemByIdField( oldFieldId );
+            if ( idItem > 0 )
+            {
+                ReferenceItemFieldHome.create( fieldCopy.getIdField( ), idItem );
+            }
             TransactionManager.commitTransaction( getPlugin( ) );
         }
         catch( Exception e )
