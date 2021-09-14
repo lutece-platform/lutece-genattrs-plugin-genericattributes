@@ -71,7 +71,7 @@ public abstract class AbstractEntryTypeRadioButton extends AbstractEntryTypeChoi
         String strFieldInLine = request.getParameter( PARAMETER_FIELD_IN_LINE );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
-        
+
         int nFieldInLine = -1;
 
         String strFieldError = StringUtils.EMPTY;
@@ -95,7 +95,7 @@ public abstract class AbstractEntryTypeRadioButton extends AbstractEntryTypeChoi
         {
             return AdminMessageService.getMessageUrl( request, strFieldError, ERROR_FIELD_REF_LIST, AdminMessage.TYPE_STOP );
         }
-        
+
         entry.setCode( strCode );
         entry.setTitle( strTitle );
         entry.setHelpMessage( strHelpMessage );

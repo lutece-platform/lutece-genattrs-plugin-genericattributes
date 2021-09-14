@@ -191,9 +191,10 @@ public final class GenericAttributesUtils
         field.setValue( strValue );
         return field;
     }
-    
+
     /**
      * Create a Field from a {@link ReferenceItem}
+     * 
      * @param entry
      * @param item
      * @return
@@ -207,7 +208,7 @@ public final class GenericAttributesUtils
         field.setDefaultValue( false );
         field.setParentEntry( entry );
         field.setLinkedItem( item );
-        
+
         return field;
     }
 }

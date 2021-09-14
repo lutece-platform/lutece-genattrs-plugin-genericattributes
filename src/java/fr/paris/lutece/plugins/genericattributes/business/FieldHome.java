@@ -71,7 +71,7 @@ public final class FieldHome
      */
     public static int create( Field field )
     {
-        int id =  _dao.insert( field, getPlugin( ) );
+        int id = _dao.insert( field, getPlugin( ) );
         if ( field.getLinkedItem( ) != null )
         {
             ReferenceItemFieldHome.create( field.getIdField( ), field.getLinkedItem( ).getId( ) );
@@ -106,7 +106,7 @@ public final class FieldHome
             {
                 createVerifyBy( fieldCopy.getIdField( ), regularExpression.getIdExpression( ) );
             }
-            
+
             Integer idItem = ReferenceItemFieldHome.findIdItemByIdField( oldFieldId );
             if ( idItem > 0 )
             {
@@ -277,9 +277,9 @@ public final class FieldHome
      */
     public static List<Field> getFieldListByCode( String code )
     {
-        return _dao.loadByCode( code, getPlugin() );
+        return _dao.loadByCode( code, getPlugin( ) );
     }
-    
+
     /**
      * Load the data of all the field of the list of entry entry and returns them in a list
      * 

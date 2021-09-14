@@ -323,7 +323,7 @@ public final class FieldDAO implements IFieldDAO
 
         return field;
     }
-    
+
     @Override
     public List<Field> loadByCode( String code, Plugin plugin )
     {

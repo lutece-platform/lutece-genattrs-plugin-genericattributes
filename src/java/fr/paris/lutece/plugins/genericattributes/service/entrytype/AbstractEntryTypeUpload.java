@@ -210,7 +210,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
             return StringUtils.EMPTY;
         }
 
-        String strBaseUrl = ( request != null ) ? AppPathService.getBaseUrl( request ) : AppPathService.getBaseUrl( );
+        String strBaseUrl = AppPathService.getBaseUrl( request );
 
         return getUrlDownloadFile( response.getIdResponse( ), strBaseUrl );
     }

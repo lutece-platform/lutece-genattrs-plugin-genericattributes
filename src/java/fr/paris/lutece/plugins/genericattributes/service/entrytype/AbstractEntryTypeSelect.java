@@ -70,7 +70,7 @@ public abstract class AbstractEntryTypeSelect extends AbstractEntryTypeChoice
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
-        
+
         String strFieldError = StringUtils.EMPTY;
 
         if ( StringUtils.isBlank( strTitle ) )
@@ -86,7 +86,7 @@ public abstract class AbstractEntryTypeSelect extends AbstractEntryTypeChoice
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
-        
+
         strFieldError = createFieldsUseRefList( entry, request );
         if ( StringUtils.isNotBlank( strFieldError ) )
         {

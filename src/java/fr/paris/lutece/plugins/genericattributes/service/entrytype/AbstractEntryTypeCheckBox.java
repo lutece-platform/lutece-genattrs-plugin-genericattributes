@@ -100,7 +100,7 @@ public abstract class AbstractEntryTypeCheckBox extends AbstractEntryTypeChoice
         {
             return AdminMessageService.getMessageUrl( request, strFieldError, ERROR_FIELD_REF_LIST, AdminMessage.TYPE_STOP );
         }
-        
+
         entry.setCode( strCode );
         entry.setTitle( strTitle );
         entry.setHelpMessage( strHelpMessage );

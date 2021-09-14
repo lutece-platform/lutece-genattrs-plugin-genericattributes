@@ -59,7 +59,7 @@ public class Field implements Serializable
     private List<Entry> _listConditionalQuestions;
     private List<RegularExpression> _listRegularExpressionList;
     private boolean _bNoDisplayTitle;
-    
+
     private ReferenceItem _linkedItem;
 
     /**
@@ -309,11 +309,12 @@ public class Field implements Serializable
     }
 
     /**
-     * @param linkedItem the linkedItem to set
+     * @param linkedItem
+     *            the linkedItem to set
      */
     public void setLinkedItem( ReferenceItem linkedItem )
     {
         _linkedItem = linkedItem;
     }
-    
+
 }
