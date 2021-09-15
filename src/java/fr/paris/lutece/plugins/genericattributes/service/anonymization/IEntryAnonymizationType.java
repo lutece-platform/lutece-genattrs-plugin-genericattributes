@@ -11,4 +11,10 @@ public interface IEntryAnonymizationType
      * @return
      */
     String getHelpMessage( Locale locale );
+    
+    /**
+     *  Get anonymization Service
+     * @return
+     */
+    IEntryTypeAnonymisationService getAnonymisationTypeService( );
 }
