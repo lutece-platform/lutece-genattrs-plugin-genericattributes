@@ -170,5 +170,10 @@ public abstract class EntryTypeService implements IEntryTypeService
 
         String strExportablePDF = request.getParameter( PARAMETER_EXPORTABLE_PDF );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_EXPORTABLE_PDF, null, String.valueOf( strExportablePDF != null ) );
+        
+        String strAnonymizable = request.getParameter( PARAMETER_ANONYMIZABLE );
+        String strAnonymizePattern = request.getParameter( PARAMETER_ANONYMIZE_PATTERN );
+        
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_ANONYMIZABLE, strAnonymizePattern, String.valueOf( strAnonymizable != null ) );
     }
 }

@@ -87,6 +87,8 @@ public interface IEntryTypeService
     String PARAMETER_FILE = "file";
     String PARAMETER_MIN = "min";
     String PARAMETER_MAX = "max";
+    String PARAMETER_ANONYMIZABLE = "anonymizable";
+    String PARAMETER_ANONYMIZE_PATTERN = "anonymize_pattern";
     String PARAMETER_USE_REF_LIST = "use_ref_list";
     String PARAMETER_REF_LIST_SELECT = "select_ref_list";
 
@@ -128,6 +130,7 @@ public interface IEntryTypeService
     String FIELD_DISPLAY_BO = PARAMETER_DISPLAY_BO;
     String FIELD_DOWNLOADABLE_FILE = "downloadable_file";
     String FIELD_USE_REF_LIST = "use_ref_list";
+    String FIELD_ANONYMIZABLE = "anonymizable";
 
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";

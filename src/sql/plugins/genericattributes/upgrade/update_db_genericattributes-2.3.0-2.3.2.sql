@@ -9,3 +9,7 @@ CREATE TABLE genatt_referenceitem_field (
 INSERT INTO genatt_field (id_entry, code, VALUE, title)
 	SELECT e.id_entry, 'use_ref_list', 'false', '-1' 
 	from genatt_entry e ;
+
+INSERT INTO genatt_field (id_entry, code, VALUE, title)
+	SELECT e.id_entry, 'anonymizable', 'false', '' 
+	from genatt_entry e ;
