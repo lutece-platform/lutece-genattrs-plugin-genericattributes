@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -46,6 +47,7 @@ import org.apache.commons.lang.math.NumberUtils;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.service.anonymization.IEntryAnonymizationType;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
@@ -55,6 +57,8 @@ import fr.paris.lutece.util.ReferenceList;
  */
 public abstract class EntryTypeService implements IEntryTypeService
 {
+    private List<IEntryAnonymizationType> _anonymizationTypes = new ArrayList<>( );
+    
     /**
      * {@inheritDoc}
      */
@@ -175,5 +179,25 @@ public abstract class EntryTypeService implements IEntryTypeService
         String strAnonymizePattern = request.getParameter( PARAMETER_ANONYMIZE_PATTERN );
         
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_ANONYMIZABLE, strAnonymizePattern, String.valueOf( strAnonymizable != null ) );
+    }
+    
+    /**
+     * @param anonymizationTypes the anonymizationTypes to set
+     */
+    public void setAnonymizationTypes( List<IEntryAnonymizationType> anonymizationTypes )
+    {
+        _anonymizationTypes = new ArrayList<> ( anonymizationTypes );
+    }
+
+    @Override
+    public List<IEntryAnonymizationType> getValidWildcards( )
+    {
+        return new ArrayList<>( _anonymizationTypes );
+    }
+    
+    @Override
+    public String getAnonymizationHelpMessage( Locale locale )
+    {
+        return getValidWildcards( ).stream( ).map( w -> w.getHelpMessage( locale ) ).collect( Collectors.joining( ","  ) );
     }
 }

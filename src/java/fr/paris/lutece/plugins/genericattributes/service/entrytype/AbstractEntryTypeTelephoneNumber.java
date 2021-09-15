@@ -288,5 +288,4 @@ public abstract class AbstractEntryTypeTelephoneNumber extends EntryTypeService
     {
         return AppPropertiesService.getProperty( PROPERTY_DEFAULT_DEFAULT_REGION, "FR" );
     }
-
 }

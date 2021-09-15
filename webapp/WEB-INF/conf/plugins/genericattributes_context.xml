@@ -11,4 +11,62 @@
     <bean id="genericattributes.fileService" class="fr.paris.lutece.plugins.genericattributes.service.file.FileService" />
     
     <bean id="genericattributes.genattReferenceItemListener" class="fr.paris.lutece.plugins.genericattributes.service.GenattReferenceItemListener" />
+    
+    <!-- Anonymization -->
+    <bean id="genericattributes.date0AnonymizationType" class="fr.paris.lutece.plugins.genericattributes.service.anonymization.EntryAnonymizationType">
+        <constructor-arg type="java.lang.String" index="0" value="%0" />
+        <constructor-arg type="java.lang.String" index="1" value="genericattributes.anonymization.date.zero.help" />
+    </bean>
+    <bean id="genericattributes.emptyDateAnonymizationType" class="fr.paris.lutece.plugins.genericattributes.service.anonymization.EntryAnonymizationType">
+        <constructor-arg type="java.lang.String" index="0" value="%x" />
+        <constructor-arg type="java.lang.String" index="1" value="genericattributes.anonymization.date.empty.help" />
+    </bean>
+    <bean id="genericattributes.defaultValueAnonymizationType" class="fr.paris.lutece.plugins.genericattributes.service.anonymization.EntryAnonymizationType">
+        <constructor-arg type="java.lang.String" index="0" value="%d" />
+        <constructor-arg type="java.lang.String" index="1" value="genericattributes.anonymization.default.help" />
+    </bean>
+    <bean id="genericattributes.defaultDateAnonymizationType" class="fr.paris.lutece.plugins.genericattributes.service.anonymization.EntryAnonymizationType">
+        <constructor-arg type="java.lang.String" index="0" value="%d" />
+        <constructor-arg type="java.lang.String" index="1" value="genericattributes.anonymization.default.help" />
+    </bean>
+    <bean id="genericattributes.defaultTelephoneAnonymizationType" class="fr.paris.lutece.plugins.genericattributes.service.anonymization.EntryAnonymizationType">
+        <constructor-arg type="java.lang.String" index="0" value="%d" />
+        <constructor-arg type="java.lang.String" index="1" value="genericattributes.anonymization.default.help" />
+    </bean>
+    <bean id="genericattributes.defaultGeolocAnonymizationType" class="fr.paris.lutece.plugins.genericattributes.service.anonymization.EntryAnonymizationType">
+        <constructor-arg type="java.lang.String" index="0" value="%d" />
+        <constructor-arg type="java.lang.String" index="1" value="genericattributes.anonymization.default.help" />
+    </bean>
+    <bean id="genericattributes.entryCodeAnonymizationType" class="fr.paris.lutece.plugins.genericattributes.service.anonymization.EntryAnonymizationType">
+        <constructor-arg type="java.lang.String" index="0" value="%c" />
+        <constructor-arg type="java.lang.String" index="1" value="genericattributes.anonymization.code.help" />
+    </bean>
+    <bean id="genericattributes.entryIdAnonymizationType" class="fr.paris.lutece.plugins.genericattributes.service.anonymization.EntryAnonymizationType">
+        <constructor-arg type="java.lang.String" index="0" value="%e" />
+        <constructor-arg type="java.lang.String" index="1" value="genericattributes.anonymization.entry.help" />
+    </bean>
+    <bean id="genericattributes.prefixAnonymizationType" class="fr.paris.lutece.plugins.genericattributes.service.anonymization.EntryAnonymizationType">
+        <constructor-arg type="java.lang.String" index="0" value="%p" />
+        <constructor-arg type="java.lang.String" index="1" value="genericattributes.anonymization.prefix.help" />
+    </bean>
+    <bean id="genericattributes.randomGuidAnonymizationType" class="fr.paris.lutece.plugins.genericattributes.service.anonymization.EntryAnonymizationType">
+        <constructor-arg type="java.lang.String" index="0" value="%g" />
+        <constructor-arg type="java.lang.String" index="1" value="genericattributes.anonymization.guid.help" />
+    </bean>
+    <bean id="genericattributes.randomNumberAnonymizationType" class="fr.paris.lutece.plugins.genericattributes.service.anonymization.EntryAnonymizationType">
+        <constructor-arg type="java.lang.String" index="0" value="%n" />
+        <constructor-arg type="java.lang.String" index="1" value="genericattributes.anonymization.number.help" />
+    </bean>
+    <bean id="genericattributes.responseIdAnonymizationType" class="fr.paris.lutece.plugins.genericattributes.service.anonymization.EntryAnonymizationType">
+        <constructor-arg type="java.lang.String" index="0" value="%r" />
+        <constructor-arg type="java.lang.String" index="1" value="genericattributes.anonymization.response.help" />
+    </bean>
+    <bean id="genericattributes.fileDeleteAnonymizationType" class="fr.paris.lutece.plugins.genericattributes.service.anonymization.EntryAnonymizationType">
+        <constructor-arg type="java.lang.String" index="0" value="%x" />
+        <constructor-arg type="java.lang.String" index="1" value="genericattributes.anonymization.file.delete.help" />
+    </bean>
+    <bean id="genericattributes.fileReplaceAnonymizationType" class="fr.paris.lutece.plugins.genericattributes.service.anonymization.EntryAnonymizationType">
+        <constructor-arg type="java.lang.String" index="0" value="%v" />
+        <constructor-arg type="java.lang.String" index="1" value="genericattributes.anonymization.file.replace.help" />
+    </bean>
 </beans>

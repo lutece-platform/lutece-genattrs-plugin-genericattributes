@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.service.anonymization.IEntryAnonymizationType;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 
@@ -311,4 +312,17 @@ public interface IEntryTypeService
      * @return the template associated to an EntryType for read only uses
      */
     String getTemplateEntryReadOnly( boolean bDisplayFront );
+    
+    /**
+     * Creates the help message for the enrty anonymisation config.
+     * @param locale
+     * @return
+     */
+    String getAnonymizationHelpMessage( Locale locale );
+    
+    /**
+     * get the list of valids wildcard for the entry
+     * @return
+     */
+    List<IEntryAnonymizationType> getValidWildcards( );
 }
