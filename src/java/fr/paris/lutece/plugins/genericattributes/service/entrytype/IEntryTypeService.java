@@ -312,16 +312,18 @@ public interface IEntryTypeService
      * @return the template associated to an EntryType for read only uses
      */
     String getTemplateEntryReadOnly( boolean bDisplayFront );
-    
+
     /**
      * Creates the help message for the enrty anonymisation config.
+     * 
      * @param locale
      * @return
      */
     String getAnonymizationHelpMessage( Locale locale );
-    
+
     /**
      * get the list of valids wildcard for the entry
+     * 
      * @return
      */
     List<IEntryAnonymizationType> getValidWildcards( );

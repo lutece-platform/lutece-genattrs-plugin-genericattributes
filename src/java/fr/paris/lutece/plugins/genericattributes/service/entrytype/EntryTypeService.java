@@ -58,7 +58,7 @@ import fr.paris.lutece.util.ReferenceList;
 public abstract class EntryTypeService implements IEntryTypeService
 {
     private List<IEntryAnonymizationType> _anonymizationTypes = new ArrayList<>( );
-    
+
     /**
      * {@inheritDoc}
      */
@@ -174,19 +174,20 @@ public abstract class EntryTypeService implements IEntryTypeService
 
         String strExportablePDF = request.getParameter( PARAMETER_EXPORTABLE_PDF );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_EXPORTABLE_PDF, null, String.valueOf( strExportablePDF != null ) );
-        
+
         String strAnonymizable = request.getParameter( PARAMETER_ANONYMIZABLE );
         String strAnonymizePattern = request.getParameter( PARAMETER_ANONYMIZE_PATTERN );
-        
+
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_ANONYMIZABLE, strAnonymizePattern, String.valueOf( strAnonymizable != null ) );
     }
-    
+
     /**
-     * @param anonymizationTypes the anonymizationTypes to set
+     * @param anonymizationTypes
+     *            the anonymizationTypes to set
      */
     public void setAnonymizationTypes( List<IEntryAnonymizationType> anonymizationTypes )
     {
-        _anonymizationTypes = new ArrayList<> ( anonymizationTypes );
+        _anonymizationTypes = new ArrayList<>( anonymizationTypes );
     }
 
     @Override
@@ -194,10 +195,10 @@ public abstract class EntryTypeService implements IEntryTypeService
     {
         return new ArrayList<>( _anonymizationTypes );
     }
-    
+
     @Override
     public String getAnonymizationHelpMessage( Locale locale )
     {
-        return getValidWildcards( ).stream( ).map( w -> w.getHelpMessage( locale ) ).collect( Collectors.joining( ","  ) );
+        return getValidWildcards( ).stream( ).map( w -> w.getHelpMessage( locale ) ).collect( Collectors.joining( "," ) );
     }
 }
