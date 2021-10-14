@@ -48,7 +48,6 @@ import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
 import fr.paris.lutece.portal.service.file.FileService;
 import fr.paris.lutece.portal.service.file.IFileStoreServiceProvider;
-import fr.paris.lutece.portal.service.file.implementation.LocalDatabaseFileService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -131,6 +130,6 @@ public abstract class AbstractEntryTypeComment extends EntryTypeService
 
     protected IFileStoreServiceProvider getFileStoreServiceProvider( )
     {
-        return FileService.getInstance( ).getFileStoreServiceProvider( LocalDatabaseFileService.FILE_STORE_PROVIDER_NAME );
+        return FileService.getInstance( ).getFileStoreServiceProvider( "defaultDatabaseFileStoreProvider" );
     }
 }
