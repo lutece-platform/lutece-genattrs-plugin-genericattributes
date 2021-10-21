@@ -46,7 +46,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.asynchronousupload.service.AbstractAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;

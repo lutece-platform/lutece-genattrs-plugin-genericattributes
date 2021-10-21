@@ -35,7 +35,7 @@ package fr.paris.lutece.plugins.genericattributes.business;
 
 import fr.paris.lutece.portal.service.i18n.I18nService;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Locale;
 
