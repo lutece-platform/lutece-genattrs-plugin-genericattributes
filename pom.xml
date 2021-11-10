@@ -10,7 +10,7 @@
     <groupId>fr.paris.lutece.plugins</groupId>
     <artifactId>plugin-genericattributes</artifactId>
     <packaging>lutece-plugin</packaging>
-    <version>2.4.0</version>
+    <version>2.4.1-SNAPSHOT</version>
     <name>Lutece Generic Attributes plugin</name>
 
     <repositories>
@@ -68,6 +68,6 @@
         <connection>scm:git:https://github.com/lutece-platform/lutece-genattrs-plugin-genericattributes.git</connection>
         <developerConnection>scm:git:https://github.com/lutece-platform/lutece-genattrs-plugin-genericattributes.git</developerConnection>
         <url>https://github.com/lutece-platform/lutece-genattrs-plugin-genericattributes.git</url>
-        <tag>plugin-genericattributes-2.4.0</tag>
+        <tag>HEAD</tag>
     </scm>
 </project>
