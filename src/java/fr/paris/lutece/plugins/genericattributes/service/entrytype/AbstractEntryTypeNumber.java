@@ -161,16 +161,6 @@ public abstract class AbstractEntryTypeNumber extends EntryTypeService
 
     private GenericAttributeError checkErrors( Entry entry, String strValueEntry, Locale locale )
     {
-        if ( !StringUtils.isNumeric( strValueEntry ) )
-        {
-            GenericAttributeError error = new GenericAttributeError( );
-            error.setMandatoryError( false );
-            error.setTitleQuestion( entry.getTitle( ) );
-            error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_NUMERIC_FIELD, locale ) );
-
-            return error;
-        }
-
         if ( entry.isMandatory( ) && StringUtils.isBlank( strValueEntry ) )
         {
             if ( StringUtils.isNotEmpty( entry.getErrorMessage( ) ) )
@@ -184,6 +174,17 @@ public abstract class AbstractEntryTypeNumber extends EntryTypeService
 
             return new MandatoryError( entry, locale );
         }
+        
+        if ( StringUtils.isNotBlank( strValueEntry ) && !StringUtils.isNumeric( strValueEntry ) )
+        {
+            GenericAttributeError error = new GenericAttributeError( );
+            error.setMandatoryError( false );
+            error.setTitleQuestion( entry.getTitle( ) );
+            error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_NUMERIC_FIELD, locale ) );
+
+            return error;
+        }
+        
         return null;
     }
 
