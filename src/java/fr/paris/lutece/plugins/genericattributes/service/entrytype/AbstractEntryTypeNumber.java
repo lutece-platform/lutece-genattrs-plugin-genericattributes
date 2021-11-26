@@ -41,6 +41,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.Field;
+import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
@@ -54,6 +56,9 @@ import fr.paris.lutece.portal.service.message.AdminMessageService;
  */
 public abstract class AbstractEntryTypeNumber extends EntryTypeService
 {
+    // PARAMETERS
+    private static final String PARAMETER_SUFFIX = "suffix";
+    
     /**
      * {@inheritDoc}
      */
@@ -74,6 +79,7 @@ public abstract class AbstractEntryTypeNumber extends EntryTypeService
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strErrorMessage = request.getParameter( PARAMETER_ERROR_MESSAGE );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
+        String strSuffix = request.getParameter( PARAMETER_SUFFIX );
 
         String strFieldError = StringUtils.EMPTY;
 
@@ -121,7 +127,8 @@ public abstract class AbstractEntryTypeNumber extends EntryTypeService
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_TEXT_CONF, null, defaultValue == null ? null : String.valueOf( defaultValue ) );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_MIN, null, minValue == null ? null : String.valueOf( minValue ) );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_MAX, null, maxValue == null ? null : String.valueOf( maxValue ) );
-
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_SUFFIX, null, StringUtils.isNotEmpty( strSuffix ) ? strSuffix : StringUtils.EMPTY );
+        
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
         return null;
@@ -194,7 +201,7 @@ public abstract class AbstractEntryTypeNumber extends EntryTypeService
     @Override
     public String getResponseValueForExport( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getResponseValue( );
+        return getResponseValue( entry, response );
     }
 
     /**
@@ -203,6 +210,37 @@ public abstract class AbstractEntryTypeNumber extends EntryTypeService
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        return response.getResponseValue( );
+        return getResponseValue( entry, response );
+    }
+    
+    /**
+     * Get the response value
+     * 
+     * @param entry
+     *            The entry
+     * @return the response value of the response for this entry
+     * @param response
+     *            The response
+     */
+    private String getResponseValue( Entry entry, Response response )
+    {
+        if ( entry.getFields( ) == null )
+        {
+            entry.setFields( FieldHome.getFieldListByIdEntry( entry.getIdEntry( ) ) );
+        }
+        
+        StringBuilder sb = new StringBuilder( );
+        sb.append( response.getResponseValue( ) );
+        
+        Field field = entry.getFieldByCode( FIELD_SUFFIX );
+        if ( field != null && StringUtils.isNotBlank( field.getValue( ) ) )
+        {
+            if ( !field.getValue( ).startsWith( StringUtils.SPACE ) )
+            {
+                sb.append( StringUtils.SPACE );
+            }
+            sb.append( field.getValue( ) );
+        }
+        return sb.toString( );
     }
 }
