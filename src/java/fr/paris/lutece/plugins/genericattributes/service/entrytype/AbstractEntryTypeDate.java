@@ -95,16 +95,14 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
         }
 
         Date dDateValue = null;
-
+        
         if ( StringUtils.isNotBlank( strValue ) )
         {
-            dDateValue = DateUtil.formatDate( strValue, locale );
-
+            dDateValue = DateUtil.parseIsoDate( strValue );
             if ( dDateValue == null )
             {
-                SimpleDateFormat sdf = (SimpleDateFormat) DateUtil.getDateFormat( locale );
                 Object [ ] messageArgs = new Object [ ] {
-                        sdf.toPattern( )
+                        DateUtil.ISO_PATTERN_DATE
                 };
                 return AdminMessageService.getMessageUrl( request, MESSAGE_ILLOGICAL_DATE, messageArgs, AdminMessage.TYPE_STOP );
             }
@@ -141,7 +139,7 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
             return null;
         }
 
-        Date tDateValue = DateUtil.formatDate( strValueEntry, locale );
+        Date tDateValue = DateUtil.parseIsoDate( strValueEntry );
 
         if ( tDateValue != null )
         {
