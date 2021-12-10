@@ -77,7 +77,8 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
-
+        String strPlaceholder = request.getParameter( PARAMETER_PLACEHOLDER );
+        
         String strFieldError = StringUtils.EMPTY;
 
         if ( StringUtils.isBlank( strTitle ) )
@@ -114,6 +115,7 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
         entry.setComment( strComment );
         entry.setCSSClass( strCSSClass );
 
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_PLACEHOLDER, null, strPlaceholder != null ? strPlaceholder : StringUtils.EMPTY );
         Field field = GenericAttributesUtils.createOrUpdateField( entry, FIELD_DATE_VALUE, null, null );
         field.setValueTypeDate( dDateValue );
 

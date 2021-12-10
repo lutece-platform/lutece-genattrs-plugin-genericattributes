@@ -80,7 +80,8 @@ public abstract class AbstractEntryTypeNumber extends EntryTypeService
         String strErrorMessage = request.getParameter( PARAMETER_ERROR_MESSAGE );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
         String strSuffix = request.getParameter( PARAMETER_SUFFIX );
-
+        String strPlaceholder = request.getParameter( PARAMETER_PLACEHOLDER );
+        
         String strFieldError = StringUtils.EMPTY;
 
         if ( StringUtils.isBlank( strTitle ) )
@@ -128,6 +129,7 @@ public abstract class AbstractEntryTypeNumber extends EntryTypeService
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_MIN, null, minValue == null ? null : String.valueOf( minValue ) );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_MAX, null, maxValue == null ? null : String.valueOf( maxValue ) );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_SUFFIX, null, StringUtils.isNotEmpty( strSuffix ) ? strSuffix : StringUtils.EMPTY );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_PLACEHOLDER, null, strPlaceholder != null ? strPlaceholder : StringUtils.EMPTY );
         
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );

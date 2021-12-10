@@ -87,7 +87,8 @@ public abstract class AbstractEntryTypeTelephoneNumber extends EntryTypeService
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
         String strAutocomplete = request.getParameter( PARAMETER_AUTOCOMPLETE );
         String strDefaultRegion = request.getParameter( PARAMETER_DEFAULT_REGION );
-
+        String strPlaceholder = request.getParameter( PARAMETER_PLACEHOLDER );
+        
         String strFieldError = StringUtils.EMPTY;
 
         if ( StringUtils.isBlank( strTitle ) )
@@ -130,6 +131,8 @@ public abstract class AbstractEntryTypeTelephoneNumber extends EntryTypeService
         {
             fieldDefaultRegion.setValue( getDefaultDefaultRegion( ) );
         }
+        
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_PLACEHOLDER, null, strPlaceholder != null ? strPlaceholder : StringUtils.EMPTY );
 
         entry.setMandatory( strMandatory != null );
         entry.setErrorMessage( strErrorMessage );

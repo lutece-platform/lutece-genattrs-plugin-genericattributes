@@ -83,7 +83,8 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strErrorMessage = request.getParameter( PARAMETER_ERROR_MESSAGE );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
-
+        String strPlaceholder = request.getParameter( PARAMETER_PLACEHOLDER );
+        
         int nWidth = -1;
         int nMaxSizeEnter = -1;
 
@@ -155,7 +156,8 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_TEXT_CONF, null, strValue );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_WIDTH, null, String.valueOf( nWidth ) );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_MAX_SIZE, null, String.valueOf( nMaxSizeEnter ) );
-
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_PLACEHOLDER, null, strPlaceholder != null ? strPlaceholder : StringUtils.EMPTY );
+        
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
 

@@ -79,7 +79,8 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         String strUseRichText = request.getParameter( PARAMETER_USE_RICH_TEXT );
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
-
+        String strPlaceholder = request.getParameter( PARAMETER_PLACEHOLDER );
+        
         int nWidth = -1;
         int nHeight = -1;
         int nMaxSizeEnter = -1;
@@ -161,7 +162,8 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_WIDTH, null, String.valueOf( nWidth ) );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_HEIGHT, null, String.valueOf( nHeight ) );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_RICHTEXT, null, String.valueOf( strUseRichText != null ) );
-
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_PLACEHOLDER, null, strPlaceholder != null ? strPlaceholder : StringUtils.EMPTY );
+        
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
         entry.setIndexed( strIndexed != null );
