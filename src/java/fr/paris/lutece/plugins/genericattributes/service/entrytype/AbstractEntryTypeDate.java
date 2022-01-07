@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -78,7 +78,7 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
         String strPlaceholder = request.getParameter( PARAMETER_PLACEHOLDER );
-        
+
         String strFieldError = StringUtils.EMPTY;
 
         if ( StringUtils.isBlank( strTitle ) )
@@ -96,7 +96,7 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
         }
 
         Date dDateValue = null;
-        
+
         if ( StringUtils.isNotBlank( strValue ) )
         {
             dDateValue = DateUtil.parseIsoDate( strValue );

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -80,7 +80,7 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
         String strPlaceholder = request.getParameter( PARAMETER_PLACEHOLDER );
-        
+
         int nWidth = -1;
         int nHeight = -1;
         int nMaxSizeEnter = -1;
@@ -163,7 +163,7 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_HEIGHT, null, String.valueOf( nHeight ) );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_RICHTEXT, null, String.valueOf( strUseRichText != null ) );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_PLACEHOLDER, null, strPlaceholder != null ? strPlaceholder : StringUtils.EMPTY );
-        
+
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
         entry.setIndexed( strIndexed != null );

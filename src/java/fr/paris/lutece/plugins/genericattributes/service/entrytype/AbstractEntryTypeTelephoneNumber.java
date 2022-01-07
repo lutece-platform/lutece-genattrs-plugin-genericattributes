@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -88,7 +88,7 @@ public abstract class AbstractEntryTypeTelephoneNumber extends EntryTypeService
         String strAutocomplete = request.getParameter( PARAMETER_AUTOCOMPLETE );
         String strDefaultRegion = request.getParameter( PARAMETER_DEFAULT_REGION );
         String strPlaceholder = request.getParameter( PARAMETER_PLACEHOLDER );
-        
+
         String strFieldError = StringUtils.EMPTY;
 
         if ( StringUtils.isBlank( strTitle ) )
@@ -131,7 +131,7 @@ public abstract class AbstractEntryTypeTelephoneNumber extends EntryTypeService
         {
             fieldDefaultRegion.setValue( getDefaultDefaultRegion( ) );
         }
-        
+
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_PLACEHOLDER, null, strPlaceholder != null ? strPlaceholder : StringUtils.EMPTY );
 
         entry.setMandatory( strMandatory != null );

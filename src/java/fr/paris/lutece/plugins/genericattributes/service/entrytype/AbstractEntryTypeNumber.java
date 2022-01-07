@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2022, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -58,7 +58,7 @@ public abstract class AbstractEntryTypeNumber extends EntryTypeService
 {
     // PARAMETERS
     private static final String PARAMETER_SUFFIX = "suffix";
-    
+
     /**
      * {@inheritDoc}
      */
@@ -81,7 +81,7 @@ public abstract class AbstractEntryTypeNumber extends EntryTypeService
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
         String strSuffix = request.getParameter( PARAMETER_SUFFIX );
         String strPlaceholder = request.getParameter( PARAMETER_PLACEHOLDER );
-        
+
         String strFieldError = StringUtils.EMPTY;
 
         if ( StringUtils.isBlank( strTitle ) )
@@ -130,7 +130,7 @@ public abstract class AbstractEntryTypeNumber extends EntryTypeService
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_MAX, null, maxValue == null ? null : String.valueOf( maxValue ) );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_SUFFIX, null, StringUtils.isNotEmpty( strSuffix ) ? strSuffix : StringUtils.EMPTY );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_PLACEHOLDER, null, strPlaceholder != null ? strPlaceholder : StringUtils.EMPTY );
-        
+
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
         return null;
@@ -183,7 +183,7 @@ public abstract class AbstractEntryTypeNumber extends EntryTypeService
 
             return new MandatoryError( entry, locale );
         }
-        
+
         if ( StringUtils.isNotBlank( strValueEntry ) && !StringUtils.isNumeric( strValueEntry ) )
         {
             GenericAttributeError error = new GenericAttributeError( );
@@ -193,7 +193,7 @@ public abstract class AbstractEntryTypeNumber extends EntryTypeService
 
             return error;
         }
-        
+
         return null;
     }
 
@@ -214,7 +214,7 @@ public abstract class AbstractEntryTypeNumber extends EntryTypeService
     {
         return getResponseValue( entry, response );
     }
-    
+
     /**
      * Get the response value
      * 
@@ -230,10 +230,10 @@ public abstract class AbstractEntryTypeNumber extends EntryTypeService
         {
             entry.setFields( FieldHome.getFieldListByIdEntry( entry.getIdEntry( ) ) );
         }
-        
+
         StringBuilder sb = new StringBuilder( );
         sb.append( response.getResponseValue( ) );
-        
+
         Field field = entry.getFieldByCode( FIELD_SUFFIX );
         if ( field != null && StringUtils.isNotBlank( field.getValue( ) ) )
         {
