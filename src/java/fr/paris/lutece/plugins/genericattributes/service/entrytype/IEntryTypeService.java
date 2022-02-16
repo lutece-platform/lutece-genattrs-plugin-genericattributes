@@ -84,6 +84,7 @@ public interface IEntryTypeService
     String PARAMETER_USED_COMPLETE_RESPONSE = "used_in_complete_form_response";
     String PARAMETER_EXPORTABLE = "exportable";
     String PARAMETER_EXPORTABLE_PDF = "exportable_pdf";
+    String PARAMETER_PUBLISHED = "published";
     String PARAMETER_DISPLAY_BO = "display_in_bo";
     String PARAMETER_FILE = "file";
     String PARAMETER_MIN = "min";
@@ -129,6 +130,7 @@ public interface IEntryTypeService
     String FIELD_TEXT_CONF = "text_config";
     String FIELD_EXPORTABLE = "exportable";
     String FIELD_EXPORTABLE_PDF = "exportable_pdf";
+    String FIELD_PUBLISHED = "published";
     String FIELD_RICHTEXT = "richtext";
     String FIELD_DISPLAY_BO = PARAMETER_DISPLAY_BO;
     String FIELD_DOWNLOADABLE_FILE = "downloadable_file";
