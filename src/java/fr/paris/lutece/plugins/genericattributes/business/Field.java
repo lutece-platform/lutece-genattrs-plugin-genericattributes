@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.genericattributes.business;
 
 import fr.paris.lutece.plugins.referencelist.business.ReferenceItem;
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
-
 import java.io.Serializable;
 
 import java.util.Date;
