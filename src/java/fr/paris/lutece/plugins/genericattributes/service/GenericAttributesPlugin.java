@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service;
 
+import fr.paris.lutece.portal.service.fileimage.FileImagePublicService;
 import fr.paris.lutece.portal.service.image.ImageResourceManager;
 import fr.paris.lutece.portal.service.plugin.PluginDefaultImplementation;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -59,5 +60,7 @@ public class GenericAttributesPlugin extends PluginDefaultImplementation
         {
             ImageResourceManager.registerProvider( new ResponseImageResourceProvider( ) );
         }
+        
+        FileImagePublicService.init( );
     }
 }
