@@ -38,8 +38,6 @@ import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.sql.Timestamp;
-
 import java.util.List;
 
 /**
@@ -52,8 +50,6 @@ public class ResponseFilter
     private int _nIdResource = GenericAttributesUtils.CONSTANT_ID_NULL;
     private int _nIdField = GenericAttributesUtils.CONSTANT_ID_NULL;
     private int _nIdEntry = GenericAttributesUtils.CONSTANT_ID_NULL;
-    private Timestamp _tDateFirst;
-    private Timestamp _tDateLast;
     private boolean _bGroupbyDay;
     private boolean _bGroupbyWeek;
     private boolean _bGroupbyMonth;
@@ -149,64 +145,6 @@ public class ResponseFilter
     public boolean containsIdEntry( )
     {
         return ( _nIdEntry != GenericAttributesUtils.CONSTANT_ID_NULL );
-    }
-
-    /**
-     *
-     * @return date of the first submit
-     */
-    public Timestamp getDateFirst( )
-    {
-        return _tDateFirst;
-    }
-
-    /**
-     * set the date of the first submit
-     * 
-     * @param begin
-     *            date of the first submit
-     */
-    public void setDateFirst( Timestamp begin )
-    {
-        _tDateFirst = begin;
-    }
-
-    /**
-     *
-     * @return true if the filter contain the date of the first submit
-     */
-    public boolean containsDateFirst( )
-    {
-        return ( _tDateFirst != null );
-    }
-
-    /**
-     *
-     * @return date of the last submit
-     */
-    public Timestamp getDateLast( )
-    {
-        return _tDateLast;
-    }
-
-    /**
-     * set the date of the last submit
-     * 
-     * @param end
-     *            the date of the last submit
-     */
-    public void setDateLast( Timestamp end )
-    {
-        _tDateLast = end;
-    }
-
-    /**
-     *
-     * @return true if the filter contain the date of the last submit
-     */
-    public boolean containsDateLast( )
-    {
-        return ( _tDateLast != null );
     }
 
     /**

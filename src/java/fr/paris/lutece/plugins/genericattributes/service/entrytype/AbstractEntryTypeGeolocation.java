@@ -38,10 +38,10 @@ package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
@@ -353,7 +353,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
 
         if ( response.getField( ) != null )
         {
-            fieldName = ObjectUtils.toString( response.getField( ).getCode( ) );
+            fieldName = Objects.toString( response.getField( ).getCode( ) );
         }
 
         return fieldName + GenericAttributesUtils.CONSTANT_EQUAL + response.getResponseValue( );
