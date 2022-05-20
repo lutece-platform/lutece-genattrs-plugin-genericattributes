@@ -80,8 +80,6 @@ public interface IEntryTypeService
     String PARAMETER_MAX_IMAGE_SIZE = "maxImageSize";
     String PARAMETER_IMAGE_TYPE = "image_type";
     String PARAMETER_INDEXED = "is_indexed";
-    String PARAMETER_USED_CORRECT_RESPONSE = "used_in_correct_form_response";
-    String PARAMETER_USED_COMPLETE_RESPONSE = "used_in_complete_form_response";
     String PARAMETER_EXPORTABLE = "exportable";
     String PARAMETER_EXPORTABLE_PDF = "exportable_pdf";
     String PARAMETER_PUBLISHED = "published";
@@ -117,8 +115,6 @@ public interface IEntryTypeService
     String FIELD_ATTRIBUTE_NAME = "attribute_name";
     String FIELD_CONFIRM = "confirm_field";
     String FIELD_MYLUTECE_ATTRIBUTE_NAME_CODE = "attribute_name";
-    String FIELD_USED_CORRECT_RESPONSE = PARAMETER_USED_CORRECT_RESPONSE;
-    String FIELD_USED_COMPLETE_RESPONSE = PARAMETER_USED_COMPLETE_RESPONSE;
     String FIELD_ARRAY_ROW = "array_row";
     String FIELD_ARRAY_COLUMN = "array_column";
     String FIELD_IMAGE_TYPE = "image_type";

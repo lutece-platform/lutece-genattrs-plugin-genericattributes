@@ -532,24 +532,6 @@ public class Entry implements Serializable, Cloneable
     }
 
     /**
-     * @return true if the field used_in_correct_form_response is present and set to true
-     */
-    public boolean isUsedInCorrectFormResponse( )
-    {
-        Field fieldUsedCorrectResponse = getFieldByCode( IEntryTypeService.FIELD_USED_CORRECT_RESPONSE );
-        return fieldUsedCorrectResponse != null && Boolean.valueOf( fieldUsedCorrectResponse.getValue( ) );
-    }
-
-    /**
-     * @return true if the field used_in_complete_form_response is present and set to true
-     */
-    public boolean isUsedInCompleteFormResponse( )
-    {
-        Field fieldUsedCompleteResponse = getFieldByCode( IEntryTypeService.FIELD_USED_COMPLETE_RESPONSE );
-        return fieldUsedCompleteResponse != null && Boolean.valueOf( fieldUsedCompleteResponse.getValue( ) );
-    }
-
-    /**
      * @return true if the field exportable is present and set to true
      */
     public boolean isExportable( )
@@ -566,7 +548,7 @@ public class Entry implements Serializable, Cloneable
         Field fieldExportablePdf = getFieldByCode( IEntryTypeService.FIELD_EXPORTABLE_PDF );
         return fieldExportablePdf != null && Boolean.valueOf( fieldExportablePdf.getValue( ) );
     }
-    
+
     /**
      * @return true if the field published is present and set to true
      */
