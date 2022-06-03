@@ -15,7 +15,7 @@
 						<#list entryTypeList as entry_type>
 							<@tr>
 								<@td>${entry_type.title}</@td>
-								<@td><@icon style='${entry_type.iconName}' /> ${entry_type.iconName}</@td>
+								<@td><@icon style='${entry_type.iconName!\'\'}' /> ${entry_type.iconName!''}</@td>
 								<@td>${entry_type.order}</@td>
 								<@td>${entry_type.inactive?string('#i18n{portal.util.labelNo}','#i18n{portal.util.labelYes}')}</@td>
 								<@td>
