@@ -74,6 +74,7 @@ public class Response implements Serializable
     private int _nStatus;
     private File _file;
     private boolean _bIsImage;
+    private int _nSortOrder;
 
     /**
      * Default constructor
@@ -97,6 +98,7 @@ public class Response implements Serializable
         this._field = response.getField( );
         this._strResponseValue = response.getResponseValue( );
         this._nStatus = response.getStatus( );
+        this._nSortOrder = response.getSortOrder( );
 
         File file = response.getFile( );
 
@@ -311,5 +313,21 @@ public class Response implements Serializable
     public void setIsImage( boolean bIsImage )
     {
         this._bIsImage = bIsImage;
+    }
+
+    /**
+     * @return the nSortOrder
+     */
+    public int getSortOrder( )
+    {
+        return _nSortOrder;
+    }
+
+    /**
+     * @param nSortOrder the nSortOrder to set
+     */
+    public void setSortOrder( int nSortOrder )
+    {
+        _nSortOrder = nSortOrder;
     }
 }

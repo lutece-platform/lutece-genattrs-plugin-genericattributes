@@ -49,14 +49,14 @@ public final class ResponseDAO implements IResponseDAO
 {
     // Constants
     private static final String SQL_QUERY_SELECT_RESPONSE = "SELECT resp.id_response, resp.response_value, type.class_name, ent.id_type, ent.id_entry, ent.title, ent.code, "
-            + " resp.iteration_number, resp.id_field, resp.id_file, resp.status FROM genatt_response resp";
+            + " resp.iteration_number, resp.id_field, resp.id_file, resp.status, resp.sort_order  FROM genatt_response resp";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_RESPONSE + ", genatt_entry ent, genatt_entry_type type "
             + " WHERE resp.id_response = ? and resp.id_entry = ent.id_entry and ent.id_type = type.id_type ";
     private static final String SQL_QUERY_SELECT_RESPONSE_BY_FILTER = SQL_QUERY_SELECT_RESPONSE + ", genatt_entry ent, genatt_entry_type type "
             + " WHERE resp.id_entry = ent.id_entry and ent.id_type = type.id_type ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_response ( "
-            + " response_value, id_entry, iteration_number, id_field, id_file, status ) VALUES ( ?,?,?,?,?,?)";
-    private static final String SQL_QUERY_UPDATE = "UPDATE genatt_response SET response_value = ?, id_entry = ?, iteration_number = ?, id_field = ?, id_file = ?, status = ? WHERE id_response = ?";
+            + " response_value, id_entry, iteration_number, id_field, id_file, status,sort_order ) VALUES ( ?,?,?,?,?,?,?)";
+    private static final String SQL_QUERY_UPDATE = "UPDATE genatt_response SET response_value = ?, id_entry = ?, iteration_number = ?, id_field = ?, id_file = ?, status = ?, sort_order = ? WHERE id_response = ?";
     private static final String SQL_QUERY_DELETE = "DELETE FROM genatt_response WHERE id_response = ? ";
     private static final String SQL_QUERY_SELECT_COUNT_RESPONSE_BY_ID_ENTRY = " SELECT field.title, COUNT( resp.id_response )"
             + " FROM genatt_entry e LEFT JOIN genatt_field field ON ( e.id_entry = field.id_entry ) LEFT JOIN genatt_response resp on ( resp.id_field = field.id_field ) "
@@ -109,7 +109,8 @@ public final class ResponseDAO implements IResponseDAO
                 daoUtil.setIntNull( nIndex++ );
             }
 
-            daoUtil.setInt( nIndex, Response.CONSTANT_STATUS_ACTIVE );
+            daoUtil.setInt( nIndex++, Response.CONSTANT_STATUS_ACTIVE );
+            daoUtil.setInt( nIndex, response.getSortOrder( ) );
 
             daoUtil.executeUpdate( );
 
@@ -189,7 +190,8 @@ public final class ResponseDAO implements IResponseDAO
             }
 
             daoUtil.setInt( nIndex++, response.getStatus( ) );
-
+            daoUtil.setInt( nIndex++, response.getSortOrder( ) );
+            
             daoUtil.setInt( nIndex, response.getIdResponse( ) );
             daoUtil.executeUpdate( );
         }
@@ -380,8 +382,8 @@ public final class ResponseDAO implements IResponseDAO
         }
 
         nIndex++;
-        response.setStatus( daoUtil.getInt( nIndex ) );
-
+        response.setStatus( daoUtil.getInt( nIndex++ ) );
+        response.setSortOrder( daoUtil.getInt( nIndex ) );
         return response;
     }
 
