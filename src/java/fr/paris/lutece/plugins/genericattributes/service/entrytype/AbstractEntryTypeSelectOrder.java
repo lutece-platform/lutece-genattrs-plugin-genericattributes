@@ -39,6 +39,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
@@ -121,7 +122,7 @@ public abstract class AbstractEntryTypeSelectOrder extends AbstractEntryTypeChoi
         for ( String idField : fieldsIds )
         {
             String id = idField.substring( idField.indexOf( '=' ) + 1 );
-            Field field = FieldHome.findByPrimaryKey( Integer.parseInt( id ) );
+            Field field = FieldHome.findByPrimaryKey( NumberUtils.toInt( id, -1 ) );
             if ( field != null )
             {
                 Response response = new Response( );
