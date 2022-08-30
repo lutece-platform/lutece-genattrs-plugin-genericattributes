@@ -91,6 +91,7 @@ CREATE TABLE genatt_response (
 	id_field int default NULL,
 	id_file int default NULL,
 	status smallint default 1,
+	sort_order int default 0,
 	PRIMARY KEY (id_response)
 );
 
