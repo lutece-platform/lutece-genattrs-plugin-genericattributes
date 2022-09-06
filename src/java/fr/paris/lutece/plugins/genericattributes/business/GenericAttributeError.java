@@ -48,6 +48,7 @@ public class GenericAttributeError implements Serializable, ErrorMessage
     private boolean _bMandatoryError;
     private String _strUrl;
     private boolean _bDisplayableError = true;
+    private String _strErrorFieldMessage = "";
 
     /**
      * return true if the error is a mandatory error
@@ -157,4 +158,28 @@ public class GenericAttributeError implements Serializable, ErrorMessage
     {
         _bDisplayableError = bDisplayableError;
     }
+
+	@Override
+	public String getFieldName() {
+		return getErrorFieldMessage( );
+	}
+
+	/**
+     * Gets the field error Message
+     * 
+     * @return the error field Message
+     */
+	public String getErrorFieldMessage( ) {
+		return _strErrorFieldMessage;
+	}
+
+	/**
+     * set the field error message
+     * 
+     * @param strErrorFieldMessage
+     *            the error field message
+     */
+	public void setErrorFieldMessage( String strErrorFieldMessage ) {
+		this._strErrorFieldMessage = strErrorFieldMessage;
+	}
 }
