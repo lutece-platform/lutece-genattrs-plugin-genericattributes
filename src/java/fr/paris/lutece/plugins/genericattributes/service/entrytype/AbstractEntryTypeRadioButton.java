@@ -71,6 +71,9 @@ public abstract class AbstractEntryTypeRadioButton extends AbstractEntryTypeChoi
         String strFieldInLine = request.getParameter( PARAMETER_FIELD_IN_LINE );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
+        String strFieldAlignment = request.getParameter( PARAMETER_ALIGNMENT_TEXT );
+        String strFieldTextLeft = request.getParameter( PARAMETER_TEXT_LEFT );
+        String strFieldTextRight = request.getParameter( PARAMETER_TEXT_RIGHT );
 
         int nFieldInLine = -1;
 
@@ -104,6 +107,10 @@ public abstract class AbstractEntryTypeRadioButton extends AbstractEntryTypeChoi
 
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
+        
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_ALIGNMENT, null, String.valueOf( strFieldAlignment != null ) );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_TEXT_LEFT, null, strFieldTextLeft );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_TEXT_RIGHT, null, strFieldTextRight );
 
         try
         {

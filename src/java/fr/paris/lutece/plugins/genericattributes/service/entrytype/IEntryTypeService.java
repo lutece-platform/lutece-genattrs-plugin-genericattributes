@@ -92,6 +92,9 @@ public interface IEntryTypeService
     String PARAMETER_USE_REF_LIST = "use_ref_list";
     String PARAMETER_REF_LIST_SELECT = "select_ref_list";
     String PARAMETER_PLACEHOLDER = "placeholder";
+    String PARAMETER_ALIGNMENT_TEXT = "alignment_text";
+    String PARAMETER_TEXT_LEFT = "left_text";
+    String PARAMETER_TEXT_RIGHT = "right_text";
 
     // Fields codes
     String FIELD_DATE_VALUE = "default_date_value";
@@ -133,6 +136,9 @@ public interface IEntryTypeService
     String FIELD_USE_REF_LIST = "use_ref_list";
     String FIELD_ANONYMIZABLE = "anonymizable";
     String FIELD_PLACEHOLDER = "placeholder";
+    String FIELD_ALIGNMENT = "alignment_text";
+    String FIELD_TEXT_LEFT = "left_text";
+    String FIELD_TEXT_RIGHT = "right_text";
 
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";
