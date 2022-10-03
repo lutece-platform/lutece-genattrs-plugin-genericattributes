@@ -157,4 +157,11 @@ public class GenericAttributeError implements Serializable, ErrorMessage
     {
         _bDisplayableError = bDisplayableError;
     }
+
+    @Override
+    public String getFieldName( )
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
