@@ -220,17 +220,6 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
 
         listResponse.add( response );
 
-        // Checks if the entry value contains XSS characters
-        if ( StringUtil.containsXssCharacters( strValueEntry ) )
-        {
-            GenericAttributeError error = new GenericAttributeError( );
-            error.setMandatoryError( false );
-            error.setTitleQuestion( entry.getTitle( ) );
-            error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_XSS_FIELD, request.getLocale( ) ) );
-
-            return error;
-        }
-
         // check max size for the field. 0 means no limit
         if ( ( nMaxSize != -1 ) && ( strValueEntry.length( ) > nMaxSize ) )
         {
