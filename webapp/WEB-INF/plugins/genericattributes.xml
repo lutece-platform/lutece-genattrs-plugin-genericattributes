@@ -2,7 +2,7 @@
     <!-- Plugin Informations -->
     <name>genericattributes</name>
     <class>fr.paris.lutece.plugins.genericattributes.service.GenericAttributesPlugin</class>
-    <version>2.4.2-SNAPSHOT</version>
+    <version>2.4.2</version>
     <documentation/>
     <installation/>
     <changes/>
