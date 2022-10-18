@@ -59,7 +59,7 @@ public abstract class AbstractEntryTypeImage extends AbstractEntryTypeUpload
 
             if ( !entry.isMandatory( ) )
             {
-                String sourceBase = request.getParameter( ( IEntryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry( ) ) );
+                String sourceBase = request.getParameter( ( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ) );
 
                 Response response = getResponseFromImage( sourceBase, entry, false );
                 response.setIterationNumber( getResponseIterationValue( request ) );

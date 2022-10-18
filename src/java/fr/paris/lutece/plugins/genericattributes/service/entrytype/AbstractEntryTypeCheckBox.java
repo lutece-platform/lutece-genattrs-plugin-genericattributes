@@ -39,12 +39,17 @@ import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
+import fr.paris.lutece.portal.service.fileimage.FileImagePublicService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.image.ImageResourceManager;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -60,6 +65,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public abstract class AbstractEntryTypeCheckBox extends AbstractEntryTypeChoice
 {
+	private static final String MESSAGE_ERROR_FILE_IMAGE = "Error importing file.";
     /**
      * {@inheritDoc}
      */
@@ -76,6 +82,8 @@ public abstract class AbstractEntryTypeCheckBox extends AbstractEntryTypeChoice
         String strFieldInLine = request.getParameter( PARAMETER_FIELD_IN_LINE );
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
+        MultipartHttpServletRequest multipartRequest = ( MultipartHttpServletRequest ) request;
+        FileItem imageFileItem = multipartRequest.getFile( PARAMETER_ILLUSTRATION_IMAGE );
 
         int nFieldInLine = -1;
 
@@ -101,6 +109,21 @@ public abstract class AbstractEntryTypeCheckBox extends AbstractEntryTypeChoice
             return AdminMessageService.getMessageUrl( request, strFieldError, ERROR_FIELD_REF_LIST, AdminMessage.TYPE_STOP );
         }
 
+        if ( imageFileItem != null && imageFileItem.getSize( ) > 0 )
+        {
+            try
+            {
+                String strFileStoreKey = ImageResourceManager.addImageResource( FileImagePublicService.IMAGE_RESOURCE_TYPE_ID, imageFileItem );
+                GenericAttributesUtils.createOrUpdateField( entry, FIELD_ILLUSTRATION_IMAGE, null, strFileStoreKey );
+            }
+            catch ( Exception e ) 
+            {
+            	AppLogService.error( MESSAGE_ERROR_FILE_IMAGE, e );
+                throw new AppException( MESSAGE_ERROR_FILE_IMAGE, e );
+            }
+        }
+        
+        
         entry.setCode( strCode );
         entry.setTitle( strTitle );
         entry.setHelpMessage( strHelpMessage );

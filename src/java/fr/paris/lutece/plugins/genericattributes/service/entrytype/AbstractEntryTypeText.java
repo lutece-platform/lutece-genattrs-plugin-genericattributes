@@ -37,8 +37,8 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
@@ -48,19 +48,25 @@ import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
+import fr.paris.lutece.portal.service.fileimage.FileImagePublicService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.image.ImageResourceManager;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
+import fr.paris.lutece.portal.service.util.AppException;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.string.StringUtil;
+import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 
 /**
  * Abstract entry type for text
  */
 public abstract class AbstractEntryTypeText extends EntryTypeService
 {
+	private static final String MESSAGE_ERROR_FILE_IMAGE = "Error importing file.";
     /**
      * {@inheritDoc}
      */
@@ -84,6 +90,8 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         String strErrorMessage = request.getParameter( PARAMETER_ERROR_MESSAGE );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
         String strPlaceholder = request.getParameter( PARAMETER_PLACEHOLDER );
+        MultipartHttpServletRequest multipartRequest = ( MultipartHttpServletRequest ) request;
+        FileItem imageFileItem = multipartRequest.getFile( PARAMETER_ILLUSTRATION_IMAGE );
 
         int nWidth = -1;
         int nMaxSizeEnter = -1;
@@ -153,11 +161,25 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         entry.setErrorMessage( strErrorMessage );
         entry.setCode( strCode );
 
+        if ( imageFileItem != null && imageFileItem.getSize( ) > 0 )
+        {
+            try
+            {
+                String strFileStoreKey = ImageResourceManager.addImageResource( FileImagePublicService.IMAGE_RESOURCE_TYPE_ID, imageFileItem );
+                GenericAttributesUtils.createOrUpdateField( entry, FIELD_ILLUSTRATION_IMAGE, imageFileItem.getName( ), strFileStoreKey );
+            }
+            catch ( Exception e ) 
+            {
+            	AppLogService.error( MESSAGE_ERROR_FILE_IMAGE, e );
+                throw new AppException( MESSAGE_ERROR_FILE_IMAGE, e );
+            }
+        }
+        
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_TEXT_CONF, null, strValue );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_WIDTH, null, String.valueOf( nWidth ) );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_MAX_SIZE, null, String.valueOf( nMaxSizeEnter ) );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_PLACEHOLDER, null, strPlaceholder != null ? strPlaceholder : StringUtils.EMPTY );
-
+        
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
 
