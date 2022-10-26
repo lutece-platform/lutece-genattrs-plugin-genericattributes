@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.genericattributes.business;
 
 import fr.paris.lutece.plugins.referencelist.business.ReferenceItem;
+import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
 import java.io.Serializable;
 
@@ -58,6 +59,7 @@ public class Field implements Serializable
     private List<Entry> _listConditionalQuestions;
     private List<RegularExpression> _listRegularExpressionList;
     private boolean _bNoDisplayTitle;
+    private File _fileImage;
 
     private ReferenceItem _linkedItem;
 
@@ -315,5 +317,23 @@ public class Field implements Serializable
     {
         _linkedItem = linkedItem;
     }
+
+	/**
+	 * Gets the file store key.
+	 *
+	 * @return the file store key
+	 */
+	public File getFileImage( ) {
+		return _fileImage;
+	}
+
+	/**
+	 * Sets the file store key.
+	 *
+	 * @param strFileStoreKey the new file store key
+	 */
+	public void setFileImage( File strFileStoreKey ) {
+		this._fileImage = strFileStoreKey;
+	}
 
 }
