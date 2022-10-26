@@ -41,6 +41,8 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 
+import fr.paris.lutece.portal.business.file.File;
+import fr.paris.lutece.portal.service.image.ImageResourceManager;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
@@ -50,23 +52,24 @@ import fr.paris.lutece.util.sql.DAOUtil;
 public final class FieldDAO implements IFieldDAO
 {
     // Constants
-    private static final String SQL_QUERY_SELECT_ALL = "SELECT id_field,id_entry,code,title,value,default_value,pos,value_type_date,no_display_title,comment"
+    private static final String SQL_QUERY_SELECT_ALL = "SELECT id_field,id_entry,code,title,value,default_value,pos,value_type_date,no_display_title,comment,id_file_key"
             + " FROM genatt_field ";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_ALL + " WHERE id_field = ? ORDER BY pos";
     private static final String SQL_QUERY_FIND_BY_CODE = SQL_QUERY_SELECT_ALL + " WHERE code = ? ORDER BY pos";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_field(id_entry,code,title,value,default_value,pos,value_type_date,no_display_title,comment)"
-            + " VALUES(?,?,?,?,?,?,?,?,?)";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_field(id_entry,code,title,value,default_value,pos,value_type_date,no_display_title,comment,id_file_key)"
+            + " VALUES(?,?,?,?,?,?,?,?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM genatt_field WHERE id_field = ? ";
     private static final String SQL_QUERY_INSERT_VERIF_BY = "INSERT INTO genatt_verify_by(id_field,id_expression) VALUES(?,?) ";
     private static final String SQL_QUERY_DELETE_VERIF_BY = "DELETE FROM genatt_verify_by WHERE id_field = ? and id_expression= ?";
     private static final String SQL_QUERY_UPDATE = "UPDATE genatt_field SET "
-            + "id_field=?,id_entry=?,code=?,title=?,value=?,default_value=?,pos=?,value_type_date=?,no_display_title=?,comment=? WHERE id_field = ?";
+            + "id_field=?,id_entry=?,code=?,title=?,value=?,default_value=?,pos=?,value_type_date=?,no_display_title=?,comment=?,id_file_key=? WHERE id_field = ?";
     private static final String SQL_QUERY_SELECT_FIELD_BY_ID_ENTRY = SQL_QUERY_SELECT_ALL + " WHERE id_entry = ? ORDER BY pos";
     private static final String SQL_QUERY_NEW_POSITION = "SELECT MAX(pos)" + " FROM genatt_field ";
     private static final String SQL_QUERY_SELECT_REGULAR_EXPRESSION_BY_ID_FIELD = "SELECT id_expression " + " FROM genatt_verify_by where id_field=?";
     private static final String SQL_QUERY_COUNT_FIELD_BY_ID_REGULAR_EXPRESSION = "SELECT COUNT(id_field) " + " FROM genatt_verify_by where id_expression = ?";
     private static final String SQL_QUERY_SELECT_FIELD_BY_LIST_ID_ENTRY = SQL_QUERY_SELECT_ALL + " WHERE id_entry IN ";
-
+    
+    private static final String PUBLIC_IMAGE_RESOURCE = "public_image_resource";
     /**
      * Generates a new field position
      * 
@@ -113,6 +116,7 @@ public final class FieldDAO implements IFieldDAO
             daoUtil.setDate( nIndex++, ( field.getValueTypeDate( ) == null ) ? null : new Date( field.getValueTypeDate( ).getTime( ) ) );
             daoUtil.setBoolean( nIndex++, field.isNoDisplayTitle( ) );
             daoUtil.setString( nIndex++, field.getComment( ) );
+            daoUtil.setString( nIndex++, ( field.getFileImage( ) == null ) ? null : field.getFileImage( ).getFileKey( ) );
             
 
             daoUtil.executeUpdate( );
@@ -177,6 +181,7 @@ public final class FieldDAO implements IFieldDAO
             daoUtil.setDate( nIndex++, ( field.getValueTypeDate( ) == null ) ? null : new Date( field.getValueTypeDate( ).getTime( ) ) );
             daoUtil.setBoolean( nIndex++, field.isNoDisplayTitle( ) );
             daoUtil.setString( nIndex++, field.getComment( ) );
+            daoUtil.setString( nIndex++, ( field.getFileImage( ) == null ) ? null : field.getFileImage( ).getFileKey( ) );
 
             daoUtil.setInt( nIndex++, field.getIdField( ) );
             daoUtil.executeUpdate( );
@@ -321,7 +326,14 @@ public final class FieldDAO implements IFieldDAO
         field.setPosition( daoUtil.getInt( nIndex++ ) );
         field.setValueTypeDate( daoUtil.getDate( nIndex++ ) );
         field.setNoDisplayTitle( daoUtil.getBoolean( nIndex++ ) );
-        field.setComment( daoUtil.getString( nIndex ) );
+        field.setComment( daoUtil.getString( nIndex++ ) );
+        File fileImage = new File( ); 
+        if ( daoUtil.getString( nIndex ) != null )
+        {
+	        fileImage.setFileKey( daoUtil.getString( nIndex ) );
+	        fileImage.setUrl( ImageResourceManager.getImageUrl( PUBLIC_IMAGE_RESOURCE, Integer.parseInt( fileImage.getFileKey( ) ) )  );
+        }
+        field.setFileImage( fileImage );
 
         return field;
     }
