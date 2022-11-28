@@ -1,0 +1,1 @@
+alter table genatt_field add column id_file_key VARCHAR(50) default null;
