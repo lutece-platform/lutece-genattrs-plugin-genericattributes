@@ -72,6 +72,7 @@ CREATE TABLE genatt_field (
 	value_type_date date NULL,
 	no_display_title smallint default NULL,
 	comment long varchar default null,
+	id_file_key varchar(50) default null,
 	PRIMARY KEY (id_field)
 );
 
