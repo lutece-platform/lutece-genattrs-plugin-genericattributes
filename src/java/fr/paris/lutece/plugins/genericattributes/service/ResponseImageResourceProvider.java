@@ -99,5 +99,4 @@ public class ResponseImageResourceProvider implements ImageResourceProvider
 
         return urlItem.getUrl( );
     }
-
 }
