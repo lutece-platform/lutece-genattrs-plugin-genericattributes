@@ -106,6 +106,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
     {
         initCommonRequestData( entry, request );
         String strTitle = request.getParameter( PARAMETER_TITLE );
+        String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
         String strComment = request.getParameter( PARAMETER_COMMENT );
         String strMandatory = request.getParameter( PARAMETER_MANDATORY );
@@ -150,6 +151,7 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         entry.setCSSClass( strCSSClass );
         entry.setIndexed( strIndexed != null );
         entry.setMandatory( strMandatory != null );
+        entry.setCode( strCode );
         return null;
     }
 
