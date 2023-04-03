@@ -97,6 +97,8 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
 
     private static final String MESSAGE_SPECIFY_BOTH_X_AND_Y = "genericattributes.message.specifyBothXAndY";
     public static final String PARAMETER_EDIT_MODE_LIST = "gismap.edit.mode.list";
+    
+    public static final String PROPERTY_ENTRY_TYPE_GEOLOCALISATION_EXPORT_WITH_FIELD_NAME = "genericattributes.entrytype.geolocalisation.export.field.name";
 
     /**
      * {@inheritDoc}
@@ -351,14 +353,16 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
     @Override
     public String getResponseValueForExport( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        String fieldName = StringUtils.EMPTY;
+        String result = StringUtils.EMPTY;
 
-        if ( response.getField( ) != null )
+        boolean isExportWithFieldName = AppPropertiesService.getPropertyBoolean( PROPERTY_ENTRY_TYPE_GEOLOCALISATION_EXPORT_WITH_FIELD_NAME, true );
+
+        if ( isExportWithFieldName && response.getField( ) != null )
         {
-            fieldName = Objects.toString( response.getField( ).getCode( ) );
+            result = Objects.toString( response.getField( ).getCode( ) ) +  GenericAttributesUtils.CONSTANT_EQUAL;
         }
-
-        return fieldName + GenericAttributesUtils.CONSTANT_EQUAL + response.getResponseValue( );
+        result += response.getResponseValue( );
+        return result;
     }
 
     // PRIVATE METHODS
