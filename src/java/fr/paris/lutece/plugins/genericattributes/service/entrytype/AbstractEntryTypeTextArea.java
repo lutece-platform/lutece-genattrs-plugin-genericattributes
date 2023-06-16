@@ -135,6 +135,9 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
             if ( StringUtils.isNotBlank( strMaxSizeEnter ) )
             {
                 nMaxSizeEnter = Integer.parseInt( strMaxSizeEnter );
+            }else {
+                 //set maximum size to 2000 characters if value is empty
+                nMaxSizeEnter = 2000;
             }
         }
         catch( NumberFormatException ne )
