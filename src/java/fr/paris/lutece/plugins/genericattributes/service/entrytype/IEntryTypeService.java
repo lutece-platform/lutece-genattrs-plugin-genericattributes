@@ -135,6 +135,8 @@ public interface IEntryTypeService
     String FIELD_ANONYMIZABLE = "anonymizable";
     String FIELD_PLACEHOLDER = "placeholder";
     String FIELD_ILLUSTRATION_IMAGE = "illustration_image";
+    String FIELD_GEOJSON = "coordinates_geojson";
+    String FIELD_ID_LAYER = "DataLayer";
 
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";
