@@ -33,29 +33,22 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryType;
-import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 /**
  * Class to manage entry type services
  */
-public final class EntryTypeServiceManager extends AbstractCacheableService
+public final class EntryTypeServiceManager
 {
-    private static final String CACHE_SERVICE_NAME = "Entry Type Service Manager Cache";
-    private static EntryTypeServiceManager _instance = new EntryTypeServiceManager( );
-    private static ConcurrentMap<String, Object> _lockBeanName = new ConcurrentHashMap<>( );
 
     /**
      * Default constructor
      */
     private EntryTypeServiceManager( )
     {
-        initCache( );
+        /* Utility class */
     }
 
     /**
@@ -63,49 +56,20 @@ public final class EntryTypeServiceManager extends AbstractCacheableService
      * 
      * @param entry
      *            The entry to get the entry type service of
-     * @return The entry type service, or null if no entry type service was found
+     * @return The entry type service, or null if no entry type service was
+     *         found
      */
     public static IEntryTypeService getEntryTypeService( Entry entry )
     {
-        if ( entry != null )
+        if ( entry == null )
         {
-            EntryType entryType = entry.getEntryType( );
-
-            if ( entryType != null )
-            {
-                IEntryTypeService entryTypeService = (IEntryTypeService) _instance.getFromCache( entryType.getBeanName( ) );
-
-                if ( entryTypeService != null )
-                {
-                    return entryTypeService;
-                }
-
-                entryTypeService = SpringContextService.getBean( entryType.getBeanName( ) );
-
-                synchronized( getLockOnBean( entryType.getBeanName( ) ) )
-                {
-                    _instance.putInCache( entryType.getBeanName( ), entryTypeService );
-                }
-
-                return entryTypeService;
-            }
+            return null;
         }
-
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getName( )
-    {
-        return CACHE_SERVICE_NAME;
-    }
-
-    private static synchronized Object getLockOnBean( String bean )
-    {
-        _lockBeanName.putIfAbsent( bean, new Object( ) );
-        return _lockBeanName.get( bean );
+        EntryType entryType = entry.getEntryType( );
+        if ( entryType == null )
+        {
+            return null;
+        }
+        return SpringContextService.getBean( entryType.getBeanName( ) );
     }
 }
