@@ -45,19 +45,15 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 
-import fr.paris.lutece.plugins.carto.business.DataLayer;
-import fr.paris.lutece.plugins.carto.business.DataLayerHome;
-import fr.paris.lutece.plugins.carto.business.MapTemplateHome;
-import fr.paris.lutece.plugins.carto.service.CartographyService;
+
+import fr.paris.lutece.plugins.genericattributes.business.CartoProviderManager;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
-import fr.paris.lutece.plugins.genericattributes.business.IMapProvider;
-import fr.paris.lutece.plugins.genericattributes.business.MapProviderManager;
+import fr.paris.lutece.plugins.genericattributes.business.ICartoProvider;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
-import fr.paris.lutece.plugins.leaflet.business.GeolocItem;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -182,21 +178,27 @@ public abstract class AbstractEntryTypeCartography extends EntryTypeService
         String strCoordinatePolygon = request.getParameter( PARAMETER_COORDINATE_POLYGON );
         String strCoordinatePolyline = request.getParameter( PARAMETER_COORDINATE_POLYLINE );
         String strIdLayer = request.getParameter( PARAMETER_DATALAYER );
-        Optional<DataLayer> dataLayer = DataLayerHome.findByPrimaryKey( Integer.valueOf( strIdLayer ) );
+        
+        List<ICartoProvider> lstcartoprovider = CartoProviderManager.getMapProvidersList();
         String strGeoJson = "";
         
-        if ( strCoordinateX != null && !strCoordinateX.isEmpty( ) && strCoordinateY != null && !strCoordinateY.isEmpty( ) )
-        {
-        	strGeoJson = CartographyService.getGeolocItemPoint(Double.valueOf( strCoordinateX ), Double.valueOf( strCoordinateY ), "").toJSON( );
-        }
-        else if ( strCoordinatePolygon != null && !strCoordinatePolygon.isEmpty( ) )
-        {
-        	strGeoJson = CartographyService.getGeolocItemPolygon( strCoordinatePolygon, GeolocItem.VALUE_GEOMETRY_TYPE_POLYGON).toJSON( );
-        }
-        else if ( strCoordinatePolyline != null && !strCoordinatePolyline.isEmpty( ) )
-        {
-        	strGeoJson = CartographyService.getGeolocItemPolygon( strCoordinatePolyline, GeolocItem.VALUE_GEOMETRY_TYPE_POLYLINE).toJSON( );
-        }
+        //if ( !lstcartoprovider.isEmpty( )  )
+        //{
+	        ICartoProvider cartoService = lstcartoprovider.get(0);
+	        
+	        if ( strCoordinateX != null && !strCoordinateX.isEmpty( ) && strCoordinateY != null && !strCoordinateY.isEmpty( ) )
+	        {
+	        	strGeoJson = cartoService.getGeolocItemPoint(Double.valueOf( strCoordinateX ), Double.valueOf( strCoordinateY ), "");
+	        }
+	        else if ( strCoordinatePolygon != null && !strCoordinatePolygon.isEmpty( ) )
+	        {
+	        	strGeoJson = cartoService.getGeolocItemPolygon( strCoordinatePolygon );
+	        }
+	        else if ( strCoordinatePolyline != null && !strCoordinatePolyline.isEmpty( ) )
+	        {
+	        	strGeoJson = cartoService.getGeolocItemPolygon( strCoordinatePolyline );
+	        }
+        //}
 
         Field fieldIdAddress = entry.getFieldByCode( FIELD_ID_ADDRESS );
         Field fieldGeoJson = entry.getFieldByCode( FIELD_GEOJSON );
@@ -221,11 +223,12 @@ public abstract class AbstractEntryTypeCartography extends EntryTypeService
         listResponse.add( responseGeoJSON );
         
         // 2 : Response Desc IDLayer
-        if ( dataLayer.isPresent( ) )
+        String solrTag = cartoService.getSolrTag( strIdLayer );
+        if ( !solrTag.isEmpty( ) )
         {
         Response responseIdLayer = new Response( );
         responseIdLayer.setEntry( entry );
-        responseIdLayer.setResponseValue( dataLayer.get( ).getSolrTag( ) );
+        responseIdLayer.setResponseValue( solrTag );
         responseIdLayer.setField( fieldIdLayer );
         responseIdLayer.setToStringValueResponse( strIdLayer );
         responseIdLayer.setIterationNumber( getResponseIterationValue( request ) );
@@ -261,7 +264,15 @@ public abstract class AbstractEntryTypeCartography extends EntryTypeService
      */
     public ReferenceList getMapProvidersRefList( )
     {
-        return MapTemplateHome.getMapTemplatesReferenceList( );
+    	List<ICartoProvider> lstcartoprovider = CartoProviderManager.getMapProvidersList();
+    	if ( !lstcartoprovider.isEmpty( ) )
+    	{
+    		return lstcartoprovider.get(0).getMapProvidersRefList( );
+    	}
+    	else
+    	{
+    		return new ReferenceList( );
+    	}
     }
 
     /**
