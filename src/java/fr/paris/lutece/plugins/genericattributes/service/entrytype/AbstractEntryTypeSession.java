@@ -33,8 +33,10 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -113,11 +115,18 @@ public abstract class AbstractEntryTypeSession extends EntryTypeService
     {
         String strValueEntry = StringUtils.EMPTY;
         HttpSession session = request.getSession( false );
+        List<String> strValueList;
 
         if ( session != null && CollectionUtils.isNotEmpty( entry.getFields( ) ) && entry.getFields( ).get( 0 ) != null )
         {
             String strAttributeName = entry.getFieldByCode( FIELD_ATTRIBUTE_NAME ).getValue( );
-            strValueEntry = (String) session.getAttribute( strAttributeName );
+            Object attribute = session.getAttribute( strAttributeName );
+            if(attribute instanceof List<?>){
+                strValueList = (List<String>) attribute;
+                strValueEntry = String.join(",", strValueList);
+            }else{
+                strValueEntry = (String) attribute;
+            }
         }
 
         if ( StringUtils.isNotBlank( strValueEntry ) )
