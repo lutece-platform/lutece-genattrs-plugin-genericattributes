@@ -196,7 +196,7 @@ public abstract class AbstractEntryTypeCartography extends EntryTypeService
 	        }
 	        else if ( strCoordinatePolyline != null && !strCoordinatePolyline.isEmpty( ) )
 	        {
-	        	strGeoJson = cartoService.getGeolocItemPolygon( strCoordinatePolyline );
+	        	strGeoJson = cartoService.getGeolocItemPolyline( strCoordinatePolyline );
 	        }
         //}
 
