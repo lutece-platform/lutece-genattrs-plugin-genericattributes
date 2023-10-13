@@ -1,44 +1,44 @@
-<@row>
-    <@columns>
-		<@box color='primary'>
-			<@boxHeader title='#i18n{genericattributes.manageEntryType.title}' />
-			<@boxBody>
-				<@table>
-					<@tableHead>
-						<@th>#i18n{genericattributes.manageEntryType.columnTitle.title}</@th>
-						<@th>#i18n{genericattributes.manageEntryType.columnIcon.title}</@th>
-						<@th>#i18n{genericattributes.manageEntryType.columnOrder.title}</@th>
-						<@th>#i18n{genericattributes.manageEntryType.columnActive.title}</@th>
-						<@th>#i18n{genericattributes.manageEntryType.columnActions.title}</@th>
-					</@tableHead>
-					<@tableBody>
-						<#list entryTypeList as entry_type>
-							<@tr>
-								<@td>${entry_type.title}</@td>
-								<@td><@icon style='${entry_type.iconName!\'\'}' /> ${entry_type.iconName!''}</@td>
-								<@td>${entry_type.order}</@td>
-								<@td>${entry_type.inactive?string('#i18n{portal.util.labelNo}','#i18n{portal.util.labelYes}')}</@td>
-								<@td>
-									<@aButton href='jsp/admin/plugins/genericattributes/ManageEntryType.jsp?view=editEntryType&id_type=${entry_type.idType}' hideTitle=['all'] buttonIcon='edit' title='#i18n{genericattributes.manageEntryType.action.edit}' size='sm' />
-									<#if entry_type.inactive>
-										<@aButton href='jsp/admin/plugins/genericattributes/ManageEntryType.jsp?action=doChangeActive&id_type=${entry_type.idType}' hideTitle=['all'] buttonIcon='play' color='success' title='#i18n{genericattributes.manageEntryType.action.enable}' size='sm' />
-									<#else>
-										<@aButton href='jsp/admin/plugins/genericattributes/ManageEntryType.jsp?action=doChangeActive&id_type=${entry_type.idType}' hideTitle=['all'] buttonIcon='stop' color='danger' title='#i18n{genericattributes.manageEntryType.action.disable}' size='sm' />										
-									</#if>
-									<#if entryTypeList?size gt 1>
-										<#if entry_type.order gt 1>
-											<@aButton href='jsp/admin/plugins/genericattributes/ManageEntryType.jsp?action=doMoveUp&id_type=${entry_type.idType}' title='#i18n{genericattributes.manageEntryType.action.moveUp}' hideTitle=['all'] buttonIcon='chevron-up' size='sm' />
-										</#if>
-										<#if entry_type.order lt entryTypeList?size>
-											<@aButton href='jsp/admin/plugins/genericattributes/ManageEntryType.jsp?action=doMoveDown&id_type=${entry_type.idType}' title='#i18n{genericattributes.manageEntryType.action.moveDown}' hideTitle=['all'] buttonIcon='chevron-down' size='sm' />
-										</#if>
-									</#if>
-								</@td>
-							</@tr>
-						</#list>
-					</@tableBody>
-				</@table>
-			</@boxBody>
-		</@box>
-    </@columns>
-</@row>
+<@pageContainer>
+    <@pageColumn>
+		<@pageHeader title='#i18n{genericattributes.manageEntryType.title}' />
+		<@table>
+			<@tableHead>
+				<@th>#i18n{genericattributes.manageEntryType.columnTitle.title}</@th>
+				<@th>#i18n{genericattributes.manageEntryType.columnIcon.title}</@th>
+				<@th>#i18n{genericattributes.manageEntryType.columnOrder.title}</@th>
+				<@th>#i18n{genericattributes.manageEntryType.columnActive.title}</@th>
+				<@th>#i18n{genericattributes.manageEntryType.columnActions.title}</@th>
+			</@tableHead>
+			<@tableBody>
+				<#list entryTypeList as entry_type>
+					<@tr>
+						<@td>${entry_type.title}</@td>
+						<@td><@icon style='${entry_type.iconName!\'\'}' /> ${entry_type.iconName!''}</@td>
+						<@td>${entry_type.order}</@td>
+						<@td>${entry_type.inactive?string('#i18n{portal.util.labelNo}','#i18n{portal.util.labelYes}')}</@td>
+						<@td>
+							<@aButton href='jsp/admin/plugins/genericattributes/ManageEntryType.jsp?view=editEntryType&id_type=${entry_type.idType}' hideTitle=['all'] buttonIcon='pencil' title='#i18n{genericattributes.manageEntryType.action.edit}' size='sm' />
+
+							<#-- btnTitle='#i18n{genericattributes.manageEntryType.action.edit}' -->
+							<#-- <@offcanvas targetUrl='jsp/admin/plugins/genericattributes/ManageEntryType.jsp?view=editEntryType&id_type=${entry_type.idType}' targetElement='#edit_entrytype_page' redirectForm=false id='entrytype${entry_type.idType}-edit' title='#i18n{genericattributes.manageEntryType.title}' btnTitle='' btnIcon='pencil' btnSize='sm' position='end' /> -->
+							
+							<#if entry_type.inactive>
+								<@aButton href='jsp/admin/plugins/genericattributes/ManageEntryType.jsp?action=doChangeActive&id_type=${entry_type.idType}' hideTitle=['all'] buttonIcon='play' color='success' title='#i18n{genericattributes.manageEntryType.action.enable}' size='sm' />
+							<#else>
+								<@aButton href='jsp/admin/plugins/genericattributes/ManageEntryType.jsp?action=doChangeActive&id_type=${entry_type.idType}' hideTitle=['all'] buttonIcon='stop' color='danger' title='#i18n{genericattributes.manageEntryType.action.disable}' size='sm' />										
+							</#if>
+							<#if entryTypeList?size gt 1>
+								<#if entry_type.order gt 1>
+									<@aButton href='jsp/admin/plugins/genericattributes/ManageEntryType.jsp?action=doMoveUp&id_type=${entry_type.idType}' title='#i18n{genericattributes.manageEntryType.action.moveUp}' hideTitle=['all'] buttonIcon='chevron-up' size='sm' />
+								</#if>
+								<#if entry_type.order lt entryTypeList?size>
+									<@aButton href='jsp/admin/plugins/genericattributes/ManageEntryType.jsp?action=doMoveDown&id_type=${entry_type.idType}' title='#i18n{genericattributes.manageEntryType.action.moveDown}' hideTitle=['all'] buttonIcon='chevron-down' size='sm' />
+								</#if>
+							</#if>
+						</@td>
+					</@tr>
+				</#list>
+			</@tableBody>
+		</@table>
+	</@pageColumn>
+</@pageContainer>

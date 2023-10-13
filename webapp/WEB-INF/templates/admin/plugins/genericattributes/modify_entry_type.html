@@ -1,23 +1,19 @@
-<@row>
-    <@columns>
-		<@box color='primary'>
-			<@boxHeader title='#i18n{genericattributes.manageEntryType.title}' />
-			<@boxBody>
-				<@tform method="post"  name="modifyEntryType" action="jsp/admin/plugins/genericattributes/ManageEntryType.jsp">
-					<@messages errors=errors />
-					<@input type="hidden" id="id_type" name="id_type" value="${entryType.idType}"/>
-					<@formGroup labelKey='#i18n{genericattributes.manageEntryType.labelName}' mandatory=true >
-						<@input type='text' name='title' value='${entryType.title}' />
-					</@formGroup>
-					<@formGroup labelKey='#i18n{genericattributes.manageEntryType.labelIcon}' mandatory=true >
-						<@selectIconFont name="iconName" defaultValue=entryType.iconName />
-					</@formGroup>
-					<@formGroup>
-						<@button type='submit' name='action_modifyEntryType' buttonIcon='check' title='#i18n{genericattributes.manageEntryType.button.edit}' />
-						<@button type='submit' name='cancel' buttonIcon='times-circle' title='#i18n{portal.admin.message.buttonCancel}' cancel=true />
-					</@formGroup>
-				</@tform>
-			</@boxBody>
-		</@box>
-    </@columns>
-</@row>
+<@pageContainer>
+    <@pageColumn>
+		<@pageHeader title='#i18n{genericattributes.manageEntryType.title}' />
+		<@tform method='post' name='modifyEntryType' action='jsp/admin/plugins/genericattributes/ManageEntryType.jsp' id='edit_entrytype_page' boxed=true>
+			<@messages errors=errors />
+			<@input type='hidden' id='id_type' name='id_type' value='${entryType.idType}'/>
+			<@formGroup labelKey='#i18n{genericattributes.manageEntryType.labelName}' mandatory=true >
+				<@input type='text' name='title' value='${entryType.title}' />
+			</@formGroup>
+			<@formGroup labelKey='#i18n{genericattributes.manageEntryType.labelIcon}' mandatory=true >
+				<@selectIconFont name='iconName' defaultValue=entryType.iconName />
+			</@formGroup>
+			<@formGroup>
+				<@button type='submit' name='action_modifyEntryType' buttonIcon='device-floppy' title='#i18n{genericattributes.manageEntryType.button.edit}' />
+				<@button type='submit' name='cancel' buttonIcon='x' title='#i18n{portal.admin.message.buttonCancel}' cancel=true />
+			</@formGroup>
+		</@tform>
+	</@pageColumn>
+</@pageContainer>
