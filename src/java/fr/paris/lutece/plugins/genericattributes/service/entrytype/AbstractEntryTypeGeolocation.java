@@ -65,8 +65,6 @@ import fr.paris.lutece.util.ReferenceList;
  */
 public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
 {
-    public static final String PARAMETER_ID_ENTRY = "id_entry";
-    public static final String PARAMETER_ID_RESOURCE = "id_resource";
 
     /** The Constant PARAMETER_MAP_PROVIDER. */
     public static final String PARAMETER_MAP_PROVIDER = "map_provider";
@@ -94,6 +92,20 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
 
     /** The Constant PARAMETER_SUFFIX_GEOMETRY. */
     public static final String PARAMETER_SUFFIX_GEOMETRY = "_geometry";
+    /**
+     * The Constant PARAMETER_PREFIX_ITERATION.
+     */
+    public static final String PARAMETER_PREFIX_ITERATION = "nIt";
+
+    /**
+     * The Constant PARAMETER_NUMBER_ITERATION.
+     */
+    public static final String PARAMETER_NUMBER_ITERATION = "number_iteration_geolocation";
+
+    /**
+     * The Constant ATTRIBUTE_LAST_ITERATION_GEOLOCATION.
+     */
+    public static final String ATTRIBUTE_LAST_ITERATION_GEOLOCATION = "last_iteration_geolocation";
 
     private static final String MESSAGE_SPECIFY_BOTH_X_AND_Y = "genericattributes.message.specifyBothXAndY";
     public static final String PARAMETER_EDIT_MODE_LIST = "gismap.edit.mode.list";
@@ -175,103 +187,137 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
-    {
-        String strIdAddressValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_ID_ADDRESS );
-        String strAddressValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_ADDRESS );
-        String strAdditionalAddressValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_ADDITIONAL_ADDRESS );
-        String strXValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_X );
-        String strYValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_Y );
-        String strGeometryValue = request.getParameter( entry.getIdEntry( ) + PARAMETER_SUFFIX_GEOMETRY );
+    public GenericAttributeError getResponseData(Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale) {
+        Integer maxIterationGeolocation = 0;
+        Integer lastIterationGeolocation = 0;
+        Integer iterationNumberToSave = 0;
 
-        Field fieldIdAddress = entry.getFieldByCode( FIELD_ID_ADDRESS );
-        Field fieldAddress = entry.getFieldByCode( FIELD_ADDRESS );
-        Field fieldAdditionalAddress = entry.getFieldByCode( FIELD_ADDITIONAL_ADDRESS );
-        Field fieldX = entry.getFieldByCode( FIELD_X );
-        Field fieldY = entry.getFieldByCode( FIELD_Y );
-        Field fieldGeometry = entry.getFieldByCode( FIELD_GEOMETRY );
+        if (request.getSession().getAttribute(ATTRIBUTE_LAST_ITERATION_GEOLOCATION) != null) {
+            lastIterationGeolocation = (Integer) request.getSession().getAttribute(ATTRIBUTE_LAST_ITERATION_GEOLOCATION);
+            request.getSession().setAttribute(ATTRIBUTE_LAST_ITERATION_GEOLOCATION, lastIterationGeolocation + 1);
+            lastIterationGeolocation = lastIterationGeolocation + 1;
+        } else {
+            request.getSession().setAttribute(ATTRIBUTE_LAST_ITERATION_GEOLOCATION, 0);
+        }
+        if (request.getParameter(PARAMETER_NUMBER_ITERATION) != null) {
+            maxIterationGeolocation = Integer.parseInt(request.getParameter(PARAMETER_NUMBER_ITERATION));
+            iterationNumberToSave = lastIterationGeolocation;
+        } else {
+            iterationNumberToSave = -1;
+        }
+        String prefixIteration = PARAMETER_PREFIX_ITERATION + lastIterationGeolocation + "_" + IEntryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry();
+
+        String strIdAddressValue = request.getParameter(prefixIteration + PARAMETER_SUFFIX_ID_ADDRESS);
+
+        String strAddressValue = request.getParameter(prefixIteration + PARAMETER_SUFFIX_ADDRESS);
+        String strAdditionalAddressValue = request.getParameter(prefixIteration + entry.getIdEntry() + PARAMETER_SUFFIX_ADDITIONAL_ADDRESS);
+        String strXValue = request.getParameter(prefixIteration + PARAMETER_SUFFIX_X);
+        String strYValue = request.getParameter(prefixIteration + PARAMETER_SUFFIX_Y);
+        String strGeometryValue = request.getParameter(prefixIteration + PARAMETER_SUFFIX_GEOMETRY);
+
+        Field fieldIdAddress = entry.getFieldByCode(FIELD_ID_ADDRESS);
+        Field fieldAddress = entry.getFieldByCode(FIELD_ADDRESS);
+        Field fieldAdditionalAddress = entry.getFieldByCode(FIELD_ADDITIONAL_ADDRESS);
+        Field fieldX = entry.getFieldByCode(FIELD_X);
+        Field fieldY = entry.getFieldByCode(FIELD_Y);
+        Field fieldGeometry = entry.getFieldByCode(FIELD_GEOMETRY);
 
         /**
          * Create the field "idAddress" in case the field does not exist in the database.
          */
-        if ( fieldIdAddress == null )
-        {
-            fieldIdAddress = GenericAttributesUtils.createOrUpdateField( entry, FIELD_ID_ADDRESS, null, FIELD_ID_ADDRESS );
-            FieldHome.create( fieldIdAddress );
+        if (fieldIdAddress == null) {
+            fieldIdAddress = GenericAttributesUtils.createOrUpdateField(entry, FIELD_ID_ADDRESS, null, FIELD_ID_ADDRESS);
+            FieldHome.create(fieldIdAddress);
         }
 
         // 1 : Response Id Address
-        Response responseIdAddress = new Response( );
-        responseIdAddress.setEntry( entry );
-        responseIdAddress.setResponseValue( strIdAddressValue );
-        responseIdAddress.setField( fieldIdAddress );
-        responseIdAddress.setToStringValueResponse( strIdAddressValue );
-        responseIdAddress.setIterationNumber( getResponseIterationValue( request ) );
-        listResponse.add( responseIdAddress );
+        if (strIdAddressValue != null) {
+            Response responseIdAddress = new Response();
+            responseIdAddress.setEntry(entry);
+            responseIdAddress.setResponseValue(strIdAddressValue);
+            responseIdAddress.setField(fieldIdAddress);
+            responseIdAddress.setToStringValueResponse(strIdAddressValue);
+            responseIdAddress.setIterationNumber(iterationNumberToSave);
+            listResponse.add(responseIdAddress);
+            // take this value of the request
 
-        // 2 : Response Address
-        Response responseAddress = new Response( );
-        responseAddress.setEntry( entry );
-        responseAddress.setResponseValue( strAddressValue );
-        responseAddress.setField( fieldAddress );
-        responseAddress.setToStringValueResponse( strAddressValue );
-        responseIdAddress.setIterationNumber( getResponseIterationValue( request ) );
-        listResponse.add( responseAddress );
-
-        // 3 : Response Additional Address
-        Response responseAdditionalAddress = new Response( );
-        responseAdditionalAddress.setEntry( entry );
-        responseAdditionalAddress.setResponseValue( strAdditionalAddressValue );
-        responseAdditionalAddress.setField( fieldAdditionalAddress );
-        responseAdditionalAddress.setToStringValueResponse( strAdditionalAddressValue );
-        responseAdditionalAddress.setIterationNumber( getResponseIterationValue( request ) );
-        listResponse.add( responseAdditionalAddress );
-
-        // 4 : Response X
-        Response responseX = new Response( );
-        responseX.setEntry( entry );
-        responseX.setResponseValue( strXValue );
-        responseX.setField( fieldX );
-        responseX.setToStringValueResponse( strXValue );
-        responseIdAddress.setIterationNumber( getResponseIterationValue( request ) );
-        listResponse.add( responseX );
-
-        // 5: Response Y
-        Response responseY = new Response( );
-        responseY.setEntry( entry );
-        responseY.setResponseValue( strYValue );
-        responseY.setField( fieldY );
-        responseY.setToStringValueResponse( strYValue );
-        responseIdAddress.setIterationNumber( getResponseIterationValue( request ) );
-        listResponse.add( responseY );
-
-        // 6 : Response Desc Geo
-        Response responseGeomerty = new Response( );
-        responseGeomerty.setEntry( entry );
-        responseGeomerty.setResponseValue( strGeometryValue );
-        responseGeomerty.setField( fieldGeometry );
-        responseGeomerty.setToStringValueResponse( strGeometryValue );
-        responseIdAddress.setIterationNumber( getResponseIterationValue( request ) );
-        listResponse.add( responseGeomerty );
-
-        if ( entry.isMandatory( ) && StringUtils.isBlank( strAddressValue ) )
-        {
-            return new MandatoryError( entry, locale );
         }
 
-        if ( ( ( StringUtils.isBlank( strXValue ) && StringUtils.isNotBlank( strYValue ) )
-                || ( StringUtils.isNotBlank( strXValue ) && StringUtils.isBlank( strYValue ) ) ) && StringUtils.isBlank( strAddressValue ) )
-        {
-            GenericAttributeError error = new GenericAttributeError( );
+        // 2 : Response Address
+        if (strAddressValue != null) {
+            Response responseAddress = new Response();
+            responseAddress.setEntry(entry);
+            responseAddress.setResponseValue(strAddressValue);
+            responseAddress.setField(fieldAddress);
+            responseAddress.setToStringValueResponse(strAddressValue);
+            responseAddress.setIterationNumber(iterationNumberToSave);
+            listResponse.add(responseAddress);
+        }
 
-            error.setMandatoryError( entry.isMandatory( ) );
-            error.setTitleQuestion( entry.getTitle( ) );
-            error.setErrorMessage( MESSAGE_SPECIFY_BOTH_X_AND_Y );
+        // 3 : Response Additional Address
+        if (strAdditionalAddressValue != null) {
+            Response responseAdditionalAddress = new Response();
+            responseAdditionalAddress.setEntry(entry);
+            responseAdditionalAddress.setResponseValue(strAdditionalAddressValue);
+            responseAdditionalAddress.setField(fieldAdditionalAddress);
+            responseAdditionalAddress.setToStringValueResponse(strAdditionalAddressValue);
+            responseAdditionalAddress.setIterationNumber(iterationNumberToSave);
+            listResponse.add(responseAdditionalAddress);
+        }
+        // 4 : Response X
+        if (strXValue != null) {
+            Response responseX = new Response();
+            responseX.setEntry(entry);
+            responseX.setResponseValue(strXValue);
+            responseX.setField(fieldX);
+            responseX.setToStringValueResponse(strXValue);
+            responseX.setIterationNumber(iterationNumberToSave);
+            listResponse.add(responseX);
+        }
+
+        // 5: Response Y
+        if (strXValue != null) {
+            Response responseY = new Response();
+            responseY.setEntry(entry);
+            responseY.setResponseValue(strYValue);
+            responseY.setField(fieldY);
+            responseY.setToStringValueResponse(strYValue);
+            responseY.setIterationNumber(iterationNumberToSave);
+            listResponse.add(responseY);
+        }
+
+        // 6 : Response Desc Geo
+        if (strGeometryValue != null) {
+            Response responseGeomerty = new Response();
+            responseGeomerty.setEntry(entry);
+            responseGeomerty.setResponseValue(strGeometryValue);
+            responseGeomerty.setField(fieldGeometry);
+            responseGeomerty.setToStringValueResponse(strGeometryValue);
+            responseGeomerty.setIterationNumber(iterationNumberToSave);
+            listResponse.add(responseGeomerty);
+        }
+
+
+        if (entry.isMandatory() && StringUtils.isBlank(strAddressValue)) {
+            return new MandatoryError(entry, locale);
+        }
+
+        if (((StringUtils.isBlank(strXValue) && StringUtils.isNotBlank(strYValue))
+                || (StringUtils.isNotBlank(strXValue) && StringUtils.isBlank(strYValue))) && StringUtils.isBlank(strAddressValue)) {
+            GenericAttributeError error = new GenericAttributeError();
+
+            error.setMandatoryError(entry.isMandatory());
+            error.setTitleQuestion(entry.getTitle());
+            error.setErrorMessage(MESSAGE_SPECIFY_BOTH_X_AND_Y);
 
             return error;
         }
-
-        return super.getResponseData( entry, request, listResponse, locale );
+        if (request.getSession().getAttribute(ATTRIBUTE_LAST_ITERATION_GEOLOCATION) != null) {
+            if (lastIterationGeolocation >= maxIterationGeolocation) {
+                request.getSession().removeAttribute(ATTRIBUTE_LAST_ITERATION_GEOLOCATION);
+            }
+        }
+        return super.getResponseData(entry, request, listResponse, locale);
     }
 
     /**
