@@ -205,8 +205,12 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         } else {
             iterationNumberToSave = -1;
         }
-        String prefixIteration = PARAMETER_PREFIX_ITERATION + lastIterationGeolocation + "_" + IEntryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry();
-
+        String prefixIteration = String.valueOf(entry.getIdEntry( ));
+        String prefixWithIteration = PARAMETER_PREFIX_ITERATION + lastIterationGeolocation + "_" + IEntryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry();
+        if(request.getParameter(prefixWithIteration+PARAMETER_SUFFIX_ADDRESS) != null)
+        {
+          prefixIteration = prefixWithIteration;
+        }
         String strIdAddressValue = request.getParameter(prefixIteration + PARAMETER_SUFFIX_ID_ADDRESS);
 
         String strAddressValue = request.getParameter(prefixIteration + PARAMETER_SUFFIX_ADDRESS);
