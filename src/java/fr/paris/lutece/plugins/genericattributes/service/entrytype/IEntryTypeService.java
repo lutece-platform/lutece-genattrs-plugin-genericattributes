@@ -164,6 +164,10 @@ public interface IEntryTypeService
     String ERROR_FIELD_FILE_TYPE = "genericattributes.createEntry.fileType";
     String ERROR_FIELD_REF_LIST = "genericattributes.createEntry.labelUseRefListSelect";
 
+    String MESSAGE_ERROR_IMPOSSIBLE_SLOT = "genericattributes.message.error.impossibleSlot";
+
+    String MESSAGE_ERROR_SLOT = "genericattributes.message.error.slot";
+
     /**
      * Get the template to display the creation or modification form of an entry of this entry type
      * 
