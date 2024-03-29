@@ -164,4 +164,13 @@ public abstract class AbstractEntryTypeRadioButton extends AbstractEntryTypeChoi
 
         return null;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getResponseValueForExport( Entry entry, HttpServletRequest request, Response response, Locale locale )
+    {
+    	return getFieldTitleFromResponse( response );
+    }
 }
