@@ -196,4 +196,13 @@ public abstract class AbstractEntryTypeCheckBox extends AbstractEntryTypeChoice
 
         return null;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getResponseValueForExport( Entry entry, HttpServletRequest request, Response response, Locale locale )
+    {
+    	return getFieldTitleFromResponse( response );
+    }
 }
