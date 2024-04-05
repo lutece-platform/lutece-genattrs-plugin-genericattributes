@@ -90,8 +90,12 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         String strErrorMessage = request.getParameter( PARAMETER_ERROR_MESSAGE );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
         String strPlaceholder = request.getParameter( PARAMETER_PLACEHOLDER );
-        MultipartHttpServletRequest multipartRequest = ( MultipartHttpServletRequest ) request;
-        FileItem imageFileItem = multipartRequest.getFile( PARAMETER_ILLUSTRATION_IMAGE );
+        FileItem imageFileItem = null;
+        if( request instanceof MultipartHttpServletRequest ) 
+        {
+            MultipartHttpServletRequest multipartRequest = ( MultipartHttpServletRequest ) request;
+            imageFileItem = multipartRequest.getFile( PARAMETER_ILLUSTRATION_IMAGE );
+        }
 
         int nWidth = -1;
         int nMaxSizeEnter = -1;

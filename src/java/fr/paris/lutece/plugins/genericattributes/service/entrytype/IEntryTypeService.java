@@ -93,6 +93,7 @@ public interface IEntryTypeService
     String PARAMETER_REF_LIST_SELECT = "select_ref_list";
     String PARAMETER_PLACEHOLDER = "placeholder";
     String PARAMETER_ILLUSTRATION_IMAGE = "illustration_image";
+    String PARAMETER_DISABLED = "disabled";
 
     // Fields codes
     String FIELD_DATE_VALUE = "default_date_value";
@@ -137,6 +138,7 @@ public interface IEntryTypeService
     String FIELD_ILLUSTRATION_IMAGE = "illustration_image";
     String FIELD_GEOJSON = "coordinates_geojson";
     String FIELD_ID_LAYER = "DataLayer";
+    String FIELD_DISABLED = "disabled";
 
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";
