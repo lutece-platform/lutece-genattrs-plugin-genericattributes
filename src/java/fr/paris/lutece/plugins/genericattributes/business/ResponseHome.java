@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
+import fr.paris.lutece.plugins.genericattributes.service.file.GenericAttributeFileService;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.file.FileHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -73,7 +74,7 @@ public final class ResponseHome
         {
             if ( response.getFile( ) != null )
             {
-                FileHome.create( response.getFile( ) );
+                GenericAttributeFileService.getInstance().save( response.getFile( ) );
             }
 
             _dao.insert( response, getPlugin( ) );
@@ -132,7 +133,7 @@ public final class ResponseHome
             {
                 if ( response.getFile( ) != null )
                 {
-                    FileHome.remove( response.getFile( ).getIdFile( ) );
+                    GenericAttributeFileService.getInstance().delete( response.getFile( ).getFileKey( ) );
                 }
 
                 _dao.delete( nIdResponse, getPlugin( ) );
