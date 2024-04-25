@@ -559,6 +559,15 @@ public class Entry implements Serializable, Cloneable
     }
 
     /**
+     * @return true if the field disabled is present and set to true
+     */
+    public boolean isDisabled( )
+    {
+        Field fieldDisabled = getFieldByCode( IEntryTypeService.FIELD_DISABLED );
+        return fieldDisabled != null && Boolean.valueOf( fieldDisabled.getValue( ) );
+    }
+
+    /**
      * Get the selected map provider
      * 
      * @see IMapProvider

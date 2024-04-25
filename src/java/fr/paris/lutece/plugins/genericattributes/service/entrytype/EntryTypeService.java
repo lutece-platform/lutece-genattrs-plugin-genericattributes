@@ -173,6 +173,10 @@ public abstract class EntryTypeService implements IEntryTypeService
         String strAnonymizePattern = request.getParameter( PARAMETER_ANONYMIZE_PATTERN );
 
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_ANONYMIZABLE, strAnonymizePattern, String.valueOf( strAnonymizable != null ) );
+
+        String strDisabled = request.getParameter( PARAMETER_DISABLED );
+        GenericAttributesUtils.createOrUpdateField( entry, IEntryTypeService.FIELD_DISABLED, null, String.valueOf( strDisabled != null ) );
+
     }
 
     /**
