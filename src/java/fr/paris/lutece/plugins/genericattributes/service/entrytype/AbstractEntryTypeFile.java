@@ -39,6 +39,7 @@ import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
+import fr.paris.lutece.plugins.genericattributes.service.file.GenericAttributeFileService;
 import fr.paris.lutece.plugins.genericattributes.service.upload.AbstractGenAttUploadHandler;
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.file.FileHome;
@@ -196,7 +197,7 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
             {
                 Response response = ResponseHome.findByPrimaryKey( genAttFileItem.getIdResponse( ) );
                 response.setEntry( entry );
-                response.setFile( FileHome.findByPrimaryKey( response.getFile( ).getIdFile( ) ) );
+                response.setFile( GenericAttributeFileService.getInstance().load( response.getFile( ).getFileKey( ) ) );
 
                 if ( bCreatePhysicalFile )
                 {

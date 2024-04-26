@@ -46,10 +46,9 @@ import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.service.file.GenericAttributeFileService;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.file.File;
-import fr.paris.lutece.portal.business.file.FileHome;
-import fr.paris.lutece.portal.business.physicalfile.PhysicalFileHome;
 import fr.paris.lutece.portal.service.fileimage.FileImagePublicService;
 import fr.paris.lutece.portal.service.fileupload.FileUploadService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -114,8 +113,7 @@ public abstract class AbstractEntryTypeGalleryImage extends EntryTypeService
         {
             FileImagePublicService.init( );
 
-            File file = FileHome.findByPrimaryKey( Integer.parseInt( strFileGallery ) );
-            file.getPhysicalFile( ).setValue( PhysicalFileHome.findByPrimaryKey( file.getIdFile( ) ).getValue( ) );
+            File file = GenericAttributeFileService.getInstance().load( strFileGallery );
 
             Response response = new Response( );
             response.setEntry( entry );

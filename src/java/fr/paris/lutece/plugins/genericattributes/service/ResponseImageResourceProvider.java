@@ -35,10 +35,8 @@ package fr.paris.lutece.plugins.genericattributes.service;
 
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
+import fr.paris.lutece.plugins.genericattributes.service.file.GenericAttributeFileService;
 import fr.paris.lutece.portal.business.file.File;
-import fr.paris.lutece.portal.business.file.FileHome;
-import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
-import fr.paris.lutece.portal.business.physicalfile.PhysicalFileHome;
 import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.image.ImageResourceProvider;
 import fr.paris.lutece.util.file.FileUtil;
@@ -68,13 +66,12 @@ public class ResponseImageResourceProvider implements ImageResourceProvider
 
         if ( response.getFile( ) != null )
         {
-            File file = FileHome.findByPrimaryKey( response.getFile( ).getIdFile( ) );
+            File file = GenericAttributeFileService.getInstance().load( response.getFile( ).getFileKey( ) );
 
             if ( ( file.getPhysicalFile( ) != null ) && FileUtil.hasImageExtension( file.getTitle( ) ) )
             {
-                PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile( ).getIdPhysicalFile( ) );
                 ImageResource image = new ImageResource( );
-                image.setImage( physicalFile.getValue( ) );
+                image.setImage( file.getPhysicalFile( ).getValue( ) );
                 image.setMimeType( file.getMimeType( ) );
 
                 return image;
