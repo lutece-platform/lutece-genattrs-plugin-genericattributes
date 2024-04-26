@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.genericattributes.service.anonymization;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.service.file.GenericAttributeFileService;
 import fr.paris.lutece.portal.business.file.FileHome;
 
 /**
@@ -51,7 +52,7 @@ public class FileDeleteAnonymizationService extends AbstractAnonymizationService
             String pattern = getPattern( entry );
             if ( pattern.contains( _wildcard ) && response.getFile( ) != null )
             {
-                FileHome.remove( response.getFile( ).getIdFile( ) );
+                GenericAttributeFileService.getInstance().delete( response.getFile( ).getFileKey( ) );
                 response.setFile( null );
             }
         }

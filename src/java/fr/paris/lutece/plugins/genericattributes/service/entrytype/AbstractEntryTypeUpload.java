@@ -54,7 +54,7 @@ import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
-import fr.paris.lutece.plugins.genericattributes.service.file.FileService;
+import fr.paris.lutece.plugins.genericattributes.service.file.GenericAttributeFileService;
 import fr.paris.lutece.plugins.genericattributes.util.FileAttributesUtils;
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
@@ -62,7 +62,6 @@ import fr.paris.lutece.portal.service.fileupload.FileUploadService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.util.ReferenceList;
@@ -192,8 +191,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
         {
             if ( response.getFile( ) != null )
             {
-                FileService fileService = SpringContextService.getBean( FileService.BEAN_SERVICE );
-                File file = fileService.findByPrimaryKey( response.getFile( ).getIdFile( ), true );
+                File file = GenericAttributeFileService.getInstance().load( response.getFile( ).getFileKey( ) );
 
                 if ( ( file != null ) && ( file.getPhysicalFile( ) != null ) && ( file.getPhysicalFile( ).getValue( ) != null ) )
                 {
