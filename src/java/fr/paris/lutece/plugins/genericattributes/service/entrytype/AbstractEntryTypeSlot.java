@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Locale;
 
@@ -74,8 +75,8 @@ public abstract class AbstractEntryTypeSlot extends EntryTypeService
     {
         String strBeginHour = request.getParameter( getAttributeName( entry, request ) + PARAMETER_SUFFIX_BEGIN );
         String strEndHour = request.getParameter( getAttributeName( entry, request ) + PARAMETER_SUFFIX_END );
-
-        if ( strBeginHour != null && strEndHour != null )
+        boolean filledSlots = StringUtils.isNotBlank( strBeginHour ) && StringUtils.isNotBlank(strEndHour);
+        if ( filledSlots )
         {
             Field fieldBeginHour = entry.getFieldByCode( FIELD_BEGIN_HOUR );
             Field fieldEndHour = entry.getFieldByCode( FIELD_END_HOUR );
@@ -95,28 +96,56 @@ public abstract class AbstractEntryTypeSlot extends EntryTypeService
             listResponse.add( createResponse( strBeginHour, entry, fieldBeginHour, request ) );
             listResponse.add( createResponse( strEndHour, entry, fieldEndHour, request ) );
         }
+        boolean emptySlots = StringUtils.isBlank(strBeginHour) && StringUtils.isBlank(strEndHour);
+        boolean emptyBeginHour = StringUtils.isBlank(strBeginHour) && StringUtils.isNotBlank(strEndHour);
+        boolean emptyEndHour = StringUtils.isNotBlank( strBeginHour ) && StringUtils.isBlank( strEndHour );
 
-        if ( entry.isMandatory( ) )
-        {
-            return new MandatoryError( entry, locale );
-        } else if ( StringUtils.isBlank( strBeginHour ) || StringUtils.isBlank( strEndHour ) )
+
+        if ( emptyBeginHour || emptyEndHour )
         {
             GenericAttributeError error = new GenericAttributeError( );
             error.setMandatoryError( entry.isMandatory( ) );
             error.setTitleQuestion( entry.getTitle( ) );
             error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_ERROR_SLOT, locale ) );
             return error;
-        } else if ( LocalTime.parse( strEndHour ).isBefore( LocalTime.parse( strBeginHour ) ) )
+        }
+
+        try
+        {
+            if ( filledSlots )
+            {
+                LocalTime beginTime = LocalTime.parse(strBeginHour);
+                LocalTime endTime = LocalTime.parse(strEndHour);
+
+                // Vérifie si l'heure de fin est avant l'heure de début
+                if ( endTime.isBefore( beginTime ) )
+                {
+                    GenericAttributeError error = new GenericAttributeError( );
+                    error.setMandatoryError( entry.isMandatory( ) );
+                    error.setTitleQuestion( entry.getTitle( ) );
+                    error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_ERROR_IMPOSSIBLE_SLOT, locale ) );
+                    return error;
+                }
+            }
+            else
+            {
+                if ( entry.isMandatory( ) && emptySlots )
+                {
+                    return new MandatoryError( entry, locale );
+                }
+            }
+        }
+        catch ( DateTimeParseException e )
         {
             GenericAttributeError error = new GenericAttributeError( );
             error.setMandatoryError( entry.isMandatory( ) );
             error.setTitleQuestion( entry.getTitle( ) );
-            error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_ERROR_IMPOSSIBLE_SLOT, locale ) );
+            error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_ERROR_SLOT, locale ) );
             return error;
-        } else
-        {
-            return super.getResponseData( entry, request, listResponse, locale );
         }
+
+        return super.getResponseData( entry, request, listResponse, locale );
+
     }
 
     protected Response createResponse( String responseValue, Entry entry, Field field, HttpServletRequest request )
