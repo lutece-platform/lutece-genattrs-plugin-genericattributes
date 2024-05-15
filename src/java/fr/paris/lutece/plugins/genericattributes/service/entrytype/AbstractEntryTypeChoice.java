@@ -131,4 +131,24 @@ public abstract class AbstractEntryTypeChoice extends EntryTypeService
         }
         return null;
     }
+    
+    public String getFieldTitleFromResponse( Response response )
+    {
+    	if ( response != null && response.getField( ) != null )
+    	{
+    		Field field = response.getField( );
+    		if ( field.getTitle( ) == null )
+    		{
+    			Field updatedField = FieldHome.findByPrimaryKey( field.getIdField( ) );
+    			if ( updatedField != null )
+    			{
+    				response.setField( updatedField );
+    			}
+    		}
+
+    		return response.getField( ).getTitle( );
+    	}
+
+    	return null;
+    }
 }
