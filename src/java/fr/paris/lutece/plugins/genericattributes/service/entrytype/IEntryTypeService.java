@@ -94,6 +94,7 @@ public interface IEntryTypeService
     String PARAMETER_PLACEHOLDER = "placeholder";
     String PARAMETER_ILLUSTRATION_IMAGE = "illustration_image";
     String PARAMETER_DISABLED = "disabled";
+    String PARAMETER_TODAY_DATE = "default_today_date";
 
     // Fields codes
     String FIELD_DATE_VALUE = "default_date_value";

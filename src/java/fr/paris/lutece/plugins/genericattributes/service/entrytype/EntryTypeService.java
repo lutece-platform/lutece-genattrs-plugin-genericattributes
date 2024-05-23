@@ -177,6 +177,10 @@ public abstract class EntryTypeService implements IEntryTypeService
         String strDisabled = request.getParameter( PARAMETER_DISABLED );
         GenericAttributesUtils.createOrUpdateField( entry, IEntryTypeService.FIELD_DISABLED, null, String.valueOf( strDisabled != null ) );
 
+        String strToDayDate = request.getParameter( PARAMETER_TODAY_DATE );
+        GenericAttributesUtils.createOrUpdateField( entry, PARAMETER_TODAY_DATE, null, String.valueOf( strToDayDate != null ) );
+
+
     }
 
     /**
