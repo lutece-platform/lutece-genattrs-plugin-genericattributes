@@ -76,26 +76,25 @@ public abstract class AbstractEntryTypeSlot extends EntryTypeService
         String strBeginHour = request.getParameter( getAttributeName( entry, request ) + PARAMETER_SUFFIX_BEGIN );
         String strEndHour = request.getParameter( getAttributeName( entry, request ) + PARAMETER_SUFFIX_END );
         boolean filledSlots = StringUtils.isNotBlank( strBeginHour ) && StringUtils.isNotBlank(strEndHour);
-        if ( filledSlots )
+
+        Field fieldBeginHour = entry.getFieldByCode( FIELD_BEGIN_HOUR );
+        Field fieldEndHour = entry.getFieldByCode( FIELD_END_HOUR );
+
+        if ( fieldBeginHour == null )
         {
-            Field fieldBeginHour = entry.getFieldByCode( FIELD_BEGIN_HOUR );
-            Field fieldEndHour = entry.getFieldByCode( FIELD_END_HOUR );
-
-            if ( fieldBeginHour == null )
-            {
-                fieldBeginHour = GenericAttributesUtils.createOrUpdateField( entry, FIELD_BEGIN_HOUR, null, FIELD_BEGIN_HOUR );
-                FieldHome.create( fieldBeginHour );
-            }
-
-            if ( fieldEndHour == null )
-            {
-                fieldEndHour = GenericAttributesUtils.createOrUpdateField( entry, FIELD_END_HOUR, null, FIELD_END_HOUR );
-                FieldHome.create( fieldEndHour );
-            }
-
-            listResponse.add( createResponse( strBeginHour, entry, fieldBeginHour, request ) );
-            listResponse.add( createResponse( strEndHour, entry, fieldEndHour, request ) );
+            fieldBeginHour = GenericAttributesUtils.createOrUpdateField( entry, FIELD_BEGIN_HOUR, null, FIELD_BEGIN_HOUR );
+            FieldHome.create( fieldBeginHour );
         }
+
+        if ( fieldEndHour == null )
+        {
+            fieldEndHour = GenericAttributesUtils.createOrUpdateField( entry, FIELD_END_HOUR, null, FIELD_END_HOUR );
+            FieldHome.create( fieldEndHour );
+        }
+
+        listResponse.add( createResponse( strBeginHour, entry, fieldBeginHour, request ) );
+        listResponse.add( createResponse( strEndHour, entry, fieldEndHour, request ) );
+
         boolean emptySlots = StringUtils.isBlank(strBeginHour) && StringUtils.isBlank(strEndHour);
         boolean emptyBeginHour = StringUtils.isBlank(strBeginHour) && StringUtils.isNotBlank(strEndHour);
         boolean emptyEndHour = StringUtils.isNotBlank( strBeginHour ) && StringUtils.isBlank( strEndHour );
@@ -104,7 +103,7 @@ public abstract class AbstractEntryTypeSlot extends EntryTypeService
         if ( emptyBeginHour || emptyEndHour )
         {
             GenericAttributeError error = new GenericAttributeError( );
-            error.setMandatoryError( entry.isMandatory( ) );
+            error.setMandatoryError( false );
             error.setTitleQuestion( entry.getTitle( ) );
             error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_ERROR_SLOT, locale ) );
             return error;
@@ -121,7 +120,7 @@ public abstract class AbstractEntryTypeSlot extends EntryTypeService
                 if ( endTime.isBefore( beginTime ) )
                 {
                     GenericAttributeError error = new GenericAttributeError( );
-                    error.setMandatoryError( entry.isMandatory( ) );
+                    error.setMandatoryError( false );
                     error.setTitleQuestion( entry.getTitle( ) );
                     error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_ERROR_IMPOSSIBLE_SLOT, locale ) );
                     return error;
@@ -138,7 +137,7 @@ public abstract class AbstractEntryTypeSlot extends EntryTypeService
         catch ( DateTimeParseException e )
         {
             GenericAttributeError error = new GenericAttributeError( );
-            error.setMandatoryError( entry.isMandatory( ) );
+            error.setMandatoryError( false );
             error.setTitleQuestion( entry.getTitle( ) );
             error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_ERROR_SLOT, locale ) );
             return error;
