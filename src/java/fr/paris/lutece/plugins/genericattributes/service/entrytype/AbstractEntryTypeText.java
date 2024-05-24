@@ -232,7 +232,13 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
     @Override
     public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String strValueEntry = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ).trim( );
+        String strValueEntry = StringUtils.trim( request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ) );
+        
+        if ( strValueEntry == null )
+        {
+            return null;
+        }
+        
         Field confirmField = entry.getFieldByCode( FIELD_CONFIRM );
 
         boolean bConfirmField = confirmField != null && Boolean.valueOf( confirmField.getValue( ) );
@@ -247,12 +253,6 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         List<RegularExpression> listRegularExpression = entry.getFieldByCode( FIELD_TEXT_CONF ).getRegularExpressionList( );
         Response response = new Response( );
         response.setEntry( entry );
-
-        if ( strValueEntry == null )
-        {
-            return null;
-        }
-
         response.setResponseValue( strValueEntry );
 
         if ( StringUtils.isNotBlank( response.getResponseValue( ) ) )
