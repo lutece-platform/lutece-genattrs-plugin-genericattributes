@@ -58,6 +58,7 @@ public class ResponseFilter
     private List<Integer> _listId;
     private String _strCodeEntry;
     private String _strResponseValue;
+    private List<Integer> _listIdEntry;
 
     /**
      * Get the id of a resource in the filter
@@ -340,4 +341,30 @@ public class ResponseFilter
     {
         return StringUtils.isNotBlank( _strResponseValue );
     }
+    
+    /**
+     * @return the _listIdEntry
+     */
+    public List<Integer> getListIdEntry( )
+    {
+        return this._listIdEntry;
+    }
+
+    /**
+     * @param listIdEntry
+     *            the _listIdEntry to set
+     */
+    public void setListIdEntry( List<Integer> listIdEntry )
+    {
+        this._listIdEntry = listIdEntry;
+    }
+    
+    /**
+    *
+    * @return true if the filter contain a list of entry id
+    */
+   public boolean containsListIdEntry( )
+   {
+       return CollectionUtils.isNotEmpty( _listIdEntry );
+   }
 }
