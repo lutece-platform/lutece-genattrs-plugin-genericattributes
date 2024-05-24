@@ -73,6 +73,7 @@ public final class ResponseDAO implements IResponseDAO
     private static final String SQL_FILTER_RESPONSE_VALUE = " AND resp.response_value = ? ";
     private static final String SQL_FILTER_ID_RESPONSE = " resp.id_response ";
     private static final String SQL_FILTER_MULTI_ID_RESPONSE = "AND resp.id_response IN ";
+    private static final String SQL_FILTER_MULTI_ID_ENTRY = "AND resp.id_entry IN ";
     private static final String SQL_ORDER_BY = " ORDER BY ";
     private static final String SQL_ASC = " ASC ";
     private static final String SQL_DESC = " DESC ";
@@ -236,6 +237,14 @@ public final class ResponseDAO implements IResponseDAO
         {
             StringBuilder sb = new StringBuilder( SQL_FILTER_MULTI_ID_RESPONSE + " (" );
             sb.append( filter.getListId( ).stream( ).map( String::valueOf ).collect( Collectors.joining( "," ) ) );
+            sb.append( ")" );
+            sbSQL.append( sb.toString( ) );
+        }
+        
+        if ( filter.containsListIdEntry( ) )
+        {
+            StringBuilder sb = new StringBuilder( SQL_FILTER_MULTI_ID_ENTRY + " (" );
+            sb.append( filter.getListIdEntry( ).stream( ).map( String::valueOf ).collect( Collectors.joining( "," ) ) );
             sb.append( ")" );
             sbSQL.append( sb.toString( ) );
         }

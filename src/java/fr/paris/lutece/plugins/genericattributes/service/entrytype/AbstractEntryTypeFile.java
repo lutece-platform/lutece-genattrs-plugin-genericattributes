@@ -79,6 +79,11 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
         }
 
         String strAttributeName = getAttributeName( entry, request );
+        
+        if ( strAttributeName == null )
+        {
+            return null;
+        }
 
         if ( getAsynchronousUploadHandler( ).hasAddFileFlag( request, strAttributeName ) )
         {

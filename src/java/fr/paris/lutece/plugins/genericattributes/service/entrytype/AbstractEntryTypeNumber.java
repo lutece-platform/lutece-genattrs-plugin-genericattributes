@@ -142,7 +142,7 @@ public abstract class AbstractEntryTypeNumber extends EntryTypeService
     @Override
     public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String strValueEntry = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ).trim( );
+        String strValueEntry = StringUtils.trim( request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ) );
 
         Response response = new Response( );
         response.setEntry( entry );

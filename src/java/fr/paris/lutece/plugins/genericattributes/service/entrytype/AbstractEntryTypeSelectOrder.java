@@ -115,31 +115,34 @@ public abstract class AbstractEntryTypeSelectOrder extends AbstractEntryTypeChoi
     {
         String strIdField = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
         
-        String[] fieldsIds = strIdField.split( ";" );
-        
-        boolean hasResponse = false;
-        int order = 1;
-        for ( String idField : fieldsIds )
+        if ( strIdField != null )
         {
-            String id = idField.substring( idField.indexOf( '=' ) + 1 );
-            Field field = FieldHome.findByPrimaryKey( NumberUtils.toInt( id, -1 ) );
-            if ( field != null )
-            {
-                Response response = new Response( );
-                response.setEntry( entry );
-                response.setResponseValue( field.getValue( ) );
-                response.setField( field );
-                response.setIterationNumber( getResponseIterationValue( request ) );
-                response.setSortOrder( order++ );
-
-                listResponse.add( response );
-                hasResponse = true;
-            }
-        }
-        
-        if ( entry.isMandatory( ) && !hasResponse )
-        {
-            return new MandatoryError( entry, locale );
+	        String[] fieldsIds = strIdField.split( ";" );
+	        
+	        boolean hasResponse = false;
+	        int order = 1;
+	        for ( String idField : fieldsIds )
+	        {
+	            String id = idField.substring( idField.indexOf( '=' ) + 1 );
+	            Field field = FieldHome.findByPrimaryKey( NumberUtils.toInt( id, -1 ) );
+	            if ( field != null )
+	            {
+	                Response response = new Response( );
+	                response.setEntry( entry );
+	                response.setResponseValue( field.getValue( ) );
+	                response.setField( field );
+	                response.setIterationNumber( getResponseIterationValue( request ) );
+	                response.setSortOrder( order++ );
+	
+	                listResponse.add( response );
+	                hasResponse = true;
+	            }
+	        }
+	        
+	        if ( entry.isMandatory( ) && !hasResponse )
+	        {
+	            return new MandatoryError( entry, locale );
+	        }
         }
         
         return null;
