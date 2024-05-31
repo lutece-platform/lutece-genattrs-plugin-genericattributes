@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS genatt_referenceitem_field;
 -- Table structure for table genatt_entry_type
 --
 CREATE TABLE genatt_entry_type (
-	id_type int default 0 NOT NULL,
+	id_type int AUTO_INCREMENT NOT NULL,
 	title varchar(255),
 	is_group smallint default NULL,
 	is_comment int default NULL,
@@ -23,7 +23,6 @@ CREATE TABLE genatt_entry_type (
 );
 
 CREATE INDEX index_genatt_entry_type_plugin ON genatt_entry_type (plugin);
-
 
 --
 -- Table structure for table genatt_entry
