@@ -34,12 +34,14 @@
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -64,6 +66,7 @@ public abstract class AbstractEntryTypeGroup extends EntryTypeService
     @Override
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
+        initCommonRequestData( entry, request );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strFieldError = StringUtils.EMPTY;
@@ -88,5 +91,20 @@ public abstract class AbstractEntryTypeGroup extends EntryTypeService
         entry.setCSSClass( strCSSClass );
 
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void initCommonRequestData( Entry entry, HttpServletRequest request )
+    {
+        if ( entry.getFields( ) == null )
+        {
+            entry.setFields( new ArrayList<>( ) );
+        }
+        // Initialize the field for this EntryType's activation status
+        String strDisabled = request.getParameter( PARAMETER_DISABLED );
+        GenericAttributesUtils.createOrUpdateField( entry, IEntryTypeService.FIELD_DISABLED, null, String.valueOf( strDisabled != null ) );
     }
 }

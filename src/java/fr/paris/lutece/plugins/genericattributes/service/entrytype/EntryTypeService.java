@@ -157,6 +157,14 @@ public abstract class EntryTypeService implements IEntryTypeService
         return StringUtils.EMPTY;
     }
 
+    /**
+     * Initialize the Fields common to every Generic Attribute Entry
+     * 
+     * @param entry
+     *            The Entry being processed
+     * @param request
+     *            The HTTP request
+     */
     protected void initCommonRequestData( Entry entry, HttpServletRequest request )
     {
         if ( entry.getFields( ) == null )
