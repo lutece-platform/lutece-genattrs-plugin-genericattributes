@@ -102,6 +102,7 @@ public abstract class AbstractEntryTypeSession extends EntryTypeService
         entry.setUnique( false );
 
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_ATTRIBUTE_NAME, strTitle, strAttibuteName );
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_IS_UPDATABLE, null, String.valueOf( Boolean.FALSE ) );
         return null;
     }
 
