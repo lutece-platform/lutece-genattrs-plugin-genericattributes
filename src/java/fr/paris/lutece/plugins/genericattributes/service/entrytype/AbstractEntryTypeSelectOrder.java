@@ -47,6 +47,7 @@ import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.MandatoryError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -71,6 +72,7 @@ public abstract class AbstractEntryTypeSelectOrder extends AbstractEntryTypeChoi
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
+        String strSortableListType = request.getParameter( PARAMETER_SORTABLE_LIST_TYPE );
 
         String strFieldError = StringUtils.EMPTY;
 
@@ -103,6 +105,9 @@ public abstract class AbstractEntryTypeSelectOrder extends AbstractEntryTypeChoi
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
         entry.setIndexed( strIndexed != null );
+
+        // Set the Entry's specific fields
+        GenericAttributesUtils.createOrUpdateField( entry, FIELD_SORTABLE_LIST_TYPE, null, strSortableListType );
 
         return null;
     }
@@ -138,13 +143,18 @@ public abstract class AbstractEntryTypeSelectOrder extends AbstractEntryTypeChoi
 	                hasResponse = true;
 	            }
 	        }
-	        
+
 	        if ( entry.isMandatory( ) && !hasResponse )
 	        {
+	            // Set the Response that will contain the errors to display
+	            Response response = new Response( );
+	            response.setEntry( entry );
+	            response.setResponseValue( StringUtils.EMPTY );
+	            listResponse.add( response );
+
 	            return new MandatoryError( entry, locale );
 	        }
         }
-        
         return null;
     }
 }
