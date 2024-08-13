@@ -47,10 +47,12 @@ import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
 import fr.paris.lutece.portal.service.file.FileService;
+import fr.paris.lutece.portal.service.file.FileServiceException;
 import fr.paris.lutece.portal.service.file.IFileStoreServiceProvider;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 
 /**
@@ -111,8 +113,16 @@ public abstract class AbstractEntryTypeComment extends EntryTypeService
                 file.setSize( physicalFile.getValue( ).length );
                 file.setPhysicalFile( physicalFile );
 
-                String idFile = getFileStoreServiceProvider( ).storeFile( file );
-                GenericAttributesUtils.createOrUpdateField( entry, FIELD_DOWNLOADABLE_FILE, file.getTitle( ), idFile );
+                String idFile;
+				try {
+					idFile = getFileStoreServiceProvider( ).storeFile( file );
+					GenericAttributesUtils.createOrUpdateField( entry, FIELD_DOWNLOADABLE_FILE, file.getTitle( ), idFile );
+				} 
+				catch ( FileServiceException e )
+				{
+					AppLogService.error(e);
+				}
+                
             }
         }
         return null;
@@ -123,8 +133,13 @@ public abstract class AbstractEntryTypeComment extends EntryTypeService
         Field oldFile = entry.getFieldByCode( FIELD_DOWNLOADABLE_FILE );
         if ( oldFile != null )
         {
-            getFileStoreServiceProvider( ).delete( oldFile.getValue( ) );
-            FieldHome.remove( oldFile.getIdField( ) );
+            try {
+				getFileStoreServiceProvider( ).delete( oldFile.getValue( ) );
+				FieldHome.remove( oldFile.getIdField( ) );
+			} catch (FileServiceException e) {
+				AppLogService.error(e);
+			}
+            
         }
     }
 

@@ -35,7 +35,9 @@ package fr.paris.lutece.plugins.genericattributes.service.file;
 
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.service.file.FileService;
+import fr.paris.lutece.portal.service.file.FileServiceException;
 import fr.paris.lutece.portal.service.file.IFileStoreServiceProvider;
+import fr.paris.lutece.portal.service.util.AppLogService;
 
 public class GenericAttributeFileService 
 {
@@ -60,7 +62,14 @@ public class GenericAttributeFileService
      */
     public String save( File file )
     {
-        return _fileStoreServiceProvider.storeFile( file );
+        try {
+			return _fileStoreServiceProvider.storeFile( file );
+		} 
+        catch ( FileServiceException e )
+		{
+			AppLogService.error(e);
+			return null;
+		}
     }
 
     /**
@@ -72,7 +81,14 @@ public class GenericAttributeFileService
      */
     public File load( String strKey )
     {
-    	return _fileStoreServiceProvider.getFile( strKey );
+    	try {
+			return _fileStoreServiceProvider.getFile( strKey );
+		} 
+    	catch ( FileServiceException e )
+		{
+			AppLogService.error(e);
+			return null;
+		}
     }
 
     /**
@@ -83,6 +99,12 @@ public class GenericAttributeFileService
      */
     public void delete( String strKey )
     {
-    	_fileStoreServiceProvider.delete( strKey );
+    	try {
+			_fileStoreServiceProvider.delete( strKey );
+		} 
+    	catch ( FileServiceException e )
+		{
+			AppLogService.error(e);
+		}
     }
 }
