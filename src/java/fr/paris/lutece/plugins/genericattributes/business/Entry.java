@@ -563,7 +563,7 @@ public class Entry implements Serializable, Cloneable
      */
     public boolean isDisabled( )
     {
-        Field fieldDisabled = getFieldByCode( IEntryTypeService.FIELD_DISABLED );
+        Field fieldDisabled = getFieldByCode( IEntryTypeService.QUESTION_DISABLED );
         return fieldDisabled != null && Boolean.valueOf( fieldDisabled.getValue( ) );
     }
 

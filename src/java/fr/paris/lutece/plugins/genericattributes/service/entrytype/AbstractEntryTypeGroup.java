@@ -105,6 +105,6 @@ public abstract class AbstractEntryTypeGroup extends EntryTypeService
         }
         // Initialize the field for this EntryType's activation status
         String strDisabled = request.getParameter( PARAMETER_DISABLED );
-        GenericAttributesUtils.createOrUpdateField( entry, IEntryTypeService.FIELD_DISABLED, null, String.valueOf( strDisabled != null ) );
+        GenericAttributesUtils.createOrUpdateField( entry, IEntryTypeService.QUESTION_DISABLED, null, String.valueOf( strDisabled != null ) );
     }
 }
