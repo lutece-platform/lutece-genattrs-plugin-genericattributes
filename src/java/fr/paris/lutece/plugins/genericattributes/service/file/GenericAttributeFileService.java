@@ -39,10 +39,10 @@ import fr.paris.lutece.portal.service.file.FileServiceException;
 import fr.paris.lutece.portal.service.file.IFileStoreServiceProvider;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
-public class GenericAttributeFileService 
+public class GenericAttributeFileService
 {
-	private static final GenericAttributeFileService _instance = new GenericAttributeFileService( );
-    private IFileStoreServiceProvider _fileStoreServiceProvider = FileService.getInstance( ).getFileStoreServiceProvider( );
+    private static final GenericAttributeFileService _instance = new GenericAttributeFileService( );
+    private IFileStoreServiceProvider _fileStoreServiceProvider;
 
     private GenericAttributeFileService( )
     {
@@ -52,7 +52,7 @@ public class GenericAttributeFileService
     {
         return _instance;
     }
-    
+
     /**
      * Save a file
      * 
@@ -62,14 +62,16 @@ public class GenericAttributeFileService
      */
     public String save( File file )
     {
-        try {
-			return _fileStoreServiceProvider.storeFile( file );
-		} 
-        catch ( FileServiceException e )
-		{
-			AppLogService.error(e);
-			return null;
-		}
+        try
+        {
+            _fileStoreServiceProvider = FileService.getInstance( ).getFileStoreServiceProvider( file.getOrigin( ) );
+            return _fileStoreServiceProvider.storeFile( file );
+        }
+        catch( FileServiceException e )
+        {
+            AppLogService.error( e );
+            return null;
+        }
     }
 
     /**
@@ -79,16 +81,18 @@ public class GenericAttributeFileService
      *            The key of the file
      * @return The file
      */
-    public File load( String strKey )
+    public File load( String strKey, String strOrigin )
     {
-    	try {
-			return _fileStoreServiceProvider.getFile( strKey );
-		} 
-    	catch ( FileServiceException e )
-		{
-			AppLogService.error(e);
-			return null;
-		}
+        try
+        {
+            _fileStoreServiceProvider = FileService.getInstance( ).getFileStoreServiceProvider( strOrigin );
+            return _fileStoreServiceProvider.getFile( strKey );
+        }
+        catch( FileServiceException e )
+        {
+            AppLogService.error( e );
+            return null;
+        }
     }
 
     /**
@@ -97,14 +101,22 @@ public class GenericAttributeFileService
      * @param strKey
      *            The key of the file
      */
-    public void delete( String strKey )
+    public void delete( String strKey, String strOrigin )
     {
-    	try {
-			_fileStoreServiceProvider.delete( strKey );
-		} 
-    	catch ( FileServiceException e )
-		{
-			AppLogService.error(e);
-		}
+        try
+        {
+            _fileStoreServiceProvider = FileService.getInstance( ).getFileStoreServiceProvider( strOrigin );
+            _fileStoreServiceProvider.delete( strKey );
+        }
+        catch( FileServiceException e )
+        {
+            AppLogService.error( e );
+        }
+    }
+
+    public String getName( )
+    {
+        // return default genatt file store provider name
+        return FileService.getInstance( ).getFileStoreServiceProvider( ).getName( );
     }
 }

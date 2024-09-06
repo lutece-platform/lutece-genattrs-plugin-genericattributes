@@ -74,7 +74,7 @@ public final class ResponseHome
         {
             if ( response.getFile( ) != null )
             {
-                GenericAttributeFileService.getInstance().save( response.getFile( ) );
+                response.getFile( ).setFileKey( GenericAttributeFileService.getInstance( ).save( response.getFile( ) ) );
             }
 
             _dao.insert( response, getPlugin( ) );
@@ -133,7 +133,7 @@ public final class ResponseHome
             {
                 if ( response.getFile( ) != null )
                 {
-                    GenericAttributeFileService.getInstance().delete( response.getFile( ).getFileKey( ) );
+                    GenericAttributeFileService.getInstance( ).delete( response.getFile( ).getFileKey( ), response.getFile( ).getOrigin( ) );
                 }
 
                 _dao.delete( nIdResponse, getPlugin( ) );

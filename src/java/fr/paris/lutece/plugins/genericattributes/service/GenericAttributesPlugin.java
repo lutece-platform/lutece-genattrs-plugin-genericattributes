@@ -60,7 +60,7 @@ public class GenericAttributesPlugin extends PluginDefaultImplementation
         {
             ImageResourceManager.registerProvider( new ResponseImageResourceProvider( ) );
         }
-        
+
         FileImagePublicService.init( );
     }
 }

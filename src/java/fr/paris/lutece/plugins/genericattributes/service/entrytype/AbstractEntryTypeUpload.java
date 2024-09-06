@@ -191,7 +191,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
         {
             if ( response.getFile( ) != null )
             {
-                File file = GenericAttributeFileService.getInstance().load( response.getFile( ).getFileKey( ) );
+                File file = GenericAttributeFileService.getInstance( ).load( response.getFile( ).getFileKey( ), response.getFile( ).getOrigin( ) );
 
                 if ( ( file != null ) && ( file.getPhysicalFile( ) != null ) && ( file.getPhysicalFile( ).getValue( ) != null ) )
                 {

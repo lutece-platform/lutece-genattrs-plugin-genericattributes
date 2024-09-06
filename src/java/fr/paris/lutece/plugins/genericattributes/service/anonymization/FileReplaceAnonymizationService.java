@@ -44,7 +44,6 @@ import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.file.GenericAttributeFileService;
 import fr.paris.lutece.portal.business.file.File;
-import fr.paris.lutece.portal.business.file.FileHome;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 
@@ -64,11 +63,11 @@ public class FileReplaceAnonymizationService extends AbstractAnonymizationServic
             String pattern = getPattern( entry );
             if ( pattern.contains( _wildcard ) && response.getFile( ) != null )
             {
-                File responseFile = GenericAttributeFileService.getInstance().load( response.getFile( ).getFileKey( ) );
-            	
+                File responseFile = GenericAttributeFileService.getInstance( ).load( response.getFile( ).getFileKey( ), response.getFile( ).getOrigin( ) );
+
                 if ( responseFile != null )
                 {
-            	    String fileType = FilenameUtils.getExtension( responseFile.getTitle( ) );
+                    String fileType = FilenameUtils.getExtension( responseFile.getTitle( ) );
 
                     try
                     {
@@ -81,14 +80,14 @@ public class FileReplaceAnonymizationService extends AbstractAnonymizationServic
                     catch( IOException e )
                     {
                         AppLogService.error( "Error while replacing file", e );
-                        GenericAttributeFileService.getInstance().delete( response.getFile( ).getFileKey( ) );
+                        GenericAttributeFileService.getInstance( ).delete( response.getFile( ).getFileKey( ), response.getFile( ).getOrigin( ) );
                         response.setFile( null );
                     }
-            	}
-            	else
-            	{
-            	    response.setFile( null );
-            	}
+                }
+                else
+                {
+                    response.setFile( null );
+                }
             }
         }
     }

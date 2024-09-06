@@ -42,7 +42,6 @@ import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 import fr.paris.lutece.plugins.genericattributes.service.file.GenericAttributeFileService;
 import fr.paris.lutece.plugins.genericattributes.service.upload.AbstractGenAttUploadHandler;
 import fr.paris.lutece.portal.business.file.File;
-import fr.paris.lutece.portal.business.file.FileHome;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
@@ -79,7 +78,7 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
         }
 
         String strAttributeName = getAttributeName( entry, request );
-        
+
         if ( strAttributeName == null )
         {
             return null;
@@ -202,7 +201,7 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
             {
                 Response response = ResponseHome.findByPrimaryKey( genAttFileItem.getIdResponse( ) );
                 response.setEntry( entry );
-                response.setFile( GenericAttributeFileService.getInstance().load( response.getFile( ).getFileKey( ) ) );
+                response.setFile( GenericAttributeFileService.getInstance( ).load( response.getFile( ).getFileKey( ), response.getFile( ).getOrigin( ) ) );
 
                 if ( bCreatePhysicalFile )
                 {
@@ -218,6 +217,7 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
 
         File file = new File( );
         file.setTitle( fileItem.getName( ) );
+        file.setOrigin( GenericAttributeFileService.getInstance( ).getName( ) );
         file.setSize( ( fileItem.getSize( ) < Integer.MAX_VALUE ) ? (int) fileItem.getSize( ) : Integer.MAX_VALUE );
 
         if ( bCreatePhysicalFile )

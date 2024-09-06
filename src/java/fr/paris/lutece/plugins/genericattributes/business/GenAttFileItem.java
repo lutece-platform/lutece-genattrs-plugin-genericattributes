@@ -53,6 +53,7 @@ public class GenAttFileItem implements FileItem
     private byte [ ] _bValue;
     private String _strFileName;
     private String _strFieldName;
+    private String _strOrigin;
     private int _nIdResponse;
     private FileItemHeaders _fileItemHeaders;
 
@@ -80,11 +81,12 @@ public class GenAttFileItem implements FileItem
      * @param nIdResponse
      *            The id of the response associated with this file item if any
      */
-    public GenAttFileItem( byte [ ] bValue, String strFileName, int nIdResponse )
+    public GenAttFileItem( byte [ ] bValue, String strFileName, int nIdResponse, String strOrigin )
     {
         _bValue = bValue;
         _strFileName = strFileName;
         _nIdResponse = nIdResponse;
+        _strOrigin = strOrigin;
     }
 
     /**
@@ -99,12 +101,14 @@ public class GenAttFileItem implements FileItem
      * @param nIdResponse
      *            The id of the response associated with this file item if any
      */
-    public GenAttFileItem( byte [ ] bValue, String strFileName, String strFieldName, int nIdResponse )
+    public GenAttFileItem( byte [ ] bValue, String strFileName, String strFieldName, int nIdResponse, String strOrigin )
     {
         _bValue = bValue;
         _strFileName = strFileName;
         _strFieldName = strFieldName;
         _nIdResponse = nIdResponse;
+        _strOrigin = strOrigin;
+
     }
 
     /**
@@ -182,6 +186,14 @@ public class GenAttFileItem implements FileItem
     /**
      * {@inheritDoc}
      */
+    public String getOrigin( )
+    {
+        return _strOrigin;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getString( )
     {
@@ -252,6 +264,11 @@ public class GenAttFileItem implements FileItem
     public void setIdResponse( int nIdResponse )
     {
         _nIdResponse = nIdResponse;
+    }
+
+    public void setOrigin( String strOrigin )
+    {
+        _strOrigin = strOrigin;
     }
 
     /**
