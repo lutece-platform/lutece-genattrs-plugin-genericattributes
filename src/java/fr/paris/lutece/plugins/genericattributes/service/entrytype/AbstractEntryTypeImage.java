@@ -63,12 +63,12 @@ public abstract class AbstractEntryTypeImage extends AbstractEntryTypeUpload
 
                 if ( sourceBase != null )
                 {
-	                Response response = getResponseFromImage( sourceBase, entry, false );
-	                response.setIterationNumber( getResponseIterationValue( request ) );
-	                
-	                listResponse.add( response );
+                    Response response = getResponseFromImage( sourceBase, entry, false );
+                    response.setIterationNumber( getResponseIterationValue( request ) );
+
+                    listResponse.add( response );
                 }
-                
+
                 return genAttError;
             }
 

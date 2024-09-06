@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import fr.paris.lutece.portal.business.file.File;
+import fr.paris.lutece.portal.service.file.FileService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
@@ -49,14 +50,14 @@ public final class ResponseDAO implements IResponseDAO
 {
     // Constants
     private static final String SQL_QUERY_SELECT_RESPONSE = "SELECT resp.id_response, resp.response_value, type.class_name, ent.id_type, ent.id_entry, ent.title, ent.code, "
-            + " resp.iteration_number, resp.id_field, resp.id_file, resp.status, resp.sort_order  FROM genatt_response resp";
+            + " resp.iteration_number, resp.id_field, resp.file_key, resp.file_store, resp.status, resp.sort_order  FROM genatt_response resp";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_RESPONSE + ", genatt_entry ent, genatt_entry_type type "
             + " WHERE resp.id_response = ? and resp.id_entry = ent.id_entry and ent.id_type = type.id_type ";
     private static final String SQL_QUERY_SELECT_RESPONSE_BY_FILTER = SQL_QUERY_SELECT_RESPONSE + ", genatt_entry ent, genatt_entry_type type "
             + " WHERE resp.id_entry = ent.id_entry and ent.id_type = type.id_type ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_response ( "
-            + " response_value, id_entry, iteration_number, id_field, id_file, status,sort_order ) VALUES ( ?,?,?,?,?,?,?)";
-    private static final String SQL_QUERY_UPDATE = "UPDATE genatt_response SET response_value = ?, id_entry = ?, iteration_number = ?, id_field = ?, id_file = ?, status = ?, sort_order = ? WHERE id_response = ?";
+            + " response_value, id_entry, iteration_number, id_field, file_key, file_store, status,sort_order ) VALUES ( ?,?,?,?,?,?,?,?)";
+    private static final String SQL_QUERY_UPDATE = "UPDATE genatt_response SET response_value = ?, id_entry = ?, iteration_number = ?, id_field = ?,file_key = ?, file_store = ?, status = ?, sort_order = ? WHERE id_response = ?";
     private static final String SQL_QUERY_DELETE = "DELETE FROM genatt_response WHERE id_response = ? ";
     private static final String SQL_QUERY_SELECT_COUNT_RESPONSE_BY_ID_ENTRY = " SELECT field.title, COUNT( resp.id_response )"
             + " FROM genatt_entry e LEFT JOIN genatt_field field ON ( e.id_entry = field.id_entry ) LEFT JOIN genatt_response resp on ( resp.id_field = field.id_field ) "
@@ -103,7 +104,9 @@ public final class ResponseDAO implements IResponseDAO
 
             if ( response.getFile( ) != null )
             {
-                daoUtil.setInt( nIndex++, response.getFile( ).getIdFile( ) );
+                daoUtil.setString( nIndex++, response.getFile( ).getFileKey( ) );
+                daoUtil.setString( nIndex++, response.getFile( ).getOrigin( ) == null ? FileService.getInstance( ).getFileStoreServiceProvider( ).getName( )
+                        : response.getFile( ).getOrigin( ) );
             }
             else
             {
@@ -183,7 +186,9 @@ public final class ResponseDAO implements IResponseDAO
 
             if ( response.getFile( ) != null )
             {
-                daoUtil.setInt( nIndex++, response.getFile( ).getIdFile( ) );
+                daoUtil.setString( nIndex++, response.getFile( ).getFileKey( ) );
+                daoUtil.setString( nIndex++, response.getFile( ).getOrigin( ) == null ? FileService.getInstance( ).getFileStoreServiceProvider( ).getName( )
+                        : response.getFile( ).getOrigin( ) );
             }
             else
             {
@@ -192,7 +197,7 @@ public final class ResponseDAO implements IResponseDAO
 
             daoUtil.setInt( nIndex++, response.getStatus( ) );
             daoUtil.setInt( nIndex++, response.getSortOrder( ) );
-            
+
             daoUtil.setInt( nIndex, response.getIdResponse( ) );
             daoUtil.executeUpdate( );
         }
@@ -240,7 +245,7 @@ public final class ResponseDAO implements IResponseDAO
             sb.append( ")" );
             sbSQL.append( sb.toString( ) );
         }
-        
+
         if ( filter.containsListIdEntry( ) )
         {
             StringBuilder sb = new StringBuilder( SQL_FILTER_MULTI_ID_ENTRY + " (" );
@@ -386,7 +391,8 @@ public final class ResponseDAO implements IResponseDAO
         if ( daoUtil.getObject( nIndex ) != null )
         {
             File file = new File( );
-            file.setIdFile( daoUtil.getInt( nIndex ) );
+            file.setFileKey( daoUtil.getString( nIndex++ ) );
+            file.setOrigin( daoUtil.getString( nIndex ) );
             response.setFile( file );
         }
 

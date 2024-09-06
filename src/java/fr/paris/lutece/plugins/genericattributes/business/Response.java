@@ -73,6 +73,7 @@ public class Response implements Serializable
     private String _strResponseValue;
     private int _nStatus;
     private File _file;
+
     private boolean _bIsImage;
     private int _nSortOrder;
 
@@ -108,6 +109,7 @@ public class Response implements Serializable
             _file.setExtension( file.getExtension( ) );
             _file.setIdFile( file.getIdFile( ) );
             _file.setMimeType( file.getMimeType( ) );
+            _file.setOrigin( file.getOrigin( ) );
             _file.setSize( file.getSize( ) );
             _file.setTitle( file.getTitle( ) );
 
@@ -324,7 +326,8 @@ public class Response implements Serializable
     }
 
     /**
-     * @param nSortOrder the nSortOrder to set
+     * @param nSortOrder
+     *            the nSortOrder to set
      */
     public void setSortOrder( int nSortOrder )
     {

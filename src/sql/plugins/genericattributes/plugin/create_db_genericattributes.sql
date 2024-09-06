@@ -89,7 +89,8 @@ CREATE TABLE genatt_response (
 	id_entry int default NULL,
 	iteration_number int default -1,
 	id_field int default NULL,
-	id_file int default NULL,
+	file_key VARCHAR(255) default NULL,
+	file_store VARCHAR(255) default NULL,
 	status smallint default 1,
 	sort_order int default 0,
 	PRIMARY KEY (id_response)

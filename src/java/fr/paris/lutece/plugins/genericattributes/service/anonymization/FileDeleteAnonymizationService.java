@@ -52,7 +52,7 @@ public class FileDeleteAnonymizationService extends AbstractAnonymizationService
             String pattern = getPattern( entry );
             if ( pattern.contains( _wildcard ) && response.getFile( ) != null )
             {
-                GenericAttributeFileService.getInstance().delete( response.getFile( ).getFileKey( ) );
+                GenericAttributeFileService.getInstance( ).delete( response.getFile( ).getFileKey( ), response.getFile( ).getOrigin( ) );
                 response.setFile( null );
             }
         }

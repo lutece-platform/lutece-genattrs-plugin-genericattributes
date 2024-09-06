@@ -63,8 +63,8 @@ import fr.paris.lutece.portal.service.message.AdminMessageService;
 public abstract class AbstractEntryTypeGalleryImage extends EntryTypeService
 {
     // PARAMETERS
-    protected static final String PARAMETER_ID_RESPONSE    = "id_response";
-    protected static final String PARAMETER_CODE_GALLERY   = "code_gallery";
+    protected static final String PARAMETER_ID_RESPONSE = "id_response";
+    protected static final String PARAMETER_CODE_GALLERY = "code_gallery";
 
     // MESSAGES
     protected static final String ERROR_FIELD_CODE_GALLERY = "genericattributes.createEntry.labelChooseGalleryImage";
@@ -108,12 +108,12 @@ public abstract class AbstractEntryTypeGalleryImage extends EntryTypeService
 
         // Upload file from gallery
         String strFileGallery = request.getParameter( strAttributeName );
-        
+
         if ( StringUtils.isNotEmpty( strFileGallery ) )
         {
             FileImagePublicService.init( );
 
-            File file = GenericAttributeFileService.getInstance().load( strFileGallery );
+            File file = GenericAttributeFileService.getInstance( ).load( strFileGallery, GenericAttributeFileService.getInstance( ).getName( ) );
 
             Response response = new Response( );
             response.setEntry( entry );
@@ -123,22 +123,25 @@ public abstract class AbstractEntryTypeGalleryImage extends EntryTypeService
             listResponse.add( response );
 
             return null;
-        } else if ( StringUtils.isEmpty( strFileGallery ) && entry.isMandatory( ) )
-        {
-            GenericAttributeError genAttError = new MandatoryError( entry, locale );
-
-            Response response = new Response( );
-            response.setEntry( entry );
-            listResponse.add( response );
-            return genAttError;
-        } else
-        {
-            Response response = new Response( );
-            response.setEntry( entry );
-            listResponse.add( response );
-
-            return null;
         }
+        else
+            if ( StringUtils.isEmpty( strFileGallery ) && entry.isMandatory( ) )
+            {
+                GenericAttributeError genAttError = new MandatoryError( entry, locale );
+
+                Response response = new Response( );
+                response.setEntry( entry );
+                listResponse.add( response );
+                return genAttError;
+            }
+            else
+            {
+                Response response = new Response( );
+                response.setEntry( entry );
+                listResponse.add( response );
+
+                return null;
+            }
 
     }
 
@@ -190,7 +193,8 @@ public abstract class AbstractEntryTypeGalleryImage extends EntryTypeService
         GenericAttributesUtils.createOrUpdateField( entry, PARAMETER_CODE_GALLERY, null, strCodeGallery );
 
         String strExportBinary = request.getParameter( IEntryTypeService.PARAMETER_EXPORT_BINARY );
-        GenericAttributesUtils.createOrUpdateField( entry, IEntryTypeService.FIELD_FILE_BINARY, null, Boolean.toString( StringUtils.isNotBlank( strExportBinary ) ) );
+        GenericAttributesUtils.createOrUpdateField( entry, IEntryTypeService.FIELD_FILE_BINARY, null,
+                Boolean.toString( StringUtils.isNotBlank( strExportBinary ) ) );
 
         entry.setMandatory( strMandatory != null );
         entry.setOnlyDisplayInBack( strOnlyDisplayInBack != null );
@@ -238,7 +242,9 @@ public abstract class AbstractEntryTypeGalleryImage extends EntryTypeService
 
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, locale ) };
+            Object [ ] tabRequiredFields = {
+                    I18nService.getLocalizedString( strFieldError, locale )
+            };
 
             return AdminMessageService.getMessageUrl( request, IEntryTypeService.MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
