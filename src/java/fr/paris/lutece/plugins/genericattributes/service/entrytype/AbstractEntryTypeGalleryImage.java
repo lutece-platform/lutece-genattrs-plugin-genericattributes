@@ -62,6 +62,8 @@ import fr.paris.lutece.portal.service.message.AdminMessageService;
  */
 public abstract class AbstractEntryTypeGalleryImage extends EntryTypeService
 {
+	public static final String ENTRY_TYPE_KEYNAME = "entryTypeGalleryImage";
+	
     // PARAMETERS
     protected static final String PARAMETER_ID_RESPONSE = "id_response";
     protected static final String PARAMETER_CODE_GALLERY = "code_gallery";
@@ -113,7 +115,7 @@ public abstract class AbstractEntryTypeGalleryImage extends EntryTypeService
         {
             FileImagePublicService.init( );
 
-            File file = GenericAttributeFileService.getInstance( ).load( strFileGallery, GenericAttributeFileService.getInstance( ).getName( ) );
+            File file = GenericAttributeFileService.getInstance( ).load( strFileGallery, ENTRY_TYPE_KEYNAME);
 
             Response response = new Response( );
             response.setEntry( entry );

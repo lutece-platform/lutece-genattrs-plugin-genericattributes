@@ -43,6 +43,7 @@ import org.apache.commons.lang3.StringUtils;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
+import fr.paris.lutece.plugins.genericattributes.service.file.GenericAttributeFileService;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
@@ -60,6 +61,8 @@ import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
  */
 public abstract class AbstractEntryTypeComment extends EntryTypeService
 {
+	public static final String ENTRY_TYPE_KEYNAME = "entryTypeComment";
+	
     /**
      * {@inheritDoc}
      */
@@ -114,14 +117,9 @@ public abstract class AbstractEntryTypeComment extends EntryTypeService
                 file.setPhysicalFile( physicalFile );
 
                 String idFile;
-				try {
-					idFile = getFileStoreServiceProvider( ).storeFile( file );
-					GenericAttributesUtils.createOrUpdateField( entry, FIELD_DOWNLOADABLE_FILE, file.getTitle( ), idFile );
-				} 
-				catch ( FileServiceException e )
-				{
-					AppLogService.error(e);
-				}
+				idFile = GenericAttributeFileService.getInstance( ).save( fileItem, ENTRY_TYPE_KEYNAME ); 
+				GenericAttributesUtils.createOrUpdateField( entry, FIELD_DOWNLOADABLE_FILE, file.getTitle( ), idFile );
+				
                 
             }
         }
@@ -133,18 +131,8 @@ public abstract class AbstractEntryTypeComment extends EntryTypeService
         Field oldFile = entry.getFieldByCode( FIELD_DOWNLOADABLE_FILE );
         if ( oldFile != null )
         {
-            try {
-				getFileStoreServiceProvider( ).delete( oldFile.getValue( ) );
-				FieldHome.remove( oldFile.getIdField( ) );
-			} catch (FileServiceException e) {
-				AppLogService.error(e);
-			}
-            
+            GenericAttributeFileService.getInstance( ).delete( oldFile.getValue( ), null);
+			FieldHome.remove( oldFile.getIdField( ) );
         }
-    }
-
-    protected IFileStoreServiceProvider getFileStoreServiceProvider( )
-    {
-        return FileService.getInstance( ).getFileStoreServiceProvider( "defaultDatabaseFileStoreProvider" );
     }
 }

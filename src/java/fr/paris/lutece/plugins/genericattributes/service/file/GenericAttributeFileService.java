@@ -33,21 +33,94 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.file;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang3.StringUtils;
+
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.service.file.FileService;
 import fr.paris.lutece.portal.service.file.FileServiceException;
-import fr.paris.lutece.portal.service.file.IFileStoreServiceProvider;
 import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 public class GenericAttributeFileService
 {
-    private static final GenericAttributeFileService _instance = new GenericAttributeFileService( );
-    private IFileStoreServiceProvider _fileStoreServiceProvider;
+	private static final String PROPERTY_FILESTORESERVICE_PREFIX = "genericattributes.filestoreservice";
+	private static final String PROPERTY_FILESTORESERVICE_DEFAULT_SUFFIX = "default";
 
+    private static final GenericAttributeFileService _instance = new GenericAttributeFileService( );
+    private static Map<String,String> _entryTypeFileServices;
+	
+    /**
+     * Constructor
+     */
     private GenericAttributeFileService( )
     {
+    	List<String> keyList = AppPropertiesService.getKeys( PROPERTY_FILESTORESERVICE_PREFIX);
+    	
+    	 _entryTypeFileServices = new HashMap<>();
+    	 
+    	// init specific entryType fileStoreService names if exists
+    	 if (keyList != null ) 
+    	 {
+	    	keyList.stream().forEach( s -> { 
+	    		if ( !StringUtils.isAllBlank(  AppPropertiesService.getProperty(s) ) )
+	    		{
+	    			_entryTypeFileServices.put(s, AppPropertiesService.getProperty(s)); 
+	    		}
+	    	} );
+    	 }
+    }
+    
+    /**
+     * get FileStoreServiceProvider name for entry type :
+     * - returns the entry type FileService (if set)
+     * - otherwise, returns the GenAttr default FileService (if set)
+     * - otherwise, returns the lutece default FileService 
+     * 
+     * @param strEntryType
+     * @return the name of the FileStoreServiceProvider
+     */
+    public String getFileStoreProviderName( String strEntryType )
+    {
+    	if (strEntryType != null ) 
+    	{
+    		if ( _entryTypeFileServices.containsKey( strEntryType ))
+    		{
+    			return _entryTypeFileServices.get( strEntryType );
+    		}
+    	}
+    	
+    	if ( _entryTypeFileServices.containsKey( PROPERTY_FILESTORESERVICE_DEFAULT_SUFFIX ))
+		{
+			return _entryTypeFileServices.get( PROPERTY_FILESTORESERVICE_DEFAULT_SUFFIX );
+		}
+    	
+    	return FileService.getInstance( ).getFileStoreServiceProvider( ).getName( );
+    }
+    
+    /**
+     * get FileStoreServiceProvider name  :
+     * - returns the GenAttr default FileService (if set)
+     * - otherwise, returns the lutece default FileService 
+     * 
+     * Use getFileStoreProviderName( String strEntryType ) to get entryType specific File service
+     * 
+     * @return the name of the FileStoreServiceProvider
+     */
+    public String getFileStoreProviderName(  )
+    {
+    	return getFileStoreProviderName( null );
     }
 
+    /**
+     * get instance of service
+     * 
+     * @return the instance
+     */
     public static GenericAttributeFileService getInstance( )
     {
         return _instance;
@@ -56,16 +129,30 @@ public class GenericAttributeFileService
     /**
      * Save a file
      * 
-     * @param file
-     *            The file
+     * @param file The lutece file in default generic file Service
      * @return The key of the file
      */
-    public String save( File file )
+    public String save( File file)
+    {
+    	return save( file, null);
+    }
+    /**
+     * Save a file
+     * 
+     * @param file The lutece file
+     * @param strEntryType the entry type
+     * @return The key of the file
+     */
+    public String save( File file, String strEntryType)
     {
         try
         {
-            _fileStoreServiceProvider = FileService.getInstance( ).getFileStoreServiceProvider( file.getOrigin( ) );
-            return _fileStoreServiceProvider.storeFile( file );
+        	if ( file.getOrigin( ) == null )
+        	{
+        		file.setOrigin( getFileStoreProviderName( strEntryType ) );
+        	}
+        	
+        	return FileService.getInstance( ).getFileStoreServiceProvider( file.getOrigin( ) ).storeFile( file );
         }
         catch( FileServiceException e )
         {
@@ -74,6 +161,26 @@ public class GenericAttributeFileService
         }
     }
 
+    /**
+     * Save a file
+     * 
+     * @param file The fileItem
+     * @param strEntryType the entry type
+     * @return The key of the file
+     */
+    public String save( FileItem file, String strEntryType)
+    {
+        try
+        {        	
+        	return FileService.getInstance( ).getFileStoreServiceProvider( getFileStoreProviderName( strEntryType )  ).storeFileItem( file );
+        }
+        catch( FileServiceException e )
+        {
+            AppLogService.error( e );
+            return null;
+        }
+    }
+    
     /**
      * Load a file
      * 
@@ -85,8 +192,12 @@ public class GenericAttributeFileService
     {
         try
         {
-            _fileStoreServiceProvider = FileService.getInstance( ).getFileStoreServiceProvider( strOrigin );
-            return _fileStoreServiceProvider.getFile( strKey );
+        	if ( StringUtils.isEmpty( strOrigin ) )
+        	{
+        		strOrigin =  getFileStoreProviderName( ) ;
+        	}
+        	
+            return FileService.getInstance( ).getFileStoreServiceProvider( strOrigin ).getFile( strKey );
         }
         catch( FileServiceException e )
         {
@@ -105,8 +216,12 @@ public class GenericAttributeFileService
     {
         try
         {
-            _fileStoreServiceProvider = FileService.getInstance( ).getFileStoreServiceProvider( strOrigin );
-            _fileStoreServiceProvider.delete( strKey );
+        	if ( StringUtils.isEmpty( strOrigin ) )
+        	{
+        		strOrigin =  getFileStoreProviderName( );
+        	}
+        	
+            FileService.getInstance( ).getFileStoreServiceProvider( strOrigin ).delete( strKey );
         }
         catch( FileServiceException e )
         {
@@ -114,9 +229,4 @@ public class GenericAttributeFileService
         }
     }
 
-    public String getName( )
-    {
-        // return default genatt file store provider name
-        return FileService.getInstance( ).getFileStoreServiceProvider( ).getName( );
-    }
 }

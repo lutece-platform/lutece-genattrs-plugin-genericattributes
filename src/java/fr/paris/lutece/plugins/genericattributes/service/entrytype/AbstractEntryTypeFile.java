@@ -60,7 +60,9 @@ import javax.servlet.http.HttpServletRequest;
  */
 public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
 {
-    /**
+    public static final String ENTRY_TYPE_KEYNAME = "entryTypeFile";
+
+	/**
      * {@inheritDoc}
      */
     @Override
@@ -217,7 +219,6 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
 
         File file = new File( );
         file.setTitle( fileItem.getName( ) );
-        file.setOrigin( GenericAttributeFileService.getInstance( ).getName( ) );
         file.setSize( ( fileItem.getSize( ) < Integer.MAX_VALUE ) ? (int) fileItem.getSize( ) : Integer.MAX_VALUE );
 
         if ( bCreatePhysicalFile )

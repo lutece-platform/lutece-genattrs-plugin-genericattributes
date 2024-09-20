@@ -66,7 +66,7 @@ public class ResponseImageResourceProvider implements ImageResourceProvider
 
         if ( response.getFile( ) != null )
         {
-            File file = GenericAttributeFileService.getInstance().load( response.getFile( ).getFileKey( ) );
+            File file = GenericAttributeFileService.getInstance().load( response.getFile( ).getFileKey( ), response.getFile( ).getOrigin( ) );
 
             if ( ( file.getPhysicalFile( ) != null ) && FileUtil.hasImageExtension( file.getTitle( ) ) )
             {

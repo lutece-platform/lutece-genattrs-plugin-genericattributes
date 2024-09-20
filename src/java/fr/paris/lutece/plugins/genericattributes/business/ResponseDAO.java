@@ -111,6 +111,7 @@ public final class ResponseDAO implements IResponseDAO
             else
             {
                 daoUtil.setIntNull( nIndex++ );
+                daoUtil.setString( nIndex++, null );
             }
 
             daoUtil.setInt( nIndex++, Response.CONSTANT_STATUS_ACTIVE );

@@ -139,7 +139,7 @@ public interface IEntryTypeService
     String FIELD_ILLUSTRATION_IMAGE = "illustration_image";
     String FIELD_GEOJSON = "coordinates_geojson";
     String FIELD_ID_LAYER = "DataLayer";
-    String FIELD_DISABLED = "disabled";
+	String FIELD_DISABLED = "disabled";
     String FIELD_IS_UPDATABLE = "is_updatable";
 
     // attribute
