@@ -110,7 +110,7 @@ public final class ResponseDAO implements IResponseDAO
             }
             else
             {
-                daoUtil.setIntNull( nIndex++ );
+                daoUtil.setString( nIndex++, null );
                 daoUtil.setString( nIndex++, null );
             }
 
@@ -193,7 +193,8 @@ public final class ResponseDAO implements IResponseDAO
             }
             else
             {
-                daoUtil.setIntNull( nIndex++ );
+                daoUtil.setString( nIndex++, null );
+                daoUtil.setString( nIndex++, null );
             }
 
             daoUtil.setInt( nIndex++, response.getStatus( ) );
