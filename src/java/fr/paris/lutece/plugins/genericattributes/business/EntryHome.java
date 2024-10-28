@@ -34,10 +34,10 @@
 package fr.paris.lutece.plugins.genericattributes.business;
 
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
+import fr.paris.lutece.plugins.genericattributes.service.file.GenericAttributeFileService;
 import fr.paris.lutece.plugins.genericattributes.util.CopyEntryEventParam;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.event.ResourceEvent;
-import fr.paris.lutece.portal.business.file.FileHome;
 import fr.paris.lutece.portal.service.event.ResourceEventManager;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -173,7 +173,7 @@ public final class EntryHome
                 {
                     if ( IEntryTypeService.FIELD_DOWNLOADABLE_FILE.equals( field.getCode( ) ) )
                     {
-                        FileHome.remove( Integer.valueOf( field.getValue( ) ) );
+                        GenericAttributeFileService.getInstance( ).delete( field.getValue( ), null );
                     }
                     if ( IEntryTypeService.FIELD_ANSWER_CHOICE.equals( field.getCode( ) ) )
                     {
