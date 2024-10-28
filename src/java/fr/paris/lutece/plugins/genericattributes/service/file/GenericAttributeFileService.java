@@ -229,4 +229,34 @@ public class GenericAttributeFileService
         }
     }
 
+    /**
+     * Update a file
+     *
+     * @param file The lutece file
+     * @param strEntryType the entry type
+     * @return The key of the file
+     */
+    public String update( File file, String strEntryType )
+    {
+        try
+        {
+            if ( file.getOrigin( ) == null )
+            {
+                file.setOrigin( getFileStoreProviderName( strEntryType ) );
+            }
+
+            String strOldFileKey = file.getFileKey( );
+            String strNewFileKey = FileService.getInstance( ).getFileStoreServiceProvider( file.getOrigin( ) ).storeFile( file );
+
+            FileService.getInstance( ).getFileStoreServiceProvider( file.getOrigin( ) ).delete( strOldFileKey );
+
+            return strNewFileKey;
+        }
+        catch( FileServiceException e )
+        {
+            AppLogService.error( e );
+            return null;
+        }
+    }
+
 }

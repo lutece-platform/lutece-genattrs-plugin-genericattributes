@@ -35,7 +35,9 @@ package fr.paris.lutece.plugins.genericattributes.business;
 
 import fr.paris.lutece.plugins.genericattributes.service.file.GenericAttributeFileService;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
+import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.file.FileHome;
+import fr.paris.lutece.portal.service.file.FileServiceException;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppException;
@@ -102,7 +104,16 @@ public final class ResponseHome
         {
             if ( response.getFile( ) != null )
             {
-                FileHome.update( response.getFile( ) );
+                File file = response.getFile( );
+                String strFileKey = GenericAttributeFileService.getInstance( ).update( file, file.getOrigin( ) );
+                if ( strFileKey != null )
+                {
+                    response.getFile( ).setFileKey( strFileKey );
+                }
+                else
+                {
+                    throw new FileServiceException( "An error occurred during file update of response : " + response.getIdResponse( ) );
+                }
             }
 
             _dao.store( response, getPlugin( ) );

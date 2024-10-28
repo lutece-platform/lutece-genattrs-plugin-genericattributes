@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.genericattributes.service.anonymization;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.file.GenericAttributeFileService;
-import fr.paris.lutece.portal.business.file.FileHome;
 
 /**
  * {@link IEntryTypeAnonymisationService} that delete the file.
