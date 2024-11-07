@@ -2,18 +2,15 @@ package fr.paris.lutece.plugins.genericattributes.service.listener;
 
 import java.util.List;
 
-import fr.paris.lutece.portal.service.file.IFileStoreServiceProvider;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
-import fr.paris.lutece.portal.service.file.FileService;
-import fr.paris.lutece.portal.service.file.FileServiceException;
 import fr.paris.lutece.plugins.filestoragetransfer.business.FileTransferRequest;
-import fr.paris.lutece.plugins.filestoragetransfer.service.listener.FileTransferListener;
+import fr.paris.lutece.plugins.filestoragetransfer.service.listener.IFileTransferListener;
 
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 
-public class FileTransferListenerService implements FileTransferListener
+public class FileTransferListenerService implements IFileTransferListener
 {
 
     private static String contextValue = AppPropertiesService.getProperty( "genericattributes.filetransfercontext" );
