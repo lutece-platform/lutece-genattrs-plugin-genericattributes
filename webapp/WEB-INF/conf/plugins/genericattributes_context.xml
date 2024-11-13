@@ -92,6 +92,4 @@
     <bean id="genericattributes.randomNumberAnonymizationService" class="fr.paris.lutece.plugins.genericattributes.service.anonymization.RandomNumberAnonymizationService" />
     <bean id="genericattributes.responseIdAnonymizationService" class="fr.paris.lutece.plugins.genericattributes.service.anonymization.ResponseIdAnonymizationService" />
     <bean id="genericattributes.telephoneDefaultAnonymizationService" class="fr.paris.lutece.plugins.genericattributes.service.anonymization.TelephoneDefaultAnonymizationService" />
-
-    <bean id="genericattributes.fileTransferListenerService" class="fr.paris.lutece.plugins.genericattributes.service.listener.FileTransferListenerService" />
 </beans>
