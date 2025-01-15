@@ -117,4 +117,6 @@ public interface IResponseDAO
      * @return the max number
      */
     int getMaxNumber( int nIdEntry, Plugin plugin );
+
+    void storeFileKey( int nIdResponse, String strFileKey, String strFileOrigin, Plugin plugin );
 }

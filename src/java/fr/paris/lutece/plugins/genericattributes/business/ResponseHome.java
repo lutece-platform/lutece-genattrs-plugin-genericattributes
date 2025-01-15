@@ -126,6 +126,22 @@ public final class ResponseHome
         }
     }
 
+    public static void updateFileKey( int nIdResponse, String strFileKey, String strFileOrigin )
+    {
+        TransactionManager.beginTransaction( getPlugin( ) );
+
+        try
+        {
+            _dao.storeFileKey( nIdResponse, strFileKey, strFileOrigin, getPlugin( ) );
+            TransactionManager.commitTransaction( getPlugin( ) );
+        }
+        catch( Exception e )
+        {
+            TransactionManager.rollBack( getPlugin( ) );
+            throw new AppException( e.getMessage( ), e );
+        }
+    }
+
     /**
      * Remove a response from its id
      * 
