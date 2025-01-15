@@ -57,11 +57,12 @@ public final class ResponseDAO implements IResponseDAO
             + " WHERE resp.id_entry = ent.id_entry and ent.id_type = type.id_type ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_response ( "
             + " response_value, id_entry, iteration_number, id_field, file_key, file_store, status,sort_order ) VALUES ( ?,?,?,?,?,?,?,?)";
-    private static final String SQL_QUERY_UPDATE = "UPDATE genatt_response SET response_value = ?, id_entry = ?, iteration_number = ?, id_field = ?,file_key = ?, file_store = ?, status = ?, sort_order = ? WHERE id_response = ?";
+    private static final String SQL_QUERY_UPDATE = "UPDATE genatt_response SET response_value = ?, id_entry = ?, iteration_number = ?, id_field = ?, file_key = ?, file_store = ?, status = ?, sort_order = ? WHERE id_response = ?";
     private static final String SQL_QUERY_DELETE = "DELETE FROM genatt_response WHERE id_response = ? ";
     private static final String SQL_QUERY_SELECT_COUNT_RESPONSE_BY_ID_ENTRY = " SELECT field.title, COUNT( resp.id_response )"
             + " FROM genatt_entry e LEFT JOIN genatt_field field ON ( e.id_entry = field.id_entry ) LEFT JOIN genatt_response resp on ( resp.id_field = field.id_field ) "
             + " WHERE e.id_entry = ? GROUP BY field.id_field ORDER BY field.pos ";
+    private static final String SQL_QUERY_UPDATE_FILE_KEY = "UPDATE genatt_response SET file_key = ?, file_store = ? WHERE id_response = ?";
 
     // Special query in order to sort numerically and not alphabetically (thus
     // avoiding list like 1, 10, 11, 2, ... instead of 1, 2, ..., 10, 11)
@@ -438,5 +439,18 @@ public final class ResponseDAO implements IResponseDAO
         }
 
         return sb.toString( );
+    }
+
+    public void storeFileKey( int nIdResponse, String strFileKey, String strFileOrigin, Plugin plugin )
+    {
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_FILE_KEY, plugin ) )
+        {
+            int nIndex = 1;
+            daoUtil.setString( nIndex++, strFileKey );
+            daoUtil.setString( nIndex++, strFileOrigin );
+            daoUtil.setInt( nIndex, nIdResponse );
+            daoUtil.executeUpdate( );
+        }
+
     }
 }
