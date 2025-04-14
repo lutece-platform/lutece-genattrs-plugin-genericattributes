@@ -35,10 +35,14 @@ package fr.paris.lutece.plugins.genericattributes.service.anonymization;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
 
 /**
  * {@link IEntryTypeAnonymisationService} that replace the wildcard by the date 1970-01-01.
  */
+@ApplicationScoped
+@Named("genericattributes.dateEmptyAnonymizationService")
 public class DateEmptyAnonymizationService extends AbstractDateAnonymizationService
 {
 

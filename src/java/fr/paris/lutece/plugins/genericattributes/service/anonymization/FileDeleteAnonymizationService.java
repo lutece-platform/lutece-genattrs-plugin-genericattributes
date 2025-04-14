@@ -36,10 +36,14 @@ package fr.paris.lutece.plugins.genericattributes.service.anonymization;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.file.GenericAttributeFileService;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
 
 /**
  * {@link IEntryTypeAnonymisationService} that delete the file.
  */
+@ApplicationScoped
+@Named("genericattributes.fileDeleteAnonymizationService")
 public class FileDeleteAnonymizationService extends AbstractAnonymizationService
 {
 

@@ -33,17 +33,16 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
+import java.util.List;
+
 import fr.paris.lutece.plugins.genericattributes.service.file.GenericAttributeFileService;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.file.File;
-import fr.paris.lutece.portal.business.file.FileHome;
 import fr.paris.lutece.portal.service.file.FileServiceException;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.util.sql.TransactionManager;
-
-import java.util.List;
+import jakarta.enterprise.inject.spi.CDI;
 
 /**
  * This class provides instances management methods (create, find, ...) for Response objects
@@ -51,7 +50,7 @@ import java.util.List;
 public final class ResponseHome
 {
     // Static variable pointed at the DAO instance
-    private static IResponseDAO _dao = SpringContextService.getBean( "genericattributes.responseDAO" );
+    private static IResponseDAO _dao = CDI.current( ).select( IResponseDAO.class ).get( );
     private static Plugin _plugin;
 
     /**

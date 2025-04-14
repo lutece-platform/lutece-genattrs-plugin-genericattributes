@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.genericattributes.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,7 @@ import java.util.List;
  * class EntryTypeDAO
  *
  */
+@ApplicationScoped
 public class EntryTypeDAO implements IEntryTypeDAO
 {
     private static final String SQL_QUERY_ORDER_BY = " order by display_order ASC ";

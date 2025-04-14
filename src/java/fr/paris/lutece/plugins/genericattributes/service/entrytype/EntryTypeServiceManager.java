@@ -35,7 +35,8 @@ package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryType;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.inject.literal.NamedLiteral;
+import jakarta.enterprise.inject.spi.CDI;
 
 /**
  * Class to manage entry type services
@@ -70,6 +71,7 @@ public final class EntryTypeServiceManager
         {
             return null;
         }
-        return SpringContextService.getBean( entryType.getBeanName( ) );
+
+        return CDI.current( ).select( IEntryTypeService.class, NamedLiteral.of( entryType.getBeanName( ) ) ).get( );
     }
 }

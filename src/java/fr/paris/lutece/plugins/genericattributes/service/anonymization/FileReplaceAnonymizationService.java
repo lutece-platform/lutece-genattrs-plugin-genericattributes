@@ -46,10 +46,14 @@ import fr.paris.lutece.plugins.genericattributes.service.file.GenericAttributeFi
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
 
 /**
  * {@link IEntryTypeAnonymisationService} that replace the file with an empty file.
  */
+@ApplicationScoped
+@Named("genericattributes.fileReplaceAnonymizationService")
 public class FileReplaceAnonymizationService extends AbstractAnonymizationService
 {
 

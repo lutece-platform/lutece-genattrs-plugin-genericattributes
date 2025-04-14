@@ -33,7 +33,8 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
-import static org.junit.Assert.assertNotEquals;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class FieldHomeTest extends AbstractEntryTest
 {
@@ -43,6 +44,7 @@ public class FieldHomeTest extends AbstractEntryTest
     private static int _nIdEntry;
     private static int _nIdEntryGroup;
 
+    @Test
     public void testSaveLoadDelete( )
     {
         Entry entry = new Entry( );
@@ -65,11 +67,10 @@ public class FieldHomeTest extends AbstractEntryTest
         assertNull( loaded );
     }
 
-    @Override
+    @BeforeEach
     public void setUp( ) throws Exception
     {
-        super.setUp( );
-
+    	super.setUp( );
         // Create an entry of type group
         Entry entryGroup = createEntryGroup( );
         _nIdEntryGroup = entryGroup.getIdEntry( );

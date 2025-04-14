@@ -38,9 +38,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -50,7 +47,9 @@ import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.anonymization.IEntryAnonymizationType;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.upload.MultipartItem;
 import fr.paris.lutece.util.ReferenceList;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Abstract implementation of IEntryTypeService
@@ -117,7 +116,7 @@ public abstract class EntryTypeService implements IEntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError canUploadFiles( Entry entry, List<FileItem> listUploadedFileItems, List<FileItem> listFileItemsToUpload, Locale locale )
+    public GenericAttributeError canUploadFiles( Entry entry, List<MultipartItem> listUploadedFileItems, List<MultipartItem> listFileItemsToUpload, Locale locale )
     {
         return null;
     }

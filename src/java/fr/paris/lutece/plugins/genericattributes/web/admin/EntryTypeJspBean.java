@@ -35,8 +35,6 @@ package fr.paris.lutece.plugins.genericattributes.web.admin;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.math.NumberUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.EntryType;
@@ -47,7 +45,12 @@ import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.util.html.HtmlTemplate;
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
 
+@SessionScoped
+@Named
 @Controller( controllerJsp = "ManageEntryType.jsp", controllerPath = "jsp/admin/plugins/genericattributes/", right = "ENTRY_TYPE_MANAGEMENT" )
 public class EntryTypeJspBean extends MVCAdminJspBean
 {

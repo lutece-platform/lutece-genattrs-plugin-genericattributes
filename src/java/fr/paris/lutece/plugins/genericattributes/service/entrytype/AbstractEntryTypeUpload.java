@@ -42,9 +42,8 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
-import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -62,6 +61,7 @@ import fr.paris.lutece.portal.service.fileupload.FileUploadService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
+import fr.paris.lutece.portal.service.upload.MultipartItem;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.util.ReferenceList;
@@ -138,7 +138,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError canUploadFiles( Entry entry, List<FileItem> listUploadedFileItems, List<FileItem> listFileItemsToUpload, Locale locale )
+    public GenericAttributeError canUploadFiles( Entry entry, List<MultipartItem> listUploadedFileItems, List<MultipartItem> listFileItemsToUpload, Locale locale )
     {
         /** 1) Check max files */
         GenericAttributeError error = FileAttributesUtils.checkNumberFiles( entry, listUploadedFileItems, listFileItemsToUpload, locale );
@@ -156,7 +156,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
 
         if ( listFileItemsToUpload != null )
         {
-            for ( FileItem fileItem : listFileItemsToUpload )
+            for ( MultipartItem fileItem : listFileItemsToUpload )
             {
                 if ( checkForImages( ) )
                 {
@@ -228,11 +228,11 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
      *            the HTTP request
      * @return The error if there is any
      */
-    protected GenericAttributeError checkResponseData( Entry entry, List<FileItem> listFilesSource, Locale locale, HttpServletRequest request )
+    protected GenericAttributeError checkResponseData( Entry entry, List<MultipartItem> listFilesSource, Locale locale, HttpServletRequest request )
     {
         // Check if the user can upload the file. The File is already uploaded in the asynchronous uploaded files map
         // Thus the list of files to upload is in the list of uploaded files
-        GenericAttributeError error = canUploadFiles( entry, listFilesSource, new ArrayList<FileItem>( ), locale );
+        GenericAttributeError error = canUploadFiles( entry, listFilesSource, new ArrayList<>( ), locale );
 
         if ( error != null )
         {
@@ -252,7 +252,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
      *            the attribute name
      * @return the file item
      */
-    protected List<FileItem> getFileSources( HttpServletRequest request, String strAttributeName )
+    protected List<MultipartItem> getFileSources( HttpServletRequest request, String strAttributeName )
     {
         if ( request != null )
         {
@@ -396,7 +396,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
      *            The locale
      * @return The error if any, or null if the file is a valid image
      */
-    public GenericAttributeError doCheckforImages( FileItem fileItem, Entry entry, Locale locale )
+    public GenericAttributeError doCheckforImages( MultipartItem fileItem, Entry entry, Locale locale )
     {
         String strFilename = FileUploadService.getFileNameOnly( fileItem );
         BufferedImage image = null;

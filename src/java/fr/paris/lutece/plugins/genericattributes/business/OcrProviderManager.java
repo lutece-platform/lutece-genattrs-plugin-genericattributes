@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
-import fr.paris.lutece.portal.service.spring.SpringContextService;
-import fr.paris.lutece.portal.service.util.AppLogService;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
+import fr.paris.lutece.portal.service.util.AppLogService;
+import jakarta.enterprise.inject.spi.CDI;
 
 /**
  * Manages all map providers.
@@ -75,7 +75,7 @@ public final class OcrProviderManager
             }
         }
 
-        AppLogService.info( OcrProviderManager.class.getName( ) + " : No ocr provider found for key " + strKey );
+        AppLogService.info( "{} : No ocr provider found for key {}", OcrProviderManager.class.getName( ), strKey );
 
         return null;
     }
@@ -87,6 +87,6 @@ public final class OcrProviderManager
      */
     public static List<IOcrProvider> getOcrProvidersList( )
     {
-        return SpringContextService.getBeansOfType( IOcrProvider.class );
+    	return CDI.current( ).select( IOcrProvider.class ).stream( ).toList( );
     }
 }

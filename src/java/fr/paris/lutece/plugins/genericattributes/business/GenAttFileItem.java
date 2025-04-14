@@ -33,21 +33,18 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
+import fr.paris.lutece.portal.service.upload.MultipartItem;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemHeaders;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
 /**
- * GenAttFileItem : builds a new fileItem
+ * GenAttFileItem : builds a new multipartItem
  */
-public class GenAttFileItem implements FileItem
+public class GenAttFileItem implements MultipartItem
 {
     private static final long serialVersionUID = -8540841906551362771L;
     private byte [ ] _bValue;
@@ -55,7 +52,6 @@ public class GenAttFileItem implements FileItem
     private String _strFieldName;
     private String _strOrigin;
     private int _nIdResponse;
-    private FileItemHeaders _fileItemHeaders;
 
     /**
      * Creates a new file item
@@ -169,15 +165,6 @@ public class GenAttFileItem implements FileItem
      * {@inheritDoc}
      */
     @Override
-    public OutputStream getOutputStream( ) throws IOException
-    {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public long getSize( )
     {
         return _bValue.length;
@@ -194,7 +181,6 @@ public class GenAttFileItem implements FileItem
     /**
      * {@inheritDoc}
      */
-    @Override
     public String getString( )
     {
         return new String( _bValue );
@@ -203,7 +189,6 @@ public class GenAttFileItem implements FileItem
     /**
      * {@inheritDoc}
      */
-    @Override
     public String getString( String encoding ) throws UnsupportedEncodingException
     {
         return new String( _bValue, encoding );
@@ -222,37 +207,9 @@ public class GenAttFileItem implements FileItem
     /**
      * {@inheritDoc}
      */
-    @Override
-    public boolean isFormField( )
-    {
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isInMemory( )
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void setFieldName( String strName )
     {
         _strFieldName = strName;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setFormField( boolean bState )
-    {
-        // nothing
     }
 
     /**
@@ -269,32 +226,5 @@ public class GenAttFileItem implements FileItem
     public void setOrigin( String strOrigin )
     {
         _strOrigin = strOrigin;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void write( java.io.File file ) throws Exception
-    {
-        // nothing
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public FileItemHeaders getHeaders( )
-    {
-        return _fileItemHeaders;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setHeaders( FileItemHeaders headers )
-    {
-        _fileItemHeaders = headers;
     }
 }

@@ -37,14 +37,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.service.file.FileService;
 import fr.paris.lutece.portal.service.file.FileServiceException;
+import fr.paris.lutece.portal.service.upload.MultipartItem;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import jakarta.enterprise.inject.spi.CDI;
 
 public class GenericAttributeFileService
 {
@@ -53,12 +54,14 @@ public class GenericAttributeFileService
 
     private static final GenericAttributeFileService _instance = new GenericAttributeFileService( );
     private static Map<String,String> _entryTypeFileServices;
-	
+    private FileService _fileService;
+    
     /**
      * Constructor
      */
     private GenericAttributeFileService( )
     {
+        _fileService = CDI.current( ).select( FileService.class ).get( );
     	List<String> keyList = AppPropertiesService.getKeys( PROPERTY_FILESTORESERVICE_PREFIX);
     	
     	 _entryTypeFileServices = new HashMap<>();
@@ -99,7 +102,7 @@ public class GenericAttributeFileService
 			return _entryTypeFileServices.get( PROPERTY_FILESTORESERVICE_DEFAULT_SUFFIX );
 		}
     	
-    	return FileService.getInstance( ).getFileStoreServiceProvider( ).getName( );
+    	return _fileService.getFileStoreServiceProvider( ).getName( );
     }
     
     /**
@@ -152,7 +155,7 @@ public class GenericAttributeFileService
         		file.setOrigin( getFileStoreProviderName( strEntryType ) );
         	}
         	
-        	return FileService.getInstance( ).getFileStoreServiceProvider( file.getOrigin( ) ).storeFile( file );
+        	return _fileService.getFileStoreServiceProvider( file.getOrigin( ) ).storeFile( file );
         }
         catch( FileServiceException e )
         {
@@ -164,15 +167,15 @@ public class GenericAttributeFileService
     /**
      * Save a file
      * 
-     * @param file The fileItem
+     * @param file The multipartItem
      * @param strEntryType the entry type
      * @return The key of the file
      */
-    public String save( FileItem file, String strEntryType)
+    public String save( MultipartItem file, String strEntryType)
     {
         try
         {        	
-        	return FileService.getInstance( ).getFileStoreServiceProvider( getFileStoreProviderName( strEntryType )  ).storeFileItem( file );
+        	return _fileService.getFileStoreServiceProvider( getFileStoreProviderName( strEntryType )  ).storeFileItem( file );
         }
         catch( FileServiceException e )
         {
@@ -197,7 +200,7 @@ public class GenericAttributeFileService
         		strOrigin =  getFileStoreProviderName( ) ;
         	}
         	
-            return FileService.getInstance( ).getFileStoreServiceProvider( strOrigin ).getFile( strKey );
+            return _fileService.getFileStoreServiceProvider( strOrigin ).getFile( strKey );
         }
         catch( FileServiceException e )
         {
@@ -221,7 +224,7 @@ public class GenericAttributeFileService
         		strOrigin =  getFileStoreProviderName( );
         	}
         	
-            FileService.getInstance( ).getFileStoreServiceProvider( strOrigin ).delete( strKey );
+            _fileService.getFileStoreServiceProvider( strOrigin ).delete( strKey );
         }
         catch( FileServiceException e )
         {
@@ -246,9 +249,9 @@ public class GenericAttributeFileService
             }
 
             String strOldFileKey = file.getFileKey( );
-            String strNewFileKey = FileService.getInstance( ).getFileStoreServiceProvider( file.getOrigin( ) ).storeFile( file );
+            String strNewFileKey = _fileService.getFileStoreServiceProvider( file.getOrigin( ) ).storeFile( file );
 
-            FileService.getInstance( ).getFileStoreServiceProvider( file.getOrigin( ) ).delete( strOldFileKey );
+            _fileService.getFileStoreServiceProvider( file.getOrigin( ) ).delete( strOldFileKey );
 
             return strNewFileKey;
         }

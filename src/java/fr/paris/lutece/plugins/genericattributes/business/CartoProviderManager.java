@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
-import fr.paris.lutece.portal.service.spring.SpringContextService;
-import fr.paris.lutece.portal.service.util.AppLogService;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
+import fr.paris.lutece.portal.service.util.AppLogService;
+import jakarta.enterprise.inject.spi.CDI;
 
 /**
  * Manages all map providers.
@@ -75,7 +75,7 @@ public final class CartoProviderManager
             }
         }
 
-        AppLogService.info( CartoProviderManager.class.getName( ) + " : No map provider found for key " + strKey );
+        AppLogService.info( "{} : No map provider found for key {}", CartoProviderManager.class.getName( ), strKey );
 
         return null;
     }
@@ -87,6 +87,6 @@ public final class CartoProviderManager
      */
     public static List<ICartoProvider> getMapProvidersList( )
     {
-        return SpringContextService.getBeansOfType( ICartoProvider.class );
+        return CDI.current( ).select( ICartoProvider.class ).stream( ).toList( );
     }
 }

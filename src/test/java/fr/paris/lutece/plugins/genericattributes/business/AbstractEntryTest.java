@@ -35,12 +35,14 @@ package fr.paris.lutece.plugins.genericattributes.business;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.junit.jupiter.api.BeforeEach;
 
 import fr.paris.lutece.plugins.genericattributes.service.GenericAttributesPlugin;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.test.LuteceTestCase;
 import fr.paris.lutece.util.sql.DAOUtil;
+import jakarta.enterprise.inject.spi.CDI;
 
 public abstract class AbstractEntryTest extends LuteceTestCase
 {
@@ -57,7 +59,7 @@ public abstract class AbstractEntryTest extends LuteceTestCase
     protected static int _nEntryTypeTextPrimaryKey;
     protected static int _nEntryTypeGroupPrimaryKey;
     protected final Plugin _plugin = PluginService.getPlugin( GenericAttributesPlugin.PLUGIN_NAME );
-    protected IEntryDAO _entryDAO = new EntryDAO( );
+    protected IEntryDAO _entryDAO = CDI.current( ).select( IEntryDAO.class ).get( );
 
     /**
      * Create an EntryType
@@ -248,8 +250,6 @@ public abstract class AbstractEntryTest extends LuteceTestCase
     @Override
     public void setUp( ) throws Exception
     {
-        super.setUp( );
-
         // Create the entry type
         _nEntryTypeGroupPrimaryKey = createEntryType( ENTRY_TYPE_GROUP_TITLE, NumberUtils.INTEGER_ONE, StringUtils.EMPTY, StringUtils.EMPTY );
         _nEntryTypeTextPrimaryKey = createEntryType( ENTRY_TYPE_TEXT_TITLE, NumberUtils.INTEGER_ZERO, StringUtils.EMPTY, StringUtils.EMPTY );

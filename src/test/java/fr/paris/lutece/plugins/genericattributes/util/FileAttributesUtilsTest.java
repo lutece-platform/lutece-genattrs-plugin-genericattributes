@@ -37,7 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.commons.fileupload.FileItem;
+import org.junit.jupiter.api.Test;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
@@ -45,6 +45,7 @@ import fr.paris.lutece.plugins.genericattributes.business.GenAttFileItem;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.upload.MultipartItem;
 import fr.paris.lutece.test.LuteceTestCase;
 
 public class FileAttributesUtilsTest extends LuteceTestCase
@@ -52,6 +53,7 @@ public class FileAttributesUtilsTest extends LuteceTestCase
 
     private static final String ENTRY_TITLE = "Entry 1";
 
+    @Test
     public void testCheckFileSizeOk( )
     {
         Field field = new Field( );
@@ -63,15 +65,16 @@ public class FileAttributesUtilsTest extends LuteceTestCase
         entry.setFields( new ArrayList<>( ) );
         entry.getFields( ).add( field );
 
-        FileItem file = new GenAttFileItem( "azerty".getBytes( ), "test.csv" );
+        MultipartItem file = new GenAttFileItem( "azerty".getBytes( ), "test.csv" );
 
-        List<FileItem> listUploadedFileItems = new ArrayList<>( );
+        List<MultipartItem> listUploadedFileItems = new ArrayList<>( );
         listUploadedFileItems.add( file );
         GenericAttributeError error = FileAttributesUtils.checkFileSize( entry, listUploadedFileItems, new ArrayList<>( ), Locale.FRANCE );
 
         assertNull( error );
     }
 
+    @Test
     public void testCheckFileSizeKo( )
     {
         Field field = new Field( );
@@ -83,9 +86,9 @@ public class FileAttributesUtilsTest extends LuteceTestCase
         entry.setFields( new ArrayList<>( ) );
         entry.getFields( ).add( field );
 
-        FileItem file = new GenAttFileItem( "azerty".getBytes( ), "test.csv" );
+        MultipartItem file = new GenAttFileItem( "azerty".getBytes( ), "test.csv" );
 
-        List<FileItem> listUploadedFileItems = new ArrayList<>( );
+        List<MultipartItem> listUploadedFileItems = new ArrayList<>( );
         listUploadedFileItems.add( file );
         GenericAttributeError error = FileAttributesUtils.checkFileSize( entry, listUploadedFileItems, new ArrayList<>( ), Locale.FRANCE );
 
@@ -100,6 +103,7 @@ public class FileAttributesUtilsTest extends LuteceTestCase
         assertEquals( strMessage, error.getErrorMessage( ) );
     }
 
+    @Test
     public void testCheckNumberFileOK( )
     {
         Field field = new Field( );
@@ -111,9 +115,9 @@ public class FileAttributesUtilsTest extends LuteceTestCase
         entry.setFields( new ArrayList<>( ) );
         entry.getFields( ).add( field );
 
-        FileItem file = new GenAttFileItem( "azerty".getBytes( ), "test.csv" );
+        MultipartItem file = new GenAttFileItem( "azerty".getBytes( ), "test.csv" );
 
-        List<FileItem> listUploadedFileItems = new ArrayList<>( );
+        List<MultipartItem> listUploadedFileItems = new ArrayList<>( );
         listUploadedFileItems.add( file );
         listUploadedFileItems.add( file );
         GenericAttributeError error = FileAttributesUtils.checkNumberFiles( entry, listUploadedFileItems, new ArrayList<>( ), Locale.FRANCE );
@@ -121,6 +125,7 @@ public class FileAttributesUtilsTest extends LuteceTestCase
         assertNull( error );
     }
 
+    @Test
     public void testCheckNumberFileKO( )
     {
         Field field = new Field( );
@@ -132,9 +137,9 @@ public class FileAttributesUtilsTest extends LuteceTestCase
         entry.setFields( new ArrayList<>( ) );
         entry.getFields( ).add( field );
 
-        FileItem file = new GenAttFileItem( "azerty".getBytes( ), "test.csv" );
+        MultipartItem file = new GenAttFileItem( "azerty".getBytes( ), "test.csv" );
 
-        List<FileItem> listUploadedFileItems = new ArrayList<>( );
+        List<MultipartItem> listUploadedFileItems = new ArrayList<>( );
         listUploadedFileItems.add( file );
         listUploadedFileItems.add( file );
         listUploadedFileItems.add( file );

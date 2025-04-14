@@ -1,9 +1,9 @@
-<jsp:useBean id="manageEntryType" scope="session" class="fr.paris.lutece.plugins.genericattributes.web.admin.EntryTypeJspBean" />
-<% String strContent = manageEntryType.processController ( request , response ); %>
-
 <%@ page errorPage="../../ErrorPage.jsp" %>
+
+${ pageContext.setAttribute( 'strContent', entryTypeJspBean.processController( pageContext.request , pageContext.response ) ) }
+
 <jsp:include page="../../AdminHeader.jsp" />
 
-<%= strContent %>
+${ pageContext.getAttribute( 'strContent' ) }
 
 <%@ include file="../../AdminFooter.jsp" %>

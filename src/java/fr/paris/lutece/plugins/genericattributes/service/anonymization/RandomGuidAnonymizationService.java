@@ -37,10 +37,14 @@ import java.util.UUID;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
 
 /**
  * {@link IEntryTypeAnonymisationService} that replace the wildcard by a random guid.
  */
+@ApplicationScoped
+@Named("genericattributes.randomGuidAnonymizationService")
 public class RandomGuidAnonymizationService extends AbstractTextAnonymizationService
 {
     @Override

@@ -45,11 +45,13 @@ import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.service.image.ImageResourceManager;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * This class provides Data Access methods for ReportingFiche objects
  */
-public final class FieldDAO implements IFieldDAO
+@ApplicationScoped
+public class FieldDAO implements IFieldDAO
 {
     // Constants
     private static final String SQL_QUERY_SELECT_ALL = "SELECT id_field,id_entry,code,title,value,default_value,pos,value_type_date,no_display_title,comment,id_file_key"

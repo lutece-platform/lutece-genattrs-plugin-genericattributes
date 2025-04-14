@@ -45,11 +45,13 @@ import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * This class provides Data Access methods for Entry objects
  */
-public final class EntryDAO implements IEntryDAO
+@ApplicationScoped
+public class EntryDAO implements IEntryDAO
 {
     // Constants
     private static final String SQL_QUERY_NUMBER_CONDITIONAL_QUESTION = "SELECT COUNT(e2.id_entry) "

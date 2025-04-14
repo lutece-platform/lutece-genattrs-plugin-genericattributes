@@ -42,11 +42,13 @@ import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.service.file.FileService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * This class provides Data Access methods for Response objects
  */
-public final class ResponseDAO implements IResponseDAO
+@ApplicationScoped
+public class ResponseDAO implements IResponseDAO
 {
     // Constants
     private static final String SQL_QUERY_SELECT_RESPONSE = "SELECT resp.id_response, resp.response_value, type.class_name, ent.id_type, ent.id_entry, ent.title, ent.code, "
