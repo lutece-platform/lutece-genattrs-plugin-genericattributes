@@ -37,7 +37,7 @@ import java.util.List;
 
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.inject.spi.CDI;
 
 /**
  *
@@ -46,7 +46,7 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
  */
 public class ReferenceItemFieldHome
 {
-    private static IReferenceItemFieldDao _dao = SpringContextService.getBean( "genericattributes.referenceItemFieldDao" );
+    private static IReferenceItemFieldDao _dao = CDI.current( ).select( IReferenceItemFieldDao.class ).get( );
     private static Plugin _plugin = GenericAttributesUtils.getPlugin( );
 
     private ReferenceItemFieldHome( )

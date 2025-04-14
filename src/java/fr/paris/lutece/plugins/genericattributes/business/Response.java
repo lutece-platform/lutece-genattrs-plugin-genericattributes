@@ -107,7 +107,7 @@ public class Response implements Serializable
         {
             _file = new File( );
             _file.setExtension( file.getExtension( ) );
-            _file.setIdFile( file.getIdFile( ) );
+            _file.setFileKey( file.getFileKey( ) );
             _file.setMimeType( file.getMimeType( ) );
             _file.setOrigin( file.getOrigin( ) );
             _file.setSize( file.getSize( ) );

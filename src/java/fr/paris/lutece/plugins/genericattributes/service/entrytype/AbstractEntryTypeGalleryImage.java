@@ -37,9 +37,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
-import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
@@ -54,6 +53,7 @@ import fr.paris.lutece.portal.service.fileupload.FileUploadService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.upload.MultipartItem;
 
 /**
  * 
@@ -84,9 +84,9 @@ public abstract class AbstractEntryTypeGalleryImage extends EntryTypeService
      *            the HTTP request
      * @return The error if there is any
      */
-    protected GenericAttributeError checkResponseData( Entry entry, List<FileItem> listFilesSource, Locale locale, HttpServletRequest request )
+    protected GenericAttributeError checkResponseData( Entry entry, List<MultipartItem> listFilesSource, Locale locale, HttpServletRequest request )
     {
-        for ( FileItem fileSource : listFilesSource )
+        for ( MultipartItem fileSource : listFilesSource )
         {
             // Check mandatory attribute
             String strFilename = Optional.ofNullable( fileSource ).map( FileUploadService::getFileNameOnly ).orElse( StringUtils.EMPTY );

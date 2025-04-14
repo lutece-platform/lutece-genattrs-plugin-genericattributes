@@ -44,7 +44,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -289,7 +289,7 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
 
                 PhysicalFile physicalFile = new PhysicalFile( );
                 String base64Image = imageSource.split( "," ) [1];
-                byte [ ] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary( base64Image );
+                byte [ ] imageBytes = jakarta.xml.bind.DatatypeConverter.parseBase64Binary( base64Image );
                 physicalFile.setValue( imageBytes );
                 file.setPhysicalFile( physicalFile );
                 file.setSize( imageBytes.length );
@@ -346,7 +346,7 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
         if ( ( imageSource != null ) && ( imageSource.split( "," ).length > 1 ) )
         {
             String base64Image = imageSource.split( "," ) [1];
-            byte [ ] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary( base64Image );
+            byte [ ] imageBytes = jakarta.xml.bind.DatatypeConverter.parseBase64Binary( base64Image );
             ByteArrayInputStream bis = new ByteArrayInputStream( imageBytes );
 
             try

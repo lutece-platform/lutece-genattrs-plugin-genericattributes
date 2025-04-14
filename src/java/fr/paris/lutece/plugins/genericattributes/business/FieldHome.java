@@ -33,18 +33,18 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
-import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
-import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
-import fr.paris.lutece.portal.service.util.AppException;
-import fr.paris.lutece.util.sql.TransactionManager;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+
+import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
+import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
+import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
+import fr.paris.lutece.portal.service.util.AppException;
+import fr.paris.lutece.util.sql.TransactionManager;
+import jakarta.enterprise.inject.spi.CDI;
 
 /**
  * This class provides instances management methods (create, find, ...) for Field objects
@@ -52,7 +52,7 @@ import org.apache.commons.collections.CollectionUtils;
 public final class FieldHome
 {
     // Static variable pointed at the DAO instance
-    private static IFieldDAO _dao = SpringContextService.getBean( "genericattributes.fieldDAO" );
+    private static IFieldDAO _dao = CDI.current( ).select( IFieldDAO.class ).get( );
     private static Plugin _plugin;
 
     /**

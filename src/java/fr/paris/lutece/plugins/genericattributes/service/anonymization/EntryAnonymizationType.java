@@ -36,7 +36,9 @@ package fr.paris.lutece.plugins.genericattributes.service.anonymization;
 import java.util.Locale;
 
 import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import jakarta.enterprise.inject.literal.NamedLiteral;
+import jakarta.enterprise.inject.spi.CDI;
+
 
 public class EntryAnonymizationType implements IEntryAnonymizationType
 {
@@ -84,7 +86,6 @@ public class EntryAnonymizationType implements IEntryAnonymizationType
     @Override
     public IEntryTypeAnonymisationService getAnonymisationTypeService( )
     {
-        IEntryTypeAnonymisationService service = SpringContextService.getBean( _serviceName );
-        return service.withWildcard( _wildcard );
+        return CDI.current( ).select( IEntryTypeAnonymisationService.class, NamedLiteral.of( _serviceName ) ).get( ).withWildcard( _wildcard );
     }
 }

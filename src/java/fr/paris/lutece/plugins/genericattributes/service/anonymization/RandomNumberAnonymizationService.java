@@ -37,10 +37,14 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
 
 /**
  * {@link IEntryTypeAnonymisationService} that replace the wildcard by a random number.
  */
+@ApplicationScoped
+@Named("genericattributes.randomNumberAnonymizationService")
 public class RandomNumberAnonymizationService extends AbstractTextAnonymizationService
 {
     @Override

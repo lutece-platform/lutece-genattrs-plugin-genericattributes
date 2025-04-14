@@ -42,10 +42,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
-import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.asynchronousupload.service.AbstractAsynchronousUploadHandler;
@@ -55,6 +54,7 @@ import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.upload.MultipartItem;
 import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.util.filesystem.UploadUtil;
 
@@ -71,13 +71,13 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
 
     /** <sessionId,<fieldName,fileItems>> */
     /** contains uploaded file items */
-    private static Map<String, Map<String, List<FileItem>>> _mapAsynchronousUpload = new ConcurrentHashMap<>( );
+    private static Map<String, Map<String, List<MultipartItem>>> _mapAsynchronousUpload = new ConcurrentHashMap<>( );
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String canUploadFiles( HttpServletRequest request, String strFieldName, List<FileItem> listFileItemsToUpload, Locale locale )
+    public String canUploadFiles( HttpServletRequest request, String strFieldName, List<MultipartItem> listFileItemsToUpload, Locale locale )
     {
         if ( StringUtils.isNotBlank( strFieldName ) && ( strFieldName.length( ) > PREFIX_ENTRY_ID.length( ) ) )
         {
@@ -94,7 +94,7 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
             int nIdEntry = Integer.parseInt( strIdEntry );
             Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
 
-            List<FileItem> listUploadedFileItems = getListUploadedFiles( strFieldName, request.getSession( ) );
+            List<MultipartItem> listUploadedFileItems = getListUploadedFiles( strFieldName, request.getSession( ) );
 
             if ( entry != null )
             {
@@ -117,7 +117,7 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
      * {@inheritDoc}
      */
     @Override
-    public List<FileItem> getListUploadedFiles( String strFieldName, HttpSession session )
+    public List<MultipartItem> getListUploadedFiles( String strFieldName, HttpSession session )
     {
         if ( StringUtils.isBlank( strFieldName ) )
         {
@@ -129,7 +129,7 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
         initMap( sessionId, strFieldName );
 
         // find session-related files in the map
-        Map<String, List<FileItem>> mapFileItemsSession = _mapAsynchronousUpload.get( sessionId );
+        Map<String, List<MultipartItem>> mapFileItemsSession = _mapAsynchronousUpload.get( sessionId );
 
         return mapFileItemsSession.get( strFieldName );
     }
@@ -138,7 +138,7 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
      * {@inheritDoc}
      */
     @Override
-    public void addFileItemToUploadedFilesList( FileItem fileItem, String strFieldName, HttpServletRequest request )
+    public void addFileItemToUploadedFilesList( MultipartItem fileItem, String strFieldName, HttpServletRequest request )
     {
         // This is the name that will be displayed in the form. We keep
         // the original name, but clean it to make it cross-platform.
@@ -148,7 +148,7 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
         initMap( sessionId, strFieldName );
 
         // Check if this file has not already been uploaded
-        List<FileItem> uploadedFiles = getListUploadedFiles( strFieldName, request.getSession( ) );
+        List<MultipartItem> uploadedFiles = getListUploadedFiles( strFieldName, request.getSession( ) );
 
         if ( uploadedFiles != null )
         {
@@ -156,11 +156,11 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
 
             if ( !uploadedFiles.isEmpty( ) )
             {
-                Iterator<FileItem> iterUploadedFiles = uploadedFiles.iterator( );
+                Iterator<MultipartItem> iterUploadedFiles = uploadedFiles.iterator( );
 
                 while ( bNew && iterUploadedFiles.hasNext( ) )
                 {
-                    FileItem uploadedFile = iterUploadedFiles.next( );
+                    MultipartItem uploadedFile = iterUploadedFiles.next( );
                     String strUploadedFileName = UploadUtil.cleanFileName( uploadedFile.getName( ).trim( ) );
                     // If we find a file with the same name and the same
                     // length, we consider that the current file has
@@ -233,7 +233,7 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
     private void initMap( String strSessionId, String strFieldName )
     {
         // find session-related files in the map
-        Map<String, List<FileItem>> mapFileItemsSession = _mapAsynchronousUpload.get( strSessionId );
+        Map<String, List<MultipartItem>> mapFileItemsSession = _mapAsynchronousUpload.get( strSessionId );
 
         // create map if not exists
         if ( mapFileItemsSession == null )

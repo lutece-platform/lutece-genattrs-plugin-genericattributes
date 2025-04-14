@@ -36,8 +36,7 @@ package fr.paris.lutece.plugins.genericattributes.business;
 import java.io.Serializable;
 import java.util.List;
 
-import org.apache.commons.fileupload.FileItem;
-
+import fr.paris.lutece.portal.service.upload.MultipartItem;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 
@@ -132,6 +131,6 @@ public interface IOcrProvider extends Serializable
      * @return the Ocr result
      * @throws Exception
      */
-    List<Response> process( FileItem fileUploaded, int nIdTargetEntry, String strResourceType ) throws Exception;
+    List<Response> process( MultipartItem fileUploaded, int nIdTargetEntry, String strResourceType ) throws Exception;
 
 }

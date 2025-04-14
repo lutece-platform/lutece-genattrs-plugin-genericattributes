@@ -38,10 +38,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
@@ -55,8 +52,10 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
+import fr.paris.lutece.portal.service.upload.MultipartItem;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Utility class of plugin generic attributes
@@ -72,7 +71,7 @@ public final class FileAttributesUtils
         // Empty Contructor
     }
 
-    public static GenericAttributeError checkFileSize( Entry entry, List<FileItem> listUploadedFileItems, List<FileItem> listFileItemsToUpload, Locale locale )
+    public static GenericAttributeError checkFileSize( Entry entry, List<MultipartItem> listUploadedFileItems, List<MultipartItem> listFileItemsToUpload, Locale locale )
     {
         GenericAttributeError error = null;
         Field fieldFileMaxSize = entry.getFieldByCode( IEntryTypeService.FIELD_FILE_MAX_SIZE );
@@ -94,11 +93,11 @@ public final class FileAttributesUtils
         if ( ( nMaxSize != GenericAttributesUtils.CONSTANT_ID_NULL ) && ( listFileItemsToUpload != null ) && ( listUploadedFileItems != null ) )
         {
             boolean bHasFileMaxSizeError = false;
-            List<FileItem> listFileItems = new ArrayList<>( );
+            List<MultipartItem> listFileItems = new ArrayList<>( );
             listFileItems.addAll( listUploadedFileItems );
             listFileItems.addAll( listFileItemsToUpload );
 
-            for ( FileItem fileItem : listFileItems )
+            for ( MultipartItem fileItem : listFileItems )
             {
                 if ( fileItem.getSize( ) > nMaxSize )
                 {
@@ -123,7 +122,7 @@ public final class FileAttributesUtils
         return error;
     }
 
-    public static GenericAttributeError checkNumberFiles( Entry entry, List<FileItem> listUploadedFileItems, List<FileItem> listFileItemsToUpload,
+    public static GenericAttributeError checkNumberFiles( Entry entry, List<MultipartItem> listUploadedFileItems, List<MultipartItem> listFileItemsToUpload,
             Locale locale )
     {
         GenericAttributeError error = null;
@@ -232,9 +231,9 @@ public final class FileAttributesUtils
      *            the locale
      * @return The error if there is any
      */
-    public static GenericAttributeError checkResponseData( Entry entry, List<FileItem> listFilesSource, Locale locale )
+    public static GenericAttributeError checkResponseData( Entry entry, List<MultipartItem> listFilesSource, Locale locale )
     {
-        for ( FileItem fileSource : listFilesSource )
+        for ( MultipartItem fileSource : listFilesSource )
         {
             // Check mandatory attribute
             String strFilename = Optional.ofNullable( fileSource ).map( FileUploadService::getFileNameOnly ).orElse( StringUtils.EMPTY );

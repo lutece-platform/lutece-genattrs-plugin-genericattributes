@@ -38,12 +38,14 @@ import java.util.List;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  *
  * class ReferenceItemFieldDao
  *
  */
+@ApplicationScoped
 public class ReferenceItemFieldDao implements IReferenceItemFieldDao
 {
     private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_referenceitem_field ( id_field, id_item ) VALUES ( ?, ? ) ";

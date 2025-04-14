@@ -36,8 +36,6 @@ package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 import java.util.List;
 import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
@@ -50,7 +48,7 @@ import fr.paris.lutece.portal.service.editor.EditorBbcodeService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
-import fr.paris.lutece.util.string.StringUtil;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Abstract entry type for text areas

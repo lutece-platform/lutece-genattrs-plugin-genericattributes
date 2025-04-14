@@ -40,10 +40,14 @@ import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeTelephoneNumber;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
 
 /**
  * {@link IEntryTypeAnonymisationService} that replace the wildcard by an example default number
  */
+@ApplicationScoped
+@Named("genericattributes.telephoneDefaultAnonymizationService")
 public class TelephoneDefaultAnonymizationService extends AbstractTextAnonymizationService
 {
     @Override

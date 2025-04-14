@@ -36,6 +36,10 @@ package fr.paris.lutece.plugins.genericattributes.business;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import fr.paris.lutece.plugins.genericattributes.service.GenericAttributesPlugin;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -64,11 +68,10 @@ public class EntryHomeTest extends AbstractEntryTest
     /**
      * {@inheritDoc}
      */
-    @Override
+    @BeforeEach
     public void setUp( ) throws Exception
     {
-        super.setUp( );
-
+    	super.setUp( );
         // Create an entry of type group
         Entry entryGroup = createEntryGroup( );
         _nIdEntryGroup = entryGroup.getIdEntry( );
@@ -88,11 +91,9 @@ public class EntryHomeTest extends AbstractEntryTest
     /**
      * {@inheritDoc}
      */
-    @Override
+    @AfterEach
     public void tearDown( ) throws Exception
     {
-        super.tearDown( );
-
         for ( Entry entry : listEntry )
         {
             // Remove the fields
@@ -162,6 +163,7 @@ public class EntryHomeTest extends AbstractEntryTest
     /**
      * Test the remove method of the EntryHome for an entry which is not inside a Entry of type group
      */
+    @Test
     public void testRemoveEntry( )
     {
         EntryHome.remove( _nIdEntry );
@@ -169,6 +171,7 @@ public class EntryHomeTest extends AbstractEntryTest
         checkEntryRemoving( _nIdEntry );
     }
 
+    @Test
     public void testGetNumberEntryByFilter( )
     {
         EntryFilter entryFilter = new EntryFilter( );
@@ -180,6 +183,7 @@ public class EntryHomeTest extends AbstractEntryTest
     /**
      * Test the remove method of the EntryHome for an entry which is inside a Entry of type group
      */
+    @Test
     public void testRemoveEntryGroup( )
     {
         EntryFilter entryFilter = new EntryFilter( );
@@ -197,6 +201,7 @@ public class EntryHomeTest extends AbstractEntryTest
         }
     }
 
+    @Test
     public void testFindByPrimaryKeyList( )
     {
         List<Integer> idList = new ArrayList<>( );
@@ -207,6 +212,7 @@ public class EntryHomeTest extends AbstractEntryTest
         assertEquals( 2, list.size( ) );
     }
 
+    @Test
     public void testUpdate( )
     {
         Entry entry = EntryHome.findByPrimaryKey( _nIdEntry );
@@ -229,17 +235,17 @@ public class EntryHomeTest extends AbstractEntryTest
     private void checkEntryRemoving( int nIdEntry )
     {
         Entry entry = _entryDAO.load( nIdEntry, _plugin );
-        assertEquals( "The has not been removed !", Boolean.TRUE.booleanValue( ), entry == null );
+        assertEquals( Boolean.TRUE.booleanValue( ), entry == null, "The has not been removed !" );
 
         List<Field> listFields = FieldHome.getFieldListByIdEntry( nIdEntry );
-        assertEquals( "There are Fields which are linked to the removed entry which are not been removed !", Boolean.TRUE.booleanValue( ),
-                listFields.isEmpty( ) );
+        assertEquals( Boolean.TRUE.booleanValue( ), listFields.isEmpty( ),
+                "There are Fields which are linked to the removed entry which are not been removed !" );
 
         ResponseFilter responseFilter = new ResponseFilter( );
         responseFilter.setIdEntry( nIdEntry );
         List<Response> listResponses = ResponseHome.getResponseList( responseFilter );
-        assertEquals( "There are Responses which are linked to the removed entry which are not been removed !", Boolean.TRUE.booleanValue( ),
-                listResponses.isEmpty( ) );
+        assertEquals( Boolean.TRUE.booleanValue( ), listResponses.isEmpty( ),
+                "There are Responses which are linked to the removed entry which are not been removed !" );
 
     }
 }

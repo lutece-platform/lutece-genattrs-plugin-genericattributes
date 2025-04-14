@@ -35,6 +35,8 @@ package fr.paris.lutece.plugins.genericattributes.util;
 
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.Test;
+
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.test.LuteceTestCase;
@@ -48,6 +50,7 @@ public class GenericAttributesUtilsTest extends LuteceTestCase
     private static final String TITLE_2 = "title2";
     private static final String VALUE_2 = "code2";
 
+    @Test
     public void testCreateOrUpdateFieldNew( )
     {
         Entry entry = new Entry( );
@@ -64,6 +67,7 @@ public class GenericAttributesUtilsTest extends LuteceTestCase
         assertEquals( VALUE_1, field.getValue( ) );
     }
 
+    @Test
     public void testCreateOrUpdateFieldUpdate( )
     {
         Field field = new Field( );

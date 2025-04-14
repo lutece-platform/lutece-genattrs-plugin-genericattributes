@@ -36,9 +36,8 @@ package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 import java.util.List;
 import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
@@ -55,6 +54,7 @@ import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
+import fr.paris.lutece.portal.service.upload.MultipartItem;
 import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.ReferenceList;
@@ -90,7 +90,7 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         String strErrorMessage = request.getParameter( PARAMETER_ERROR_MESSAGE );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
         String strPlaceholder = request.getParameter( PARAMETER_PLACEHOLDER );
-        FileItem imageFileItem = null;
+        MultipartItem imageFileItem = null;
         if( request instanceof MultipartHttpServletRequest ) 
         {
             MultipartHttpServletRequest multipartRequest = ( MultipartHttpServletRequest ) request;

@@ -33,11 +33,11 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
+import java.util.List;
+
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
-
-import java.util.List;
+import jakarta.enterprise.inject.spi.CDI;
 
 /**
  *
@@ -47,7 +47,7 @@ import java.util.List;
 public final class EntryTypeHome
 {
     // Static variable pointed at the DAO instance
-    private static IEntryTypeDAO _dao = SpringContextService.getBean( "genericattributes.entryTypeDAO" );
+    private static IEntryTypeDAO _dao = CDI.current( ).select( IEntryTypeDAO.class ).get( );
     private static Plugin _plugin;
 
     /**

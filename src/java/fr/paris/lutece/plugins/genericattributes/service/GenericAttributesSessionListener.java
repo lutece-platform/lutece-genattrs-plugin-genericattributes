@@ -34,10 +34,9 @@
 package fr.paris.lutece.plugins.genericattributes.service;
 
 import fr.paris.lutece.plugins.genericattributes.service.upload.AbstractGenAttUploadHandler;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
-
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.servlet.http.HttpSessionEvent;
+import jakarta.servlet.http.HttpSessionListener;
 
 /**
  * Will remove fileItems uploaded
@@ -59,9 +58,8 @@ public class GenericAttributesSessionListener implements HttpSessionListener
     @Override
     public void sessionDestroyed( HttpSessionEvent se )
     {
-        for ( AbstractGenAttUploadHandler handler : SpringContextService.getBeansOfType( AbstractGenAttUploadHandler.class ) )
-        {
-            handler.removeSessionFiles( se.getSession( ) );
-        }
+        CDI.current( ).select( AbstractGenAttUploadHandler.class ).forEach(
+            handler -> handler.removeSessionFiles( se.getSession( ) )
+        );
     }
 }

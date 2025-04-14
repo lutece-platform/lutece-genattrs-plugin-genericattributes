@@ -35,9 +35,6 @@ package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
 import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
@@ -47,14 +44,12 @@ import fr.paris.lutece.plugins.genericattributes.service.file.GenericAttributeFi
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
-import fr.paris.lutece.portal.service.file.FileService;
-import fr.paris.lutece.portal.service.file.FileServiceException;
-import fr.paris.lutece.portal.service.file.IFileStoreServiceProvider;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
-import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.upload.MultipartItem;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Abstract entry type for comments
@@ -101,7 +96,7 @@ public abstract class AbstractEntryTypeComment extends EntryTypeService
         if ( request instanceof MultipartHttpServletRequest )
         {
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-            FileItem fileItem = multipartRequest.getFile( PARAMETER_FILE );
+            MultipartItem fileItem = multipartRequest.getFile( PARAMETER_FILE );
 
             if ( fileItem != null && fileItem.get( ) != null )
             {

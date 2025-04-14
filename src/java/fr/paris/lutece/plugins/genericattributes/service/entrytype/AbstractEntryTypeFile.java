@@ -43,17 +43,17 @@ import fr.paris.lutece.plugins.genericattributes.service.file.GenericAttributeFi
 import fr.paris.lutece.plugins.genericattributes.service.upload.AbstractGenAttUploadHandler;
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
+import fr.paris.lutece.portal.service.upload.MultipartItem;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Abstract entries of type files. This abstract entry type extends the abstract entry type upload.
@@ -89,8 +89,8 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
         if ( getAsynchronousUploadHandler( ).hasAddFileFlag( request, strAttributeName ) )
         {
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-            List<FileItem> listFileItemsToUpload = multipartRequest.getFileList( strAttributeName );
-            List<FileItem> listUploadedFileItems = getAsynchronousUploadHandler( ).getListUploadedFiles( strAttributeName, request.getSession( ) );
+            List<MultipartItem> listFileItemsToUpload = multipartRequest.getFileList( strAttributeName );
+            List<MultipartItem> listUploadedFileItems = getAsynchronousUploadHandler( ).getListUploadedFiles( strAttributeName, request.getSession( ) );
             GenericAttributeError error = null;
 
             // remove when multipartRequest.getFileList( ) will be fixed.
@@ -106,7 +106,7 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
 
             if ( error != null )
             {
-                for ( FileItem fileItem : listUploadedFileItems )
+                for ( MultipartItem fileItem : listUploadedFileItems )
                 {
                     Response response = getResponseFromFile( fileItem, entry, false );
                     response.setIterationNumber( getResponseIterationValue( request ) );
@@ -117,7 +117,7 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
             }
         }
 
-        List<FileItem> listFilesSource = getFileSources( request, strAttributeName );
+        List<MultipartItem> listFilesSource = getFileSources( request, strAttributeName );
 
         GenericAttributeError genAttError = null;
 
@@ -126,7 +126,7 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
         {
             if ( CollectionUtils.isNotEmpty( listFilesSource ) )
             {
-                for ( FileItem fileItem : listFilesSource )
+                for ( MultipartItem fileItem : listFilesSource )
                 {
                     listResponse.add( getResponseFromFile( fileItem, entry, false ) );
                 }
@@ -144,7 +144,7 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
         {
             genAttError = checkResponseData( entry, listFilesSource, locale, request );
 
-            for ( FileItem fileItem : listFilesSource )
+            for ( MultipartItem fileItem : listFilesSource )
             {
                 Response response = getResponseFromFile( fileItem, entry, genAttError == null );
                 response.setIterationNumber( getResponseIterationValue( request ) );
@@ -157,7 +157,7 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
                 return genAttError;
             }
 
-            for ( FileItem fileItem : listFilesSource )
+            for ( MultipartItem fileItem : listFilesSource )
             {
                 if ( checkForImages( ) )
                 {
@@ -193,7 +193,7 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
      *            the database by this method, like any other created object.
      * @return The created response
      */
-    private Response getResponseFromFile( FileItem fileItem, Entry entry, boolean bCreatePhysicalFile )
+    private Response getResponseFromFile( MultipartItem fileItem, Entry entry, boolean bCreatePhysicalFile )
     {
         if ( fileItem instanceof GenAttFileItem )
         {

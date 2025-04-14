@@ -33,19 +33,19 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
+import java.util.List;
+import java.util.Map;
+
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.genericattributes.service.file.GenericAttributeFileService;
 import fr.paris.lutece.plugins.genericattributes.util.CopyEntryEventParam;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
-import fr.paris.lutece.portal.business.event.ResourceEvent;
-import fr.paris.lutece.portal.service.event.ResourceEventManager;
+import fr.paris.lutece.portal.service.event.EventAction;
+import fr.paris.lutece.portal.service.event.Type.TypeQualifier;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.util.sql.TransactionManager;
-
-import java.util.List;
-import java.util.Map;
+import jakarta.enterprise.inject.spi.CDI;
 
 /**
  * This class provides instances management methods (create, find, ...) for Entry objects
@@ -53,7 +53,7 @@ import java.util.Map;
 public final class EntryHome
 {
     // Static variable pointed at the DAO instance
-    private static IEntryDAO _dao = SpringContextService.getBean( "genericattributes.entryDAO" );
+    private static IEntryDAO _dao = CDI.current( ).select( IEntryDAO.class ).get( );
     private static Plugin _plugin;
 
     /**
@@ -122,13 +122,16 @@ public final class EntryHome
                     }
                 }
             }
-            ResourceEvent event = new ResourceEvent( );
-            event.setIdResource( String.valueOf( entryCopy.getIdEntry( ) ) );
-            event.setTypeResource( entry.getResourceType( ) );
-            event.setParam( new CopyEntryEventParam( oldId ) );
-            ResourceEventManager.fireAddedResource( event );
-
+            
             TransactionManager.commitTransaction( getPlugin( ) );
+            
+            EntryEvent event = new EntryEvent( );
+            event.setId( String.valueOf( entryCopy.getIdEntry( ) ) );
+            event.setResourceType( entry.getResourceType( ) );
+            event.setParam( new CopyEntryEventParam( oldId ) );
+
+            CDI.current( ).getBeanManager( ).getEvent( ).select( EntryEvent.class, new TypeQualifier( EventAction.CREATE ) ).fire( event );
+            
             return entryCopy;
         }
         catch( Exception e )
@@ -147,10 +150,11 @@ public final class EntryHome
     public static void update( Entry entry )
     {
         _dao.store( entry, getPlugin( ) );
-        ResourceEvent event = new ResourceEvent( );
-        event.setIdResource( String.valueOf( entry.getIdEntry( ) ) );
-        event.setTypeResource( entry.getResourceType( ) );
-        ResourceEventManager.fireUpdatedResource( event );
+        EntryEvent event = new EntryEvent( );
+        event.setId( String.valueOf( entry.getIdEntry( ) ) );
+        event.setResourceType( entry.getResourceType( ) );
+
+        CDI.current( ).getBeanManager( ).getEvent( ).select( EntryEvent.class, new TypeQualifier( EventAction.UPDATE ) ).fire( event );
     }
 
     /**
@@ -192,12 +196,13 @@ public final class EntryHome
 
                 _dao.delete( nIdEntry, getPlugin( ) );
 
-                ResourceEvent event = new ResourceEvent( );
-                event.setIdResource( String.valueOf( nIdEntry ) );
-                event.setTypeResource( entry.getResourceType( ) );
-                ResourceEventManager.fireDeletedResource( event );
-
                 TransactionManager.commitTransaction( getPlugin( ) );
+                
+                EntryEvent event = new EntryEvent( );
+                event.setId( String.valueOf( nIdEntry ) );
+                event.setResourceType( entry.getResourceType( ) );
+
+                CDI.current( ).getBeanManager( ).getEvent( ).select( EntryEvent.class, new TypeQualifier( EventAction.REMOVE ) ).fire( event );
             }
             catch( Exception e )
             {
