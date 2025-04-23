@@ -36,12 +36,14 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
@@ -187,120 +189,53 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
-    public GenericAttributeError getResponseData(Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale) {
-        Integer maxIterationGeolocation = 0;
+    public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
+    {
         Integer lastIterationGeolocation = 0;
         Integer iterationNumberToSave = 0;
 
-        if (request.getSession().getAttribute(ATTRIBUTE_LAST_ITERATION_GEOLOCATION) != null) {
-            lastIterationGeolocation = (Integer) request.getSession().getAttribute(ATTRIBUTE_LAST_ITERATION_GEOLOCATION);
-            request.getSession().setAttribute(ATTRIBUTE_LAST_ITERATION_GEOLOCATION, lastIterationGeolocation + 1);
-            lastIterationGeolocation = lastIterationGeolocation + 1;
-        } else {
-            request.getSession().setAttribute(ATTRIBUTE_LAST_ITERATION_GEOLOCATION, 0);
+        if ( request.getAttribute( ATTRIBUTE_LAST_ITERATION_GEOLOCATION ) != null )
+        {
+            lastIterationGeolocation = (Integer) request.getAttribute( ATTRIBUTE_LAST_ITERATION_GEOLOCATION );
+            lastIterationGeolocation += 1;
+            request.setAttribute( ATTRIBUTE_LAST_ITERATION_GEOLOCATION, lastIterationGeolocation );
         }
-        if (request.getParameter(PARAMETER_NUMBER_ITERATION) != null) {
-            maxIterationGeolocation = Integer.parseInt(request.getParameter(PARAMETER_NUMBER_ITERATION));
+        else
+        {
+            request.setAttribute( ATTRIBUTE_LAST_ITERATION_GEOLOCATION, 0 );
+        }
+        if ( request.getParameter( PARAMETER_NUMBER_ITERATION ) != null )
+        {
             iterationNumberToSave = lastIterationGeolocation;
-        } else {
+        }
+        else
+        {
             iterationNumberToSave = -1;
         }
+
+        // Get the value of the fields containing the user's input
         String prefixIteration = String.valueOf(entry.getIdEntry( ));
         String prefixWithIteration = PARAMETER_PREFIX_ITERATION + lastIterationGeolocation + "_" + IEntryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry();
         if(request.getParameter(prefixWithIteration+PARAMETER_SUFFIX_ADDRESS) != null)
         {
           prefixIteration = prefixWithIteration;
         }
-        String strIdAddressValue = request.getParameter(prefixIteration + PARAMETER_SUFFIX_ID_ADDRESS);
 
+        // Retrieve the values from the user's input
+        String strIdAddressValue = request.getParameter(prefixIteration + PARAMETER_SUFFIX_ID_ADDRESS);
         String strAddressValue = request.getParameter(prefixIteration + PARAMETER_SUFFIX_ADDRESS);
         String strAdditionalAddressValue = request.getParameter(prefixIteration + entry.getIdEntry() + PARAMETER_SUFFIX_ADDITIONAL_ADDRESS);
         String strXValue = request.getParameter(prefixIteration + PARAMETER_SUFFIX_X);
         String strYValue = request.getParameter(prefixIteration + PARAMETER_SUFFIX_Y);
         String strGeometryValue = request.getParameter(prefixIteration + PARAMETER_SUFFIX_GEOMETRY);
 
-        Field fieldIdAddress = entry.getFieldByCode(FIELD_ID_ADDRESS);
-        Field fieldAddress = entry.getFieldByCode(FIELD_ADDRESS);
-        Field fieldAdditionalAddress = entry.getFieldByCode(FIELD_ADDITIONAL_ADDRESS);
-        Field fieldX = entry.getFieldByCode(FIELD_X);
-        Field fieldY = entry.getFieldByCode(FIELD_Y);
-        Field fieldGeometry = entry.getFieldByCode(FIELD_GEOMETRY);
-
-        /**
-         * Create the field "idAddress" in case the field does not exist in the database.
-         */
-        if (fieldIdAddress == null) {
-            fieldIdAddress = GenericAttributesUtils.createOrUpdateField(entry, FIELD_ID_ADDRESS, null, FIELD_ID_ADDRESS);
-            FieldHome.create(fieldIdAddress);
+        // Get the List of responses for this Entry
+        List<Response> listEntryResponse = getGeolocationResponseList( entry, iterationNumberToSave, strIdAddressValue, strAddressValue, strAdditionalAddressValue,
+                strXValue, strYValue, strGeometryValue );
+        if ( CollectionUtils.isNotEmpty( listEntryResponse ) )
+        {
+            listResponse.addAll( listEntryResponse );
         }
-
-        // 1 : Response Id Address
-        if (strIdAddressValue != null) {
-            Response responseIdAddress = new Response();
-            responseIdAddress.setEntry(entry);
-            responseIdAddress.setResponseValue(strIdAddressValue);
-            responseIdAddress.setField(fieldIdAddress);
-            responseIdAddress.setToStringValueResponse(strIdAddressValue);
-            responseIdAddress.setIterationNumber(iterationNumberToSave);
-            listResponse.add(responseIdAddress);
-            // take this value of the request
-
-        }
-
-        // 2 : Response Address
-        if (strAddressValue != null) {
-            Response responseAddress = new Response();
-            responseAddress.setEntry(entry);
-            responseAddress.setResponseValue(strAddressValue);
-            responseAddress.setField(fieldAddress);
-            responseAddress.setToStringValueResponse(strAddressValue);
-            responseAddress.setIterationNumber(iterationNumberToSave);
-            listResponse.add(responseAddress);
-        }
-
-        // 3 : Response Additional Address
-        if (strAdditionalAddressValue != null) {
-            Response responseAdditionalAddress = new Response();
-            responseAdditionalAddress.setEntry(entry);
-            responseAdditionalAddress.setResponseValue(strAdditionalAddressValue);
-            responseAdditionalAddress.setField(fieldAdditionalAddress);
-            responseAdditionalAddress.setToStringValueResponse(strAdditionalAddressValue);
-            responseAdditionalAddress.setIterationNumber(iterationNumberToSave);
-            listResponse.add(responseAdditionalAddress);
-        }
-        // 4 : Response X
-        if (strXValue != null) {
-            Response responseX = new Response();
-            responseX.setEntry(entry);
-            responseX.setResponseValue(strXValue);
-            responseX.setField(fieldX);
-            responseX.setToStringValueResponse(strXValue);
-            responseX.setIterationNumber(iterationNumberToSave);
-            listResponse.add(responseX);
-        }
-
-        // 5: Response Y
-        if (strXValue != null) {
-            Response responseY = new Response();
-            responseY.setEntry(entry);
-            responseY.setResponseValue(strYValue);
-            responseY.setField(fieldY);
-            responseY.setToStringValueResponse(strYValue);
-            responseY.setIterationNumber(iterationNumberToSave);
-            listResponse.add(responseY);
-        }
-
-        // 6 : Response Desc Geo
-        if (strGeometryValue != null) {
-            Response responseGeomerty = new Response();
-            responseGeomerty.setEntry(entry);
-            responseGeomerty.setResponseValue(strGeometryValue);
-            responseGeomerty.setField(fieldGeometry);
-            responseGeomerty.setToStringValueResponse(strGeometryValue);
-            responseGeomerty.setIterationNumber(iterationNumberToSave);
-            listResponse.add(responseGeomerty);
-        }
-
 
         if (entry.isMandatory() && StringUtils.isBlank(strAddressValue)) {
             return new MandatoryError(entry, locale);
@@ -315,11 +250,6 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
             error.setErrorMessage(MESSAGE_SPECIFY_BOTH_X_AND_Y);
 
             return error;
-        }
-        if (request.getSession().getAttribute(ATTRIBUTE_LAST_ITERATION_GEOLOCATION) != null) {
-            if (lastIterationGeolocation >= maxIterationGeolocation) {
-                request.getSession().removeAttribute(ATTRIBUTE_LAST_ITERATION_GEOLOCATION);
-            }
         }
         return super.getResponseData(entry, request, listResponse, locale);
     }
@@ -444,5 +374,120 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         fieldMapProvider.setParentEntry( entry );
 
         return fieldMapProvider;
+    }
+
+    /**
+     * Get the List of Responses from a Geolocation Entry, containing the address values for the user's input
+     * 
+     * @param entry
+     *            The Entry to process
+     * @param iterationNumberToSave
+     *            Current iteration of this Entry
+     * @param strIdAddressValue
+     *            Specific ID of the address
+     * @param strAddressValue
+     *            Actual value of the address
+     * @param strAdditionalAddressValue
+     *            Optional extra address value
+     * @param strXValue
+     *            X coordinates of the address
+     * @param strYValue
+     *            Y coordinates of the address
+     * @param strGeometryValue
+     * 
+     * @return a List of Reponses
+     */
+    private List<Response> getGeolocationResponseList( Entry entry, int iterationNumberToSave, String strIdAddressValue, String strAddressValue,
+            String strAdditionalAddressValue, String strXValue, String strYValue, String strGeometryValue )
+    {
+        // List of all the responses retrieved from the Geolocation Entry's input
+        List<Response> listGeolocationResponses = new ArrayList<>( );
+
+        // Fields part of Geolocation entries
+        Field fieldIdAddress = entry.getFieldByCode( FIELD_ID_ADDRESS );
+        Field fieldAddress = entry.getFieldByCode( FIELD_ADDRESS );
+        Field fieldAdditionalAddress = entry.getFieldByCode( FIELD_ADDITIONAL_ADDRESS );
+        Field fieldX = entry.getFieldByCode( FIELD_X );
+        Field fieldY = entry.getFieldByCode( FIELD_Y );
+        Field fieldGeometry = entry.getFieldByCode( FIELD_GEOMETRY );
+
+        // Create the field "idAddress" in case the field does not exist in the database
+        if ( fieldIdAddress == null )
+        {
+            fieldIdAddress = GenericAttributesUtils.createOrUpdateField( entry, FIELD_ID_ADDRESS, null, FIELD_ID_ADDRESS );
+            FieldHome.create( fieldIdAddress );
+        }
+
+        // 1 : Response Id Address
+        if ( strIdAddressValue != null )
+        {
+            Response responseIdAddress = new Response( );
+            responseIdAddress.setEntry( entry );
+            responseIdAddress.setResponseValue( strIdAddressValue );
+            responseIdAddress.setField( fieldIdAddress );
+            responseIdAddress.setToStringValueResponse( strIdAddressValue );
+            responseIdAddress.setIterationNumber( iterationNumberToSave );
+            listGeolocationResponses.add( responseIdAddress );
+        }
+
+        // 2 : Response Address
+        if ( strAddressValue != null )
+        {
+            Response responseAddress = new Response( );
+            responseAddress.setEntry( entry );
+            responseAddress.setResponseValue( strAddressValue );
+            responseAddress.setField( fieldAddress );
+            responseAddress.setToStringValueResponse( strAddressValue );
+            responseAddress.setIterationNumber( iterationNumberToSave );
+            listGeolocationResponses.add( responseAddress );
+        }
+
+        // 3 : Response Additional Address
+        if ( strAdditionalAddressValue != null )
+        {
+            Response responseAdditionalAddress = new Response( );
+            responseAdditionalAddress.setEntry( entry );
+            responseAdditionalAddress.setResponseValue( strAdditionalAddressValue );
+            responseAdditionalAddress.setField( fieldAdditionalAddress );
+            responseAdditionalAddress.setToStringValueResponse( strAdditionalAddressValue );
+            responseAdditionalAddress.setIterationNumber( iterationNumberToSave );
+            listGeolocationResponses.add( responseAdditionalAddress );
+        }
+        // 4 : Response X
+        if ( strXValue != null )
+        {
+            Response responseX = new Response( );
+            responseX.setEntry( entry );
+            responseX.setResponseValue( strXValue );
+            responseX.setField( fieldX );
+            responseX.setToStringValueResponse( strXValue );
+            responseX.setIterationNumber( iterationNumberToSave );
+            listGeolocationResponses.add( responseX );
+        }
+
+        // 5: Response Y
+        if ( strYValue != null )
+        {
+            Response responseY = new Response( );
+            responseY.setEntry( entry );
+            responseY.setResponseValue( strYValue );
+            responseY.setField( fieldY );
+            responseY.setToStringValueResponse( strYValue );
+            responseY.setIterationNumber( iterationNumberToSave );
+            listGeolocationResponses.add( responseY );
+        }
+
+        // 6 : Response Desc Geo
+        if ( strGeometryValue != null )
+        {
+            Response responseGeomerty = new Response( );
+            responseGeomerty.setEntry( entry );
+            responseGeomerty.setResponseValue( strGeometryValue );
+            responseGeomerty.setField( fieldGeometry );
+            responseGeomerty.setToStringValueResponse( strGeometryValue );
+            responseGeomerty.setIterationNumber( iterationNumberToSave );
+            listGeolocationResponses.add( responseGeomerty );
+        }
+        return listGeolocationResponses;
     }
 }
