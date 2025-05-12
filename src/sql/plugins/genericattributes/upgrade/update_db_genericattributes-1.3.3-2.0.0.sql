@@ -1,3 +1,6 @@
+--liquibase formatted sql
+--changeset genericattributes:update_db_genericattributes-1.3.3-2.0.0.sql
+--preconditions onFail:MARK_RAN onError:WARN
 -- To use on an empty database only
 -- for a full updates, see plugins depending on genatt (forms, ticketing...)
 
