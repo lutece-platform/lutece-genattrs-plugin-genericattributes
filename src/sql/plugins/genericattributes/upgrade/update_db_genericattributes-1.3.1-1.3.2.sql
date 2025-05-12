@@ -1,3 +1,6 @@
+--liquibase formatted sql
+--changeset genericattributes:update_db_genericattributes-1.3.1-1.3.2.sql
+--preconditions onFail:MARK_RAN onError:WARN
 ALTER TABLE genatt_entry MODIFY COLUMN code varchar(100) default NULL; 
 ALTER TABLE genatt_field MODIFY COLUMN code varchar(100) default NULL; 
 

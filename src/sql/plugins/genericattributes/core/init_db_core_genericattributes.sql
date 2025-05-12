@@ -1,3 +1,6 @@
+--liquibase formatted sql
+--changeset genericattributes:init_db_core_genericattributes.sql
+--preconditions onFail:MARK_RAN onError:WARN
 INSERT INTO core_datastore( entity_key, entity_value ) VALUES ('core.cache.status.EntryTypeServiceManagerCache.enabled', '1');
 
 DELETE FROM core_admin_right WHERE id_right = 'ENTRY_TYPE_MANAGEMENT';
