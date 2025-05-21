@@ -78,6 +78,7 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
         String strPlaceholder = request.getParameter( PARAMETER_PLACEHOLDER );
+        String strAutocomplete = request.getParameter( PARAMETER_AUTOCOMPLETE );
 
         int nWidth = -1;
         int nHeight = -1;
@@ -157,6 +158,12 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
         entry.setHelpMessage( strHelpMessage );
         entry.setComment( strComment );
         entry.setCSSClass( strCSSClass );
+
+        Field fieldAutocomplete = GenericAttributesUtils.createOrUpdateField( entry, FIELD_AUTOCOMPLETE, null, null );
+        if ( StringUtils.isNotBlank( strAutocomplete ) )
+        {
+            fieldAutocomplete.setValue( strAutocomplete.trim( ) );
+        }
 
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_TEXT_CONF, null, strValue );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_MAX_SIZE, null, String.valueOf( nMaxSizeEnter ) );

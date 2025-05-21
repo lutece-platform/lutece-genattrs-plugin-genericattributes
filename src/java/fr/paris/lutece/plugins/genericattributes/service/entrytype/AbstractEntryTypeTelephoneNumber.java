@@ -64,9 +64,7 @@ import fr.paris.lutece.util.string.StringUtil;
 public abstract class AbstractEntryTypeTelephoneNumber extends EntryTypeService
 {
 
-    private static final String PARAMETER_AUTOCOMPLETE = "autocomplete";
     private static final String PARAMETER_DEFAULT_REGION = "defaultRegion";
-    private static final String FIELD_AUTOCOMPLETE = "autocomplete";
     public static final String FIELD_DEFAULT_REGION = "defaultRegion";
     private static final String MESSAGE_ERROR_PHONENUMBER = "genericattributes.message.error.phonenumber";
     private static final String MESSAGE_UNKNOWN_DEFAULT_REGION = "genericattributes.message.error.unknown.default.region";

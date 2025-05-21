@@ -81,6 +81,7 @@ public abstract class AbstractEntryTypeNumber extends EntryTypeService
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
         String strSuffix = request.getParameter( PARAMETER_SUFFIX );
         String strPlaceholder = request.getParameter( PARAMETER_PLACEHOLDER );
+        String strAutocomplete = request.getParameter( PARAMETER_AUTOCOMPLETE );
 
         String strFieldError = StringUtils.EMPTY;
 
@@ -124,6 +125,12 @@ public abstract class AbstractEntryTypeNumber extends EntryTypeService
         entry.setErrorMessage( strErrorMessage );
         entry.setCode( strCode );
         entry.setUnique( strUnique != null );
+
+        Field fieldAutocomplete = GenericAttributesUtils.createOrUpdateField( entry, FIELD_AUTOCOMPLETE, null, null );
+        if ( StringUtils.isNotBlank( strAutocomplete ) )
+        {
+            fieldAutocomplete.setValue( strAutocomplete.trim( ) );
+        }
 
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_TEXT_CONF, null, defaultValue == null ? null : String.valueOf( defaultValue ) );
         GenericAttributesUtils.createOrUpdateField( entry, FIELD_MIN, null, minValue == null ? null : String.valueOf( minValue ) );

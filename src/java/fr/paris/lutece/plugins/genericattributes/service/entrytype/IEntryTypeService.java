@@ -94,6 +94,7 @@ public interface IEntryTypeService
     String PARAMETER_DISABLED = "disabled";
     String PARAMETER_TODAY_DATE = "default_today_date";
     String PARAMETER_SORTABLE_LIST_TYPE = "sortable_list_type";
+    String PARAMETER_AUTOCOMPLETE = "autocomplete";
 
     // Fields codes
     String FIELD_DATE_VALUE = "default_date_value";
@@ -141,6 +142,7 @@ public interface IEntryTypeService
 	String FIELD_DISABLED = "disabled";
     String FIELD_IS_UPDATABLE = "is_updatable";
     String FIELD_SORTABLE_LIST_TYPE = "sortable_list_type";
+    String FIELD_AUTOCOMPLETE = "autocomplete";
 
     // attribute
     String ATTRIBUTE_RESPONSE_ITERATION_NUMBER = "response_iteration_number";
