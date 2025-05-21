@@ -90,6 +90,8 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         String strErrorMessage = request.getParameter( PARAMETER_ERROR_MESSAGE );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
         String strPlaceholder = request.getParameter( PARAMETER_PLACEHOLDER );
+        String strAutocomplete = request.getParameter( PARAMETER_AUTOCOMPLETE );
+
         FileItem imageFileItem = null;
         if( request instanceof MultipartHttpServletRequest ) 
         {
@@ -164,6 +166,12 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         entry.setIndexed( strIndexed != null );
         entry.setErrorMessage( strErrorMessage );
         entry.setCode( strCode );
+
+        Field fieldAutocomplete = GenericAttributesUtils.createOrUpdateField( entry, FIELD_AUTOCOMPLETE, null, null );
+        if ( StringUtils.isNotBlank( strAutocomplete ) )
+        {
+            fieldAutocomplete.setValue( strAutocomplete.trim( ) );
+        }
 
         if ( imageFileItem != null && imageFileItem.getSize( ) > 0 )
         {
