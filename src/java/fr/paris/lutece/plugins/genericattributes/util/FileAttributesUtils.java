@@ -64,6 +64,7 @@ public final class FileAttributesUtils
 {
     public static final String PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_MAX_FILES = "genericattributes.message.error.uploading_file.max_files";
     public static final String PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_FILE_MAX_SIZE = "genericattributes.message.error.uploading_file.file_max_size";
+    public static final String PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_FILE_VALUE = "genericattributes.message.error.uploading_file.file_value";
     public static final String PROPERTY_UPLOAD_FILE_DEFAULT_MAX_SIZE = "genericattributes.upload.file.default_max_size";
 
     private FileAttributesUtils( )
@@ -263,6 +264,20 @@ public final class FileAttributesUtils
                         return error;
                     }
                 }
+            }
+
+            // Check fileItem Value
+            if ( fileSource == null || fileSource.get() == null )
+            {
+                GenericAttributeError error = new GenericAttributeError( );
+                error.setMandatoryError( false );
+                error.setTitleQuestion( entry.getTitle( ) );
+                Object [ ] args = {
+                        strFilename
+                };
+                error.setErrorMessage( I18nService.getLocalizedString( PROPERTY_MESSAGE_ERROR_UPLOADING_FILE_FILE_VALUE, args, locale ) );
+
+                return error;
             }
         }
 
