@@ -65,15 +65,12 @@
 		<dependency>
 			<groupId>org.glassfish.jaxb</groupId>
 			<artifactId>jaxb-runtime</artifactId>
-			<version>4.0.5</version>
 			<scope>test</scope>
 		</dependency>
     </dependencies>
 
     <properties>
         <componentName>generic-attributes</componentName>
-        <jiraProjectName>GENERICATT</jiraProjectName>
-        <jiraComponentId>12272</jiraComponentId>
     </properties>
 
     <scm>
