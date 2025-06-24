@@ -43,7 +43,7 @@ import java.util.Objects;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;

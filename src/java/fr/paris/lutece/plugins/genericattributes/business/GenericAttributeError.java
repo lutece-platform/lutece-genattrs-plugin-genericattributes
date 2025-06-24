@@ -164,4 +164,9 @@ public class GenericAttributeError implements Serializable, ErrorMessage
         // TODO Auto-generated method stub
         return null;
     }
+
+	@Override
+	public String getParamName() {
+		return null;
+	}
 }
