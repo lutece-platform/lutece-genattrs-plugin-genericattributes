@@ -303,6 +303,7 @@ public final class FileAttributesUtils
 
         String strExportBinary = request.getParameter( IEntryTypeService.PARAMETER_EXPORT_BINARY );
 
+        GenericAttributesUtils.createOrUpdateField( entry, IEntryTypeService.FIELD_FILE_CONFIG, null, null );
         GenericAttributesUtils.createOrUpdateField( entry, IEntryTypeService.FIELD_FILE_MAX_SIZE, null, String.valueOf( nFileMaxSize ) );
         GenericAttributesUtils.createOrUpdateField( entry, IEntryTypeService.FIELD_MAX_FILES, null, String.valueOf( nMaxFiles ) );
         GenericAttributesUtils.createOrUpdateField( entry, IEntryTypeService.FIELD_FILE_BINARY, null,

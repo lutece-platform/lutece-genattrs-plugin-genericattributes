@@ -111,6 +111,7 @@ public interface IEntryTypeService
     String FIELD_GEOMETRY = "geometry";
     String FIELD_PREFIX = "prefix";
     String FIELD_SUFFIX = "suffix";
+    String FIELD_FILE_CONFIG = "file_config";
     String FIELD_FILE_MAX_SIZE = "file_max_size";
     String FIELD_MAX_FILES = "max_files";
     String FIELD_FILE_BINARY = "export_binary";

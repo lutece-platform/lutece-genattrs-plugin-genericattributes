@@ -43,6 +43,8 @@ import fr.paris.lutece.plugins.genericattributes.service.file.GenericAttributeFi
 import fr.paris.lutece.plugins.genericattributes.service.upload.AbstractGenAttUploadHandler;
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
+import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
+import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
 
@@ -52,6 +54,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -120,6 +123,10 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
         List<FileItem> listFilesSource = getFileSources( request, strAttributeName );
 
         GenericAttributeError genAttError = null;
+        List<RegularExpression> listRegularExpression = entry.getFields().stream()
+                .filter(field -> field.getRegularExpressionList()!=null)
+                .flatMap(field -> field.getRegularExpressionList().stream())
+                .collect(Collectors.toList());
 
         if ( getAsynchronousUploadHandler( ).hasRemoveFlag( request, strAttributeName )
                 || getAsynchronousUploadHandler( ).hasAddFileFlag( request, strAttributeName ) )
@@ -149,6 +156,7 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
                 Response response = getResponseFromFile( fileItem, entry, genAttError == null );
                 response.setIterationNumber( getResponseIterationValue( request ) );
 
+                genAttError = checkRegularExpression( listRegularExpression, response, entry);
                 listResponse.add( response );
             }
 
@@ -179,6 +187,48 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
         }
 
         return genAttError;
+    }
+
+    /**
+     * check regular expressions
+     * @param listRegularExpression list of regular expression
+     * @param response The Response
+     * @param entry The Entry
+     * @return error
+     */
+    private GenericAttributeError checkRegularExpression( List<RegularExpression> listRegularExpression, Response response, Entry entry )
+    {
+
+        for ( RegularExpression re : listRegularExpression)
+        {
+
+            if ( !RegularExpressionService.getInstance( ).isMatches( getMimeTypeFromResponse(response), re ) )
+            {
+                GenericAttributeError error = new GenericAttributeError( );
+                error.setMandatoryError( false );
+                error.setTitleQuestion( entry.getTitle( ) );
+                error.setErrorMessage( re.getErrorMessage( ) );
+
+                return error;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Retrieves the MIME type of the file contained in the given response.
+     *
+     * @param response The Response
+     * @return The MIME type of the file if present, otherwise returns null.
+     */
+    private String getMimeTypeFromResponse(Response response)
+    {
+        File file = response.getFile();
+        if (file != null)
+        {
+            return file.getMimeType();
+        }
+        return null;
     }
 
     /**
