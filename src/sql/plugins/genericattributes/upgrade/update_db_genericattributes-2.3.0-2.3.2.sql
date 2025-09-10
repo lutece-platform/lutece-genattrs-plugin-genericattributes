@@ -1,6 +1,6 @@
---liquibase formatted sql
---changeset genericattributes:update_db_genericattributes-2.3.0-2.3.2.sql
---preconditions onFail:MARK_RAN onError:WARN
+-- liquibase formatted sql
+-- changeset genericattributes:update_db_genericattributes-2.3.0-2.3.2.sql
+-- preconditions onFail:MARK_RAN onError:WARN
 DROP TABLE IF EXISTS genatt_referenceitem_field;
 
 CREATE TABLE genatt_referenceitem_field (

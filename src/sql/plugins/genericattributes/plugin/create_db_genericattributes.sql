@@ -1,6 +1,6 @@
---liquibase formatted sql
---changeset genericattributes:create_db_genericattributes.sql
---preconditions onFail:MARK_RAN onError:WARN
+-- liquibase formatted sql
+-- changeset genericattributes:create_db_genericattributes.sql
+-- preconditions onFail:MARK_RAN onError:WARN
 DROP TABLE IF EXISTS genatt_verify_by;
 DROP TABLE IF EXISTS genatt_field;
 DROP TABLE IF EXISTS genatt_response;
