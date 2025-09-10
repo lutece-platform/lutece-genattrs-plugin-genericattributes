@@ -1,6 +1,6 @@
---liquibase formatted sql
---changeset genericattributes:update_db_genericattributes-2.2.0-2.3.0.sql
---preconditions onFail:MARK_RAN onError:WARN
+-- liquibase formatted sql
+-- changeset genericattributes:update_db_genericattributes-2.2.0-2.3.0.sql
+-- preconditions onFail:MARK_RAN onError:WARN
 ALTER TABLE genatt_entry_type ADD COLUMN display_order int default 0;
 ALTER TABLE genatt_entry_type ADD COLUMN inactive int default 0;
 
