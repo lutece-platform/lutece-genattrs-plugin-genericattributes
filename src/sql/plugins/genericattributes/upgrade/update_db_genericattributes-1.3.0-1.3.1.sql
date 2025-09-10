@@ -1,6 +1,6 @@
---liquibase formatted sql
---changeset genericattributes:update_db_genericattributes-1.3.0-1.3.1.sql
---preconditions onFail:MARK_RAN onError:WARN
+-- liquibase formatted sql
+-- changeset genericattributes:update_db_genericattributes-1.3.0-1.3.1.sql
+-- preconditions onFail:MARK_RAN onError:WARN
 -- 
 -- Add a new column for the EntryType icon name in genatt_entry_type table
 -- 
