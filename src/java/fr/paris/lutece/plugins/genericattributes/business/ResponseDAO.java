@@ -71,6 +71,7 @@ public final class ResponseDAO implements IResponseDAO
     private static final String SQL_FILTER_ID_RESOURCE = " AND ent.id_resource = ? ";
     private static final String SQL_FILTER_ID_ENTRY = " AND resp.id_entry = ? ";
     private static final String SQL_FILTER_ID_FIELD = " AND resp.id_field = ? ";
+    private static final String SQL_FILTER_FILE_KEY = " AND resp.file_key = ? ";
     private static final String SQL_FILTER_CODE_ENTRY = " AND ent.code = ? ";
     private static final String SQL_FILTER_RESPONSE_VALUE = " AND resp.response_value = ? ";
     private static final String SQL_FILTER_ID_RESPONSE = " resp.id_response ";
@@ -241,6 +242,11 @@ public final class ResponseDAO implements IResponseDAO
             sbSQL.append( SQL_FILTER_RESPONSE_VALUE );
         }
 
+        if ( filter.containsFileKey( ) )
+        {
+            sbSQL.append( SQL_FILTER_FILE_KEY );
+        }
+
         if ( filter.containsListIdResource( ) )
         {
             StringBuilder sb = new StringBuilder( SQL_FILTER_MULTI_ID_RESPONSE + " (" );
@@ -288,6 +294,11 @@ public final class ResponseDAO implements IResponseDAO
             if ( filter.containsResponseValue( ) )
             {
                 daoUtil.setString( nIndex++, filter.getResponseValue( ) );
+            }
+
+            if ( filter.containsFileKey( ) )
+            {
+                daoUtil.setString( nIndex++, filter.getFileKey( ) );
             }
 
             daoUtil.executeQuery( );
