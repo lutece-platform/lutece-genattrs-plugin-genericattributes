@@ -59,6 +59,7 @@ public class ResponseFilter
     private String _strCodeEntry;
     private String _strResponseValue;
     private List<Integer> _listIdEntry;
+    private String _strFileKey;
 
     /**
      * Get the id of a resource in the filter
@@ -367,4 +368,30 @@ public class ResponseFilter
    {
        return CollectionUtils.isNotEmpty( _listIdEntry );
    }
+
+    /**
+     * @return the _strFileKey
+     */
+   public String getFileKey ( )
+   {
+        return this._strFileKey;
+   }
+
+    /**
+     * @param strFileKey
+     *            the _strFileKey to set
+     */
+    public void setFileKey( String strFileKey )
+    {
+        this._strFileKey = strFileKey;
+    }
+
+    /**
+     *
+     * @return true if the filter contain a file key
+     */
+    public boolean containsFileKey( )
+    {
+        return StringUtils.isNotBlank( _strFileKey );
+    }
 }
