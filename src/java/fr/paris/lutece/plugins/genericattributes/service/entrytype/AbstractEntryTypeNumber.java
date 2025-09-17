@@ -201,6 +201,59 @@ public abstract class AbstractEntryTypeNumber extends EntryTypeService
             return error;
         }
 
+        return checkMinMaxValue( entry, strValueEntry, locale);
+    }
+
+    /**
+     * Check if the value respects the minimum and maximum value configuration
+     *
+     * @param entry The Entry
+     * @param strValueEntry The value.
+     * @param locale The locale.
+     * @return A GenericAttributeError if the value is out of bounds otherwise null.
+     */
+    private GenericAttributeError checkMinMaxValue( Entry entry, String strValueEntry, Locale locale )
+    {
+        if ( StringUtils.isNotBlank( strValueEntry ) && StringUtils.isNumeric( strValueEntry ) )
+        {
+            int value = Integer.parseInt( strValueEntry );
+
+            Field fieldMin = entry.getFieldByCode( FIELD_MIN );
+            if ( fieldMin != null && StringUtils.isNumeric( fieldMin.getValue() ) )
+            {
+                int minValue = Integer.parseInt( fieldMin.getValue() );
+
+                if (minValue > value)
+                {
+                    Object[] messageArgs = new Object[]{
+                            minValue,
+                    };
+                    GenericAttributeError error = new GenericAttributeError();
+                    error.setMandatoryError(false);
+                    error.setTitleQuestion(entry.getTitle());
+                    error.setErrorMessage(I18nService.getLocalizedString(MESSAGE_NUMERIC_MIN, messageArgs, locale));
+                    return error;
+                }
+            }
+
+            Field fieldMax = entry.getFieldByCode( FIELD_MAX );
+            if ( fieldMax !=null && StringUtils.isNumeric( fieldMax.getValue() ) )
+            {
+                int maxValue = Integer.parseInt( fieldMax.getValue() );
+
+                if( maxValue < value ) {
+                    Object[] messageArgs = new Object[]{
+                            maxValue,
+                    };
+                    GenericAttributeError error = new GenericAttributeError();
+                    error.setMandatoryError(false);
+                    error.setTitleQuestion(entry.getTitle());
+                    error.setErrorMessage(I18nService.getLocalizedString(MESSAGE_NUMERIC_MAX, messageArgs, locale));
+                    return error;
+                }
+            }
+
+        }
         return null;
     }
 
