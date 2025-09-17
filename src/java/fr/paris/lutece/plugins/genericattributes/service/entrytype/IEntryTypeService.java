@@ -150,6 +150,8 @@ public interface IEntryTypeService
     // message
     String MESSAGE_MANDATORY_FIELD = "portal.util.message.mandatoryField";
     String MESSAGE_NUMERIC_FIELD = "genericattributes.message.numeric.field";
+    String MESSAGE_NUMERIC_MAX = "genericattributes.message.numeric.max";
+    String MESSAGE_NUMERIC_MIN = "genericattributes.message.numeric.min";
     String MESSAGE_CONFIRM_FIELD = "genericattributes.message.errorConfirmField";
     String MESSAGE_UNIQUE_FIELD = "genericattributes.message.errorUniqueField";
     String MESSAGE_XSS_FIELD = "genericattributes.message.errorXssField";
