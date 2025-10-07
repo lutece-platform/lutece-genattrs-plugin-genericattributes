@@ -74,6 +74,47 @@ public class Entry implements Serializable, Cloneable
     private boolean _bIndexed;
 
     /**
+     * Default constructor
+     */
+    public Entry( )
+    {
+        super( );
+    }
+
+    /**
+     * Copy constructor
+     * Leaves out dynamic data
+     *
+     * @param source
+     *            Entry to copy
+     */
+    public Entry( Entry source )
+    {
+        _nIdEntry = source._nIdEntry;
+        _strTitle = source._strTitle;
+        _strCode = source._strCode;
+        _strHelpMessage = source._strHelpMessage;
+        _strComment = source._strComment;
+        _bMandatory = source._bMandatory;
+        _bFieldInLine = source._bFieldInLine;
+        _nPosition = source._nPosition;
+        _nIdResource = source._nIdResource;
+        _strResourceType = source._strResourceType;
+        _entryType = source._entryType;
+        _entryParent = source._entryParent;
+        _listEntryChildren = source._listEntryChildren;
+        _listFields = source._listFields;
+        _fieldDepend = source._fieldDepend;
+        _nNumberConditionalQuestion = source._nNumberConditionalQuestion;
+        _bUnique = source._bUnique;
+        _error = source._error;
+        _strCSSClass = source._strCSSClass;
+        _strErrorMessage = source._strErrorMessage;
+        _bOnlyDisplayInBack = source._bOnlyDisplayInBack;
+        _bIndexed = source._bIndexed;
+    }
+
+    /**
      * Get the list of children of this entry
      * 
      * @return the list of entry who are insert in the group
