@@ -37,6 +37,8 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang3.StringUtils;
@@ -67,6 +69,8 @@ import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 public abstract class AbstractEntryTypeText extends EntryTypeService
 {
 	private static final String MESSAGE_ERROR_FILE_IMAGE = "Error importing file.";
+    private static final String PROPERTY_DEFAULT_MAX_SIZE = "genericattributes.text.default.max.size";
+
     /**
      * {@inheritDoc}
      */
@@ -354,5 +358,15 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
         return response.getResponseValue( );
+    }
+
+    /**
+     * Gets the default max size
+     *
+     * @return the default max size
+     */
+    public String getDefaultMaxSize( )
+    {
+        return AppPropertiesService.getProperty( PROPERTY_DEFAULT_MAX_SIZE, "" );
     }
 }
