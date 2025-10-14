@@ -38,6 +38,7 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
@@ -58,6 +59,8 @@ import fr.paris.lutece.util.string.StringUtil;
 public abstract class AbstractEntryTypeTextArea extends EntryTypeService
 {
     private static final String PARAMETER_USE_RICH_TEXT = "useRichText";
+    private static final String PROPERTY_DEFAULT_MAX_SIZE = "genericattributes.textarea.default.max.size";
+    private static final String PROPERTY_DEFAULT_HEIGHT = "genericattributes.textarea.default.height";
 
     /**
      * {@inheritDoc}
@@ -270,4 +273,25 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
     {
         return response.getResponseValue( );
     }
+
+    /**
+     * Gets the default max size
+     *
+     * @return the default max size
+     */
+    public String getDefaultMaxSize( )
+    {
+        return AppPropertiesService.getProperty( PROPERTY_DEFAULT_MAX_SIZE, "" );
+    }
+
+    /**
+     * Gets the default height
+     *
+     * @return the default height
+     */
+    public String getDefaultHeight( )
+    {
+        return AppPropertiesService.getProperty( PROPERTY_DEFAULT_HEIGHT, "" );
+    }
+
 }
