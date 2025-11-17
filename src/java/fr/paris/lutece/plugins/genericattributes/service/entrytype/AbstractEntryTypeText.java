@@ -286,6 +286,23 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
     private GenericAttributeError checkErrors( Entry entry, Field confirmField, String strValueEntry, String strValueEntryConfirmField,
             List<RegularExpression> listRegularExpression, boolean bConfirmField, Locale locale )
     {
+        // check max size for the field.
+        int nMaxSize = Integer.parseInt( entry.getFieldByCode( FIELD_MAX_SIZE ).getValue( ) );
+
+        if ( ( nMaxSize != -1 ) && ( strValueEntry.length( ) > nMaxSize ) )
+        {
+            GenericAttributeError error = new GenericAttributeError( );
+            error.setMandatoryError( false );
+            error.setTitleQuestion( entry.getTitle( ) );
+
+            Object [ ] messageArgs = new Object [ ] {
+                    nMaxSize,
+            };
+            error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_MAXLENGTH, messageArgs, locale ) );
+
+            return error;
+        }
+
         // Checks if the entry value contains XSS characters
         if ( StringUtil.containsXssCharacters( strValueEntry ) )
         {
