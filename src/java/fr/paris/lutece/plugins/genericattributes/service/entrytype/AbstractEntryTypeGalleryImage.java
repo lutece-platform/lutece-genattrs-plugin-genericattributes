@@ -167,6 +167,15 @@ public abstract class AbstractEntryTypeGalleryImage extends EntryTypeService
     @Override
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
+    	return getRequestData( entry, request, locale, null );
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getRequestData( Entry entry, HttpServletRequest request, Locale locale, String errorReturnUrl )
+    {
         initCommonRequestData( entry, request );
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
@@ -177,7 +186,7 @@ public abstract class AbstractEntryTypeGalleryImage extends EntryTypeService
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
 
-        String strError = checkEntryData( request, locale );
+        String strError = checkEntryData( request, locale, errorReturnUrl );
 
         if ( StringUtils.isNotBlank( strError ) )
         {
@@ -226,7 +235,7 @@ public abstract class AbstractEntryTypeGalleryImage extends EntryTypeService
      *            the locale
      * @return the error message url if there is an error, an empty string otherwise
      */
-    private static String checkEntryData( HttpServletRequest request, Locale locale )
+    private static String checkEntryData( HttpServletRequest request, Locale locale, String errorReturnUrl )
     {
         String strTitle = request.getParameter( IEntryTypeService.PARAMETER_TITLE );
         String strFieldError = StringUtils.EMPTY;
@@ -248,6 +257,10 @@ public abstract class AbstractEntryTypeGalleryImage extends EntryTypeService
                     I18nService.getLocalizedString( strFieldError, locale )
             };
 
+            if( StringUtils.isNotBlank( errorReturnUrl ) )
+            {
+            	return AdminMessageService.getMessageUrl( request, IEntryTypeService.MESSAGE_MANDATORY_FIELD, tabRequiredFields, errorReturnUrl, AdminMessage.TYPE_STOP );
+            }
             return AdminMessageService.getMessageUrl( request, IEntryTypeService.MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
