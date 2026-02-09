@@ -72,6 +72,15 @@ public abstract class EntryTypeService implements IEntryTypeService
      * {@inheritDoc}
      */
     @Override
+    public String getRequestData( Entry entry, HttpServletRequest request, Locale locale, String errorReturnUrl )
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
         return null;

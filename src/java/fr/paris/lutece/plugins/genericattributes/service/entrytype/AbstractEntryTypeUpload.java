@@ -298,6 +298,15 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
     @Override
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
+    	return getRequestData( entry, request, locale, null );
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getRequestData( Entry entry, HttpServletRequest request, Locale locale, String errorReturnUrl )
+    {
         initCommonRequestData( entry, request );
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strHelpMessage = ( request.getParameter( PARAMETER_HELP_MESSAGE ) != null ) ? request.getParameter( PARAMETER_HELP_MESSAGE ).trim( ) : null;
@@ -308,7 +317,7 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
 
-        String strError = FileAttributesUtils.checkEntryData( request, locale );
+        String strError = FileAttributesUtils.checkEntryData( request, locale, errorReturnUrl );
 
         if ( StringUtils.isNotBlank( strError ) )
         {

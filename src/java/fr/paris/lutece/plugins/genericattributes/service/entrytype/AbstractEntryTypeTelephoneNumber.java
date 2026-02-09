@@ -70,8 +70,20 @@ public abstract class AbstractEntryTypeTelephoneNumber extends EntryTypeService
     private static final String MESSAGE_UNKNOWN_DEFAULT_REGION = "genericattributes.message.error.unknown.default.region";
     private static final String PROPERTY_DEFAULT_DEFAULT_REGION = "genericattributes.telephoneNumber.default.default.region";
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
+    {
+    	return getRequestData( entry, request, locale, null );
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getRequestData( Entry entry, HttpServletRequest request, Locale locale, String errorReturnUrl )
     {
         initCommonRequestData( entry, request );
         String strTitle = request.getParameter( PARAMETER_TITLE );
@@ -100,6 +112,10 @@ public abstract class AbstractEntryTypeTelephoneNumber extends EntryTypeService
                     I18nService.getLocalizedString( strFieldError, locale )
             };
 
+            if( StringUtils.isNotBlank( errorReturnUrl ) )
+            {
+            	return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, errorReturnUrl, AdminMessage.TYPE_STOP );
+            }
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
@@ -119,6 +135,12 @@ public abstract class AbstractEntryTypeTelephoneNumber extends EntryTypeService
         {
             if ( !PhoneNumberUtil.getInstance( ).getSupportedRegions( ).contains( strDefaultRegion ) )
             {
+            	if( StringUtils.isNotBlank( errorReturnUrl ) )
+                {
+            		return AdminMessageService.getMessageUrl( request, MESSAGE_UNKNOWN_DEFAULT_REGION, new Object [ ] {
+                            strDefaultRegion
+                    }, errorReturnUrl, AdminMessage.TYPE_STOP );
+                }
                 return AdminMessageService.getMessageUrl( request, MESSAGE_UNKNOWN_DEFAULT_REGION, new Object [ ] {
                         strDefaultRegion
                 }, AdminMessage.TYPE_STOP );

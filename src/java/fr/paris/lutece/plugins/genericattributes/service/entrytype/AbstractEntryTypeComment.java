@@ -69,6 +69,15 @@ public abstract class AbstractEntryTypeComment extends EntryTypeService
     @Override
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
+    	return getRequestData( entry, request, locale, null );
+    }
+	
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getRequestData( Entry entry, HttpServletRequest request, Locale locale, String errorReturnUrl )
+    {
         initCommonRequestData( entry, request );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         String strComment = request.getParameter( PARAMETER_COMMENT );
@@ -88,6 +97,10 @@ public abstract class AbstractEntryTypeComment extends EntryTypeService
                     I18nService.getLocalizedString( strFieldError, locale )
             };
 
+            if( StringUtils.isNotBlank( errorReturnUrl ) )
+            {
+            	return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, errorReturnUrl, AdminMessage.TYPE_STOP );
+            }
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
