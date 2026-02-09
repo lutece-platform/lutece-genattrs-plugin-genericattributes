@@ -66,6 +66,15 @@ public abstract class AbstractEntryTypeCheckBox extends AbstractEntryTypeChoice
     @Override
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
+    	return getRequestData( entry, request, locale, null );
+    }
+	
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getRequestData( Entry entry, HttpServletRequest request, Locale locale, String errorReturnUrl )
+    {
         initCommonRequestData( entry, request );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
         String strTitle = request.getParameter( PARAMETER_TITLE );
@@ -92,12 +101,20 @@ public abstract class AbstractEntryTypeCheckBox extends AbstractEntryTypeChoice
                     I18nService.getLocalizedString( strFieldError, locale )
             };
 
+            if( StringUtils.isNotBlank( errorReturnUrl ) )
+            {
+            	return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, errorReturnUrl, AdminMessage.TYPE_STOP );
+            }
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
         strFieldError = createFieldsUseRefList( entry, request );
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
+        	if( StringUtils.isNotBlank( errorReturnUrl ) )
+            {
+        		return AdminMessageService.getMessageUrl( request, strFieldError, ERROR_FIELD_REF_LIST, errorReturnUrl, AdminMessage.TYPE_STOP );
+            }
             return AdminMessageService.getMessageUrl( request, strFieldError, ERROR_FIELD_REF_LIST, AdminMessage.TYPE_STOP );
         }
 
