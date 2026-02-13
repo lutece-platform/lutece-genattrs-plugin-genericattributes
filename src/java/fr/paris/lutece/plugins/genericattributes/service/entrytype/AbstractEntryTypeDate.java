@@ -67,6 +67,15 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
     @Override
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
+    	return getRequestData( entry, request, locale, null );
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getRequestData( Entry entry, HttpServletRequest request, Locale locale, String errorReturnUrl )
+    {
         initCommonRequestData( entry, request );
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strCode = request.getParameter( PARAMETER_ENTRY_CODE );
@@ -92,6 +101,11 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
                     I18nService.getLocalizedString( strFieldError, locale )
             };
 
+            if( StringUtils.isNotBlank( errorReturnUrl ) )
+            {
+            	return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, errorReturnUrl, AdminMessage.TYPE_STOP );
+            }
+
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
@@ -105,6 +119,11 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
                 Object [ ] messageArgs = new Object [ ] {
                         DateUtil.ISO_PATTERN_DATE
                 };
+                
+                if( StringUtils.isNotBlank( errorReturnUrl ) )
+                {
+                	return AdminMessageService.getMessageUrl( request, MESSAGE_ILLOGICAL_DATE, messageArgs, errorReturnUrl, AdminMessage.TYPE_STOP );
+                }
                 return AdminMessageService.getMessageUrl( request, MESSAGE_ILLOGICAL_DATE, messageArgs, AdminMessage.TYPE_STOP );
             }
         }

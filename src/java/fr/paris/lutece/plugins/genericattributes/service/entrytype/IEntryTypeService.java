@@ -226,6 +226,22 @@ public interface IEntryTypeService
     String getRequestData( Entry entry, HttpServletRequest request, Locale locale );
 
     /**
+     * Get the request data
+     * 
+     * @param entry
+     *            The entry
+     * @param request
+     *            HttpRequest
+     * @param locale
+     *            the locale
+     * @param errorReturnUrl
+     *            url to go to after displaying a message when an error occurs
+     * @return null if all data required are in the request else the url of jsp error
+     */
+    String getRequestData( Entry entry, HttpServletRequest request, Locale locale, String errorReturnUrl );
+
+    
+    /**
      * Generate the list of responses associated with the given entry from the request, and saved it into the Entry object.
      * 
      * @param entry

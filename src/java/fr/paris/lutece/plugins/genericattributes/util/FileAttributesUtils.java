@@ -171,6 +171,20 @@ public final class FileAttributesUtils
      */
     public static String checkEntryData( HttpServletRequest request, Locale locale )
     {
+    	return checkEntryData( request, locale, null );
+    }
+    
+    /**
+     * Check the entry data
+     * 
+     * @param request
+     *            the HTTP request
+     * @param locale
+     *            the locale
+     * @return the error message url if there is an error, an empty string otherwise
+     */
+    public static String checkEntryData( HttpServletRequest request, Locale locale, String errorReturnUrl )
+    {
         String strTitle = request.getParameter( IEntryTypeService.PARAMETER_TITLE );
         String strMaxFiles = request.getParameter( IEntryTypeService.PARAMETER_MAX_FILES );
         String strFileMaxSize = request.getParameter( IEntryTypeService.PARAMETER_FILE_MAX_SIZE );
@@ -197,6 +211,10 @@ public final class FileAttributesUtils
                     I18nService.getLocalizedString( strFieldError, locale )
             };
 
+            if ( StringUtils.isNotBlank( errorReturnUrl ) )
+            {
+            	return AdminMessageService.getMessageUrl( request, IEntryTypeService.MESSAGE_MANDATORY_FIELD, tabRequiredFields,errorReturnUrl, AdminMessage.TYPE_STOP );
+            }
             return AdminMessageService.getMessageUrl( request, IEntryTypeService.MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
@@ -216,6 +234,10 @@ public final class FileAttributesUtils
                     I18nService.getLocalizedString( strFieldError, locale )
             };
 
+            if ( StringUtils.isNotBlank( errorReturnUrl ) )
+            {
+            	return AdminMessageService.getMessageUrl( request, IEntryTypeService.MESSAGE_NUMERIC_FIELD, tabRequiredFields, errorReturnUrl, AdminMessage.TYPE_STOP );
+            }
             return AdminMessageService.getMessageUrl( request, IEntryTypeService.MESSAGE_NUMERIC_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
