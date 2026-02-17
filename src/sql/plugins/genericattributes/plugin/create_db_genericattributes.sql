@@ -88,7 +88,7 @@ ALTER TABLE genatt_field ADD CONSTRAINT fk_genatt_field_entry FOREIGN KEY (id_en
 --
 CREATE TABLE genatt_response (
 	id_response int AUTO_INCREMENT,
-	response_value long VARCHAR DEFAULT NULL,
+	response_value LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
 	id_entry int default NULL,
 	iteration_number int default -1,
 	id_field int default NULL,
