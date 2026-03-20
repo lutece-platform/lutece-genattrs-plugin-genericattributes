@@ -49,7 +49,7 @@ import fr.paris.lutece.util.sql.DAOUtil;
 public final class ResponseDAO implements IResponseDAO
 {
     // Constants
-    private static final String SQL_QUERY_SELECT_RESPONSE = "SELECT resp.id_response, resp.response_value, type.class_name, ent.id_type, ent.id_entry, ent.title, ent.code, "
+    private static final String SQL_QUERY_SELECT_RESPONSE = "SELECT resp.id_response, resp.response_value, type.class_name, ent.id_type, ent.id_entry, ent.title, ent.code, ent.pos, "
             + " resp.iteration_number, resp.id_field, resp.file_key, resp.file_store, resp.status, resp.sort_order  FROM genatt_response resp";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_RESPONSE + ", genatt_entry ent, genatt_entry_type type "
             + " WHERE resp.id_response = ? and resp.id_entry = ent.id_entry and ent.id_type = type.id_type ";
@@ -387,6 +387,7 @@ public final class ResponseDAO implements IResponseDAO
         entry.setIdEntry( daoUtil.getInt( nIndex++ ) );
         entry.setTitle( daoUtil.getString( nIndex++ ) );
         entry.setCode( daoUtil.getString( nIndex++ ) );
+        entry.setPosition( daoUtil.getInt( nIndex++ ) );
         response.setEntry( entry );
 
         response.setIterationNumber( daoUtil.getInt( nIndex++ ) );
