@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Locale;
 
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import jakarta.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
@@ -60,6 +61,9 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
     private static final String PROPERTY_DEFAULT_MAX_SIZE = "genericattributes.textarea.default.max.size";
     private static final String PROPERTY_DEFAULT_HEIGHT = "genericattributes.textarea.default.height";
 
+    @Inject
+    private EditorBbcodeService _editorBbcodeService;
+    
     /**
      * {@inheritDoc}
      */
@@ -220,7 +224,7 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
 
         if ( useRichtext )
         {
-            response.setResponseValue( EditorBbcodeService.getInstance( ).parse( strValueEntry ) );
+            response.setResponseValue( _editorBbcodeService.parse( strValueEntry ) );
         }
         else
         {

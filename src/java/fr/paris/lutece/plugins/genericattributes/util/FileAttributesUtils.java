@@ -52,6 +52,7 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
+import jakarta.enterprise.inject.spi.CDI;
 import fr.paris.lutece.portal.service.upload.MultipartItem;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
@@ -256,6 +257,8 @@ public final class FileAttributesUtils
      */
     public static GenericAttributeError checkResponseData( Entry entry, List<MultipartItem> listFilesSource, Locale locale )
     {
+        RegularExpressionService regularExpressionService = CDI.current( ).select( RegularExpressionService.class ).get( );
+
         for ( MultipartItem fileSource : listFilesSource )
         {
             // Check mandatory attribute
@@ -272,11 +275,11 @@ public final class FileAttributesUtils
             List<RegularExpression> listRegularExpression = entry.getFields( ).get( 0 ).getRegularExpressionList( );
 
             if ( StringUtils.isNotBlank( strFilename ) && CollectionUtils.isNotEmpty( listRegularExpression )
-                    && RegularExpressionService.getInstance( ).isAvailable( ) )
+                    && regularExpressionService.isAvailable( ) )
             {
                 for ( RegularExpression regularExpression : listRegularExpression )
                 {
-                    if ( !RegularExpressionService.getInstance( ).isMatches( strMimeType, regularExpression ) )
+                    if ( !regularExpressionService.isMatches( strMimeType, regularExpression ) )
                     {
                         GenericAttributeError error = new GenericAttributeError( );
                         error.setMandatoryError( false );

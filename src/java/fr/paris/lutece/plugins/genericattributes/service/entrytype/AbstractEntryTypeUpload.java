@@ -42,6 +42,8 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
+
+import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -90,6 +92,9 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
 
     // MESSAGES
     protected static final String MESSAGE_ERROR_NOT_AN_IMAGE = "genericattributes.message.notAnImage";
+
+    @Inject
+    protected RegularExpressionService _regularExpressionService;
 
     /**
      * Get the asynchronous upload handler to use for entries of this type
@@ -346,11 +351,11 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
     {
         ReferenceList refListRegularExpression = null;
 
-        if ( RegularExpressionService.getInstance( ).isAvailable( ) )
+        if ( _regularExpressionService.isAvailable( ) )
         {
             refListRegularExpression = new ReferenceList( );
 
-            List<RegularExpression> listRegularExpression = RegularExpressionService.getInstance( ).getAllRegularExpression( );
+            List<RegularExpression> listRegularExpression = _regularExpressionService.getAllRegularExpression( );
 
             for ( RegularExpression regularExpression : listRegularExpression )
             {

@@ -181,8 +181,9 @@ public final class FieldHome
         field.setConditionalQuestions( EntryHome.getEntryList( filter ) );
 
         List<RegularExpression> listRegularExpression = new ArrayList<>( );
-
-        if ( RegularExpressionService.getInstance( ).isAvailable( ) )
+        RegularExpressionService regularExpressionService = CDI.current( ).select( RegularExpressionService.class ).get( );
+        
+        if ( regularExpressionService.isAvailable( ) )
         {
             List<Integer> listRegularExpressionKeyEntry = getListRegularExpressionKeyByIdField( nKey );
 
@@ -192,7 +193,7 @@ public final class FieldHome
 
                 for ( Integer regularExpressionKey : listRegularExpressionKeyEntry )
                 {
-                    regularExpression = RegularExpressionService.getInstance( ).getRegularExpressionByKey( regularExpressionKey );
+                    regularExpression = regularExpressionService.getRegularExpressionByKey( regularExpressionKey );
 
                     if ( regularExpression != null )
                     {
