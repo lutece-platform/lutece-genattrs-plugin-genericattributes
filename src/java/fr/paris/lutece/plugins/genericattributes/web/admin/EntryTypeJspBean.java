@@ -33,8 +33,6 @@
  */
 package fr.paris.lutece.plugins.genericattributes.web.admin;
 
-import java.util.Map;
-
 import org.apache.commons.lang3.math.NumberUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.EntryType;
@@ -44,12 +42,14 @@ import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
+import fr.paris.lutece.portal.web.cdi.mvc.Models;
 import fr.paris.lutece.util.html.HtmlTemplate;
-import jakarta.enterprise.context.SessionScoped;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.HttpServletRequest;
 
-@SessionScoped
+@RequestScoped
 @Named
 @Controller( controllerJsp = "ManageEntryType.jsp", controllerPath = "jsp/admin/plugins/genericattributes/", right = "ENTRY_TYPE_MANAGEMENT" )
 public class EntryTypeJspBean extends MVCAdminJspBean
@@ -79,6 +79,9 @@ public class EntryTypeJspBean extends MVCAdminJspBean
     private static final String ACTION_MOVE_DOWN = "doMoveDown";
     private static final String ACTION_DO_EDIT = "modifyEntryType";
 
+    @Inject
+    private Models _model;
+
     /**
      * Build the Manage View
      * 
@@ -89,10 +92,9 @@ public class EntryTypeJspBean extends MVCAdminJspBean
     @View( value = VIEW_MANAGE_ENTRY_TYPE, defaultView = true )
     public String getManageEntryType( HttpServletRequest request )
     {
-        Map<String, Object> model = getModel( );
-        model.put( MARK_ENTRY_TYPE_LIST, EntryTypeHome.getCompleteList( ) );
+        _model.put( MARK_ENTRY_TYPE_LIST, EntryTypeHome.getCompleteList( ) );
 
-        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_ENTRY_TYPE, getLocale( ), model );
+        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE_ENTRY_TYPE, getLocale( ), _model );
 
         return getAdminPage( templateList.getHtml( ) );
     }
@@ -188,9 +190,8 @@ public class EntryTypeJspBean extends MVCAdminJspBean
         {
             return redirectView( request, VIEW_MANAGE_ENTRY_TYPE );
         }
-        Map<String, Object> model = getModel( );
-        model.put( MARK_ENTRY_TYPE, EntryTypeHome.findByPrimaryKey( idType ) );
-        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_EDIT_ENTRY_TYPE, getLocale( ), model );
+        _model.put( MARK_ENTRY_TYPE, EntryTypeHome.findByPrimaryKey( idType ) );
+        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_EDIT_ENTRY_TYPE, getLocale( ), _model );
 
         return getAdminPage( templateList.getHtml( ) );
     }
