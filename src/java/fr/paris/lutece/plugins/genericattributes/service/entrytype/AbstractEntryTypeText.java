@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 import java.util.List;
 import java.util.Locale;
 
+import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
 
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -71,6 +72,9 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
 	private static final String MESSAGE_ERROR_FILE_IMAGE = "Error importing file.";
     private static final String PROPERTY_DEFAULT_MAX_SIZE = "genericattributes.text.default.max.size";
 
+    @Inject
+    protected RegularExpressionService _regularExpressionService;
+    
     /**
      * {@inheritDoc}
      */
@@ -237,11 +241,11 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
     {
         ReferenceList refListRegularExpression = null;
 
-        if ( RegularExpressionService.getInstance( ).isAvailable( ) )
+        if ( _regularExpressionService.isAvailable( ) )
         {
             refListRegularExpression = new ReferenceList( );
 
-            List<RegularExpression> listRegularExpression = RegularExpressionService.getInstance( ).getAllRegularExpression( );
+            List<RegularExpression> listRegularExpression = _regularExpressionService.getAllRegularExpression( );
 
             for ( RegularExpression regularExpression : listRegularExpression )
             {
@@ -346,11 +350,11 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
         }
 
         if ( ( !strValueEntry.equals( StringUtils.EMPTY ) ) && CollectionUtils.isNotEmpty( listRegularExpression )
-                && RegularExpressionService.getInstance( ).isAvailable( ) )
+                && _regularExpressionService.isAvailable( ) )
         {
             for ( RegularExpression regularExpression : listRegularExpression )
             {
-                if ( !RegularExpressionService.getInstance( ).isMatches( strValueEntry, regularExpression ) )
+                if ( !_regularExpressionService.isMatches( strValueEntry, regularExpression ) )
                 {
                     GenericAttributeError error = new GenericAttributeError( );
                     error.setMandatoryError( false );

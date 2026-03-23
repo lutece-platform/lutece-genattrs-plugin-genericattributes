@@ -43,6 +43,7 @@ import fr.paris.lutece.portal.service.file.FileService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 /**
  * This class provides Data Access methods for Response objects
@@ -83,6 +84,9 @@ public class ResponseDAO implements IResponseDAO
     private static final String SQL_ASC = " ASC ";
     private static final String SQL_DESC = " DESC ";
 
+    @Inject
+    private FileService _fileService;
+
     /**
      * {@inheritDoc}
      */
@@ -109,7 +113,7 @@ public class ResponseDAO implements IResponseDAO
             if ( response.getFile( ) != null )
             {
                 daoUtil.setString( nIndex++, response.getFile( ).getFileKey( ) );
-                daoUtil.setString( nIndex++, response.getFile( ).getOrigin( ) == null ? FileService.getInstance( ).getFileStoreServiceProvider( ).getName( )
+                daoUtil.setString( nIndex++, response.getFile( ).getOrigin( ) == null ? _fileService.getFileStoreServiceProvider( ).getName( )
                         : response.getFile( ).getOrigin( ) );
             }
             else
@@ -192,7 +196,7 @@ public class ResponseDAO implements IResponseDAO
             if ( response.getFile( ) != null )
             {
                 daoUtil.setString( nIndex++, response.getFile( ).getFileKey( ) );
-                daoUtil.setString( nIndex++, response.getFile( ).getOrigin( ) == null ? FileService.getInstance( ).getFileStoreServiceProvider( ).getName( )
+                daoUtil.setString( nIndex++, response.getFile( ).getOrigin( ) == null ? _fileService.getFileStoreServiceProvider( ).getName( )
                         : response.getFile( ).getOrigin( ) );
             }
             else

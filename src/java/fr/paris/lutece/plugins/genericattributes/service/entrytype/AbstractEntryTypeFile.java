@@ -44,7 +44,6 @@ import fr.paris.lutece.plugins.genericattributes.service.upload.AbstractGenAttUp
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
-import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
 import fr.paris.lutece.portal.service.upload.MultipartItem;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.filesystem.FileSystemUtil;
@@ -202,7 +201,7 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
         for ( RegularExpression re : listRegularExpression)
         {
 
-            if ( !RegularExpressionService.getInstance( ).isMatches( getMimeTypeFromResponse(response), re ) )
+            if ( !_regularExpressionService.isMatches( getMimeTypeFromResponse(response), re ) )
             {
                 GenericAttributeError error = new GenericAttributeError( );
                 error.setMandatoryError( false );
