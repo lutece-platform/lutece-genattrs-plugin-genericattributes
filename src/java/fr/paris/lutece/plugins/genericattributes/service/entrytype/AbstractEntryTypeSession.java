@@ -163,6 +163,6 @@ public abstract class AbstractEntryTypeSession extends EntryTypeService
     @Override
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
-        return StringUtils.EMPTY;
+        return response.getResponseValue( );
     }
 }
