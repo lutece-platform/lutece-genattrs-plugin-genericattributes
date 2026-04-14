@@ -37,6 +37,7 @@ import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.file.GenericAttributeFileService;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 /**
@@ -46,7 +47,9 @@ import jakarta.inject.Named;
 @Named("genericattributes.fileDeleteAnonymizationService")
 public class FileDeleteAnonymizationService extends AbstractAnonymizationService
 {
-
+    @Inject
+    private GenericAttributeFileService _genericAttributeFileService;
+    
     @Override
     public void anonymizeResponse( Entry entry, Response response, boolean first )
     {
@@ -55,7 +58,7 @@ public class FileDeleteAnonymizationService extends AbstractAnonymizationService
             String pattern = getPattern( entry );
             if ( pattern.contains( _wildcard ) && response.getFile( ) != null )
             {
-                GenericAttributeFileService.getInstance( ).delete( response.getFile( ).getFileKey( ), response.getFile( ).getOrigin( ) );
+                _genericAttributeFileService.delete( response.getFile( ).getFileKey( ), response.getFile( ).getOrigin( ) );
                 response.setFile( null );
             }
         }

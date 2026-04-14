@@ -252,7 +252,7 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
             {
                 Response response = ResponseHome.findByPrimaryKey( genAttFileItem.getIdResponse( ) );
                 response.setEntry( entry );
-                response.setFile( GenericAttributeFileService.getInstance( ).load( response.getFile( ).getFileKey( ), response.getFile( ).getOrigin( ) ) );
+                response.setFile( _genericAttributeFileService.load( response.getFile( ).getFileKey( ), response.getFile( ).getOrigin( ) ) );
 
                 if ( bCreatePhysicalFile )
                 {

@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import jakarta.inject.Inject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
@@ -58,6 +59,8 @@ public class FileReplaceAnonymizationService extends AbstractAnonymizationServic
 {
 
     private static final String FILES_DIRECTORY = "/WEB-INF/anonymization/";
+    @Inject
+    private GenericAttributeFileService _genericAttributeFileService;
 
     @Override
     public void anonymizeResponse( Entry entry, Response response, boolean first )
@@ -67,7 +70,7 @@ public class FileReplaceAnonymizationService extends AbstractAnonymizationServic
             String pattern = getPattern( entry );
             if ( pattern.contains( _wildcard ) && response.getFile( ) != null )
             {
-                File responseFile = GenericAttributeFileService.getInstance( ).load( response.getFile( ).getFileKey( ), response.getFile( ).getOrigin( ) );
+                File responseFile = _genericAttributeFileService.load( response.getFile( ).getFileKey( ), response.getFile( ).getOrigin( ) );
 
                 if ( responseFile != null )
                 {
@@ -84,7 +87,7 @@ public class FileReplaceAnonymizationService extends AbstractAnonymizationServic
                     catch( IOException e )
                     {
                         AppLogService.error( "Error while replacing file", e );
-                        GenericAttributeFileService.getInstance( ).delete( response.getFile( ).getFileKey( ), response.getFile( ).getOrigin( ) );
+                        _genericAttributeFileService.delete( response.getFile( ).getFileKey( ), response.getFile( ).getOrigin( ) );
                         response.setFile( null );
                     }
                 }

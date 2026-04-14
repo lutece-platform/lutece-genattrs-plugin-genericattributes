@@ -41,6 +41,7 @@ import fr.paris.lutece.portal.service.image.ImageResource;
 import fr.paris.lutece.portal.service.image.ImageResourceProvider;
 import fr.paris.lutece.util.file.FileUtil;
 import fr.paris.lutece.util.url.UrlItem;
+import jakarta.enterprise.inject.spi.CDI;
 
 /**
  * Resource provider for images
@@ -66,7 +67,7 @@ public class ResponseImageResourceProvider implements ImageResourceProvider
 
         if ( response.getFile( ) != null )
         {
-            File file = GenericAttributeFileService.getInstance().load( response.getFile( ).getFileKey( ), response.getFile( ).getOrigin( ) );
+            File file = CDI.current( ).select( GenericAttributeFileService.class ).get( ).load( response.getFile( ).getFileKey( ), response.getFile( ).getOrigin( ) );
 
             if ( ( file.getPhysicalFile( ) != null ) && FileUtil.hasImageExtension( file.getTitle( ) ) )
             {
