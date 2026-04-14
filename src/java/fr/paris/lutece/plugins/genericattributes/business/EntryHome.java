@@ -177,7 +177,7 @@ public final class EntryHome
                 {
                     if ( IEntryTypeService.FIELD_DOWNLOADABLE_FILE.equals( field.getCode( ) ) )
                     {
-                        GenericAttributeFileService.getInstance( ).delete( field.getValue( ), null );
+                        CDI.current( ).select( GenericAttributeFileService.class ).get( ).delete( field.getValue( ), null );
                     }
                     if ( IEntryTypeService.FIELD_ANSWER_CHOICE.equals( field.getCode( ) ) )
                     {

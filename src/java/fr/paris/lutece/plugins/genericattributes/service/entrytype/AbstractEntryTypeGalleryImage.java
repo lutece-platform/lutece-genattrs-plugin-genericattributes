@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -71,6 +72,9 @@ public abstract class AbstractEntryTypeGalleryImage extends EntryTypeService
     // MESSAGES
     protected static final String ERROR_FIELD_CODE_GALLERY = "genericattributes.createEntry.labelChooseGalleryImage";
 
+    @Inject
+    protected GenericAttributeFileService _genericAttributeFileService;
+    
     /**
      * Check the record field data
      * 
@@ -115,7 +119,7 @@ public abstract class AbstractEntryTypeGalleryImage extends EntryTypeService
         {
             FileImagePublicService.init( );
 
-            File file = GenericAttributeFileService.getInstance( ).load( strFileGallery, ENTRY_TYPE_KEYNAME);
+            File file = _genericAttributeFileService.load( strFileGallery, ENTRY_TYPE_KEYNAME);
 
             Response response = new Response( );
             response.setEntry( entry );

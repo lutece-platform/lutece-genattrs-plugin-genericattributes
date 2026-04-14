@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
 import java.util.Locale;
 
+import jakarta.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
@@ -57,6 +58,9 @@ import jakarta.servlet.http.HttpServletRequest;
 public abstract class AbstractEntryTypeComment extends EntryTypeService
 {
 	public static final String ENTRY_TYPE_KEYNAME = "entryTypeComment";
+
+    @Inject
+    protected GenericAttributeFileService _genericAttributeFileService;
 	
     /**
      * {@inheritDoc}
@@ -125,7 +129,7 @@ public abstract class AbstractEntryTypeComment extends EntryTypeService
                 file.setPhysicalFile( physicalFile );
 
                 String idFile;
-				idFile = GenericAttributeFileService.getInstance( ).save( fileItem, ENTRY_TYPE_KEYNAME ); 
+				idFile = _genericAttributeFileService.save( fileItem, ENTRY_TYPE_KEYNAME ); 
 				GenericAttributesUtils.createOrUpdateField( entry, FIELD_DOWNLOADABLE_FILE, file.getTitle( ), idFile );
 				
                 
@@ -139,7 +143,7 @@ public abstract class AbstractEntryTypeComment extends EntryTypeService
         Field oldFile = entry.getFieldByCode( FIELD_DOWNLOADABLE_FILE );
         if ( oldFile != null )
         {
-            GenericAttributeFileService.getInstance( ).delete( oldFile.getValue( ), null);
+            _genericAttributeFileService.delete( oldFile.getValue( ), null);
 			FieldHome.remove( oldFile.getIdField( ) );
         }
     }

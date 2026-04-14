@@ -45,37 +45,39 @@ import fr.paris.lutece.portal.service.file.FileServiceException;
 import fr.paris.lutece.portal.service.upload.MultipartItem;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.spi.CDI;
+import jakarta.inject.Inject;
 
+@ApplicationScoped
 public class GenericAttributeFileService
 {
 	private static final String PROPERTY_FILESTORESERVICE_PREFIX = "genericattributes.filestoreservice";
 	private static final String PROPERTY_FILESTORESERVICE_DEFAULT_SUFFIX = "default";
 
-    private static final GenericAttributeFileService _instance = new GenericAttributeFileService( );
-    private static Map<String,String> _entryTypeFileServices;
+    private Map<String,String> _entryTypeFileServices;
+
+    @Inject
     private FileService _fileService;
-    
+
     /**
-     * Constructor
+     * Initializes the service.
      */
-    private GenericAttributeFileService( )
+    @PostConstruct
+    public void init( )
     {
-        _fileService = CDI.current( ).select( FileService.class ).get( );
-    	List<String> keyList = AppPropertiesService.getKeys( PROPERTY_FILESTORESERVICE_PREFIX);
-    	
-    	 _entryTypeFileServices = new HashMap<>();
-    	 
-    	// init specific entryType fileStoreService names if exists
-    	 if (keyList != null ) 
-    	 {
-	    	keyList.stream().forEach( s -> { 
-	    		if ( !StringUtils.isAllBlank(  AppPropertiesService.getProperty(s) ) )
-	    		{
-	    			_entryTypeFileServices.put(s, AppPropertiesService.getProperty(s)); 
-	    		}
-	    	} );
-    	 }
+    	List<String> keyList = AppPropertiesService.getKeys( PROPERTY_FILESTORESERVICE_PREFIX );
+    	_entryTypeFileServices = new HashMap<>( );
+    	if ( keyList != null )
+    	{
+    		keyList.stream( ).forEach( s -> {
+    			if ( !StringUtils.isAllBlank( AppPropertiesService.getProperty( s ) ) )
+    			{
+    				_entryTypeFileServices.put( s, AppPropertiesService.getProperty( s ) );
+    			}
+    		} );
+    	}
     }
     
     /**
@@ -120,13 +122,15 @@ public class GenericAttributeFileService
     }
 
     /**
-     * get instance of service
-     * 
+     * Returns the CDI-managed instance of this service.
+     *
      * @return the instance
+     * @deprecated since 3.0, use {@code @Inject GenericAttributeFileService} instead
      */
+    @Deprecated( since = "3.0", forRemoval = true )
     public static GenericAttributeFileService getInstance( )
     {
-        return _instance;
+        return CDI.current( ).select( GenericAttributeFileService.class ).get( );
     }
 
     /**

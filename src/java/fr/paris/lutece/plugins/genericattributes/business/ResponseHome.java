@@ -51,6 +51,7 @@ public final class ResponseHome
 {
     // Static variable pointed at the DAO instance
     private static IResponseDAO _dao = CDI.current( ).select( IResponseDAO.class ).get( );
+    private static GenericAttributeFileService _genericAttributeFileService = CDI.current( ).select( GenericAttributeFileService.class ).get( );
     private static Plugin _plugin;
 
     /**
@@ -75,7 +76,7 @@ public final class ResponseHome
         {
             if ( response.getFile( ) != null )
             {
-                response.getFile( ).setFileKey( GenericAttributeFileService.getInstance( ).save( response.getFile( ) ) );
+                response.getFile( ).setFileKey( _genericAttributeFileService.save( response.getFile( ) ) );
             }
 
             _dao.insert( response, getPlugin( ) );
@@ -104,7 +105,7 @@ public final class ResponseHome
             if ( response.getFile( ) != null )
             {
                 File file = response.getFile( );
-                String strFileKey = GenericAttributeFileService.getInstance( ).update( file, file.getOrigin( ) );
+                String strFileKey = _genericAttributeFileService.update( file, file.getOrigin( ) );
                 if ( strFileKey != null )
                 {
                     response.getFile( ).setFileKey( strFileKey );
@@ -159,7 +160,7 @@ public final class ResponseHome
             {
                 if ( response.getFile( ) != null )
                 {
-                    GenericAttributeFileService.getInstance( ).delete( response.getFile( ).getFileKey( ), response.getFile( ).getOrigin( ) );
+                    _genericAttributeFileService.delete( response.getFile( ).getFileKey( ), response.getFile( ).getOrigin( ) );
                 }
 
                 _dao.delete( nIdResponse, getPlugin( ) );
