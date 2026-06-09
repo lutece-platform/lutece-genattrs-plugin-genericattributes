@@ -99,6 +99,18 @@ public abstract class AbstractEntryTypeMyLuteceUser extends EntryTypeService
      * {@inheritDoc}
      */
     @Override
+    public String getRequestData( Entry entry, HttpServletRequest request, Locale locale, String errorReturnUrl )
+    {
+        // Callers (e.g. the forms plugin) use this 4-args variant for both creation and
+        // modification. Without this delegation it would fall back to the no-op default of
+        // EntryTypeService, so the title and the fields would never be set nor updated.
+        return getRequestData( entry, request, locale );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ReferenceList getReferenceListRegularExpression( Entry entry, Plugin plugin )
     {
         return null;
