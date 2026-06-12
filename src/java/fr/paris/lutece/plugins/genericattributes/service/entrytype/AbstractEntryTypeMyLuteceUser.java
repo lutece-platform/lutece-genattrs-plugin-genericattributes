@@ -81,6 +81,15 @@ public abstract class AbstractEntryTypeMyLuteceUser extends EntryTypeService
     @Override
     public String getRequestData( Entry entry, HttpServletRequest request, Locale locale )
     {
+        return getRequestData( entry, request, locale, null );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getRequestData( Entry entry, HttpServletRequest request, Locale locale, String errorReturnUrl )
+    {
         initCommonRequestData( entry, request );
         String strIndexed = request.getParameter( PARAMETER_INDEXED );
 
