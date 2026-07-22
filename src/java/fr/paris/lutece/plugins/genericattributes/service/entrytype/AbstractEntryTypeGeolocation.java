@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2022, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -208,15 +208,17 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
         Integer lastIterationGeolocation = 0;
         Integer iterationNumberToSave = 0;
 
-        if ( request.getAttribute( ATTRIBUTE_LAST_ITERATION_GEOLOCATION ) != null )
+        String attributeLastIterationIdEntry = ATTRIBUTE_LAST_ITERATION_GEOLOCATION + "_" + entry.getIdEntry();
+
+        if ( request.getAttribute( attributeLastIterationIdEntry ) != null )
         {
-            lastIterationGeolocation = (Integer) request.getAttribute( ATTRIBUTE_LAST_ITERATION_GEOLOCATION );
+            lastIterationGeolocation = (Integer) request.getAttribute( attributeLastIterationIdEntry );
             lastIterationGeolocation += 1;
-            request.setAttribute( ATTRIBUTE_LAST_ITERATION_GEOLOCATION, lastIterationGeolocation );
+            request.setAttribute( attributeLastIterationIdEntry, lastIterationGeolocation );
         }
         else
         {
-            request.setAttribute( ATTRIBUTE_LAST_ITERATION_GEOLOCATION, 0 );
+            request.setAttribute( attributeLastIterationIdEntry, 0 );
         }
         if ( request.getParameter( PARAMETER_NUMBER_ITERATION ) != null )
         {
