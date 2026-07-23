@@ -156,7 +156,14 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
                 Response response = getResponseFromFile( fileItem, entry, genAttError == null );
                 response.setIterationNumber( getResponseIterationValue( request ) );
 
-                genAttError = checkRegularExpression( listRegularExpression, response, entry);
+                // Return when there is an existing error and checkRegularExpression is null, it was masking a validation error
+                final GenericAttributeError regularExpressionError = this.checkRegularExpression( listRegularExpression, response, entry );
+
+                if ( regularExpressionError != null )
+                {
+                    genAttError = regularExpressionError;
+                }
+
                 listResponse.add( response );
             }
 
