@@ -155,7 +155,15 @@ public abstract class AbstractEntryTypeFile extends AbstractEntryTypeUpload
                 Response response = getResponseFromFile( fileItem, entry, genAttError == null );
                 response.setIterationNumber( getResponseIterationValue( request ) );
 
-                genAttError = checkRegularExpression( listRegularExpression, response, entry);
+                // Keep the error of checkResponseData : overwriting it here would drop the reason why the
+                // physical file was not created, and the response would be saved with a file without content.
+                GenericAttributeError regularExpressionError = checkRegularExpression( listRegularExpression, response, entry );
+
+                if ( regularExpressionError != null )
+                {
+                    genAttError = regularExpressionError;
+                }
+
                 listResponse.add( response );
             }
 
