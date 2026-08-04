@@ -176,11 +176,37 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removeSessionFiles( HttpSession session )
     {
         String sessionId = (String) session.getAttribute( PARAM_CUSTOM_SESSION_ID );
-        if ( sessionId != null )
+
+        if ( StringUtils.isBlank( sessionId ) )
+        {
+            return;
+        }
+
+        Map<String, List<FileItem>> mapFileItemsSession = _mapAsynchronousUpload.get( sessionId );
+
+        if ( mapFileItemsSession == null )
+        {
+            return;
+        }
+
+        try
+        {
+            for ( List<FileItem> fileItems : mapFileItemsSession.values( ) )
+            {
+                for ( FileItem fileItem : fileItems )
+                {
+                    fileItem.delete( );
+                }
+            }
+        }
+        finally
         {
             _mapAsynchronousUpload.remove( sessionId );
         }
