@@ -197,17 +197,12 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
             return;
         }
 
-        try
+        for ( List<MultipartItem> fileItems : mapFileItemsSession.values( ) )
         {
-            for ( List<MultipartItem> fileItems : mapFileItemsSession.values( ) )
-            {
-                deleteFiles( fileItems );
-            }
+            deleteFiles( fileItems );
         }
-        finally
-        {
-            _mapAsynchronousUpload.remove( sessionId );
-        }
+
+        _mapAsynchronousUpload.remove( sessionId );
     }
 
     private void deleteFiles( List<MultipartItem> fileItems )
