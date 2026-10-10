@@ -48,9 +48,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class EntryNumberingDAO implements IEntryNumberingDAO
 {
-    private static final String SQL_QUERY_SELECT = "SELECT last_value FROM genatt_entry_numbering WHERE id_entry = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_entry_numbering ( id_entry, last_value ) VALUES ( ?, ? )";
-    private static final String SQL_QUERY_INCREMENT = "UPDATE genatt_entry_numbering SET last_value = last_value + 1 WHERE id_entry = ?";
+    private static final String SQL_QUERY_SELECT = "SELECT counter_value FROM genatt_entry_numbering WHERE id_entry = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_entry_numbering ( id_entry, counter_value ) VALUES ( ?, ? )";
+    private static final String SQL_QUERY_INCREMENT = "UPDATE genatt_entry_numbering SET counter_value = counter_value + 1 WHERE id_entry = ?";
     private static final String SQL_QUERY_DELETE = "DELETE FROM genatt_entry_numbering WHERE id_entry = ?";
 
     /**
