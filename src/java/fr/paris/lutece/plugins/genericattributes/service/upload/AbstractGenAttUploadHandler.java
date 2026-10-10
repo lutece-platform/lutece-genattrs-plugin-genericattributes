@@ -34,9 +34,12 @@
 package fr.paris.lutece.plugins.genericattributes.service.upload;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -68,6 +71,15 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
     // Error messages
     private static final String ERROR_MESSAGE_UNKNOWN_ERROR = "genericattributes.message.unknownError";
 
+    /**
+     * Session attribute holding the uploaded files, by field name. The files are kept in the session, not in this instance: a
+     * replicated session brings them to the instance that handles the next request.
+     */
+    // One attribute for all the files, on purpose: one attribute per file avoids lost updates between concurrent uploads served by
+    // two instances, but OpenLiberty sessionCache then lets an instance that already holds the session in memory miss the files
+    // uploaded on another instance (reproduced). Remaining limit: two uploads of one session at the same time on two instances can
+    // lose a file (the last map written wins).
+    private static final String SESSION_ATTRIBUTE_UPLOADED_FILES = "genericattributes.asynchronousUploadedFiles";
 
     /**
      * {@inheritDoc}
@@ -117,9 +129,7 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
             throw new AppException( "id field name is not provided for the current file upload" );
         }
 
-        // The files are kept in the session (not in this instance): a replicated session brings them to the instance that handles
-        // the next request
-        return new SessionMultipartItemList( session, strFieldName );
+        return getSessionFiles( session ).computeIfAbsent( strFieldName, s -> new SessionMultipartItemList( ) );
     }
 
     /**
@@ -167,7 +177,20 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
     @Override
     public void removeSessionFiles( HttpSession session )
     {
-        deleteFiles( SessionMultipartItemList.removeAll( session ) );
+        @SuppressWarnings( "unchecked" )
+        Map<String, List<MultipartItem>> mapFileItemsSession = (Map<String, List<MultipartItem>>) session.getAttribute( SESSION_ATTRIBUTE_UPLOADED_FILES );
+
+        if ( mapFileItemsSession == null )
+        {
+            return;
+        }
+
+        for ( List<MultipartItem> fileItems : mapFileItemsSession.values( ) )
+        {
+            deleteFiles( fileItems );
+        }
+
+        session.removeAttribute( SESSION_ATTRIBUTE_UPLOADED_FILES );
     }
 
     private void deleteFiles( List<MultipartItem> fileItems )
@@ -218,5 +241,35 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
         }
 
         return null;
+    }
+
+    /**
+     * Gets the uploaded files of the session, by field name. The map is modified in place: the session must be written back
+     * after each request that reads it (OpenLiberty sessionCache writeContents=GET_AND_SET_ATTRIBUTES)
+     *
+     * @param session
+     *            the session
+     * @return the uploaded files, by field name
+     */
+    @SuppressWarnings( "unchecked" )
+    private Map<String, List<MultipartItem>> getSessionFiles( HttpSession session )
+    {
+        Map<String, List<MultipartItem>> mapFileItemsSession = (Map<String, List<MultipartItem>>) session.getAttribute( SESSION_ATTRIBUTE_UPLOADED_FILES );
+
+        if ( mapFileItemsSession == null )
+        {
+            // Concurrent uploads of the same session on this instance must share one map
+            synchronized( this )
+            {
+                mapFileItemsSession = (Map<String, List<MultipartItem>>) session.getAttribute( SESSION_ATTRIBUTE_UPLOADED_FILES );
+                if ( mapFileItemsSession == null )
+                {
+                    mapFileItemsSession = new ConcurrentHashMap<>( );
+                    session.setAttribute( SESSION_ATTRIBUTE_UPLOADED_FILES, mapFileItemsSession );
+                }
+            }
+        }
+
+        return mapFileItemsSession;
     }
 }
