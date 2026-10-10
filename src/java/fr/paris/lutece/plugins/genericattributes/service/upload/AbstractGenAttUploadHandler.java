@@ -71,9 +71,11 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
     // Error messages
     private static final String ERROR_MESSAGE_UNKNOWN_ERROR = "genericattributes.message.unknownError";
 
-    /** <sessionId,<fieldName,fileItems>> */
-    /** contains uploaded file items */
-    private static Map<String, Map<String, List<MultipartItem>>> _mapAsynchronousUpload = new ConcurrentHashMap<>( );
+    /**
+     * Session attribute holding the uploaded files, by field name. The files are kept in the session, not in this instance: a
+     * replicated session brings them to the instance that handles the next request.
+     */
+    private static final String SESSION_ATTRIBUTE_UPLOADED_FILES = "genericattributes.asynchronousUploadedFiles";
 
     /**
      * {@inheritDoc}
@@ -83,9 +85,6 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
     {
         if ( StringUtils.isNotBlank( strFieldName ) && ( strFieldName.length( ) > PREFIX_ENTRY_ID.length( ) ) )
         {
-            String sessionId = getCustomSessionId( request.getSession( ) );
-            initMap( sessionId, strFieldName );
-
             String strIdEntry = getEntryIdFromFieldName( strFieldName );
 
             if ( StringUtils.isEmpty( strIdEntry ) || !StringUtils.isNumeric( strIdEntry ) )
@@ -126,14 +125,7 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
             throw new AppException( "id field name is not provided for the current file upload" );
         }
 
-        String sessionId = getCustomSessionId( session );
-
-        initMap( sessionId, strFieldName );
-
-        // find session-related files in the map
-        Map<String, List<MultipartItem>> mapFileItemsSession = _mapAsynchronousUpload.get( sessionId );
-
-        return mapFileItemsSession.get( strFieldName );
+        return getSessionFiles( session ).computeIfAbsent( strFieldName, s -> new SessionMultipartItemList( ) );
     }
 
     /**
@@ -145,9 +137,6 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
         // This is the name that will be displayed in the form. We keep
         // the original name, but clean it to make it cross-platform.
         String strFileName = UploadUtil.cleanFileName( fileItem.getName( ).trim( ) );
-
-        String sessionId = getCustomSessionId( request.getSession( ) );
-        initMap( sessionId, strFieldName );
 
         // Check if this file has not already been uploaded
         List<MultipartItem> uploadedFiles = getListUploadedFiles( strFieldName, request.getSession( ) );
@@ -184,13 +173,8 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
     @Override
     public void removeSessionFiles( HttpSession session )
     {
-        String sessionId = (String) session.getAttribute( PARAM_CUSTOM_SESSION_ID );
-        if( StringUtils.isBlank( sessionId) )
-        {
-            return;
-        }
-
-        Map<String, List<MultipartItem>> mapFileItemsSession = _mapAsynchronousUpload.get( sessionId );
+        @SuppressWarnings( "unchecked" )
+        Map<String, List<MultipartItem>> mapFileItemsSession = (Map<String, List<MultipartItem>>) session.getAttribute( SESSION_ATTRIBUTE_UPLOADED_FILES );
 
         if ( mapFileItemsSession == null )
         {
@@ -202,7 +186,7 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
             deleteFiles( fileItems );
         }
 
-        _mapAsynchronousUpload.remove( sessionId );
+        session.removeAttribute( SESSION_ATTRIBUTE_UPLOADED_FILES );
     }
 
     private void deleteFiles( List<MultipartItem> fileItems )
@@ -256,28 +240,32 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
     }
 
     /**
-     * Init the map
-     * 
-     * @param strSessionId
-     *            the session id
-     * @param strFieldName
-     *            the field name
+     * Gets the uploaded files of the session, by field name. The map is modified in place: the session must be written back
+     * after each request that reads it (OpenLiberty sessionCache writeContents=GET_AND_SET_ATTRIBUTES)
+     *
+     * @param session
+     *            the session
+     * @return the uploaded files, by field name
      */
-    private void initMap( String strSessionId, String strFieldName )
+    @SuppressWarnings( "unchecked" )
+    private Map<String, List<MultipartItem>> getSessionFiles( HttpSession session )
     {
-        // find session-related files in the map
-        Map<String, List<MultipartItem>> mapFileItemsSession = _mapAsynchronousUpload.get( strSessionId );
+        Map<String, List<MultipartItem>> mapFileItemsSession = (Map<String, List<MultipartItem>>) session.getAttribute( SESSION_ATTRIBUTE_UPLOADED_FILES );
 
-        // create map if not exists
         if ( mapFileItemsSession == null )
         {
+            // Concurrent uploads of the same session on this instance must share one map
             synchronized( this )
             {
-                // Ignore double check locking error : assignation and instanciation of objects are separated.
-                mapFileItemsSession = _mapAsynchronousUpload.computeIfAbsent( strSessionId, s -> new ConcurrentHashMap<>( ) );
+                mapFileItemsSession = (Map<String, List<MultipartItem>>) session.getAttribute( SESSION_ATTRIBUTE_UPLOADED_FILES );
+                if ( mapFileItemsSession == null )
+                {
+                    mapFileItemsSession = new ConcurrentHashMap<>( );
+                    session.setAttribute( SESSION_ATTRIBUTE_UPLOADED_FILES, mapFileItemsSession );
+                }
             }
         }
 
-        mapFileItemsSession.computeIfAbsent( strFieldName, s -> new ArrayList<>( ) );
+        return mapFileItemsSession;
     }
 }
