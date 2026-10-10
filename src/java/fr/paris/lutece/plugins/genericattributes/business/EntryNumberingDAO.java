@@ -133,8 +133,9 @@ public class EntryNumberingDAO implements IEntryNumberingDAO
             daoUtil.setInt( 2, nValue );
             daoUtil.executeUpdate( );
         }
-        catch( AppException e )
+        catch( RuntimeException e )
         {
+            // Duplicate key: created meanwhile by another request or instance (some drivers report it with another exception)
             if ( select( nIdEntry, plugin ) == null )
             {
                 throw e;
