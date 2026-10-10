@@ -122,3 +122,13 @@ CREATE TABLE genatt_referenceitem_field (
 	id_item int default 0 NOT NULL,
 	PRIMARY KEY( id_field )
 );
+
+-- changeset genericattributes:create_db_genericattributes-rev1.sql
+-- preconditions onFail:MARK_RAN onError:WARN
+-- precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = database() AND table_name = 'genatt_entry_numbering'
+-- Counter of the numbering entries, shared by the instances of the application
+CREATE TABLE genatt_entry_numbering (
+	id_entry int NOT NULL,
+	last_value int default 0 NOT NULL,
+	PRIMARY KEY (id_entry)
+);

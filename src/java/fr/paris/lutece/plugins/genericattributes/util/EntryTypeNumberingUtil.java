@@ -33,43 +33,42 @@
  */
 package fr.paris.lutece.plugins.genericattributes.util;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
-import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeNumbering;
+import fr.paris.lutece.plugins.genericattributes.business.EntryNumberingHome;
 
 /**
- * Contains the map of values for {@link AbstractEntryTypeNumbering}
+ * Values of the numbering entries.
+ * <p>
+ * The counter is kept in the database (genatt_entry_numbering): it was held in a map of each JVM, so two instances of the application gave
+ * the same numbers.
+ * </p>
  */
 public final class EntryTypeNumberingUtil
 {
-
     private static final EntryTypeNumberingUtil INSTANCE = new EntryTypeNumberingUtil( );
-    private final Map<Integer, Integer> _valuesMap;
 
     private EntryTypeNumberingUtil( )
     {
-        _valuesMap = new HashMap<>( );
     }
 
+    /**
+     * Gets the instance
+     *
+     * @return the instance
+     */
     public static EntryTypeNumberingUtil getInstance( )
     {
         return INSTANCE;
     }
 
-    public synchronized int getNextValue( int entryId )
+    /**
+     * Gets the next value of a numbering entry
+     *
+     * @param entryId
+     *            The entry id
+     * @return the next value, unique across the instances
+     */
+    public int getNextValue( int entryId )
     {
-        if ( _valuesMap.containsKey( entryId ) )
-        {
-            int old = _valuesMap.get( entryId );
-            _valuesMap.put( entryId, old + 1 );
-        }
-        else
-        {
-            _valuesMap.put( entryId, ResponseHome.findMaxNumber( entryId ) );
-        }
-
-        return _valuesMap.get( entryId );
+        return EntryNumberingHome.nextValue( entryId );
     }
 }

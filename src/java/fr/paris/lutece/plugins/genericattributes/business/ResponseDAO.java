@@ -91,7 +91,7 @@ public class ResponseDAO implements IResponseDAO
      * {@inheritDoc}
      */
     @Override
-    public synchronized void insert( Response response, Plugin plugin )
+    public void insert( Response response, Plugin plugin )
     {
         int nIndex = 1;
 

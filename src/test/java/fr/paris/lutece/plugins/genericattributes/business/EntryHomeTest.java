@@ -40,9 +40,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import fr.paris.lutece.plugins.genericattributes.service.GenericAttributesPlugin;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.plugin.PluginService;
 
 /**
  * Test class for the EntryHome
@@ -63,7 +61,6 @@ public class EntryHomeTest extends AbstractEntryTest
     private static int _nIdEntry2;
     private static int _nIdEntryGroup;
     private static List<Entry> listEntry = new ArrayList<>( );
-    private final Plugin _plugin = PluginService.getPlugin( GenericAttributesPlugin.PLUGIN_NAME );
 
     /**
      * {@inheritDoc}

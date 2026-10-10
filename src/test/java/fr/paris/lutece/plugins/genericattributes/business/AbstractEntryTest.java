@@ -58,8 +58,19 @@ public abstract class AbstractEntryTest extends LuteceTestCase
 
     protected static int _nEntryTypeTextPrimaryKey;
     protected static int _nEntryTypeGroupPrimaryKey;
-    protected final Plugin _plugin = PluginService.getPlugin( GenericAttributesPlugin.PLUGIN_NAME );
-    protected IEntryDAO _entryDAO = CDI.current( ).select( IEntryDAO.class ).get( );
+    // Read before each test: Lutece (plugins, CDI) is not initialized yet when the test instance is created
+    protected Plugin _plugin;
+    protected IEntryDAO _entryDAO;
+
+    /**
+     * Gets the plugin and the DAO once Lutece is initialized
+     */
+    @BeforeEach
+    protected void initPlugin( )
+    {
+        _plugin = PluginService.getPlugin( GenericAttributesPlugin.PLUGIN_NAME );
+        _entryDAO = CDI.current( ).select( IEntryDAO.class ).get( );
+    }
 
     /**
      * Create an EntryType
