@@ -44,6 +44,8 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
 import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.util.sql.TransactionManager;
+import fr.paris.lutece.portal.service.event.EventAction;
+import fr.paris.lutece.portal.service.event.Type.TypeQualifier;
 import jakarta.enterprise.inject.spi.CDI;
 
 /**
@@ -76,6 +78,7 @@ public final class FieldHome
         {
             ReferenceItemFieldHome.create( field.getIdField( ), field.getLinkedItem( ).getId( ) );
         }
+        notifyEntryUpdate( field.getParentEntry( ) );
         return id;
     }
 
@@ -130,6 +133,7 @@ public final class FieldHome
     public static void update( Field field )
     {
         _dao.store( field, getPlugin( ) );
+        notifyEntryUpdate( field.getParentEntry( ) );
     }
 
     /**
@@ -156,6 +160,33 @@ public final class FieldHome
         }
 
         _dao.delete( nIdField, getPlugin( ) );
+        if ( field != null )
+        {
+            notifyEntryUpdate( field.getParentEntry( ) );
+        }
+    }
+
+    /**
+     * Notifies the observers of the entries (the caches of the forms and appointments) that the fields of an entry
+     * changed: the choices of a question are fields, cached with the question
+     *
+     * @param entry
+     *            the parent entry of the field, may be null
+     */
+    private static void notifyEntryUpdate( Entry entry )
+    {
+        if ( ( entry == null ) || ( entry.getIdEntry( ) <= 0 ) )
+        {
+            return;
+        }
+        String strResourceType = entry.getResourceType( );
+        if ( strResourceType == null )
+        {
+            Entry stored = EntryHome.findByPrimaryKey( entry.getIdEntry( ) );
+            strResourceType = ( stored != null ) ? stored.getResourceType( ) : null;
+        }
+        EntryEvent event = new EntryEvent( String.valueOf( entry.getIdEntry( ) ), strResourceType );
+        CDI.current( ).getBeanManager( ).getEvent( ).select( EntryEvent.class, new TypeQualifier( EventAction.UPDATE ) ).fire( event );
     }
 
     // /////////////////////////////////////////////////////////////////////////
