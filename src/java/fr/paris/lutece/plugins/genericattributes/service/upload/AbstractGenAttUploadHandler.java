@@ -39,12 +39,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import fr.paris.lutece.portal.service.util.AppLogService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
@@ -67,6 +69,19 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
 {
     private static final String PREFIX_ENTRY_ID = IEntryTypeService.PREFIX_ATTRIBUTE;
     private static final Pattern PATTERN_PREFIX_ENTRY_ID = Pattern.compile( "[^0-9]+([0-9]+)$" );
+    private static final String PARAMETER_FIELD_NAME = "fieldname";
+
+    // Locks of the uploads of a session to a field, by stripes: the check of the number of files and the add are atomic
+    private static final int NB_UPLOAD_LOCKS = 64;
+    private static final Object [ ] UPLOAD_LOCKS = new Object [ NB_UPLOAD_LOCKS ];
+
+    static
+    {
+        for ( int i = 0; i < NB_UPLOAD_LOCKS; i++ )
+        {
+            UPLOAD_LOCKS [i] = new Object( );
+        }
+    }
 
     // Error messages
     private static final String ERROR_MESSAGE_UNKNOWN_ERROR = "genericattributes.message.unknownError";
@@ -80,6 +95,22 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
     // uploaded on another instance (reproduced). Remaining limit: two uploads of one session at the same time on two instances can
     // lose a file (the last map written wins).
     private static final String SESSION_ATTRIBUTE_UPLOADED_FILES = "genericattributes.asynchronousUploadedFiles";
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * The uploads of a session to a field are processed one at a time: otherwise parallel uploads could all pass the check of the
+     * maximum number of files (canUploadFiles) before any of them adds its file.
+     * </p>
+     */
+    @Override
+    public void process( HttpServletRequest request, HttpServletResponse response, Map<String, Object> map, List<MultipartItem> listFileItemsToUpload )
+    {
+        synchronized( getUploadLock( request.getSession( ), request.getParameter( PARAMETER_FIELD_NAME ) ) )
+        {
+            super.process( request, response, map, listFileItemsToUpload );
+        }
+    }
 
     /**
      * {@inheritDoc}
@@ -145,7 +176,12 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
         // Check if this file has not already been uploaded
         List<MultipartItem> uploadedFiles = getListUploadedFiles( strFieldName, request.getSession( ) );
 
-        if ( uploadedFiles != null )
+        if ( uploadedFiles == null )
+        {
+            return;
+        }
+
+        synchronized( getUploadLock( request.getSession( ), strFieldName ) )
         {
             boolean bNew = true;
 
@@ -168,6 +204,18 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
             {
                 uploadedFiles.add( fileItem );
             }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeFileItem( String strFieldName, HttpSession session, int nIndex )
+    {
+        synchronized( getUploadLock( session, strFieldName ) )
+        {
+            super.removeFileItem( strFieldName, session, nIndex );
         }
     }
 
@@ -206,6 +254,20 @@ public abstract class AbstractGenAttUploadHandler extends AbstractAsynchronousUp
                 AppLogService.error( "Unable to delete uploaded file " + fileItem.getName( ), e );
             }
         }
+    }
+
+    /**
+     * Gets the lock of the uploads of a session to a field
+     *
+     * @param session
+     *            the session
+     * @param strFieldName
+     *            the field name
+     * @return the lock
+     */
+    private static Object getUploadLock( HttpSession session, String strFieldName )
+    {
+        return UPLOAD_LOCKS [Math.floorMod( Objects.hash( session.getId( ), strFieldName ), NB_UPLOAD_LOCKS )];
     }
 
     /**
