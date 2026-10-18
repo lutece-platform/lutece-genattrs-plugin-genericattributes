@@ -44,7 +44,6 @@ import org.apache.commons.lang3.StringUtils;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
-import fr.paris.lutece.plugins.genericattributes.business.ReferenceItemFieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.plugins.referencelist.business.ReferenceItem;
@@ -114,9 +113,13 @@ public abstract class AbstractEntryTypeChoice extends EntryTypeService
 
             for ( Field anwserField : anwserFields )
             {
-                FieldHome.remove( anwserField.getIdField( ) );
-                ReferenceItemFieldHome.removeByField( anwserField.getIdField( ) );
+                // removes the link to the reference item too; one event for the entry below
+                FieldHome.remove( anwserField.getIdField( ), false );
                 entry.getFields( ).removeIf( f -> f.getIdField( ) == anwserField.getIdField( ) );
+            }
+            if ( !anwserFields.isEmpty( ) )
+            {
+                FieldHome.notifyEntryUpdate( entry );
             }
 
             // We create the needed answer choices

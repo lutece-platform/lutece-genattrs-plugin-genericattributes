@@ -105,7 +105,8 @@ public final class EntryHome
                 }
 
                 field.setParentEntry( entryCopy );
-                FieldHome.copy( field );
+                // the copy of the entry fires one event once committed
+                FieldHome.copy( field, false );
             }
 
             if ( Boolean.TRUE.equals( entryCopy.getEntryType( ).getGroup( ) ) )
@@ -183,7 +184,8 @@ public final class EntryHome
                     {
                         ReferenceItemFieldHome.removeByField( field.getIdField( ) );
                     }
-                    FieldHome.remove( field.getIdField( ) );
+                    // the removal of the entry fires one event once committed
+                    FieldHome.remove( field.getIdField( ), false );
                 }
 
                 // Remove the Responses of an Entry

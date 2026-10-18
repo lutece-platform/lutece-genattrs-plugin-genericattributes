@@ -73,12 +73,29 @@ public final class FieldHome
      */
     public static int create( Field field )
     {
+        return create( field, true );
+    }
+
+    /**
+     * Creation of an instance of field
+     *
+     * @param field
+     *            The instance of the Field which contains the informations to store
+     * @param bNotify
+     *            false when the caller changes several fields of the entry and fires one event with {@link #notifyEntryUpdate(Entry)}
+     * @return The primary key of the new Field.
+     */
+    public static int create( Field field, boolean bNotify )
+    {
         int id = _dao.insert( field, getPlugin( ) );
         if ( field.getLinkedItem( ) != null )
         {
             ReferenceItemFieldHome.create( field.getIdField( ), field.getLinkedItem( ).getId( ) );
         }
-        notifyEntryUpdate( field.getParentEntry( ) );
+        if ( bNotify )
+        {
+            notifyEntryUpdate( field.getParentEntry( ) );
+        }
         return id;
     }
 
@@ -90,6 +107,19 @@ public final class FieldHome
      */
     public static void copy( Field field )
     {
+        copy( field, true );
+    }
+
+    /**
+     * Copy of an instance of field
+     *
+     * @param field
+     *            The instance of the Field who must copy
+     * @param bNotify
+     *            false when the copy is part of the copy of its entry, which fires its own event
+     */
+    static void copy( Field field, boolean bNotify )
+    {
         Field fieldCopy = field;
         int oldFieldId = field.getIdField( );
 
@@ -97,7 +127,7 @@ public final class FieldHome
 
         try
         {
-            fieldCopy.setIdField( create( field ) );
+            fieldCopy.setIdField( create( field, false ) );
 
             for ( Entry entry : field.getConditionalQuestions( ) )
             {
@@ -122,6 +152,10 @@ public final class FieldHome
             TransactionManager.rollBack( getPlugin( ) );
             throw new AppException( e.getMessage( ), e );
         }
+        if ( bNotify )
+        {
+            notifyEntryUpdate( fieldCopy.getParentEntry( ) );
+        }
     }
 
     /**
@@ -132,8 +166,24 @@ public final class FieldHome
      */
     public static void update( Field field )
     {
+        update( field, true );
+    }
+
+    /**
+     * Update of the field which is specified in parameter
+     *
+     * @param field
+     *            The instance of the Field which contains the informations to update
+     * @param bNotify
+     *            false when the caller changes several fields of the entry and fires one event with {@link #notifyEntryUpdate(Entry)}
+     */
+    public static void update( Field field, boolean bNotify )
+    {
         _dao.store( field, getPlugin( ) );
-        notifyEntryUpdate( field.getParentEntry( ) );
+        if ( bNotify )
+        {
+            notifyEntryUpdate( field.getParentEntry( ) );
+        }
     }
 
     /**
@@ -143,6 +193,19 @@ public final class FieldHome
      *            The field Id
      */
     public static void remove( int nIdField )
+    {
+        remove( nIdField, true );
+    }
+
+    /**
+     * Delete an instance of the field whose identifier is specified in parameter
+     *
+     * @param nIdField
+     *            The field Id
+     * @param bNotify
+     *            false when the caller removes several fields of the entry or the entry itself and fires one event
+     */
+    public static void remove( int nIdField, boolean bNotify )
     {
         Field field = findByPrimaryKey( nIdField );
         if ( field != null )
@@ -162,7 +225,7 @@ public final class FieldHome
         // the link to a reference item, if the field was created from a reference list
         ReferenceItemFieldHome.removeByField( nIdField );
         _dao.delete( nIdField, getPlugin( ) );
-        if ( field != null )
+        if ( bNotify && field != null )
         {
             notifyEntryUpdate( field.getParentEntry( ) );
         }
@@ -175,7 +238,7 @@ public final class FieldHome
      * @param entry
      *            the parent entry of the field, may be null
      */
-    private static void notifyEntryUpdate( Entry entry )
+    public static void notifyEntryUpdate( Entry entry )
     {
         if ( ( entry == null ) || ( entry.getIdEntry( ) <= 0 ) )
         {

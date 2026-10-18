@@ -33,7 +33,9 @@
  */
 package fr.paris.lutece.plugins.genericattributes.service;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -75,17 +77,27 @@ public class GenattReferenceItemListener
     {
     	ReferenceItem item = event.getReferenceItem( );
         List<Integer> idFields = ReferenceItemFieldHome.findIdFieldByIdItem( item.getId( ) );
+        // one event per entry, once its fields are removed
+        Map<Integer, Entry> mapEntries = new LinkedHashMap<>( );
         for ( Integer id : idFields )
         {
-            FieldHome.remove( id );
+            Field field = FieldHome.findByPrimaryKey( id );
+            if ( field != null && field.getParentEntry( ) != null )
+            {
+                mapEntries.putIfAbsent( field.getParentEntry( ).getIdEntry( ), field.getParentEntry( ) );
+            }
+            FieldHome.remove( id, false );
         }
         ReferenceItemFieldHome.removeByItem( item.getId( ) );
+        mapEntries.values( ).forEach( FieldHome::notifyEntryUpdate );
     }
 
     public void updateReferenceItem( @ObservesAsync @Type(EventAction.UPDATE) ReferenceItemEvent event )
     {
     	ReferenceItem item = event.getReferenceItem( );
         List<Integer> idFields = ReferenceItemFieldHome.findIdFieldByIdItem( item.getId( ) );
+        // one event per entry, once its fields are updated
+        Map<Integer, Entry> mapEntries = new LinkedHashMap<>( );
         for ( Integer id : idFields )
         {
             Field field = FieldHome.findByPrimaryKey( id );
@@ -97,8 +109,13 @@ public class GenattReferenceItemListener
             }
             field.setValue( item.getCode( ) );
             field.setTitle( item.getName( ) );
-            FieldHome.update( field );
+            FieldHome.update( field, false );
+            if ( field.getParentEntry( ) != null )
+            {
+                mapEntries.putIfAbsent( field.getParentEntry( ).getIdEntry( ), field.getParentEntry( ) );
+            }
         }
+        mapEntries.values( ).forEach( FieldHome::notifyEntryUpdate );
     }
 
     private List<Entry> listConcernedEntries( int idList )
