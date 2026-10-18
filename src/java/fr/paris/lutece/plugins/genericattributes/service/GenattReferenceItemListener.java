@@ -89,6 +89,12 @@ public class GenattReferenceItemListener
         for ( Integer id : idFields )
         {
             Field field = FieldHome.findByPrimaryKey( id );
+            if ( field == null )
+            {
+                // a link left by a field removed before the link rows were removed with it
+                ReferenceItemFieldHome.removeByField( id );
+                continue;
+            }
             field.setValue( item.getCode( ) );
             field.setTitle( item.getName( ) );
             FieldHome.update( field );

@@ -159,6 +159,8 @@ public final class FieldHome
             removeVerifyBy( nIdField, regularExpressionKey );
         }
 
+        // the link to a reference item, if the field was created from a reference list
+        ReferenceItemFieldHome.removeByField( nIdField );
         _dao.delete( nIdField, getPlugin( ) );
         if ( field != null )
         {

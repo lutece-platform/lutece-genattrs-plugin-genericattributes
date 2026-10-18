@@ -36,11 +36,16 @@ package fr.paris.lutece.plugins.genericattributes.business;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import fr.paris.lutece.plugins.genericattributes.service.GenattReferenceItemListener;
+import fr.paris.lutece.plugins.referencelist.business.ReferenceItem;
+import fr.paris.lutece.plugins.referencelist.service.ReferenceItemEvent;
+
 public class FieldHomeTest extends AbstractEntryTest
 {
 
     private static final String TITLE_1 = "Title 1";
     private static final String TITLE_2 = "Title 2";
+    private static final int ID_REFERENCE_ITEM = 987654;
     private static int _nIdEntry;
     private static int _nIdEntryGroup;
 
@@ -65,6 +70,69 @@ public class FieldHomeTest extends AbstractEntryTest
         FieldHome.remove( field.getIdField( ) );
         loaded = FieldHome.findByPrimaryKey( field.getIdField( ) );
         assertNull( loaded );
+    }
+
+    /**
+     * Removing a field created from a reference list removes its link to the reference item
+     */
+    @Test
+    public void testRemoveFieldRemovesReferenceItemLink( )
+    {
+        Field field = createLinkedField( );
+        assertTrue( ReferenceItemFieldHome.findIdFieldByIdItem( ID_REFERENCE_ITEM ).contains( field.getIdField( ) ) );
+
+        FieldHome.remove( field.getIdField( ) );
+
+        assertFalse( ReferenceItemFieldHome.findIdFieldByIdItem( ID_REFERENCE_ITEM ).contains( field.getIdField( ) ) );
+    }
+
+    /**
+     * The update of a reference item skips the links to removed fields and still updates the other fields
+     */
+    @Test
+    public void testUpdateReferenceItemSkipsRemovedField( )
+    {
+        int nIdRemovedField = Integer.MAX_VALUE - 1;
+        ReferenceItemFieldHome.create( nIdRemovedField, ID_REFERENCE_ITEM );
+        Field field = createLinkedField( );
+        try
+        {
+            ReferenceItem item = new ReferenceItem( );
+            item.setId( ID_REFERENCE_ITEM );
+            item.setCode( "newCode" );
+            item.setName( "newName" );
+
+            new GenattReferenceItemListener( ).updateReferenceItem( new ReferenceItemEvent( item ) );
+
+            Field loaded = FieldHome.findByPrimaryKey( field.getIdField( ) );
+            assertEquals( "newCode", loaded.getValue( ) );
+            assertEquals( "newName", loaded.getTitle( ) );
+            assertFalse( ReferenceItemFieldHome.findIdFieldByIdItem( ID_REFERENCE_ITEM ).contains( nIdRemovedField ) );
+        }
+        finally
+        {
+            ReferenceItemFieldHome.removeByField( nIdRemovedField );
+            FieldHome.remove( field.getIdField( ) );
+        }
+    }
+
+    private Field createLinkedField( )
+    {
+        Entry entry = new Entry( );
+        entry.setIdEntry( _nIdEntry );
+
+        ReferenceItem item = new ReferenceItem( );
+        item.setId( ID_REFERENCE_ITEM );
+
+        Field field = new Field( );
+        field.setCode( "answer_choice" );
+        field.setParentEntry( entry );
+        field.setTitle( "title" );
+        field.setValue( "value" );
+        field.setLinkedItem( item );
+        FieldHome.create( field );
+
+        return field;
     }
 
     @BeforeEach
