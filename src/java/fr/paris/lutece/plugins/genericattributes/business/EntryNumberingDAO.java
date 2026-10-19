@@ -43,7 +43,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * Counter of the numbering entries in the table genatt_entry_numbering. The increment is an atomic UPDATE read back in the same transaction
- * (the row stays locked until the commit), so two submissions on two instances never get the same value.
+ * (the row stays locked until the commit), so two submissions on two instances never get the same value. The first counter of an entry is
+ * created under a lock of the row of the entry, so a concurrent submission waits for it instead of inserting it a second time.
  */
 @ApplicationScoped
 public class EntryNumberingDAO implements IEntryNumberingDAO
@@ -52,6 +53,7 @@ public class EntryNumberingDAO implements IEntryNumberingDAO
     private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_entry_numbering ( id_entry, counter_value ) VALUES ( ?, ? )";
     private static final String SQL_QUERY_INCREMENT = "UPDATE genatt_entry_numbering SET counter_value = counter_value + 1 WHERE id_entry = ?";
     private static final String SQL_QUERY_DELETE = "DELETE FROM genatt_entry_numbering WHERE id_entry = ?";
+    private static final String SQL_QUERY_LOCK_ENTRY = "SELECT id_entry FROM genatt_entry WHERE id_entry = ? FOR UPDATE";
 
     /**
      * {@inheritDoc}
@@ -59,14 +61,17 @@ public class EntryNumberingDAO implements IEntryNumberingDAO
     @Override
     public int nextValue( int nIdEntry, IntSupplier currentValue, Plugin plugin )
     {
-        if ( select( nIdEntry, plugin ) == null )
-        {
-            createIfAbsent( nIdEntry, currentValue.getAsInt( ), plugin );
-        }
-
         TransactionManager.beginTransaction( plugin );
         try
         {
+            if ( select( nIdEntry, plugin ) == null )
+            {
+                lockEntry( nIdEntry, plugin );
+                if ( select( nIdEntry, plugin ) == null )
+                {
+                    createIfAbsent( nIdEntry, currentValue.getAsInt( ), plugin );
+                }
+            }
             try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INCREMENT, plugin ) )
             {
                 daoUtil.setInt( 1, nIdEntry );
@@ -116,7 +121,25 @@ public class EntryNumberingDAO implements IEntryNumberingDAO
     }
 
     /**
-     * Creates the counter of an entry; another instance may create it at the same time (primary key)
+     * Locks the row of an entry until the end of the transaction
+     *
+     * @param nIdEntry
+     *            The entry id
+     * @param plugin
+     *            The plugin
+     */
+    private void lockEntry( int nIdEntry, Plugin plugin )
+    {
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_LOCK_ENTRY, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdEntry );
+            daoUtil.executeQuery( );
+            daoUtil.next( );
+        }
+    }
+
+    /**
+     * Creates the counter of an entry; without the row of the entry to lock, another instance may create it at the same time (primary key)
      *
      * @param nIdEntry
      *            The entry id
