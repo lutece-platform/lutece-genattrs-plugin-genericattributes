@@ -65,7 +65,10 @@ public interface IOcrProvider extends Serializable
     String getDisplayedName( );
 
     /**
-     * Gets the html template
+     * Gets the html template, rendered: HTML the application built from its templates. With the always-on auto-escaping
+     * of the templates, the consumer that puts it in a template model marks it as markup
+     * ({@code HtmlMarkup.of( strHtml )}, {@code fr.paris.lutece.portal.service.template.HtmlMarkup}); a plain
+     * {@code String} is printed as text.
      * 
      * @param nIdTargetEntry
      *            The File reading entry id
@@ -76,7 +79,8 @@ public interface IOcrProvider extends Serializable
     String getHtmlCode( int nIdTargetEntry, String strResourceType );
 
     /**
-     * Gets the html template configuration
+     * Gets the html template configuration, rendered: HTML the application built from its templates, marked by its
+     * consumer with {@code HtmlMarkup.of( strHtml )} as for {@link #getHtmlCode(int, String)}.
      * 
      * @param listEntry
      *            The entry list to mapping for prefill

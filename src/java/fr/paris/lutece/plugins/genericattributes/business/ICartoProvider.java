@@ -63,9 +63,10 @@ public interface ICartoProvider extends Serializable
     String getDisplayedName( );
 
     /**
-     * Gets the html template
+     * Gets the html template: the path of a template (from the templates root) that the consumer includes
+     * ({@code <#include entry.mapProvider.htmlCode />}), not HTML.
      * 
-     * @return the html template
+     * @return the path of the html template
      */
     String getHtmlCode( );
 
