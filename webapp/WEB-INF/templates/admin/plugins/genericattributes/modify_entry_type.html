@@ -4,10 +4,10 @@
 		<@tform method='post' name='modifyEntryType' action='jsp/admin/plugins/genericattributes/ManageEntryType.jsp' id='edit_entrytype_page'>
 			<@messages errors=errors />
 			<@input type='hidden' id='id_type' name='id_type' value='${entryType.idType}'/>
-			<@formGroup labelKey='#i18n{genericattributes.manageEntryType.labelName}' mandatory=true >
+			<@formGroup labelFor='title' labelKey='#i18n{genericattributes.manageEntryType.labelName}' mandatory=true >
 				<@input type='text' name='title' value='${entryType.title}' />
 			</@formGroup>
-			<@formGroup labelKey='#i18n{genericattributes.manageEntryType.labelIcon} ${entryType.iconName!}' mandatory=true >
+			<@formGroup labelFor='selectIcon-btn' labelKey='#i18n{genericattributes.manageEntryType.labelIcon} ${entryType.iconName!}' mandatory=true >
 				<@selectIconFont name='iconName' defaultValue=entryType.iconName />
 			</@formGroup>
 			<@formGroup>
