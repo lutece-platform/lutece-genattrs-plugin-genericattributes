@@ -61,7 +61,6 @@ import fr.paris.lutece.portal.service.upload.MultipartItem;
 import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.ReferenceList;
-import fr.paris.lutece.util.string.StringUtil;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 
 /**
@@ -320,17 +319,6 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
                     nMaxSize,
             };
             error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_MAXLENGTH, messageArgs, locale ) );
-
-            return error;
-        }
-
-        // Checks if the entry value contains XSS characters
-        if ( StringUtil.containsXssCharacters( strValueEntry ) )
-        {
-            GenericAttributeError error = new GenericAttributeError( );
-            error.setMandatoryError( false );
-            error.setTitleQuestion( entry.getTitle( ) );
-            error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_XSS_FIELD, locale ) );
 
             return error;
         }
