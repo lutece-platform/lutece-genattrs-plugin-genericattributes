@@ -155,6 +155,10 @@ public interface IEntryTypeService
     String MESSAGE_NUMERIC_MIN = "genericattributes.message.numeric.min";
     String MESSAGE_CONFIRM_FIELD = "genericattributes.message.errorConfirmField";
     String MESSAGE_UNIQUE_FIELD = "genericattributes.message.errorUniqueField";
+    /**
+     * @deprecated the entry types no longer refuse the characters &lt; &gt; # and " on input: the templates escape the answers on output
+     */
+    @Deprecated
     String MESSAGE_XSS_FIELD = "genericattributes.message.errorXssField";
     String MESSAGE_MAXLENGTH = "genericattributes.message.maxLength";
     String MESSAGE_INVALID_SQL_QUERY = "genericattributes.message.invalidSqlQuery";

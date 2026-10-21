@@ -52,7 +52,6 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.util.date.DateUtil;
-import fr.paris.lutece.util.string.StringUtil;
 
 /**
  * Abstract entry type for dates
@@ -178,17 +177,6 @@ public abstract class AbstractEntryTypeDate extends EntryTypeService
 
         response.setIterationNumber( getResponseIterationValue( request ) );
         listResponse.add( response );
-
-        // Checks if the entry value contains XSS characters
-        if ( StringUtil.containsXssCharacters( strValueEntry ) )
-        {
-            GenericAttributeError error = new GenericAttributeError( );
-            error.setMandatoryError( false );
-            error.setTitleQuestion( entry.getTitle( ) );
-            error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_XSS_FIELD, request.getLocale( ) ) );
-
-            return error;
-        }
 
         if ( entry.isMandatory( ) && StringUtils.isBlank( strValueEntry ) )
         {
