@@ -33,12 +33,17 @@
  */
 package fr.paris.lutece.plugins.genericattributes.business;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import fr.paris.lutece.plugins.genericattributes.service.GenattReferenceItemListener;
 import fr.paris.lutece.plugins.referencelist.business.ReferenceItem;
 import fr.paris.lutece.plugins.referencelist.service.ReferenceItemEvent;
+import fr.paris.lutece.portal.service.regularexpression.RegularExpressionRemovalListenerService;
 
 public class FieldHomeTest extends AbstractEntryTest
 {
@@ -112,6 +117,38 @@ public class FieldHomeTest extends AbstractEntryTest
         finally
         {
             ReferenceItemFieldHome.removeByField( nIdRemovedField );
+            FieldHome.remove( field.getIdField( ) );
+        }
+    }
+
+    /**
+     * A regular expression verifying a field cannot be removed, with a message naming the entry; it can once the field no longer uses it
+     */
+    @Test
+    public void testRegularExpressionRemovalRefusedWhileUsed( )
+    {
+        int nIdExpression = 515151;
+        Entry entry = new Entry( );
+        entry.setIdEntry( _nIdEntry );
+        Field field = new Field( );
+        field.setCode( "text_config" );
+        field.setParentEntry( entry );
+        field.setTitle( "title" );
+        field.setValue( "value" );
+        FieldHome.create( field );
+        FieldHome.createVerifyBy( field.getIdField( ), nIdExpression );
+        try
+        {
+            List<String> listMessages = new ArrayList<>( );
+            assertFalse( RegularExpressionRemovalListenerService.getService( ).checkForRemoval( String.valueOf( nIdExpression ), listMessages, Locale.ENGLISH ) );
+            assertTrue( listMessages.stream( ).anyMatch( message -> message.contains( TITLE_1 ) ), String.valueOf( listMessages ) );
+
+            FieldHome.removeVerifyBy( field.getIdField( ), nIdExpression );
+            assertTrue( RegularExpressionRemovalListenerService.getService( ).checkForRemoval( String.valueOf( nIdExpression ), new ArrayList<>( ), Locale.ENGLISH ) );
+        }
+        finally
+        {
+            FieldHome.removeVerifyBy( field.getIdField( ), nIdExpression );
             FieldHome.remove( field.getIdField( ) );
         }
     }

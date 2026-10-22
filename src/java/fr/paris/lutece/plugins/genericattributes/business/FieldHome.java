@@ -367,6 +367,18 @@ public final class FieldHome
     }
 
     /**
+     * Get the titles of the entries whose fields are verified by the regular expression
+     *
+     * @param nIdExpression
+     *            The identifier of the regular expression
+     * @return the titles of the entries, one per field verified by the regular expression
+     */
+    public static List<String> getEntryTitlesByRegularExpression( int nIdExpression )
+    {
+        return _dao.selectEntryTitlesByRegularExpression( nIdExpression, getPlugin( ) );
+    }
+
+    /**
      * Load the data of all the field by code
      * 
      * @param code

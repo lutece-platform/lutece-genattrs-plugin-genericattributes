@@ -69,6 +69,8 @@ public class FieldDAO implements IFieldDAO
     private static final String SQL_QUERY_NEW_POSITION = "SELECT MAX(pos)" + " FROM genatt_field ";
     private static final String SQL_QUERY_SELECT_REGULAR_EXPRESSION_BY_ID_FIELD = "SELECT id_expression " + " FROM genatt_verify_by where id_field=?";
     private static final String SQL_QUERY_COUNT_FIELD_BY_ID_REGULAR_EXPRESSION = "SELECT COUNT(id_field) " + " FROM genatt_verify_by where id_expression = ?";
+    private static final String SQL_QUERY_SELECT_ENTRY_TITLE_BY_ID_REGULAR_EXPRESSION = "SELECT e.title FROM genatt_verify_by v INNER JOIN genatt_field f ON v.id_field = f.id_field "
+            + " INNER JOIN genatt_entry e ON f.id_entry = e.id_entry WHERE v.id_expression = ?";
     private static final String SQL_QUERY_SELECT_FIELD_BY_LIST_ID_ENTRY = SQL_QUERY_SELECT_ALL + " WHERE id_entry IN ";
     
     private static final String PUBLIC_IMAGE_RESOURCE = "public_image_resource";
@@ -283,6 +285,28 @@ public class FieldDAO implements IFieldDAO
         }
 
         return nNumberEntry != 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> selectEntryTitlesByRegularExpression( int nIdExpression, Plugin plugin )
+    {
+        List<String> listTitles = new ArrayList<>( );
+
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ENTRY_TITLE_BY_ID_REGULAR_EXPRESSION, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdExpression );
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                listTitles.add( daoUtil.getString( 1 ) );
+            }
+        }
+
+        return listTitles;
     }
 
     @Override

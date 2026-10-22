@@ -145,6 +145,17 @@ public interface IFieldDAO
     boolean isRegularExpressionIsUse( int nIdExpression, Plugin plugin );
 
     /**
+     * Load the titles of the entries whose fields are verified by the regular expression
+     *
+     * @param nIdExpression
+     *            The identifier of the regular expression
+     * @param plugin
+     *            the plugin
+     * @return the titles of the entries, one per field verified by the regular expression
+     */
+    List<String> selectEntryTitlesByRegularExpression( int nIdExpression, Plugin plugin );
+
+    /**
      * Load all the fields by list of id_enrty.
      * 
      * @param idList
