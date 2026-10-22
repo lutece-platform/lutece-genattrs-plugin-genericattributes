@@ -407,16 +407,16 @@ public class ResponseDAO implements IResponseDAO
 
         nIndex++;
 
-        // Get file if it exists
-        if ( daoUtil.getObject( nIndex ) != null )
+        int nIndexFileKey = nIndex++;
+        int nIndexFileStore = nIndex++;
+        if ( daoUtil.getObject( nIndexFileKey ) != null )
         {
             File file = new File( );
-            file.setFileKey( daoUtil.getString( nIndex++ ) );
-            file.setOrigin( daoUtil.getString( nIndex ) );
+            file.setFileKey( daoUtil.getString( nIndexFileKey ) );
+            file.setOrigin( daoUtil.getString( nIndexFileStore ) );
             response.setFile( file );
         }
 
-        nIndex++;
         response.setStatus( daoUtil.getInt( nIndex++ ) );
         response.setSortOrder( daoUtil.getInt( nIndex ) );
         return response;
