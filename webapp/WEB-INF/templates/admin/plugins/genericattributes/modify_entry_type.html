@@ -5,11 +5,17 @@
 			<@messages errors=errors />
 			<@input type='hidden' id='id_type' name='id_type' value='${entryType.idType}'/>
 			<@formGroup labelKey='#i18n{genericattributes.manageEntryType.labelName}' mandatory=true >
-				<@input type='text' name='title' value='${entryType.title}' />
+				<@input type='text' name='title' value=(entryType.title!'')?html maxlength=maxLengthTitle />
 			</@formGroup>
 			<@formGroup labelKey='#i18n{genericattributes.manageEntryType.labelIcon} ${entryType.iconName!}' mandatory=true >
 				<@selectIconFont name='iconName' defaultValue=entryType.iconName />
 			</@formGroup>
+			<#if entryType.derived>
+			<@formGroup labelKey='#i18n{genericattributes.manageEntryType.labelDerivedFrom}'>
+				<p class='form-control-plaintext'>${(entryTypeParent.title?html)!''}</p>
+			</@formGroup>
+			<#include "/admin/plugins/genericattributes/entry_type_regex_fields.html" />
+			</#if>
 			<@formGroup>
 				<@button type='submit' name='action_modifyEntryType' buttonIcon='check' title='#i18n{genericattributes.manageEntryType.button.edit}' class='form-validation' />
 				<@button type='submit' name='cancel' buttonIcon='x' title='#i18n{portal.admin.message.buttonCancel}' cancel=true  class='form-validation' />

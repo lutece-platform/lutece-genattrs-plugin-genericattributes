@@ -1,0 +1,6 @@
+<@formGroup labelKey='#i18n{genericattributes.manageEntryType.labelRegexPattern}' labelFor='regex_pattern' helpKey='#i18n{genericattributes.manageEntryType.labelRegexPattern.help}' mandatory=true>
+	<@input type='text' name='regex_pattern' id='regex_pattern' value=(entryType.regexPattern!'')?html class='font-monospace' maxlength=maxLengthRegexPattern mandatory=true />
+</@formGroup>
+<@formGroup labelKey='#i18n{genericattributes.manageEntryType.labelRegexErrorMessage}' labelFor='regex_error_message' helpKey='#i18n{genericattributes.manageEntryType.labelRegexErrorMessage.help}'>
+	<@input type='text' name='regex_error_message' id='regex_error_message' value=(entryType.regexErrorMessage!'')?html maxlength=maxLengthRegexErrorMessage />
+</@formGroup>

@@ -157,6 +157,7 @@ public interface IEntryTypeService
     String MESSAGE_UNIQUE_FIELD = "genericattributes.message.errorUniqueField";
     String MESSAGE_XSS_FIELD = "genericattributes.message.errorXssField";
     String MESSAGE_MAXLENGTH = "genericattributes.message.maxLength";
+    String MESSAGE_REGEX_FIELD = "genericattributes.message.errorRegexField";
     String MESSAGE_INVALID_SQL_QUERY = "genericattributes.message.invalidSqlQuery";
     String MESSAGE_MYLUTECE_AUTHENTIFICATION_REQUIRED = "genericattributes.message.myLuteceAuthentificationRequired";
     String ERROR_FIELD_TITLE = "genericattributes.createEntry.labelTitle";
@@ -361,4 +362,15 @@ public interface IEntryTypeService
      * @return
      */
     List<IEntryAnonymizationType> getValidWildcards( );
+
+    /**
+     * Tell whether the responses to the entries of this entry type can be controlled by the regular expression of their entry type. Only such entry types
+     * can carry a regular expression in the entry type management.
+     * 
+     * @return true if the regular expression of the entry type is checked on the responses
+     */
+    default boolean isRegularExpressionSupported( )
+    {
+        return false;
+    }
 }

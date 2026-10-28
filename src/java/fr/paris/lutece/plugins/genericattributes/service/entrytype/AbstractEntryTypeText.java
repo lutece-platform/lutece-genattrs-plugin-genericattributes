@@ -366,6 +366,13 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
             }
         }
 
+        GenericAttributeError regexError = checkEntryTypeRegularExpression( entry, strValueEntry, locale );
+
+        if ( regexError != null )
+        {
+            return regexError;
+        }
+
         if ( bConfirmField && ( ( strValueEntryConfirmField == null ) || !strValueEntry.equals( strValueEntryConfirmField ) ) )
         {
             GenericAttributeError error = new GenericAttributeError( );
@@ -396,6 +403,15 @@ public abstract class AbstractEntryTypeText extends EntryTypeService
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
         return response.getResponseValue( );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isRegularExpressionSupported( )
+    {
+        return true;
     }
 
     /**

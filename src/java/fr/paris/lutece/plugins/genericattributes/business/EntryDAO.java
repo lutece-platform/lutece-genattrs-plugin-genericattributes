@@ -57,6 +57,7 @@ public class EntryDAO implements IEntryDAO
     private static final String SQL_QUERY_NUMBER_CONDITIONAL_QUESTION = "SELECT COUNT(e2.id_entry) "
             + "FROM genatt_entry e1,genatt_field f1,genatt_entry e2 WHERE e1.id_entry=? AND e1.id_entry=f1.id_entry and e2.id_field_depend=f1.id_field ";
     private static final String SQL_QUERY_SELECT_LIST = "ent.id_type,typ.title,typ.is_group,typ.is_comment,typ.class_name,typ.is_mylutece_user,typ.icon_name,"
+            + "typ.id_type_parent,typ.regex_pattern,typ.regex_error_message,"
             + "ent.id_entry,ent.id_resource,ent.resource_type,ent.id_parent,ent.code,ent.title,ent.help_message, ent.comment,ent.mandatory,ent.fields_in_line,"
             + "ent.pos,ent.id_field_depend,ent.field_unique, ent.css_class, ent.pos_conditional, ent.error_message, "
             + "ent.is_only_display_back, ent.is_indexed ";
@@ -657,6 +658,9 @@ public class EntryDAO implements IEntryDAO
         entryType.setBeanName( daoUtil.getString( nIndex++ ) );
         entryType.setMyLuteceUser( daoUtil.getBoolean( nIndex++ ) );
         entryType.setIconName( daoUtil.getString( nIndex++ ) );
+        entryType.setIdTypeParent( daoUtil.getInt( nIndex++ ) );
+        entryType.setRegexPattern( daoUtil.getString( nIndex++ ) );
+        entryType.setRegexErrorMessage( daoUtil.getString( nIndex++ ) );
 
         entry = new Entry( );
 

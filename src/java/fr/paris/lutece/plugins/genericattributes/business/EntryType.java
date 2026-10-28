@@ -54,6 +54,9 @@ public class EntryType implements Serializable
 
     private int _nOrder;
     private boolean _bInactive;
+    private int _nIdTypeParent;
+    private String _strRegexPattern;
+    private String _strRegexErrorMessage;
 
     /**
      *
@@ -248,5 +251,78 @@ public class EntryType implements Serializable
     public void setInactive( boolean bInactive )
     {
         _bInactive = bInactive;
+    }
+
+    /**
+     * Get the id of the entry type this one was derived from
+     * 
+     * @return the id of the parent entry type, or 0 if this entry type is not derived
+     */
+    public int getIdTypeParent( )
+    {
+        return _nIdTypeParent;
+    }
+
+    /**
+     * Set the id of the entry type this one was derived from
+     * 
+     * @param nIdTypeParent
+     *            the id of the parent entry type, 0 if none
+     */
+    public void setIdTypeParent( int nIdTypeParent )
+    {
+        _nIdTypeParent = nIdTypeParent;
+    }
+
+    /**
+     * Tell whether this entry type was derived from another entry type
+     * 
+     * @return true if the entry type is derived
+     */
+    public boolean isDerived( )
+    {
+        return _nIdTypeParent > 0;
+    }
+
+    /**
+     * Get the regular expression every response to an entry of this type must match
+     * 
+     * @return the regular expression, or null if none
+     */
+    public String getRegexPattern( )
+    {
+        return _strRegexPattern;
+    }
+
+    /**
+     * Set the regular expression every response to an entry of this type must match
+     * 
+     * @param strRegexPattern
+     *            the regular expression
+     */
+    public void setRegexPattern( String strRegexPattern )
+    {
+        _strRegexPattern = strRegexPattern;
+    }
+
+    /**
+     * Get the error message displayed when a response does not match the regular expression
+     * 
+     * @return the error message
+     */
+    public String getRegexErrorMessage( )
+    {
+        return _strRegexErrorMessage;
+    }
+
+    /**
+     * Set the error message displayed when a response does not match the regular expression
+     * 
+     * @param strRegexErrorMessage
+     *            the error message
+     */
+    public void setRegexErrorMessage( String strRegexErrorMessage )
+    {
+        _strRegexErrorMessage = strRegexErrorMessage;
     }
 }

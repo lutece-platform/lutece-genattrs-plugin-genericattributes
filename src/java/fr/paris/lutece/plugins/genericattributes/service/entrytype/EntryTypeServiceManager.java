@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.genericattributes.service.entrytype;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryType;
+import jakarta.enterprise.inject.Instance;
 import jakarta.enterprise.inject.literal.NamedLiteral;
 import jakarta.enterprise.inject.spi.CDI;
 
@@ -73,5 +74,24 @@ public final class EntryTypeServiceManager
         }
 
         return CDI.current( ).select( IEntryTypeService.class, NamedLiteral.of( entryType.getBeanName( ) ) ).get( );
+    }
+
+    /**
+     * Get the entry type service of an entry type
+     * 
+     * @param entryType
+     *            The entry type
+     * @return The entry type service, or null if no deployed bean answers the bean name of the entry type
+     */
+    public static IEntryTypeService findEntryTypeService( EntryType entryType )
+    {
+        if ( entryType == null || entryType.getBeanName( ) == null )
+        {
+            return null;
+        }
+
+        Instance<IEntryTypeService> instance = CDI.current( ).select( IEntryTypeService.class, NamedLiteral.of( entryType.getBeanName( ) ) );
+
+        return instance.isResolvable( ) ? instance.get( ) : null;
     }
 }

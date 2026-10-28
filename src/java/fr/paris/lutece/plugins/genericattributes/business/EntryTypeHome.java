@@ -36,6 +36,8 @@ package fr.paris.lutece.plugins.genericattributes.business;
 import java.util.List;
 
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
+import fr.paris.lutece.portal.service.event.EventAction;
+import fr.paris.lutece.portal.service.event.Type.TypeQualifier;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import jakarta.enterprise.inject.spi.CDI;
 
@@ -116,5 +118,88 @@ public final class EntryTypeHome
     public static void update( EntryType entryType )
     {
         _dao.store( entryType, getPlugin( ) );
+        fireEvent( entryType, EventAction.UPDATE );
+    }
+
+    /**
+     * Create an entry type
+     * 
+     * @param entryType
+     *            the entry type to create
+     * @return the created entry type, carrying its new id
+     */
+    public static EntryType create( EntryType entryType )
+    {
+        _dao.insert( entryType, getPlugin( ) );
+        fireEvent( entryType, EventAction.CREATE );
+
+        return entryType;
+    }
+
+    /**
+     * Remove an entry type
+     * 
+     * @param nIdType
+     *            the id of the entry type to remove
+     */
+    public static void remove( int nIdType )
+    {
+        EntryType entryType = findByPrimaryKey( nIdType );
+        _dao.delete( nIdType, getPlugin( ) );
+
+        if ( entryType != null )
+        {
+            fireEvent( entryType, EventAction.REMOVE );
+        }
+    }
+
+    /**
+     * Get the highest display order of the entry types of a plugin
+     * 
+     * @param strPlugin
+     *            the name of the plugin owning the entry types
+     * @return the highest display order, 0 if the plugin has no entry type
+     */
+    public static int getMaxOrder( String strPlugin )
+    {
+        return _dao.selectMaxOrder( strPlugin, getPlugin( ) );
+    }
+
+    /**
+     * Count the entries using an entry type
+     * 
+     * @param nIdType
+     *            the id of the entry type
+     * @return the number of entries of this type
+     */
+    public static int countEntries( int nIdType )
+    {
+        return _dao.countEntries( nIdType, getPlugin( ) );
+    }
+
+    /**
+     * Count the entry types derived from an entry type
+     * 
+     * @param nIdType
+     *            the id of the entry type
+     * @return the number of entry types derived from it
+     */
+    public static int countDerivedEntryTypes( int nIdType )
+    {
+        return _dao.countDerivedEntryTypes( nIdType, getPlugin( ) );
+    }
+
+    /**
+     * Notify the observers that an entry type changed
+     * 
+     * @param entryType
+     *            the entry type
+     * @param action
+     *            the change
+     */
+    private static void fireEvent( EntryType entryType, EventAction action )
+    {
+        CDI.current( ).getBeanManager( ).getEvent( ).select( EntryTypeEvent.class, new TypeQualifier( action ) )
+                .fire( new EntryTypeEvent( entryType.getIdType( ), entryType.getPlugin( ) ) );
     }
 }

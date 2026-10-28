@@ -272,7 +272,22 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
             return new MandatoryError( entry, locale );
         }
 
-        return null;
+        // A rich text answer is BBCode: the regular expression of the entry type controls plain text only, as the front office does
+        if ( useRichtext )
+        {
+            return null;
+        }
+
+        return checkEntryTypeRegularExpression( entry, strValueEntry, locale );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isRegularExpressionSupported( )
+    {
+        return true;
     }
 
     /**

@@ -37,6 +37,7 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,11 +50,27 @@ import java.util.List;
 public class EntryTypeDAO implements IEntryTypeDAO
 {
     private static final String SQL_QUERY_ORDER_BY = " order by display_order ASC ";
-    private static final String SQL_QUERY_SELECT_ALL = "SELECT id_type,title,is_group,is_comment,class_name,icon_name,is_mylutece_user,plugin,display_order,inactive"
-            + " FROM genatt_entry_type ";
+    private static final String SQL_QUERY_SELECT_ALL = "SELECT id_type,title,is_group,is_comment,class_name,icon_name,is_mylutece_user,plugin,display_order,inactive,"
+            + "id_type_parent,regex_pattern,regex_error_message FROM genatt_entry_type ";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = SQL_QUERY_SELECT_ALL + " WHERE id_type=?";
     private static final String SQL_QUERY_SELECT = SQL_QUERY_SELECT_ALL + " WHERE plugin = ? " + SQL_QUERY_ORDER_BY;
-    private static final String SQL_QUERY_UPDATE = "UPDATE genatt_entry_type SET title = ?,is_group = ?,is_comment = ?,class_name = ?,icon_name = ?,is_mylutece_user = ?,plugin = ?,display_order = ?,inactive = ? WHERE id_type = ? ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE genatt_entry_type SET title = ?,is_group = ?,is_comment = ?,class_name = ?,icon_name = ?,is_mylutece_user = ?,plugin = ?,display_order = ?,inactive = ?,"
+            + "id_type_parent = ?,regex_pattern = ?,regex_error_message = ? WHERE id_type = ? ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO genatt_entry_type ( title,is_group,is_comment,class_name,icon_name,is_mylutece_user,plugin,display_order,inactive,"
+            + "id_type_parent,regex_pattern,regex_error_message ) VALUES ( ?,?,?,?,?,?,?,?,?,?,?,? ) ";
+    private static final String SQL_QUERY_INSERT_WITH_ID = "INSERT INTO genatt_entry_type ( title,is_group,is_comment,class_name,icon_name,is_mylutece_user,plugin,display_order,inactive,"
+            + "id_type_parent,regex_pattern,regex_error_message,id_type ) VALUES ( ?,?,?,?,?,?,?,?,?,?,?,?,? ) ";
+    private static final String SQL_QUERY_MAX_ID = "SELECT MAX(id_type) FROM genatt_entry_type ";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM genatt_entry_type WHERE id_type = ? ";
+
+    /**
+     * The plugins insert their entry types with fixed ids, and may add new ones in a later upgrade script: the derived entry types get ids from this
+     * value on, out of the range those scripts use.
+     */
+    public static final int DERIVED_ENTRY_TYPE_MIN_ID = 1000;
+    private static final String SQL_QUERY_MAX_ORDER = "SELECT MAX(display_order) FROM genatt_entry_type WHERE plugin = ? ";
+    private static final String SQL_QUERY_COUNT_ENTRIES = "SELECT COUNT(id_entry) FROM genatt_entry WHERE id_type = ? ";
+    private static final String SQL_QUERY_COUNT_CHILDREN = "SELECT COUNT(id_type) FROM genatt_entry_type WHERE id_type_parent = ? ";
 
     /**
      * {@inheritDoc}
@@ -129,8 +146,59 @@ public class EntryTypeDAO implements IEntryTypeDAO
         entryType.setPlugin( daoUtil.getString( ++index ) );
         entryType.setOrder( daoUtil.getInt( ++index ) );
         entryType.setInactive( daoUtil.getBoolean( ++index ) );
+        entryType.setIdTypeParent( daoUtil.getInt( ++index ) );
+        entryType.setRegexPattern( daoUtil.getString( ++index ) );
+        entryType.setRegexErrorMessage( daoUtil.getString( ++index ) );
 
         return entryType;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void insert( EntryType entryType, Plugin plugin )
+    {
+        if ( entryType.isDerived( ) )
+        {
+            insertDerived( entryType, plugin );
+            return;
+        }
+
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin ) )
+        {
+            setValues( daoUtil, entryType );
+            daoUtil.executeUpdate( );
+
+            if ( daoUtil.nextGeneratedKey( ) )
+            {
+                entryType.setIdType( daoUtil.getGeneratedKeyInt( 1 ) );
+            }
+        }
+    }
+
+    private void insertDerived( EntryType entryType, Plugin plugin )
+    {
+        int nIdType = DERIVED_ENTRY_TYPE_MIN_ID;
+
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_MAX_ID, plugin ) )
+        {
+            daoUtil.executeQuery( );
+
+            if ( daoUtil.next( ) )
+            {
+                nIdType = Math.max( nIdType, daoUtil.getInt( 1 ) + 1 );
+            }
+        }
+
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_WITH_ID, plugin ) )
+        {
+            int index = setValues( daoUtil, entryType );
+            daoUtil.setInt( ++index, nIdType );
+            daoUtil.executeUpdate( );
+        }
+
+        entryType.setIdType( nIdType );
     }
 
     @Override
@@ -138,21 +206,107 @@ public class EntryTypeDAO implements IEntryTypeDAO
     {
         try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
         {
-            int index = 0;
-            daoUtil.setString( ++index, entryType.getTitle( ) );
-            daoUtil.setBoolean( ++index, entryType.getGroup( ) );
-            daoUtil.setBoolean( ++index, entryType.getComment( ) );
-            daoUtil.setString( ++index, entryType.getBeanName( ) );
-            daoUtil.setString( ++index, entryType.getIconName( ) );
-            daoUtil.setBoolean( ++index, entryType.getMyLuteceUser( ) );
-            daoUtil.setString( ++index, entryType.getPlugin( ) );
-            daoUtil.setInt( ++index, entryType.getOrder( ) );
-            daoUtil.setBoolean( ++index, entryType.isInactive( ) );
+            int index = setValues( daoUtil, entryType );
 
             daoUtil.setInt( ++index, entryType.getIdType( ) );
 
             daoUtil.executeUpdate( );
         }
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void delete( int nIdType, Plugin plugin )
+    {
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdType );
+            daoUtil.executeUpdate( );
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int selectMaxOrder( String strPlugin, Plugin plugin )
+    {
+        int nMaxOrder = 0;
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_MAX_ORDER, plugin ) )
+        {
+            daoUtil.setString( 1, strPlugin );
+            daoUtil.executeQuery( );
+
+            if ( daoUtil.next( ) )
+            {
+                nMaxOrder = daoUtil.getInt( 1 );
+            }
+        }
+        return nMaxOrder;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int countEntries( int nIdType, Plugin plugin )
+    {
+        return count( SQL_QUERY_COUNT_ENTRIES, nIdType, plugin );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int countDerivedEntryTypes( int nIdType, Plugin plugin )
+    {
+        return count( SQL_QUERY_COUNT_CHILDREN, nIdType, plugin );
+    }
+
+    private int count( String strQuery, int nIdType, Plugin plugin )
+    {
+        int nCount = 0;
+        try ( DAOUtil daoUtil = new DAOUtil( strQuery, plugin ) )
+        {
+            daoUtil.setInt( 1, nIdType );
+            daoUtil.executeQuery( );
+
+            if ( daoUtil.next( ) )
+            {
+                nCount = daoUtil.getInt( 1 );
+            }
+        }
+        return nCount;
+    }
+
+    private int setValues( DAOUtil daoUtil, EntryType entryType )
+    {
+        int index = 0;
+        daoUtil.setString( ++index, entryType.getTitle( ) );
+        daoUtil.setBoolean( ++index, entryType.getGroup( ) );
+        daoUtil.setBoolean( ++index, entryType.getComment( ) );
+        daoUtil.setString( ++index, entryType.getBeanName( ) );
+        daoUtil.setString( ++index, entryType.getIconName( ) );
+        daoUtil.setBoolean( ++index, entryType.getMyLuteceUser( ) );
+        daoUtil.setString( ++index, entryType.getPlugin( ) );
+        daoUtil.setInt( ++index, entryType.getOrder( ) );
+        daoUtil.setBoolean( ++index, entryType.isInactive( ) );
+
+        if ( entryType.isDerived( ) )
+        {
+            daoUtil.setInt( ++index, entryType.getIdTypeParent( ) );
+        }
+        else
+        {
+            daoUtil.setIntNull( ++index );
+        }
+
+        daoUtil.setString( ++index, entryType.getRegexPattern( ) );
+        daoUtil.setString( ++index, entryType.getRegexErrorMessage( ) );
+
+        return index;
     }
 }

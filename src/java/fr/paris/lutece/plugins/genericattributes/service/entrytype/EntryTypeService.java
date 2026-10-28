@@ -40,12 +40,16 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.EntryType;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.anonymization.IEntryAnonymizationType;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
+import fr.paris.lutece.plugins.genericattributes.util.RegularExpressionUtils;
+import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.upload.MultipartItem;
 import fr.paris.lutece.util.ReferenceList;
@@ -218,5 +222,52 @@ public abstract class EntryTypeService implements IEntryTypeService
     public String getAnonymizationHelpMessage( Locale locale )
     {
         return getValidWildcards( ).stream( ).map( w -> w.getHelpMessage( locale ) ).collect( Collectors.joining( "," ) );
+    }
+
+    /**
+     * Check a response value against the regular expression of the entry type of the entry. A blank value, or an entry type without regular expression, is
+     * always valid: the mandatory control is the job of the entry type service. The value is matched without its surrounding spaces, as the front office
+     * does. A value the expression cannot settle in time is refused: the answer comes from an anonymous user, the expression must not let it through
+     * by being slow.
+     * 
+     * @param entry
+     *            the entry
+     * @param strValue
+     *            the response value
+     * @param locale
+     *            the locale
+     * @return the error if the value does not match the regular expression, null otherwise
+     */
+    protected GenericAttributeError checkEntryTypeRegularExpression( Entry entry, String strValue, Locale locale )
+    {
+        EntryType entryType = entry.getEntryType( );
+
+        if ( entryType == null || StringUtils.isBlank( entryType.getRegexPattern( ) ) || StringUtils.isBlank( strValue ) )
+        {
+            return null;
+        }
+
+        if ( RegularExpressionUtils.matches( entryType.getRegexPattern( ), strValue.trim( ) ) == RegularExpressionUtils.MatchResult.MATCH )
+        {
+            return null;
+        }
+
+        GenericAttributeError error = new GenericAttributeError( );
+        error.setMandatoryError( false );
+        error.setTitleQuestion( entry.getTitle( ) );
+
+        if ( StringUtils.isNotBlank( entryType.getRegexErrorMessage( ) ) )
+        {
+            // The templates display the error message as HTML: the message an administrator typed is text
+            error.setErrorMessage( StringEscapeUtils.escapeHtml4( entryType.getRegexErrorMessage( ) ) );
+        }
+        else
+        {
+            error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_REGEX_FIELD, new String [ ] {
+                    entry.getTitle( )
+            }, locale ) );
+        }
+
+        return error;
     }
 }
