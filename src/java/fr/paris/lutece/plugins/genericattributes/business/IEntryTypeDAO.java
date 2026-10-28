@@ -82,4 +82,57 @@ public interface IEntryTypeDAO
      * @param plugin
      */
     void store( EntryType entryType, Plugin plugin );
+
+    /**
+     * Insert a new entry type
+     * 
+     * @param entryType
+     *            the entry type to insert, its id is set after the insertion
+     * @param plugin
+     *            the plugin
+     */
+    void insert( EntryType entryType, Plugin plugin );
+
+    /**
+     * Delete an entry type
+     * 
+     * @param nIdType
+     *            the id of the entry type
+     * @param plugin
+     *            the plugin
+     */
+    void delete( int nIdType, Plugin plugin );
+
+    /**
+     * Get the highest display order of the entry types of a plugin
+     * 
+     * @param strPlugin
+     *            the name of the plugin owning the entry types
+     * @param plugin
+     *            the plugin
+     * @return the highest display order, 0 if the plugin has no entry type
+     */
+    int selectMaxOrder( String strPlugin, Plugin plugin );
+
+    /**
+     * Count the entries using an entry type
+     * 
+     * @param nIdType
+     *            the id of the entry type
+     * @param plugin
+     *            the plugin
+     * @return the number of entries of this type
+     */
+    int countEntries( int nIdType, Plugin plugin );
+
+    /**
+     * Count the entry types derived from an entry type
+     * 
+     * @param nIdType
+     *            the id of the entry type
+     * @param plugin
+     *            the plugin
+     * @return the number of entry types derived from it
+     */
+    int countDerivedEntryTypes( int nIdType, Plugin plugin );
 }

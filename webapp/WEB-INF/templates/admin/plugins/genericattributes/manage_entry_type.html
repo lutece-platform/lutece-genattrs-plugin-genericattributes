@@ -10,12 +10,17 @@
 				</@formGroup>
 			</@tform>
 		</@pageHeader>
+		<@messages infos=infos errors=errors />
 		<@manageFeature>
 		<#list entryTypeList as entry_type>
 			<@manageFeatureItem class='item-labels'>
 				<#if entry_type.inactive><#assign entryTypeClass = "text-muted"> <#else><#assign entryTypeClass = ""> </#if>
 				<#-- <@manageFeatureItemColumn>${entry_type.order}</@manageFeatureItemColumn> -->
-				<@manageFeatureItemColumn class='searchable ${entryTypeClass!}'><@icon style='${entry_type.iconName!\'\'}' class='me-2' /> ${entry_type.title}</@manageFeatureItemColumn>
+				<@manageFeatureItemColumn class='searchable ${entryTypeClass!}'><@icon style='${entry_type.iconName!\'\'}' class='me-2' /> ${entry_type.title}
+					<#if entry_type.derived>
+						<span class="badge bg-azure-lt ms-2" title="${(entry_type.regexPattern!'')?html}">#i18n{genericattributes.manageEntryType.labelDerivedFrom} : ${(entryTypeTitles[entry_type.idTypeParent?c]!'')?html}</span>
+					</#if>
+				</@manageFeatureItemColumn>
 				<@manageFeatureItemColumn>
 					<@span class=entry_type.inactive?string('bg-danger text-danger-fg py-1 px-2 rounded','bg-success text-success-fg py-1 px-2 rounded')>
 						#i18n{genericattributes.manageEntryType.columnActive.title} : ${entry_type.inactive?string('#i18n{portal.util.labelNo}','#i18n{portal.util.labelYes}')} 
@@ -24,6 +29,12 @@
 				</@manageFeatureItemColumn>
 				<@manageFeatureItemColumn align='end'>
 					<@offcanvas targetUrl="jsp/admin/plugins/genericattributes/ManageEntryType.jsp?view=editEntryType&id_type=${entry_type.idType}" useIframe=true targetElement="#edit_entrytype_page" id="entrytype-${entry_type.idType}-edit" title="#i18n{genericattributes.manageEntryType.title}" btnTitle="#i18n{portal.util.labelModify} " btnIcon="edit" position="end" />
+					<#if regexSupportedTypes?seq_contains(entry_type.idType)>
+						<@aButton href='jsp/admin/plugins/genericattributes/ManageEntryType.jsp?view=createEntryType&id_type=${entry_type.idType}' hideTitle=['all'] buttonIcon='copy-plus' color='primary' class='me-2' title='#i18n{genericattributes.manageEntryType.action.derive}' />
+					</#if>
+					<#if entry_type.derived>
+						<@aButton href='jsp/admin/plugins/genericattributes/ManageEntryType.jsp?view=confirmRemoveEntryType&id_type=${entry_type.idType}' hideTitle=['all'] buttonIcon='trash' color='danger' class='me-2' title='#i18n{genericattributes.manageEntryType.action.remove}' />
+					</#if>
 					<#if entry_type.inactive>
 						<@tform action='jsp/admin/plugins/genericattributes/ManageEntryType.jsp' method='post' class='d-inline'><@input type='hidden' name='action' value='doChangeActive' /><@input type='hidden' name='id_type' value='${entry_type.idType}' /><@button type='submit' hideTitle=['xs','sm'] buttonIcon='play' color='success' class='me-2' title='#i18n{genericattributes.manageEntryType.action.enable}' /></@tform>
 					<#else>

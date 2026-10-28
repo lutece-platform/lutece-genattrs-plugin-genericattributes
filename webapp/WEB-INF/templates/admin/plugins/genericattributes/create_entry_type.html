@@ -1,0 +1,23 @@
+<@pageContainer>
+    <@pageColumn>
+		<@pageHeader title='#i18n{genericattributes.createEntryType.pageTitle}' />
+		<@tform method='post' name='createEntryType' action='jsp/admin/plugins/genericattributes/ManageEntryType.jsp'>
+			<@messages errors=errors />
+			<@input type='hidden' name='id_type' value='${entryTypeParent.idType}' />
+			<@formGroup labelKey='#i18n{genericattributes.manageEntryType.labelDerivedFrom}'>
+				<p class='form-control-plaintext'><@icon style='${entryTypeParent.iconName!\'\'}' class='me-2' /> ${entryTypeParent.title?html}</p>
+			</@formGroup>
+			<@formGroup labelKey='#i18n{genericattributes.manageEntryType.labelName}' labelFor='title' mandatory=true>
+				<@input type='text' name='title' id='title' value=(entryType.title!'')?html maxlength=maxLengthTitle mandatory=true />
+			</@formGroup>
+			<@formGroup labelKey='#i18n{genericattributes.manageEntryType.labelIcon}' mandatory=true>
+				<@selectIconFont name='iconName' defaultValue=entryType.iconName!'' />
+			</@formGroup>
+			<#include "/admin/plugins/genericattributes/entry_type_regex_fields.html" />
+			<@formGroup>
+				<@button type='submit' name='action_createEntryType' buttonIcon='check' title='#i18n{genericattributes.manageEntryType.button.create}' />
+				<@aButton href='jsp/admin/plugins/genericattributes/ManageEntryType.jsp' buttonIcon='x' title='#i18n{portal.admin.message.buttonCancel}' color='secondary' />
+			</@formGroup>
+		</@tform>
+	</@pageColumn>
+</@pageContainer>
