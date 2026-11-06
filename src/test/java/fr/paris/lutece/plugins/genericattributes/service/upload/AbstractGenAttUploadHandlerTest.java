@@ -78,7 +78,16 @@ public class AbstractGenAttUploadHandlerTest
             List<Callable<Object>> listUploads = new ArrayList<>( );
             for ( int i = 0; i < NB_UPLOADS; i++ )
             {
-                MultipartItem fileItem = new GenAttFileItem( ( "content" + i ).getBytes( ), "file" + i + ".txt" );
+                //MultipartItem fileItem = new GenAttFileItem( ( "content" + i ).getBytes( ), "file" + i + ".txt" );
+            	MultipartItem fileItem = new GenAttFileItem( ( "content" + i ).getBytes( ), "file" + i + ".txt" )
+                {
+                    @Override
+                    public String getContentType( )
+                    {
+                        return "text/plain";
+                    }
+                };
+                
                 listUploads.add( ( ) -> {
                     List<MultipartItem> listFiles = new ArrayList<>( );
                     listFiles.add( fileItem );
