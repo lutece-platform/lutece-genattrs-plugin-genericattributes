@@ -114,10 +114,11 @@ public class EntryTypeRegularExpressionTest extends LuteceTestCase
     }
 
     @Test
-    public void testErrorMessageIsEscaped( )
+    public void testErrorMessageIsPlainText( )
     {
+        // Plain text: the auto-escaping templates escape the message on output, an escaped message would show its entities
         GenericAttributeError error = _service.check( newEntry( REGEX_EMAIL, "<img src=x onerror=alert(1)>" ), "not an e-mail" );
-        assertEquals( "&lt;img src=x onerror=alert(1)&gt;", error.getErrorMessage( ) );
+        assertEquals( "<img src=x onerror=alert(1)>", error.getErrorMessage( ) );
     }
 
     @Test
