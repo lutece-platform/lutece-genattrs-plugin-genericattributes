@@ -18,7 +18,7 @@
 				<#-- <@manageFeatureItemColumn>${entry_type.order}</@manageFeatureItemColumn> -->
 				<@manageFeatureItemColumn class='searchable ${entryTypeClass!}'><@icon style='${entry_type.iconName!\'\'}' class='me-2' /> ${entry_type.title}
 					<#if entry_type.derived>
-						<span class="badge bg-azure-lt ms-2" title="${(entry_type.regexPattern!'')?html}">#i18n{genericattributes.manageEntryType.labelDerivedFrom} : ${(entryTypeTitles[entry_type.idTypeParent?c]!'')?html}</span>
+						<span class="badge bg-azure-lt ms-2" title="${entry_type.regexPattern!''}">#i18n{genericattributes.manageEntryType.labelDerivedFrom} : ${entryTypeTitles[entry_type.idTypeParent?c]!''}</span>
 					</#if>
 				</@manageFeatureItemColumn>
 				<@manageFeatureItemColumn>
