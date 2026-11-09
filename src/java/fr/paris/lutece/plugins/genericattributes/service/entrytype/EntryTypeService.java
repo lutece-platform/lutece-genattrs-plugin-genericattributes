@@ -40,7 +40,6 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.commons.text.StringEscapeUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryType;
@@ -258,8 +257,8 @@ public abstract class EntryTypeService implements IEntryTypeService
 
         if ( StringUtils.isNotBlank( entryType.getRegexErrorMessage( ) ) )
         {
-            // The templates display the error message as HTML: the message an administrator typed is text
-            error.setErrorMessage( StringEscapeUtils.escapeHtml4( entryType.getRegexErrorMessage( ) ) );
+            // Plain text: the auto-escaping templates escape the message an administrator typed
+            error.setErrorMessage( entryType.getRegexErrorMessage( ) );
         }
         else
         {

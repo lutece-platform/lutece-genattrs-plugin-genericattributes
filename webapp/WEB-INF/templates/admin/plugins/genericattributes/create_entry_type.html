@@ -5,10 +5,10 @@
 			<@messages errors=errors />
 			<@input type='hidden' name='id_type' value='${entryTypeParent.idType}' />
 			<@formGroup labelKey='#i18n{genericattributes.manageEntryType.labelDerivedFrom}'>
-				<p class='form-control-plaintext'><@icon style='${entryTypeParent.iconName!\'\'}' class='me-2' /> ${entryTypeParent.title?html}</p>
+				<p class='form-control-plaintext'><@icon style='${entryTypeParent.iconName!\'\'}' class='me-2' /> ${entryTypeParent.title}</p>
 			</@formGroup>
 			<@formGroup labelKey='#i18n{genericattributes.manageEntryType.labelName}' labelFor='title' mandatory=true>
-				<@input type='text' name='title' id='title' value=(entryType.title!'')?html maxlength=maxLengthTitle mandatory=true />
+				<@input type='text' name='title' id='title' value=entryType.title!'' maxlength=maxLengthTitle mandatory=true />
 			</@formGroup>
 			<@formGroup labelKey='#i18n{genericattributes.manageEntryType.labelIcon}' mandatory=true>
 				<@selectIconFont name='iconName' defaultValue=entryType.iconName!'' />

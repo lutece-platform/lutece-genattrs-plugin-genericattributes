@@ -12,7 +12,7 @@
 			</@formGroup>
 			<#if entryType.derived>
 			<@formGroup labelKey='#i18n{genericattributes.manageEntryType.labelDerivedFrom}'>
-				<p class='form-control-plaintext'>${(entryTypeParent.title?html)!''}</p>
+				<p class='form-control-plaintext'>${entryTypeParent.title!''}</p>
 			</@formGroup>
 			<#include "/admin/plugins/genericattributes/entry_type_regex_fields.html" />
 			</#if>
