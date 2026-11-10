@@ -119,7 +119,7 @@ public class EntryTypeJspBean extends MVCAdminJspBean
     private DerivedEntryTypeService _derivedEntryTypeService;
 
     /**
-     * Build the Manage View
+     * Build the Manage View. Its rows post the enable, disable and move actions, which accept the security token generated for this view
      * 
      * @param request
      *            The HTTP request
@@ -155,7 +155,7 @@ public class EntryTypeJspBean extends MVCAdminJspBean
      * @param request
      * @return
      */
-    @Action( ACTION_CHANGE_ACTIVE )
+    @Action( value = ACTION_CHANGE_ACTIVE, securityTokenAction = VIEW_MANAGE_ENTRY_TYPE )
     public String doChangeActive( HttpServletRequest request )
     {
         int idType = NumberUtils.toInt( request.getParameter( PARAMETER_ID ), -1 );
@@ -179,7 +179,7 @@ public class EntryTypeJspBean extends MVCAdminJspBean
      * @param request
      * @return
      */
-    @Action( ACTION_MOVE_UP )
+    @Action( value = ACTION_MOVE_UP, securityTokenAction = VIEW_MANAGE_ENTRY_TYPE )
     public String doMoveUp( HttpServletRequest request )
     {
         int idType = NumberUtils.toInt( request.getParameter( PARAMETER_ID ), -1 );
@@ -199,7 +199,7 @@ public class EntryTypeJspBean extends MVCAdminJspBean
      * @param request
      * @return
      */
-    @Action( ACTION_MOVE_DOWN )
+    @Action( value = ACTION_MOVE_DOWN, securityTokenAction = VIEW_MANAGE_ENTRY_TYPE )
     public String doMoveDown( HttpServletRequest request )
     {
         int idType = NumberUtils.toInt( request.getParameter( PARAMETER_ID ), -1 );
