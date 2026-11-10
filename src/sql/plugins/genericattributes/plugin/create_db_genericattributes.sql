@@ -1,17 +1,12 @@
 -- liquibase formatted sql
 -- changeset genericattributes:create_db_genericattributes.sql
 -- preconditions onFail:MARK_RAN onError:WARN
-DROP TABLE IF EXISTS genatt_verify_by;
-DROP TABLE IF EXISTS genatt_field;
-DROP TABLE IF EXISTS genatt_response;
-DROP TABLE IF EXISTS genatt_entry;
-DROP TABLE IF EXISTS genatt_entry_type;
-DROP TABLE IF EXISTS genatt_referenceitem_field;
+-- precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = database() AND LOWER(table_name) = 'genatt_entry_type'
 
 --
 -- Table structure for table genatt_entry_type
 --
-CREATE TABLE genatt_entry_type (
+CREATE TABLE IF NOT EXISTS genatt_entry_type (
 	id_type int AUTO_INCREMENT NOT NULL,
 	title varchar(255),
 	is_group smallint default NULL,
@@ -30,7 +25,7 @@ CREATE INDEX index_genatt_entry_type_plugin ON genatt_entry_type (plugin);
 --
 -- Table structure for table genatt_entry
 --
-CREATE TABLE genatt_entry (
+CREATE TABLE IF NOT EXISTS genatt_entry (
 	id_entry int AUTO_INCREMENT NOT NULL,
 	id_resource int default 0 NOT NULL,
 	resource_type VARCHAR(255) NOT NULL,
@@ -63,7 +58,7 @@ ALTER TABLE genatt_entry ADD CONSTRAINT fk_genatt_entry_type FOREIGN KEY (id_typ
 --
 -- Table structure for table genatt_field
 --
-CREATE TABLE genatt_field (
+CREATE TABLE IF NOT EXISTS genatt_field (
 	id_field int AUTO_INCREMENT,
 	id_entry int default 0 NOT NULL,
 	title varchar(255),
@@ -86,7 +81,7 @@ ALTER TABLE genatt_field ADD CONSTRAINT fk_genatt_field_entry FOREIGN KEY (id_en
 --
 -- Table structure for table genatt_response
 --
-CREATE TABLE genatt_response (
+CREATE TABLE IF NOT EXISTS genatt_response (
 	id_response int AUTO_INCREMENT,
 	response_value long VARCHAR DEFAULT NULL,
 	id_entry int default NULL,
@@ -106,7 +101,7 @@ CREATE INDEX index_genatt_response_entry ON genatt_response (id_entry);
 --
 -- Table structure for table genatt_verify_by
 --
-CREATE TABLE genatt_verify_by (
+CREATE TABLE IF NOT EXISTS genatt_verify_by (
 	id_field int default 0 NOT NULL,
 	id_expression int default 0 NOT NULL,
 	PRIMARY KEY (id_field,id_expression)
@@ -117,7 +112,7 @@ CREATE INDEX index_genatt_verify_by_field ON genatt_verify_by (id_field);
 ALTER TABLE genatt_verify_by ADD CONSTRAINT fk_genatt_verify_by_field FOREIGN KEY (id_field)
 	REFERENCES genatt_field (id_field);
 	
-CREATE TABLE genatt_referenceitem_field (
+CREATE TABLE IF NOT EXISTS genatt_referenceitem_field (
 	id_field int default 0 NOT NULL,
 	id_item int default 0 NOT NULL,
 	PRIMARY KEY( id_field )
