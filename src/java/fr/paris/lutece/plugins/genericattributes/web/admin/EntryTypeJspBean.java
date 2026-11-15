@@ -112,6 +112,9 @@ public class EntryTypeJspBean extends MVCAdminJspBean
     private static final String ACTION_CREATE_ENTRY_TYPE = "createEntryType";
     private static final String ACTION_REMOVE_ENTRY_TYPE = "removeEntryType";
 
+    // Security token shared by the list of entry types and the actions its buttons post
+    private static final String TOKEN_MANAGE_ENTRY_TYPE = "manageEntryType";
+
     @Inject
     private Models _model;
 
@@ -125,7 +128,7 @@ public class EntryTypeJspBean extends MVCAdminJspBean
      *            The HTTP request
      * @return The page
      */
-    @View( value = VIEW_MANAGE_ENTRY_TYPE, defaultView = true )
+    @View( value = VIEW_MANAGE_ENTRY_TYPE, defaultView = true, securityTokenAction = TOKEN_MANAGE_ENTRY_TYPE )
     public String getManageEntryType( HttpServletRequest request )
     {
         List<EntryType> listEntryType = EntryTypeHome.getCompleteList( );
@@ -155,7 +158,7 @@ public class EntryTypeJspBean extends MVCAdminJspBean
      * @param request
      * @return
      */
-    @Action( ACTION_CHANGE_ACTIVE )
+    @Action( value = ACTION_CHANGE_ACTIVE, securityTokenAction = TOKEN_MANAGE_ENTRY_TYPE )
     public String doChangeActive( HttpServletRequest request )
     {
         int idType = NumberUtils.toInt( request.getParameter( PARAMETER_ID ), -1 );
@@ -179,7 +182,7 @@ public class EntryTypeJspBean extends MVCAdminJspBean
      * @param request
      * @return
      */
-    @Action( ACTION_MOVE_UP )
+    @Action( value = ACTION_MOVE_UP, securityTokenAction = TOKEN_MANAGE_ENTRY_TYPE )
     public String doMoveUp( HttpServletRequest request )
     {
         int idType = NumberUtils.toInt( request.getParameter( PARAMETER_ID ), -1 );
@@ -199,7 +202,7 @@ public class EntryTypeJspBean extends MVCAdminJspBean
      * @param request
      * @return
      */
-    @Action( ACTION_MOVE_DOWN )
+    @Action( value = ACTION_MOVE_DOWN, securityTokenAction = TOKEN_MANAGE_ENTRY_TYPE )
     public String doMoveDown( HttpServletRequest request )
     {
         int idType = NumberUtils.toInt( request.getParameter( PARAMETER_ID ), -1 );
