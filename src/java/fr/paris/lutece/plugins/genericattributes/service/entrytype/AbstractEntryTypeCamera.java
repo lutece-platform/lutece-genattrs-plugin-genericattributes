@@ -72,6 +72,8 @@ import fr.paris.lutece.util.filesystem.FileSystemUtil;
  */
 public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
 {
+    // Prefix of the fields of an iteration of an iterable group (forms)
+    private static final String PREFIX_ITERATION = "nIt";
     private static final String PROPERTY_IMAGE_TITLE = AppPropertiesService.getProperty( "genericattributes.image.prefix.title", "default" );
     private static final String PROPERTY_IMAGE_TITLE_DATE_FORMAT = AppPropertiesService.getProperty( "genericattributes.image.date.format.title",
             "YYYY-MM-DD hh:mm:ss" );
@@ -213,7 +215,14 @@ public abstract class AbstractEntryTypeCamera extends AbstractEntryTypeImage
         }
 
         GenericAttributeError genAttError = null;
-        String sourceBase = request.getParameter( ( IEntryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry( ) ) );
+        // In an iterable group, the field of the iteration n > 0 is named nIt<n>_attribute<id>
+        String strParameterName = IEntryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry( );
+        int nIteration = getResponseIterationValue( request );
+        if ( nIteration > 0 )
+        {
+            strParameterName = PREFIX_ITERATION + nIteration + "_" + strParameterName;
+        }
+        String sourceBase = request.getParameter( strParameterName );
 
         if ( sourceBase != null )
         {
