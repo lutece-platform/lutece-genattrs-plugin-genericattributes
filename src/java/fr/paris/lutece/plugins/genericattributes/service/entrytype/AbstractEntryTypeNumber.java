@@ -113,22 +113,24 @@ public abstract class AbstractEntryTypeNumber extends EntryTypeService
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }
 
-        Integer defaultValue = null;
-        if ( StringUtils.isNumeric( strValue ) )
-        {
-            defaultValue = Integer.parseInt( strValue );
-        }
+        Integer defaultValue = parseInteger( strValue );
+        Integer maxValue = parseInteger( strMax );
+        Integer minValue = parseInteger( strMin );
 
-        Integer maxValue = null;
-        if ( StringUtils.isNumeric( strMax ) )
+        // A number too large for an integer is refused instead of failing on parsing
+        if ( ( StringUtils.isNumeric( strValue ) && defaultValue == null ) || ( StringUtils.isNumeric( strMax ) && maxValue == null )
+                || ( StringUtils.isNumeric( strMin ) && minValue == null ) )
         {
-            maxValue = Integer.parseInt( strMax );
-        }
+            Object [ ] tabArgs = {
+                    String.valueOf( Integer.MAX_VALUE )
+            };
 
-        Integer minValue = null;
-        if ( StringUtils.isNumeric( strMin ) )
-        {
-            minValue = Integer.parseInt( strMin );
+            if ( StringUtils.isNotBlank( errorReturnUrl ) )
+            {
+                return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_MAX, tabArgs, errorReturnUrl, AdminMessage.TYPE_STOP );
+            }
+
+            return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_MAX, tabArgs, AdminMessage.TYPE_STOP );
         }
 
         entry.setTitle( strTitle );
@@ -219,6 +221,29 @@ public abstract class AbstractEntryTypeNumber extends EntryTypeService
     }
 
     /**
+     * Parses a positive integer
+     *
+     * @param strValue
+     *            the value
+     * @return the integer, or null if the value is not made of digits only or is too large for an integer
+     */
+    private static Integer parseInteger( String strValue )
+    {
+        if ( !StringUtils.isNumeric( strValue ) )
+        {
+            return null;
+        }
+        try
+        {
+            return Integer.valueOf( strValue );
+        }
+        catch( NumberFormatException e )
+        {
+            return null;
+        }
+    }
+
+    /**
      * Check if the value respects the minimum and maximum value configuration
      *
      * @param entry The Entry
@@ -230,12 +255,27 @@ public abstract class AbstractEntryTypeNumber extends EntryTypeService
     {
         if ( StringUtils.isNotBlank( strValueEntry ) && StringUtils.isNumeric( strValueEntry ) )
         {
-            int value = Integer.parseInt( strValueEntry );
+            Integer nValue = parseInteger( strValueEntry );
+            if ( nValue == null )
+            {
+                // Too large for an integer: over the maximum value that can be configured
+                Field fieldMax = entry.getFieldByCode( FIELD_MAX );
+                Integer nMax = fieldMax != null ? parseInteger( fieldMax.getValue( ) ) : null;
+                Object [ ] messageArgs = {
+                        String.valueOf( nMax != null ? nMax : Integer.MAX_VALUE )
+                };
+                GenericAttributeError error = new GenericAttributeError( );
+                error.setMandatoryError( false );
+                error.setTitleQuestion( entry.getTitle( ) );
+                error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_NUMERIC_MAX, messageArgs, locale ) );
+                return error;
+            }
+            int value = nValue;
 
             Field fieldMin = entry.getFieldByCode( FIELD_MIN );
-            if ( fieldMin != null && StringUtils.isNumeric( fieldMin.getValue() ) )
+            if ( fieldMin != null && parseInteger( fieldMin.getValue() ) != null )
             {
-                int minValue = Integer.parseInt( fieldMin.getValue() );
+                int minValue = parseInteger( fieldMin.getValue() );
 
                 if (minValue > value)
                 {
@@ -251,9 +291,9 @@ public abstract class AbstractEntryTypeNumber extends EntryTypeService
             }
 
             Field fieldMax = entry.getFieldByCode( FIELD_MAX );
-            if ( fieldMax !=null && StringUtils.isNumeric( fieldMax.getValue() ) )
+            if ( fieldMax !=null && parseInteger( fieldMax.getValue() ) != null )
             {
-                int maxValue = Integer.parseInt( fieldMax.getValue() );
+                int maxValue = parseInteger( fieldMax.getValue() );
 
                 if( maxValue < value ) {
                     Object[] messageArgs = new Object[]{
