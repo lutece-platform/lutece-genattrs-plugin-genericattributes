@@ -41,6 +41,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import fr.paris.lutece.plugins.genericattributes.service.GenattReferenceItemListener;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.referencelist.business.ReferenceItem;
 import fr.paris.lutece.plugins.referencelist.service.ReferenceItemEvent;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionRemovalListenerService;
@@ -117,6 +118,39 @@ public class FieldHomeTest extends AbstractEntryTest
         finally
         {
             ReferenceItemFieldHome.removeByField( nIdRemovedField );
+            FieldHome.remove( field.getIdField( ) );
+        }
+    }
+
+    /**
+     * Removing the items of a reference list that no longer exists (whole list removed) removes the choices and the use of the list by the entry
+     */
+    @Test
+    public void testRemoveItemOfRemovedListRemovesUseRefList( )
+    {
+        int nIdRemovedList = 987654;
+        Entry entry = new Entry( );
+        entry.setIdEntry( _nIdEntry );
+        Field fieldUseRefList = new Field( );
+        fieldUseRefList.setCode( IEntryTypeService.FIELD_USE_REF_LIST );
+        fieldUseRefList.setParentEntry( entry );
+        fieldUseRefList.setTitle( String.valueOf( nIdRemovedList ) );
+        FieldHome.create( fieldUseRefList );
+        Field field = createLinkedField( );
+        try
+        {
+            ReferenceItem item = new ReferenceItem( );
+            item.setId( ID_REFERENCE_ITEM );
+            item.setIdreference( nIdRemovedList );
+
+            new GenattReferenceItemListener( ).removeReferenceItem( new ReferenceItemEvent( item ) );
+
+            assertNull( FieldHome.findByPrimaryKey( field.getIdField( ) ) );
+            assertNull( FieldHome.findByPrimaryKey( fieldUseRefList.getIdField( ) ) );
+        }
+        finally
+        {
+            FieldHome.remove( fieldUseRefList.getIdField( ) );
             FieldHome.remove( field.getIdField( ) );
         }
     }

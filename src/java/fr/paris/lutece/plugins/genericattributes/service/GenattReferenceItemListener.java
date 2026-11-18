@@ -47,6 +47,7 @@ import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.ReferenceItemFieldHome;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
+import fr.paris.lutece.plugins.referencelist.business.ReferenceHome;
 import fr.paris.lutece.plugins.referencelist.business.ReferenceItem;
 import fr.paris.lutece.plugins.referencelist.service.ReferenceItemEvent;
 import fr.paris.lutece.portal.service.event.EventAction;
@@ -89,7 +90,31 @@ public class GenattReferenceItemListener
             FieldHome.remove( id, false );
         }
         ReferenceItemFieldHome.removeByItem( item.getId( ) );
+        if ( ReferenceHome.findByPrimaryKey( item.getIdreference( ) ) == null )
+        {
+            // The whole list was removed: the questions no longer use it
+            mapEntries.values( ).forEach( entry -> removeUseRefList( entry, item.getIdreference( ) ) );
+        }
         mapEntries.values( ).forEach( FieldHome::notifyEntryUpdate );
+    }
+
+    /**
+     * Removes the field telling that the entry uses a reference list
+     * 
+     * @param entry
+     *            the entry
+     * @param nIdReference
+     *            the id of the reference list
+     */
+    private void removeUseRefList( Entry entry, int nIdReference )
+    {
+        for ( Field field : FieldHome.getFieldListByIdEntry( entry.getIdEntry( ) ) )
+        {
+            if ( IEntryTypeService.FIELD_USE_REF_LIST.equals( field.getCode( ) ) && String.valueOf( nIdReference ).equals( field.getTitle( ) ) )
+            {
+                FieldHome.remove( field.getIdField( ), false );
+            }
+        }
     }
 
     public void updateReferenceItem( @ObservesAsync @Type(EventAction.UPDATE) ReferenceItemEvent event )
