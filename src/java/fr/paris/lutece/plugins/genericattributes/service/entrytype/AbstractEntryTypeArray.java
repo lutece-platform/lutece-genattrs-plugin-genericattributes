@@ -57,6 +57,8 @@ import fr.paris.lutece.portal.service.message.AdminMessageService;
  */
 public abstract class AbstractEntryTypeArray extends EntryTypeService
 {
+    private static final String PARAMETER_PREFIX_CELL = "response_";
+
     /**
      * {@inheritDoc}
      */
@@ -193,6 +195,23 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
     }
 
     /**
+     * Gives the name of the input of a cell: it holds the id of the entry, so that two array entries of the same form or step do not post the same
+     * parameters
+     * 
+     * @param entry
+     *            the entry
+     * @param nRow
+     *            the row of the cell (from 1, row 1 holds the titles of the columns)
+     * @param nColumn
+     *            the column of the cell (from 1, column 1 holds the titles of the rows)
+     * @return the name of the input, {@code response_<id entry>_<row>_<column>}
+     */
+    public static String getCellParameterName( Entry entry, int nRow, int nColumn )
+    {
+        return PARAMETER_PREFIX_CELL + entry.getIdEntry( ) + "_" + nRow + "_" + nColumn;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -205,7 +224,12 @@ public abstract class AbstractEntryTypeArray extends EntryTypeService
         {
             for ( int j = 1; j <= ( column + 1 ); j++ )
             {
-                String strTitleRow = request.getParameter( "response_" + i + "_" + j );
+                String strTitleRow = request.getParameter( getCellParameterName( entry, i, j ) );
+                if ( strTitleRow == null )
+                {
+                    // Templates written before the cell names held the id of the entry
+                    strTitleRow = request.getParameter( PARAMETER_PREFIX_CELL + i + "_" + j );
+                }
 
                 Field existingFields = null;
 
