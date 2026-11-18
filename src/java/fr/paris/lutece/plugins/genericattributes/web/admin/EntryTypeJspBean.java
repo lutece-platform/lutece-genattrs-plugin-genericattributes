@@ -90,6 +90,7 @@ public class EntryTypeJspBean extends MVCAdminJspBean
     private static final String MARK_ENTRY_TYPE_PARENT = "entryTypeParent";
     private static final String MARK_ENTRY_TYPE_TITLES = "entryTypeTitles";
     private static final String MARK_REGEX_SUPPORTED_TYPES = "regexSupportedTypes";
+    private static final String MARK_MAX_ORDER_BY_PLUGIN = "maxOrderByPlugin";
     private static final String MARK_MAX_LENGTH_TITLE = "maxLengthTitle";
     private static final String MARK_MAX_LENGTH_REGEX_PATTERN = "maxLengthRegexPattern";
     private static final String MARK_MAX_LENGTH_REGEX_ERROR_MESSAGE = "maxLengthRegexErrorMessage";
@@ -134,10 +135,13 @@ public class EntryTypeJspBean extends MVCAdminJspBean
         List<EntryType> listEntryType = EntryTypeHome.getCompleteList( );
         Map<String, String> mapTitles = new HashMap<>( );
         List<Integer> listRegexSupportedTypes = new ArrayList<>( );
+        // The order is numbered per plugin, and a type only moves among the types of its plugin
+        Map<String, Integer> mapMaxOrderByPlugin = new HashMap<>( );
 
         for ( EntryType entryType : listEntryType )
         {
             mapTitles.put( String.valueOf( entryType.getIdType( ) ), entryType.getTitle( ) );
+            mapMaxOrderByPlugin.merge( StringUtils.defaultString( entryType.getPlugin( ) ), entryType.getOrder( ), Math::max );
 
             if ( _derivedEntryTypeService.isRegularExpressionSupported( entryType ) )
             {
@@ -148,6 +152,7 @@ public class EntryTypeJspBean extends MVCAdminJspBean
         _model.put( MARK_ENTRY_TYPE_LIST, listEntryType );
         _model.put( MARK_ENTRY_TYPE_TITLES, mapTitles );
         _model.put( MARK_REGEX_SUPPORTED_TYPES, listRegexSupportedTypes );
+        _model.put( MARK_MAX_ORDER_BY_PLUGIN, mapMaxOrderByPlugin );
 
         return getPage( TEMPLATE_MANAGE_ENTRY_TYPE );
     }

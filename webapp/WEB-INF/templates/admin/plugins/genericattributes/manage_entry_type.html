@@ -44,7 +44,7 @@
 						<#if entry_type.order gt 1>
 							<@tform action='jsp/admin/plugins/genericattributes/ManageEntryType.jsp' method='post' class='d-inline'><@input type='hidden' name='action' value='doMoveUp' /><@input type='hidden' name='id_type' value='${entry_type.idType}' /><@button type='submit' title='#i18n{genericattributes.manageEntryType.action.moveUp}' hideTitle=['all'] buttonIcon='chevron-up' params={'aria-label': '#i18n{genericattributes.manageEntryType.action.moveUp} ' + entry_type.title} /></@tform>
 						</#if>
-						<#if entry_type.order lt entryTypeList?size>
+						<#if entry_type.order lt (maxOrderByPlugin[entry_type.plugin!'']!0)>
 							<@tform action='jsp/admin/plugins/genericattributes/ManageEntryType.jsp' method='post' class='d-inline'><@input type='hidden' name='action' value='doMoveDown' /><@input type='hidden' name='id_type' value='${entry_type.idType}' /><@button type='submit' title='#i18n{genericattributes.manageEntryType.action.moveDown}' hideTitle=['all'] buttonIcon='chevron-down' params={'aria-label': '#i18n{genericattributes.manageEntryType.action.moveDown} ' + entry_type.title} /></@tform>
 						</#if>
 					</#if>
