@@ -263,7 +263,9 @@ public abstract class AbstractEntryTypeGeolocation extends EntryTypeService
 
             error.setMandatoryError(entry.isMandatory());
             error.setTitleQuestion(entry.getTitle());
-            error.setErrorMessage(MESSAGE_SPECIFY_BOTH_X_AND_Y);
+            error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_SPECIFY_BOTH_X_AND_Y, new Object [ ] {
+                    entry.getTitle( )
+            }, locale ) );
 
             return error;
         }

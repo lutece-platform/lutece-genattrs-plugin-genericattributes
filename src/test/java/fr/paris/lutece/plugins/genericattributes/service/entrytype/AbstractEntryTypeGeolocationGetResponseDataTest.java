@@ -216,6 +216,21 @@ public class AbstractEntryTypeGeolocationGetResponseDataTest extends LuteceTestC
     }
 
     /**
+     * The error message is localized with the title of the question, not the raw i18n key
+     */
+    @Test
+    void testGetResponseData_onlyXProvidedWithoutAddress_messageIsLocalized( )
+    {
+        Entry entry = buildEntry( 1, false );
+        FakeHttpServletRequest request = new FakeHttpServletRequest( );
+        addGeolocParams( request, 1, 0, "", "", X_1, "", "" );
+
+        GenericAttributeError error = entryType.getResponseData( entry, request, new ArrayList<>( ), Locale.ENGLISH );
+
+        assertEquals( "You must specify both X and Y values for the field Question geoloc 1.", error.getErrorMessage( ) );
+    }
+
+    /**
      * Double de test minimal pour jakarta.servlet.http.HttpServletRequest.
      * Seules getParameter/getAttribute/setAttribute/removeAttribute sont
      * réellement implémentées (nécessaires pour getResponseData). Les
