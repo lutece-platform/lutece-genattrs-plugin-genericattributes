@@ -252,8 +252,9 @@ public abstract class AbstractEntryTypeTextArea extends EntryTypeService
 
         listResponse.add( response );
 
-        // check max size for the field. 0 means no limit
-        if ( ( nMaxSize != -1 ) && ( strValueEntry.length( ) > nMaxSize ) )
+        // check max size for the field. 0 means no limit. A line break is posted as \r\n but counted as one character by the browser
+        // (maxlength of the textarea): it is counted once here too
+        if ( ( nMaxSize != -1 ) && ( StringUtils.replace( strValueEntry, "\r\n", "\n" ).length( ) > nMaxSize ) )
         {
             GenericAttributeError error = new GenericAttributeError( );
             error.setMandatoryError( false );
