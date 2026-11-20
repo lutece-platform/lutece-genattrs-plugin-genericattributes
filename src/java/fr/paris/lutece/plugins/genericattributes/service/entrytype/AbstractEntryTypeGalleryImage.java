@@ -119,7 +119,8 @@ public abstract class AbstractEntryTypeGalleryImage extends EntryTypeService
         {
             FileImagePublicService.init( );
 
-            File file = _genericAttributeFileService.load( strFileGallery, ENTRY_TYPE_KEYNAME);
+            // load takes the name of the file store provider, not the entry type: the provider configured for the gallery images
+            File file = _genericAttributeFileService.load( strFileGallery, _genericAttributeFileService.getFileStoreProviderName( ENTRY_TYPE_KEYNAME ) );
 
             Response response = new Response( );
             response.setEntry( entry );
