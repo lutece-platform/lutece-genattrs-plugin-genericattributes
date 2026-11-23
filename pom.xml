@@ -10,7 +10,7 @@
     <groupId>fr.paris.lutece.plugins</groupId>
     <artifactId>plugin-genericattributes</artifactId>
     <packaging>lutece-plugin</packaging>
-    <version>2.4.12-SNAPSHOT</version>
+    <version>2.4.13-SNAPSHOT</version>
     <name>Lutece Generic Attributes plugin</name>
 
     <repositories>
