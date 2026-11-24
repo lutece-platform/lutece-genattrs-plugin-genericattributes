@@ -359,10 +359,19 @@ public abstract class AbstractEntryTypeUpload extends EntryTypeService
             refListRegularExpression = new ReferenceList( );
 
             List<RegularExpression> listRegularExpression = _regularExpressionService.getAllRegularExpression( );
+            // the expressions are attached to the configuration field of the file, not to the first field of the entry
+            Field fieldConfig = entry.getFieldByCode( FIELD_FILE_CONFIG );
+            if ( fieldConfig == null && entry.getFields( ) != null && !entry.getFields( ).isEmpty( ) )
+            {
+                fieldConfig = entry.getFields( ).get( 0 );
+            }
+            List<RegularExpression> listAttached = ( fieldConfig != null && fieldConfig.getRegularExpressionList( ) != null )
+                    ? fieldConfig.getRegularExpressionList( )
+                    : new ArrayList<>( );
 
             for ( RegularExpression regularExpression : listRegularExpression )
             {
-                if ( !entry.getFields( ).get( 0 ).getRegularExpressionList( ).contains( regularExpression ) )
+                if ( !listAttached.contains( regularExpression ) )
                 {
                     refListRegularExpression.addItem( regularExpression.getIdExpression( ), regularExpression.getTitle( ) );
                 }
